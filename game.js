@@ -1,7 +1,7 @@
 /**
- * Block Blast! - Pure Vanilla JavaScript Game Engine
- * Featuring smart piece balancing, drag & drop + tap-to-place, combo streaks,
- * dynamic particle blasts, and Web Audio API synthesizer.
+ * Block Blast! - WebAssembly Assembly Engine Frontend
+ * Core game state, piece generation, collision hit testing, line blasting,
+ * and combo scoring are executed directly in WebAssembly Text (WAT) assembly.
  */
 
 (function () {
@@ -9,49 +9,17 @@
 
   const BOARD_SIZE = 8;
 
-  // Shapes classified by size category: 'small', 'medium', 'large'
-  const SHAPE_DEFS = [
-    // --- Small Shapes ---
-    { id: 'dot', color: 'color-yellow', sizeType: 'small', matrix: [[1]] },
-    { id: 'h2', color: 'color-cyan', sizeType: 'small', matrix: [[1, 1]] },
-    { id: 'v2', color: 'color-cyan', sizeType: 'small', matrix: [[1], [1]] },
-    { id: 'corner2_tl', color: 'color-pink', sizeType: 'small', matrix: [[1, 1], [1, 0]] },
-    { id: 'corner2_tr', color: 'color-pink', sizeType: 'small', matrix: [[1, 1], [0, 1]] },
-    { id: 'corner2_bl', color: 'color-pink', sizeType: 'small', matrix: [[1, 0], [1, 1]] },
-    { id: 'corner2_br', color: 'color-pink', sizeType: 'small', matrix: [[0, 1], [1, 1]] },
-
-    // --- Medium Shapes ---
-    { id: 'h3', color: 'color-blue', sizeType: 'medium', matrix: [[1, 1, 1]] },
-    { id: 'v3', color: 'color-blue', sizeType: 'medium', matrix: [[1], [1], [1]] },
-    { id: 'sq2', color: 'color-green', sizeType: 'medium', matrix: [[1, 1], [1, 1]] },
-    { id: 't_down', color: 'color-purple', sizeType: 'medium', matrix: [[1, 1, 1], [0, 1, 0]] },
-    { id: 't_up', color: 'color-purple', sizeType: 'medium', matrix: [[0, 1, 0], [1, 1, 1]] },
-    { id: 't_right', color: 'color-purple', sizeType: 'medium', matrix: [[1, 0], [1, 1], [1, 0]] },
-    { id: 't_left', color: 'color-purple', sizeType: 'medium', matrix: [[0, 1], [1, 1], [0, 1]] },
-    { id: 'l_1', color: 'color-orange', sizeType: 'medium', matrix: [[1, 0], [1, 0], [1, 1]] },
-    { id: 'l_2', color: 'color-orange', sizeType: 'medium', matrix: [[0, 1], [0, 1], [1, 1]] },
-    { id: 'l_3', color: 'color-orange', sizeType: 'medium', matrix: [[1, 1], [1, 0], [1, 0]] },
-    { id: 'l_4', color: 'color-orange', sizeType: 'medium', matrix: [[1, 1], [0, 1], [0, 1]] },
-    { id: 'l_h1', color: 'color-green', sizeType: 'medium', matrix: [[1, 1, 1], [1, 0, 0]] },
-    { id: 'l_h2', color: 'color-green', sizeType: 'medium', matrix: [[1, 1, 1], [0, 0, 1]] },
-    { id: 'l_h3', color: 'color-green', sizeType: 'medium', matrix: [[1, 0, 0], [1, 1, 1]] },
-    { id: 'l_h4', color: 'color-green', sizeType: 'medium', matrix: [[0, 0, 1], [1, 1, 1]] },
-    { id: 's_h', color: 'color-cyan', sizeType: 'medium', matrix: [[0, 1, 1], [1, 1, 0]] },
-    { id: 'z_h', color: 'color-red', sizeType: 'medium', matrix: [[1, 1, 0], [0, 1, 1]] },
-    { id: 's_v', color: 'color-cyan', sizeType: 'medium', matrix: [[1, 0], [1, 1], [0, 1]] },
-    { id: 'z_v', color: 'color-red', sizeType: 'medium', matrix: [[0, 1], [1, 1], [1, 0]] },
-
-    // --- Large Shapes ---
-    { id: 'h4', color: 'color-purple', sizeType: 'large', matrix: [[1, 1, 1, 1]] },
-    { id: 'v4', color: 'color-purple', sizeType: 'large', matrix: [[1], [1], [1], [1]] },
-    { id: 'h5', color: 'color-orange', sizeType: 'large', matrix: [[1, 1, 1, 1, 1]] },
-    { id: 'v5', color: 'color-orange', sizeType: 'large', matrix: [[1], [1], [1], [1], [1]] },
-    { id: 'sq3', color: 'color-red', sizeType: 'large', matrix: [[1, 1, 1], [1, 1, 1], [1, 1, 1]] },
-    { id: 'corner3_tl', color: 'color-yellow', sizeType: 'large', matrix: [[1, 1, 1], [1, 0, 0], [1, 0, 0]] },
-    { id: 'corner3_tr', color: 'color-yellow', sizeType: 'large', matrix: [[1, 1, 1], [0, 0, 1], [0, 0, 1]] },
-    { id: 'corner3_bl', color: 'color-yellow', sizeType: 'large', matrix: [[1, 0, 0], [1, 0, 0], [1, 1, 1]] },
-    { id: 'corner3_br', color: 'color-yellow', sizeType: 'large', matrix: [[0, 0, 1], [0, 0, 1], [1, 1, 1]] },
-    { id: 'plus', color: 'color-blue', sizeType: 'large', matrix: [[0, 1, 0], [1, 1, 1], [0, 1, 0]] }
+  // 1-indexed color classes matching WebAssembly engine color IDs (1..8)
+  const COLOR_CLASSES = [
+    '',
+    'color-yellow', // 1
+    'color-cyan',   // 2
+    'color-pink',   // 3
+    'color-blue',   // 4
+    'color-green',  // 5
+    'color-purple', // 6
+    'color-orange', // 7
+    'color-red'     // 8
   ];
 
   // ==========================================
@@ -100,7 +68,7 @@
         osc.start(now);
         osc.stop(now + duration);
       } catch (e) {
-        // Audio error gracefully handled
+        // Audio error handled
       }
     }
 
@@ -150,7 +118,6 @@
       this.init();
       if (this.isMuted || !this.ctx) return;
 
-      // Pentatonic Arpeggio scaled with combo
       const pentatonic = [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5]; // C5, D5, E5, G5, A5, C6
       const baseIdx = Math.min(combo - 1, 4);
       const notes = [
@@ -162,7 +129,6 @@
 
       notes.forEach((freq, idx) => {
         this.playTone(freq, 'sine', 0.28, idx * 0.05, 0.22);
-        // Harmonic overtone for extra richness
         this.playTone(freq * 1.5, 'triangle', 0.2, idx * 0.05 + 0.02, 0.08);
       });
     }
@@ -187,10 +153,12 @@
   }
 
   // ==========================================
-  // Core Block Blast Game Engine
+  // Core Block Blast Game Controller (WASM Engine)
   // ==========================================
   class BlockBlastGame {
-    constructor() {
+    constructor(wasm) {
+      this.wasm = wasm;
+
       // DOM Elements
       this.boardWrapperEl = document.querySelector('.board-wrapper');
       this.boardEl = document.getElementById('board');
@@ -209,19 +177,17 @@
 
       // State
       this.sound = new SoundManager();
-      this.grid = Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(null));
-      this.dockSlots = [null, null, null];
-      this.score = 0;
       this.highScore = parseInt(localStorage.getItem('blockblast_highscore') || '0', 10);
-      this.combo = 0;
-      this.isGameOver = false;
       this.selectedDockIndex = null;
+      this.isProcessingBlast = false;
 
       // Drag Tracking
       this.isDragging = false;
       this.draggedSlotIndex = null;
-      this.draggedShape = null;
+      this.draggedRows = 0;
+      this.draggedCols = 0;
       this.draggedColor = null;
+      this.draggedMatrix = null;
       this.dragPointerType = 'mouse';
       this.dragStartCoords = { x: 0, y: 0 };
       this.activePointerId = null;
@@ -234,7 +200,6 @@
     }
 
     initDOM() {
-      // Generate 8x8 cells
       this.boardEl.innerHTML = '';
       for (let r = 0; r < BOARD_SIZE; r++) {
         for (let c = 0; c < BOARD_SIZE; c++) {
@@ -263,79 +228,43 @@
     }
 
     startNewGame() {
-      for (let r = 0; r < BOARD_SIZE; r++) {
-        for (let c = 0; c < BOARD_SIZE; c++) {
-          this.grid[r][c] = null;
-        }
-      }
-      this.renderBoard();
+      // Initialize WebAssembly engine with randomized seed and saved high score
+      const seed = (Date.now() ^ (Math.random() * 0x7FFFFFFF)) >>> 0;
+      this.wasm.init_game(seed, this.highScore);
 
-      this.score = 0;
-      this.combo = 0;
-      this.isGameOver = false;
       this.selectedDockIndex = null;
+      this.isProcessingBlast = false;
       this.scoreValEl.textContent = '0';
       this.hideCombo();
 
       this.modalEl.classList.add('hidden');
       this.newRecordBadgeEl.classList.add('hidden');
 
-      this.spawnDockPieces();
+      this.renderBoard();
+      this.renderDock();
       this.updateDockAvailability();
     }
 
-    // Smart piece spawning: guarantees fair play and variety
-    spawnDockPieces() {
-      const smallPool = SHAPE_DEFS.filter(s => s.sizeType === 'small');
-      const mediumPool = SHAPE_DEFS.filter(s => s.sizeType === 'medium');
-      const largePool = SHAPE_DEFS.filter(s => s.sizeType === 'large');
+    renderBoard() {
+      const cells = this.boardEl.querySelectorAll('.cell');
+      cells.forEach(cell => {
+        const r = parseInt(cell.dataset.r, 10);
+        const c = parseInt(cell.dataset.c, 10);
+        const colorIdx = this.wasm.get_board_cell(r, c);
 
-      let picked = [];
-      let attempts = 0;
-
-      while (attempts < 50) {
-        attempts++;
-        picked = [];
-
-        // At most one large piece per round
-        const includeLarge = Math.random() < 0.45;
-        if (includeLarge) {
-          picked.push(largePool[Math.floor(Math.random() * largePool.length)]);
+        cell.className = 'cell';
+        if (colorIdx > 0 && COLOR_CLASSES[colorIdx]) {
+          cell.classList.add('filled', COLOR_CLASSES[colorIdx]);
         }
-
-        // Fill remaining with small & medium
-        while (picked.length < 3) {
-          const pool = Math.random() < 0.55 ? smallPool : mediumPool;
-          picked.push(pool[Math.floor(Math.random() * pool.length)]);
-        }
-
-        // Shuffle picked pieces
-        picked.sort(() => Math.random() - 0.5);
-
-        // Ensure at least one piece can fit on the current board
-        const canFitAtLeastOne = picked.some(p => this.canFitAnywhere(p.matrix));
-        if (canFitAtLeastOne) {
-          break;
-        }
-      }
-
-      for (let i = 0; i < 3; i++) {
-        this.dockSlots[i] = {
-          matrix: picked[i].matrix,
-          color: picked[i].color,
-          id: picked[i].id
-        };
-      }
-
-      this.renderDock();
+      });
     }
 
     renderDock() {
       const slotEls = this.dockEl.querySelectorAll('.dock-slot');
       slotEls.forEach((slotEl, idx) => {
         slotEl.innerHTML = '';
-        const pieceData = this.dockSlots[idx];
-        if (!pieceData) return;
+        const isActive = this.wasm.get_dock_slot_active(idx);
+        if (!isActive) return;
 
         const pieceEl = document.createElement('div');
         pieceEl.className = 'piece';
@@ -344,8 +273,10 @@
           pieceEl.classList.add('selected');
         }
 
-        const rows = pieceData.matrix.length;
-        const cols = pieceData.matrix[0].length;
+        const rows = this.wasm.get_dock_slot_rows(idx);
+        const cols = this.wasm.get_dock_slot_cols(idx);
+        const colorClass = COLOR_CLASSES[this.wasm.get_dock_slot_color(idx)];
+
         pieceEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
         pieceEl.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
 
@@ -353,8 +284,8 @@
           for (let c = 0; c < cols; c++) {
             const mini = document.createElement('div');
             mini.className = 'mini-block';
-            if (pieceData.matrix[r][c] === 1) {
-              mini.classList.add(pieceData.color);
+            if (this.wasm.get_dock_slot_cell(idx, r, c) === 1) {
+              mini.classList.add(colorClass);
             } else {
               mini.classList.add('empty');
             }
@@ -366,66 +297,18 @@
       });
     }
 
-    renderBoard() {
-      const cells = this.boardEl.querySelectorAll('.cell');
-      cells.forEach(cell => {
-        const r = parseInt(cell.dataset.r, 10);
-        const c = parseInt(cell.dataset.c, 10);
-        const color = this.grid[r][c];
-
-        cell.className = 'cell';
-        if (color) {
-          cell.classList.add('filled', color);
-        }
-      });
-    }
-
-    canFitAt(matrix, startR, startC) {
-      const rows = matrix.length;
-      const cols = matrix[0].length;
-
-      if (startR < 0 || startC < 0 || startR + rows > BOARD_SIZE || startC + cols > BOARD_SIZE) {
-        return false;
-      }
-
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          if (matrix[r][c] === 1) {
-            if (this.grid[startR + r][startC + c] !== null) {
-              return false;
-            }
-          }
-        }
-      }
-      return true;
-    }
-
-    canFitAnywhere(matrix) {
-      const rows = matrix.length;
-      const cols = matrix[0].length;
-
-      for (let r = 0; r <= BOARD_SIZE - rows; r++) {
-        for (let c = 0; c <= BOARD_SIZE - cols; c++) {
-          if (this.canFitAt(matrix, r, c)) {
-            return true;
-          }
-        }
-      }
-      return false;
-    }
-
     updateDockAvailability() {
       let anyCanFit = false;
       let remainingPieces = 0;
 
       const slotEls = this.dockEl.querySelectorAll('.dock-slot');
       slotEls.forEach((slotEl, idx) => {
-        const pieceData = this.dockSlots[idx];
+        const isActive = this.wasm.get_dock_slot_active(idx);
         const pieceEl = slotEl.querySelector('.piece');
-        if (!pieceData || !pieceEl) return;
+        if (!isActive || !pieceEl) return;
 
         remainingPieces++;
-        const fits = this.canFitAnywhere(pieceData.matrix);
+        const fits = this.wasm.can_fit_anywhere(idx) === 1;
         if (fits) {
           pieceEl.classList.remove('disabled');
           anyCanFit = true;
@@ -453,13 +336,13 @@
 
       window.addEventListener('resize', () => this.clearPreview());
 
-      // Pointer interactions on dock
+      // Dock pointer interactions
       this.dockEl.addEventListener('pointerdown', (e) => this.onPointerDown(e));
       window.addEventListener('pointermove', (e) => this.onPointerMove(e));
       window.addEventListener('pointerup', (e) => this.onPointerUp(e));
       window.addEventListener('pointercancel', (e) => this.onPointerCancel(e));
 
-      // Board interactions for tap-to-place & mouse hover preview
+      // Board interactions for tap-to-place & hover preview
       this.boardEl.addEventListener('click', (e) => this.onBoardClick(e));
       this.boardEl.addEventListener('pointermove', (e) => this.onBoardPointerMove(e));
       this.boardEl.addEventListener('pointerleave', () => {
@@ -470,57 +353,62 @@
     }
 
     onPointerDown(e) {
-      if (this.isGameOver) return;
+      if (this.wasm.get_is_game_over() === 1 || this.isProcessingBlast) return;
 
       const pieceEl = e.target.closest('.piece');
       if (!pieceEl || pieceEl.classList.contains('disabled')) return;
 
       const slotIdx = parseInt(pieceEl.dataset.slotIndex, 10);
-      const pieceData = this.dockSlots[slotIdx];
-      if (!pieceData) return;
+      if (this.wasm.get_dock_slot_active(slotIdx) !== 1) return;
 
       this.sound.playPick();
 
       this.isDragging = true;
       this.draggedSlotIndex = slotIdx;
-      this.draggedShape = pieceData.matrix;
-      this.draggedColor = pieceData.color;
+      this.draggedRows = this.wasm.get_dock_slot_rows(slotIdx);
+      this.draggedCols = this.wasm.get_dock_slot_cols(slotIdx);
+      this.draggedColor = COLOR_CLASSES[this.wasm.get_dock_slot_color(slotIdx)];
+
+      this.draggedMatrix = [];
+      for (let r = 0; r < this.draggedRows; r++) {
+        const row = [];
+        for (let c = 0; c < this.draggedCols; c++) {
+          row.push(this.wasm.get_dock_slot_cell(slotIdx, r, c));
+        }
+        this.draggedMatrix.push(row);
+      }
+
       this.dragPointerType = e.pointerType;
       this.dragStartCoords = { x: e.clientX, y: e.clientY };
 
-      // Pointer Capture
       try {
         pieceEl.setPointerCapture(e.pointerId);
         this.activePointerId = e.pointerId;
         this.activeCapturedEl = pieceEl;
       } catch (err) {
-        // Pointer capture fallback
+        // Fallback
       }
 
       pieceEl.classList.add('is-dragging');
-
-      this.createDragProxy(pieceData);
+      this.createDragProxy();
       this.updateDragProxyPosition(e.clientX, e.clientY);
 
       this.deselectDockPiece();
       e.preventDefault();
     }
 
-    createDragProxy(pieceData) {
+    createDragProxy() {
       this.dragProxyEl.innerHTML = '';
       this.dragProxyEl.className = 'drag-proxy';
+      this.dragProxyEl.style.gridTemplateColumns = `repeat(${this.draggedCols}, var(--cell-size))`;
+      this.dragProxyEl.style.gridTemplateRows = `repeat(${this.draggedRows}, var(--cell-size))`;
 
-      const rows = pieceData.matrix.length;
-      const cols = pieceData.matrix[0].length;
-      this.dragProxyEl.style.gridTemplateColumns = `repeat(${cols}, var(--cell-size))`;
-      this.dragProxyEl.style.gridTemplateRows = `repeat(${rows}, var(--cell-size))`;
-
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
+      for (let r = 0; r < this.draggedRows; r++) {
+        for (let c = 0; c < this.draggedCols; c++) {
           const block = document.createElement('div');
           block.className = 'proxy-block';
-          if (pieceData.matrix[r][c] === 1) {
-            block.classList.add(pieceData.color);
+          if (this.draggedMatrix[r][c] === 1) {
+            block.classList.add(this.draggedColor);
           } else {
             block.classList.add('empty');
           }
@@ -532,13 +420,9 @@
     }
 
     getPointerTargetCoords(clientX, clientY) {
-      // In mobile touch, offset piece ~70px vertically so finger doesn't block view
       const isTouch = this.dragPointerType === 'touch';
       const offsetY = isTouch ? -70 : 0;
-      return {
-        x: clientX,
-        y: clientY + offsetY
-      };
+      return { x: clientX, y: clientY + offsetY };
     }
 
     updateDragProxyPosition(clientX, clientY) {
@@ -551,12 +435,11 @@
       if (!this.isDragging) return;
 
       this.updateDragProxyPosition(e.clientX, e.clientY);
-
       const target = this.getPointerTargetCoords(e.clientX, e.clientY);
-      const targetPos = this.getGridCoordsFromPoint(target.x, target.y, this.draggedShape);
+      const targetPos = this.getGridCoordsFromPoint(target.x, target.y, this.draggedMatrix);
 
       if (targetPos) {
-        this.updatePlacementPreview(targetPos.r, targetPos.c, this.draggedShape, this.draggedColor);
+        this.updatePlacementPreview(targetPos.r, targetPos.c, this.draggedSlotIndex, this.draggedMatrix, this.draggedColor);
       } else {
         this.clearPreview();
       }
@@ -565,7 +448,6 @@
     onPointerUp(e) {
       if (!this.isDragging) return;
 
-      // Release pointer capture
       if (this.activeCapturedEl && this.activePointerId !== null) {
         try {
           this.activeCapturedEl.releasePointerCapture(this.activePointerId);
@@ -577,14 +459,13 @@
       }
 
       const target = this.getPointerTargetCoords(e.clientX, e.clientY);
-      const targetPos = this.getGridCoordsFromPoint(target.x, target.y, this.draggedShape);
+      const targetPos = this.getGridCoordsFromPoint(target.x, target.y, this.draggedMatrix);
 
       let placed = false;
-      if (targetPos && this.canFitAt(this.draggedShape, targetPos.r, targetPos.c)) {
+      if (targetPos && this.wasm.can_fit_at(this.draggedSlotIndex, targetPos.r, targetPos.c) === 1) {
         placed = this.placePiece(this.draggedSlotIndex, targetPos.r, targetPos.c);
       }
 
-      // If user tapped without dragging
       const distance = Math.hypot(e.clientX - this.dragStartCoords.x, e.clientY - this.dragStartCoords.y);
       if (!placed && distance < 8) {
         this.toggleSelectDockPiece(this.draggedSlotIndex);
@@ -614,11 +495,10 @@
       });
 
       this.draggedSlotIndex = null;
-      this.draggedShape = null;
+      this.draggedMatrix = null;
       this.draggedColor = null;
     }
 
-    // Precise grid coordinate computation using actual cell dimensions
     getGridCoordsFromPoint(screenX, screenY, matrix) {
       const firstCell = this.boardEl.children[0];
       const secondCell = this.boardEl.children[1];
@@ -636,7 +516,6 @@
       const shapeRows = matrix.length;
       const shapeCols = matrix[0].length;
 
-      // Center of shape relative to pointer
       const shapeWidth = (shapeCols - 1) * stepX + r0.width;
       const shapeHeight = (shapeRows - 1) * stepY + r0.height;
 
@@ -653,10 +532,10 @@
       return null;
     }
 
-    updatePlacementPreview(startR, startC, matrix, color) {
+    updatePlacementPreview(startR, startC, slotIdx, matrix, color) {
       this.clearPreview();
 
-      const canFit = this.canFitAt(matrix, startR, startC);
+      const canFit = this.wasm.can_fit_at(slotIdx, startR, startC) === 1;
       const rows = matrix.length;
       const cols = matrix[0].length;
 
@@ -697,8 +576,9 @@
         );
         const r = parseInt(cell.dataset.r, 10);
         const c = parseInt(cell.dataset.c, 10);
-        if (this.grid[r][c]) {
-          cell.classList.add('filled', this.grid[r][c]);
+        const colorIdx = this.wasm.get_board_cell(r, c);
+        if (colorIdx > 0 && COLOR_CLASSES[colorIdx]) {
+          cell.classList.add('filled', COLOR_CLASSES[colorIdx]);
         }
       });
       this.currentPreviewCells = [];
@@ -732,154 +612,123 @@
 
       const r = parseInt(cell.dataset.r, 10);
       const c = parseInt(cell.dataset.c, 10);
-      const pieceData = this.dockSlots[this.selectedDockIndex];
-      if (!pieceData) return;
 
-      this.updatePlacementPreview(r, c, pieceData.matrix, pieceData.color);
+      const rows = this.wasm.get_dock_slot_rows(this.selectedDockIndex);
+      const cols = this.wasm.get_dock_slot_cols(this.selectedDockIndex);
+      const colorClass = COLOR_CLASSES[this.wasm.get_dock_slot_color(this.selectedDockIndex)];
+      const matrix = [];
+      for (let row = 0; row < rows; row++) {
+        const rowArr = [];
+        for (let col = 0; col < cols; col++) {
+          rowArr.push(this.wasm.get_dock_slot_cell(this.selectedDockIndex, row, col));
+        }
+        matrix.push(rowArr);
+      }
+
+      this.updatePlacementPreview(r, c, this.selectedDockIndex, matrix, colorClass);
     }
 
     onBoardClick(e) {
-      if (this.selectedDockIndex === null) return;
+      if (this.selectedDockIndex === null || this.isProcessingBlast) return;
 
       const cell = e.target.closest('.cell');
       if (!cell) return;
 
       const r = parseInt(cell.dataset.r, 10);
       const c = parseInt(cell.dataset.c, 10);
-      const pieceData = this.dockSlots[this.selectedDockIndex];
-      if (!pieceData) return;
 
-      if (this.canFitAt(pieceData.matrix, r, c)) {
+      if (this.wasm.can_fit_at(this.selectedDockIndex, r, c) === 1) {
         this.placePiece(this.selectedDockIndex, r, c);
         this.deselectDockPiece();
       }
     }
 
     // ==========================================
-    // Piece Placement & Line Blasts
+    // Piece Placement & Line Blasts (WASM Engine)
     // ==========================================
     placePiece(slotIndex, startR, startC) {
-      const pieceData = this.dockSlots[slotIndex];
-      if (!pieceData) return false;
+      if (this.wasm.can_fit_at(slotIndex, startR, startC) === 0) return false;
 
-      const matrix = pieceData.matrix;
-      const color = pieceData.color;
-      let filledCount = 0;
-
-      for (let r = 0; r < matrix.length; r++) {
-        for (let c = 0; c < matrix[0].length; c++) {
-          if (matrix[r][c] === 1) {
-            this.grid[startR + r][startC + c] = color;
-            filledCount++;
-          }
-        }
-      }
-
+      // Execute placement and line calculations in WebAssembly
+      const linesCleared = this.wasm.place_piece(slotIndex, startR, startC);
       this.sound.playDrop();
 
-      this.dockSlots[slotIndex] = null;
       this.renderDock();
       this.renderBoard();
 
-      // Base placement points
-      this.addScore(filledCount * 10);
+      const scoreDelta = this.wasm.get_last_score_delta();
+      const currentScore = this.wasm.get_score();
+      const highScore = this.wasm.get_high_score();
+      const combo = this.wasm.get_combo();
 
-      this.checkAndClearLines();
-      return true;
-    }
+      this.scoreValEl.textContent = currentScore;
+      this.scoreValEl.classList.remove('score-bounce');
+      void this.scoreValEl.offsetWidth;
+      this.scoreValEl.classList.add('score-bounce');
 
-    checkAndClearLines() {
-      const fullRows = [];
-      const fullCols = [];
-
-      for (let r = 0; r < BOARD_SIZE; r++) {
-        if (this.grid[r].every(c => c !== null)) {
-          fullRows.push(r);
-        }
+      if (currentScore >= highScore) {
+        this.highScoreValEl.textContent = highScore;
+        localStorage.setItem('blockblast_highscore', highScore);
       }
 
-      for (let c = 0; c < BOARD_SIZE; c++) {
-        let isColFull = true;
-        for (let r = 0; r < BOARD_SIZE; r++) {
-          if (this.grid[r][c] === null) {
-            isColFull = false;
-            break;
-          }
-        }
-        if (isColFull) {
-          fullCols.push(c);
-        }
-      }
+      if (linesCleared > 0) {
+        this.isProcessingBlast = true;
+        this.showCombo(combo, linesCleared);
+        this.sound.playBlast(combo);
 
-      const totalLines = fullRows.length + fullCols.length;
-
-      if (totalLines > 0) {
-        this.combo++;
-        this.showCombo(this.combo, totalLines);
-
-        const multiBonus = totalLines > 1 ? (totalLines - 1) * 150 : 0;
-        const linePoints = (totalLines * 100 + multiBonus) * this.combo;
-        this.addScore(linePoints);
-
-        this.sound.playBlast(this.combo);
-        if (totalLines >= 2) {
+        if (linesCleared >= 2) {
           this.triggerBoardShake();
         }
 
+        const rowsMask = this.wasm.get_cleared_rows_mask();
+        const colsMask = this.wasm.get_cleared_cols_mask();
         const cellsToAnimate = new Set();
-        fullRows.forEach(r => {
-          for (let c = 0; c < BOARD_SIZE; c++) cellsToAnimate.add(`${r},${c}`);
-        });
-        fullCols.forEach(c => {
-          for (let r = 0; r < BOARD_SIZE; r++) cellsToAnimate.add(`${r},${c}`);
-        });
 
-        // Trigger blast animation and blast particles
+        for (let r = 0; r < BOARD_SIZE; r++) {
+          if ((rowsMask & (1 << r)) !== 0) {
+            for (let c = 0; c < BOARD_SIZE; c++) cellsToAnimate.add(`${r},${c}`);
+          }
+        }
+        for (let c = 0; c < BOARD_SIZE; c++) {
+          if ((colsMask & (1 << c)) !== 0) {
+            for (let r = 0; r < BOARD_SIZE; r++) cellsToAnimate.add(`${r},${c}`);
+          }
+        }
+
         cellsToAnimate.forEach(coord => {
           const [r, c] = coord.split(',').map(Number);
           const cell = this.boardEl.querySelector(`[data-r="${r}"][data-c="${c}"]`);
           if (cell) {
             cell.classList.add('blast-clearing');
-            this.createBlastParticles(cell, this.grid[r][c]);
+            const colorIdx = this.wasm.get_board_cell(r, c);
+            this.createBlastParticles(cell, COLOR_CLASSES[colorIdx]);
           }
         });
 
-        this.showFloatingScore(`+${linePoints}`);
+        this.showFloatingScore(`+${scoreDelta}`);
 
         setTimeout(() => {
-          cellsToAnimate.forEach(coord => {
-            const [r, c] = coord.split(',').map(Number);
-            this.grid[r][c] = null;
-          });
+          this.wasm.clear_cleared_lines();
           this.renderBoard();
+          this.isProcessingBlast = false;
           this.postPlacementRoutine();
         }, 360);
       } else {
-        this.combo = 0;
         this.hideCombo();
         this.postPlacementRoutine();
       }
+
+      return true;
     }
 
     postPlacementRoutine() {
-      const allEmpty = this.dockSlots.every(s => s === null);
-      if (allEmpty) {
-        this.spawnDockPieces();
-      }
+      // Check dock replenishment and game over in WebAssembly
+      const isGameOver = this.wasm.check_and_replenish_dock();
+      this.renderDock();
       this.updateDockAvailability();
-    }
 
-    addScore(pts) {
-      this.score += pts;
-      this.scoreValEl.textContent = this.score;
-      this.scoreValEl.classList.remove('score-bounce');
-      void this.scoreValEl.offsetWidth;
-      this.scoreValEl.classList.add('score-bounce');
-
-      if (this.score > this.highScore) {
-        this.highScore = this.score;
-        this.highScoreValEl.textContent = this.highScore;
-        localStorage.setItem('blockblast_highscore', this.highScore);
+      if (isGameOver === 1) {
+        setTimeout(() => this.triggerGameOver(), 350);
       }
     }
 
@@ -929,7 +778,6 @@
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
 
-      // 4 particles per clearing block
       for (let i = 0; i < 4; i++) {
         const particle = document.createElement('div');
         particle.className = `blast-particle ${colorClass || 'color-yellow'}`;
@@ -951,19 +799,18 @@
       }
     }
 
-    // ==========================================
-    // Game Over Handling
-    // ==========================================
     triggerGameOver() {
-      if (this.isGameOver) return;
-      this.isGameOver = true;
+      if (this.wasm.get_is_game_over() !== 1) return;
 
       this.sound.playGameOver();
 
-      this.modalScoreEl.textContent = this.score;
-      this.modalHighScoreEl.textContent = this.highScore;
+      const finalScore = this.wasm.get_score();
+      const bestScore = this.wasm.get_high_score();
 
-      const isNewRecord = this.score >= this.highScore && this.score > 0;
+      this.modalScoreEl.textContent = finalScore;
+      this.modalHighScoreEl.textContent = bestScore;
+
+      const isNewRecord = finalScore >= bestScore && finalScore > 0;
       if (isNewRecord) {
         this.newRecordBadgeEl.classList.remove('hidden');
         this.sound.playNewRecord();
@@ -975,7 +822,17 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    new BlockBlastGame();
+  // Bootstrap WebAssembly Module and Start Game
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      if (typeof BlockBlastWasm !== 'undefined') {
+        const wasm = await BlockBlastWasm.loadModule();
+        new BlockBlastGame(wasm);
+      } else {
+        console.error('BlockBlastWasm loader not found.');
+      }
+    } catch (err) {
+      console.error('Failed to initialize WebAssembly engine:', err);
+    }
   });
 })();
