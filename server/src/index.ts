@@ -11,9 +11,16 @@ async function bootstrap() {
   // Initialize upload directories
   await AIService.initDirs();
 
+  const app = createApp();
+
+  const server = app.listen(env.PORT, () => {
+    console.log(` ToolNest API server running at http://localhost:${env.PORT}`);
+    console.log(` Client URL: ${env.CLIENT_URL}`);
+  });
+
   // Connect to MongoDB
   try {
-    await mongoose.connect(env.MONGODB_URI);
+    await mongoose.connect(env.MONGODB_URI, { serverSelectionTimeoutMS: 3000 });
     console.log(` Connected to MongoDB at ${env.MONGODB_URI}`);
 
     // Ensure default admin user exists
@@ -29,16 +36,9 @@ async function bootstrap() {
     }
   } catch (err) {
     console.warn(
-      ` Could not connect to MongoDB (${(err as Error).message}). Operating with local in-memory fallback where applicable.`,
+      ` Could not connect to MongoDB (${(err as Error).message}). Server running with local in-memory fallback where applicable.`,
     );
   }
-
-  const app = createApp();
-
-  const server = app.listen(env.PORT, () => {
-    console.log(` ToolNest API server running at http://localhost:${env.PORT}`);
-    console.log(` Client URL: ${env.CLIENT_URL}`);
-  });
 
   const shutdown = async () => {
     console.log('Shutting down ToolNest server...');

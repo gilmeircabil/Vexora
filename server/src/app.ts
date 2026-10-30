@@ -44,7 +44,7 @@ export function createApp() {
   app.use('/api', apiRouter);
 
   // 404 handler for API routes
-  app.use('/api/*', (_req, res) => {
+  app.use('/api', (_req, res) => {
     res.status(404).json({
       success: false,
       error: 'API endpoint not found',

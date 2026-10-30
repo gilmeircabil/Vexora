@@ -9,9 +9,12 @@
     "node": ">=20.19"
   },
   "scripts": {
-    "dev": "vite --root client",
-    "dev:client": "vite --root client",
+    "dev": "concurrently -n \"client,server\" -c \"cyan.bold,magenta.bold\" \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:all": "concurrently -n \"client,server\" -c \"cyan.bold,magenta.bold\" \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "vite client",
     "dev:server": "tsx watch server/src/index.ts",
+    "start": "concurrently -n \"client,server\" -c \"cyan.bold,magenta.bold\" \"npm run preview\" \"npm run start:server\"",
+    "start:client": "vite preview client",
     "start:server": "tsx server/src/index.ts",
     "build": "tsc -b && vite build client",
     "build:client": "vite build client",
@@ -67,6 +70,7 @@
     "@types/react-dom": "^19.0.0",
     "@types/supertest": "^7.2.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^10.0.6",
     "eslint": "^9.20.0",
     "jsdom": "^26.0.0",
     "supertest": "^7.3.1",
