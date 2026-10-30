@@ -15,17 +15,8 @@
     />
     <meta name="theme-color" content="#4f46e5" />
     <script>
-      (function() {
-        try {
-          var saved = localStorage.getItem('toolnest-theme');
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if (saved === 'dark' || (!saved && prefersDark)) {
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.classList.remove('dark');
-          }
-        } catch (e) {}
-      })();
+      // Enforce clean, comfortable light mode
+      document.documentElement.classList.remove('dark');
     </script>
     <!-- Content Security Policy: strictly local-first, no unexpected scripts or external tracking -->
     <meta
@@ -33,9 +24,7 @@
       content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob: data:; worker-src 'self' blob:; object-src 'none'; frame-src 'self' blob:;"
     />
   </head>
-  <body
-    class="antialiased min-h-screen selection:bg-indigo-500/20 selection:text-indigo-600 dark:selection:text-indigo-400"
-  >
+  <body class="antialiased min-h-screen selection:bg-indigo-500/20 selection:text-indigo-600">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Shield, Zap, Lock, Sparkles, X, Terminal } from 'lucide-react';
+import { Search, Shield, Zap, Lock, X, Terminal } from 'lucide-react';
 import { TOOL_CATALOG, CATEGORIES, searchTools, type ToolCategory } from '../tools/catalog.js';
 import { ToolCard } from '../components/common/ToolCard.js';
 import { Icon } from '../components/common/Icon.js';
@@ -31,25 +31,25 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-14 sm:space-y-16">
+    <div className="space-y-12 sm:space-y-14">
       {/* Hero Section */}
-      <section className="text-center pt-6 sm:pt-10 pb-2 max-w-3xl mx-auto space-y-6">
+      <section className="text-center pt-6 sm:pt-8 pb-2 max-w-3xl mx-auto space-y-5">
         {/* Eyebrow Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-mono font-medium shadow-2xs">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-xs font-mono font-medium shadow-2xs">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span>OPEN UTILITY WORKBENCH</span>
-          <span className="text-neutral-400 dark:text-neutral-500">·</span>
+          <span className="text-neutral-400">·</span>
           <span>{TOOL_CATALOG.length} TOOLS READY</span>
         </div>
 
         {/* Main Heading */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-neutral-900 dark:text-white leading-[1.12]">
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-neutral-800 leading-[1.12]">
           Everyday tools. One place.{' '}
-          <span className="text-indigo-600 dark:text-indigo-400">Zero tracking.</span>
+          <span className="text-indigo-600">Zero tracking.</span>
         </h1>
 
         {/* Descriptive Deck */}
-        <p className="text-sm sm:text-base lg:text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-sm sm:text-base lg:text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed">
           High-performance, client-side utilities for images, PDFs, text, and developers. Processed
           instantly in your browser with zero file uploads or cloud storage.
         </p>
@@ -63,18 +63,18 @@ export const HomePage: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search tools by name, format, or task (e.g. compress, jwt, pdf)..."
-              className="w-full pl-12 pr-12 py-3.5 text-sm sm:text-base bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-2xl shadow-xs focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-950/50 focus:outline-none transition-all text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400"
+              className="w-full pl-12 pr-12 py-3.5 text-sm sm:text-base bg-white border border-neutral-300 rounded-2xl shadow-xs focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 focus:outline-none transition-all text-neutral-800 placeholder:text-neutral-400"
             />
             {searchQuery ? (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-neutral-400 hover:text-neutral-600 transition-colors"
                 aria-label="Clear search"
               >
                 <X className="w-4 h-4" />
               </button>
             ) : (
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 absolute right-3.5 top-1/2 -translate-y-1/2 px-2 py-0.5 text-[11px] font-mono font-medium text-neutral-400 bg-neutral-100 dark:bg-neutral-800 rounded-md border border-neutral-200 dark:border-neutral-700">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 absolute right-3.5 top-1/2 -translate-y-1/2 px-2 py-0.5 text-[11px] font-mono font-medium text-neutral-500 bg-neutral-100 rounded-md border border-neutral-200">
                 /
               </kbd>
             )}
@@ -82,12 +82,12 @@ export const HomePage: React.FC = () => {
 
           {/* Quick-Filter Chips */}
           <div className="flex items-center justify-center gap-1.5 flex-wrap pt-3 text-xs text-neutral-500">
-            <span className="text-[11px] text-neutral-400 font-medium mr-1">Popular:</span>
+            <span className="text-[11px] text-neutral-500 font-medium mr-1">Popular:</span>
             {QUICK_TAGS.map((tag) => (
               <button
                 key={tag}
                 onClick={() => handleTagClick(tag)}
-                className="px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-xs font-medium transition-colors border border-neutral-200/60 dark:border-neutral-700/60"
+                className="px-2.5 py-1 rounded-lg bg-neutral-200/80 hover:bg-neutral-300/80 text-neutral-700 text-xs font-medium transition-colors border border-neutral-300/40"
               >
                 {tag}
               </button>
@@ -106,12 +106,12 @@ export const HomePage: React.FC = () => {
             }}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all shrink-0 ${
               selectedCategory === 'all' && !searchQuery
-                ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 shadow-sm'
-                : 'bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700'
+                ? 'bg-neutral-900 text-white shadow-sm'
+                : 'bg-white text-neutral-700 border border-neutral-200/90 hover:bg-neutral-50 hover:border-neutral-300'
             }`}
           >
             <span>All Utilities</span>
-            <span className="font-mono text-[11px] px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10">
+            <span className="font-mono text-[11px] px-1.5 py-0.5 rounded bg-black/10">
               {TOOL_CATALOG.length}
             </span>
           </button>
@@ -129,12 +129,12 @@ export const HomePage: React.FC = () => {
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all shrink-0 whitespace-nowrap ${
                   isSelected
                     ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700'
+                    : 'bg-white text-neutral-700 border border-neutral-200/90 hover:bg-neutral-50 hover:border-neutral-300'
                 }`}
               >
                 <Icon name={cat.iconName} className="w-4 h-4" />
                 <span>{cat.name}</span>
-                <span className="font-mono text-[11px] px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10">
+                <span className="font-mono text-[11px] px-1.5 py-0.5 rounded bg-black/10">
                   {count}
                 </span>
               </button>
@@ -143,7 +143,7 @@ export const HomePage: React.FC = () => {
         </div>
 
         {/* Results Counter / Filter State */}
-        <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 px-1">
+        <div className="flex items-center justify-between text-xs text-neutral-500 px-1">
           <div className="flex items-center gap-2 font-mono">
             <span>
               {searchQuery
@@ -160,7 +160,7 @@ export const HomePage: React.FC = () => {
                 setSearchQuery('');
                 setSelectedCategory('all');
               }}
-              className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
+              className="text-indigo-600 hover:underline font-medium"
             >
               Reset filters
             </button>
@@ -175,9 +175,9 @@ export const HomePage: React.FC = () => {
         </div>
 
         {filteredTools.length === 0 && (
-          <div className="text-center py-16 bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800 p-8 space-y-3">
+          <div className="text-center py-16 bg-white rounded-2xl border border-neutral-200 p-8 space-y-3">
             <Terminal className="w-10 h-10 text-neutral-400 mx-auto" />
-            <h3 className="text-base font-semibold text-neutral-800 dark:text-neutral-200">
+            <h3 className="text-base font-semibold text-neutral-800">
               No matching tools found for "{searchQuery}"
             </h3>
             <p className="text-xs text-neutral-500 max-w-md mx-auto">
@@ -197,51 +197,51 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* Feature & Privacy Guarantees */}
-      <section className="pt-8 border-t border-neutral-200/80 dark:border-neutral-800">
+      <section className="pt-8 border-t border-neutral-200/90">
         <div className="text-center max-w-xl mx-auto mb-8 space-y-1">
-          <h2 className="text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+          <h2 className="text-lg font-bold tracking-tight text-neutral-800">
             Engineered for Privacy & Zero Friction
           </h2>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">
+          <p className="text-xs text-neutral-500">
             Transparent guarantees backed by browser sandbox execution.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 space-y-2.5">
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3 border border-indigo-100 dark:border-indigo-900/40">
+          <div className="p-6 rounded-2xl bg-white border border-neutral-200/90 space-y-2.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3 border border-indigo-100">
               <Lock className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-neutral-900 dark:text-neutral-100 text-base">
+            <h3 className="font-bold text-neutral-800 text-base">
               Local-First Sandbox
             </h3>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+            <p className="text-xs text-neutral-600 leading-relaxed">
               Your images, PDFs, text, and passwords never leave your browser. Cryptographic hashing,
               PDF stitching, and image resizing run client-side via HTML5 Canvas, Web Crypto, and Web Workers.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 space-y-2.5">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3 border border-emerald-100 dark:border-emerald-900/40">
+          <div className="p-6 rounded-2xl bg-white border border-neutral-200/90 space-y-2.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 border border-emerald-100">
               <Shield className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-neutral-900 dark:text-neutral-100 text-base">
+            <h3 className="font-bold text-neutral-800 text-base">
               Zero Tracking, Zero Ads
             </h3>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+            <p className="text-xs text-neutral-600 leading-relaxed">
               No tracking cookies, no Google Analytics pixels, no intrusive banners, and no forced logins
               for core tools. Open any utility and start immediately.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 space-y-2.5">
-            <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-3 border border-purple-100 dark:border-purple-900/40">
+          <div className="p-6 rounded-2xl bg-white border border-neutral-200/90 space-y-2.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-3 border border-purple-100">
               <Zap className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-neutral-900 dark:text-neutral-100 text-base">
+            <h3 className="font-bold text-neutral-800 text-base">
               Open Source & Auditable
             </h3>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+            <p className="text-xs text-neutral-600 leading-relaxed">
               Every utility is MIT licensed. Inspect source algorithms, run the suite locally, or deploy
               your own private instance with clean TypeScript and modern React.
             </p>

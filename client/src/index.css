@@ -1,22 +1,12 @@
 @import 'tailwindcss';
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @layer base {
   :root {
-    --bg-page: #f8fafc;
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
+    --bg-page: #f1f3f6;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
     --border-subtle: #e2e8f0;
-    --grid-dot-color: rgba(148, 163, 184, 0.25);
-  }
-
-  .dark {
-    --bg-page: #0b0f17;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --border-subtle: #1e293b;
-    --grid-dot-color: rgba(255, 255, 255, 0.05);
+    --grid-dot-color: rgba(100, 116, 139, 0.12);
   }
 
   html,
@@ -55,11 +45,11 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(156, 163, 175, 0.35);
+    background: rgba(156, 163, 175, 0.4);
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(156, 163, 175, 0.55);
+    background: rgba(156, 163, 175, 0.6);
   }
 
   /* Code & Mono typography styling */
