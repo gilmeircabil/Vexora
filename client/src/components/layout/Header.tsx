@@ -107,7 +107,7 @@ export const Header: React.FC = () => {
           </div>
           <div>
             <span className="text-xl font-black tracking-tight text-black">
-              Vexora <span className="text-neutral-400 font-bold">/</span> ToolNest
+              VexoraTool
             </span>
           </div>
         </Link>

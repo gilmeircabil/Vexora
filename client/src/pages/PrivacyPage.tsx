@@ -14,7 +14,7 @@ export const PrivacyPage: React.FC = () => {
           Privacy Policy & Architecture
         </h1>
         <p className="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          How ToolNest processes your data, why your files never leave your device, and our
+          How VexoraTool processes your data, why your files never leave your device, and our
           commitment to transparency.
         </p>
       </div>
@@ -28,7 +28,7 @@ export const PrivacyPage: React.FC = () => {
             </h2>
           </div>
           <p>
-            Every currently published tool on ToolNest operates{' '}
+            Every currently published tool on VexoraTool operates{' '}
             <strong>entirely inside your browser</strong>. When you drop a PDF, image, or text
             snippet into a tool:
           </p>
@@ -61,7 +61,7 @@ export const PrivacyPage: React.FC = () => {
             </h2>
           </div>
           <p>
-            ToolNest does not use Google Analytics, Facebook Pixels, user fingerprinting, or
+            VexoraTool does not use Google Analytics, Facebook Pixels, user fingerprinting, or
             tracking cookies. We do not maintain user profiles or monitor individual tool usage.
           </p>
           <p>
@@ -93,7 +93,7 @@ export const PrivacyPage: React.FC = () => {
             <h2 className="text-base font-bold">4. Honest Security Boundaries</h2>
           </div>
           <p className="text-xs text-amber-900 dark:text-amber-200">
-            While ToolNest does not upload or retain your files, local-first web applications still
+            While VexoraTool does not upload or retain your files, local-first web applications still
             run inside your browser environment. If your computer has malware, untrusted browser
             extensions with permission to read web pages, or compromised memory, those extensions
             could theoretically inspect DOM data. Always keep your browser updated and review

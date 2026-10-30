@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('ToolNest End-to-End Test Suite', () => {
+test.describe('VexoraTool End-to-End Test Suite', () => {
   test('Homepage loads with tagline and tool cards', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(/ToolNest/);
+    await expect(page).toHaveTitle(/VexoraTool/);
     await expect(page.getByText('Everyday tools. One place. No cost.')).toBeVisible();
 
     // Verify tool cards render
@@ -29,7 +29,7 @@ test.describe('ToolNest End-to-End Test Suite', () => {
 
   test('Direct tool URL loads specific tool page with metadata', async ({ page }) => {
     await page.goto('/tools/json-formatter');
-    await expect(page).toHaveTitle(/JSON Formatter & Validator — ToolNest/);
+    await expect(page).toHaveTitle(/JSON Formatter & Validator — VexoraTool/);
     await expect(page.getByRole('heading', { name: 'JSON Formatter & Validator' })).toBeVisible();
     await expect(page.getByText('Local processing · No upload')).toBeVisible();
   });
@@ -88,7 +88,7 @@ test.describe('ToolNest End-to-End Test Suite', () => {
 
   test('Background Remover loads with controls and presets', async ({ page }) => {
     await page.goto('/tools/background-remover');
-    await expect(page).toHaveTitle(/Background Remover — ToolNest/);
+    await expect(page).toHaveTitle(/Background Remover — VexoraTool/);
     await expect(page.getByRole('heading', { name: 'Background Remover' })).toBeVisible();
     await expect(page.getByText('Local processing · No upload')).toBeVisible();
   });

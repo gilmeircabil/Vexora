@@ -13,7 +13,7 @@ export const ToolDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (entry) {
-      document.title = `${entry.definition.name} — Vexora - ToolNest`;
+      document.title = `${entry.definition.name} — VexoraTool`;
     }
   }, [entry]);
 

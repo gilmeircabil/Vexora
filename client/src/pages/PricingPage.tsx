@@ -81,7 +81,7 @@ const FAQS = [
   },
   {
     q: 'What happens if I run out of credits?',
-    a: "If you exhaust your daily free credits, you can upgrade to Pro or Premium for instant monthly credits. Otherwise, your free allowance will automatically replenish tomorrow at 00:00 UTC. Your access to ToolNest's offline utilities is never blocked.",
+    a: "If you exhaust your daily free credits, you can upgrade to Pro or Premium for instant monthly credits. Otherwise, your free allowance will automatically replenish tomorrow at 00:00 UTC. Your access to VexoraTool's offline utilities is never blocked.",
   },
   {
     q: 'Do paid credits roll over to the next month?',

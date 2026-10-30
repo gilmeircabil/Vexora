@@ -26,7 +26,7 @@ export const Footer: React.FC = () => {
                 </svg>
               </div>
               <span className="font-black text-lg text-black tracking-tight">
-                Vexora <span className="text-neutral-400">/</span> ToolNest
+                VexoraTool
               </span>
             </Link>
             <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
@@ -136,7 +136,7 @@ export const Footer: React.FC = () => {
         {/* Bottom copyright & disclaimer */}
         <div className="pt-8 border-t-2 border-black/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-neutral-600">
           <p className="font-mono">
-            © {new Date().getFullYear()} Vexora - ToolNest · MIT License
+            © {new Date().getFullYear()} VexoraTool · MIT License
           </p>
           <p className="text-center sm:text-right">
             Browser-based local execution. Sensitive files never leave your device.

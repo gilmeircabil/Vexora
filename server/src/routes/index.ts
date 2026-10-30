@@ -20,7 +20,7 @@ apiRouter.get('/health', (_req, res) => {
   res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    service: 'ToolNest API',
+    service: 'VexoraTool API',
   });
 });
 

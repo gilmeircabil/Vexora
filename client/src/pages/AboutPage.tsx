@@ -7,20 +7,20 @@ export const AboutPage: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto space-y-10">
       <div className="space-y-3">
-        <h1 className="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
-          About Vexora - ToolNest
+        <h1 className="text-3xl font-black tracking-tight text-black">
+          About VexoraTool
         </h1>
-        <p className="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
+        <p className="text-base font-semibold text-neutral-700 leading-relaxed">
           Everyday tools. One place. No cost. A free, open-source utility platform built with
           privacy and respect for your device.
         </p>
       </div>
 
-      <div className="space-y-6 text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
+      <div className="space-y-6 text-sm text-neutral-800 leading-relaxed">
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
             <Heart className="w-5 h-5 text-rose-500" />
-            <h2 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
+            <h2 className="text-base font-bold text-black">
               The Mission
             </h2>
           </div>
@@ -30,7 +30,7 @@ export const AboutPage: React.FC = () => {
             for simple conversions, or upload sensitive documents to unverified cloud servers.
           </p>
           <p>
-            <strong>Vexora - ToolNest was built to challenge that paradigm.</strong> We provide{' '}
+            <strong>VexoraTool was built to challenge that paradigm.</strong> We provide{' '}
             {TOOL_CATALOG.length} indispensable utilities for images, PDFs, text manipulation, web
             development, and daily calculations completely free, open source, and offline-capable.
           </p>
@@ -39,7 +39,7 @@ export const AboutPage: React.FC = () => {
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
             <Lock className="w-5 h-5 text-indigo-500" />
-            <h2 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
+            <h2 className="text-base font-bold text-black">
               Our Core Principles
             </h2>
           </div>
@@ -68,12 +68,12 @@ export const AboutPage: React.FC = () => {
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
             <Cpu className="w-5 h-5 text-emerald-500" />
-            <h2 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
+            <h2 className="text-base font-bold text-black">
               Honest Disclosure on Future Capabilities
             </h2>
           </div>
           <p>
-            Today, all {TOOL_CATALOG.length} published tools in Vexora - ToolNest execute
+            Today, all {TOOL_CATALOG.length} published tools in VexoraTool execute
             client-side. Advanced neural features are managed with an atomic credit system.
           </p>
           <p>

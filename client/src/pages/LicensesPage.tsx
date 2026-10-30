@@ -24,23 +24,23 @@ export const LicensesPage: React.FC = () => {
           Open Source Licenses
         </h1>
         <p className="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          ToolNest is licensed under the MIT License and built upon open-source software.
+          VexoraTool is licensed under the MIT License and built upon open-source software.
         </p>
       </div>
 
       <div className="space-y-6">
-        {/* ToolNest MIT License */}
+        {/* VexoraTool MIT License */}
         <Card className="space-y-3">
           <div className="flex items-center gap-2 pb-2 border-b border-neutral-100 dark:border-neutral-800">
             <Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
             <h2 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
-              ToolNest License (MIT)
+              VexoraTool License (MIT)
             </h2>
           </div>
           <pre className="p-4 rounded-xl bg-neutral-900 text-neutral-200 font-mono text-xs overflow-x-auto whitespace-pre-wrap leading-relaxed">
             {`MIT License
 
-Copyright (c) 2026 ToolNest Contributors
+Copyright (c) 2026 VexoraTool Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
