@@ -21,7 +21,7 @@ export const HomePage: React.FC = () => {
       <section className="text-center pt-8 pb-4 max-w-3xl mx-auto space-y-5">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/70 dark:border-indigo-800/60 text-indigo-700 dark:text-indigo-400 text-xs font-medium">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>32 Free & Open-Source Browser Utilities</span>
+          <span>{TOOL_CATALOG.length} Free & Open-Source Browser Utilities</span>
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">

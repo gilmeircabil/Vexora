@@ -1,13 +1,14 @@
 import React from 'react';
 import { Card } from '../components/common/Card.js';
 import { ShieldCheck, Heart, Terminal, Cpu, Lock } from 'lucide-react';
+import { TOOL_CATALOG } from '../tools/catalog.js';
 
 export const AboutPage: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto space-y-10">
       <div className="space-y-3">
         <h1 className="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
-          About ToolNest
+          About Vexora - ToolNest
         </h1>
         <p className="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
           Everyday tools. One place. No cost. A free, open-source utility platform built with
@@ -29,9 +30,9 @@ export const AboutPage: React.FC = () => {
             for simple conversions, or upload sensitive documents to unverified cloud servers.
           </p>
           <p>
-            <strong>ToolNest was built to challenge that paradigm.</strong> We provide 30
-            indispensable utilities for images, PDFs, text manipulation, web development, and daily
-            calculations completely free, open source, and offline-capable.
+            <strong>Vexora - ToolNest was built to challenge that paradigm.</strong> We provide{' '}
+            {TOOL_CATALOG.length} indispensable utilities for images, PDFs, text manipulation, web
+            development, and daily calculations completely free, open source, and offline-capable.
           </p>
         </Card>
 
@@ -72,9 +73,8 @@ export const AboutPage: React.FC = () => {
             </h2>
           </div>
           <p>
-            Today, all 30 published tools in ToolNest execute client-side. In the future,
-            specialized features like AI background removal or high-resolution video compression may
-            require heavy neural network inferencing or backend containers.
+            Today, all {TOOL_CATALOG.length} published tools in Vexora - ToolNest execute
+            client-side. Advanced neural features are managed with an atomic credit system.
           </p>
           <p>
             If and when server-assisted tools are introduced, they will always be clearly labeled

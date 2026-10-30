@@ -1,8 +1,8 @@
-# ToolNest
+# Vexora - ToolNest
 
 > **Everyday tools. One place. No cost.**
 
-ToolNest is a free, open-source, hybrid utility platform containing 33 indispensable tools for images, PDFs, text manipulation, developers, everyday calculations, and premium AI-powered tools powered by a 2-phase atomic credit engine.
+Vexora - ToolNest is a free, open-source, hybrid utility platform containing 33 indispensable tools for images, PDFs, text manipulation, developers, everyday calculations, and premium AI-powered tools powered by a 2-phase atomic credit engine.
 
 ---
 

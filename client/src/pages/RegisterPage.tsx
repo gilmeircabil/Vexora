@@ -54,7 +54,7 @@ export const RegisterPage: React.FC = () => {
             <Sparkles className="w-5 h-5" />
           </div>
           <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-            Create your ToolNest Account
+            Create your Vexora - ToolNest Account
           </h1>
           <p className="text-xs text-neutral-500 mt-1">
             Includes{' '}

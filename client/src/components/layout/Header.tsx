@@ -117,7 +117,8 @@ export const Header: React.FC = () => {
           </div>
           <div>
             <span className="text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-              Tool<span className="text-indigo-600 dark:text-indigo-400">Nest</span>
+              Vexora <span className="text-neutral-400 font-normal">-</span> Tool
+              <span className="text-indigo-600 dark:text-indigo-400">Nest</span>
             </span>
           </div>
         </Link>
@@ -399,7 +400,7 @@ export const Header: React.FC = () => {
               to="/about"
               className="block px-3 py-1.5 text-xs text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200"
             >
-              About ToolNest
+              About Vexora - ToolNest
             </Link>
             <Link
               to="/privacy"

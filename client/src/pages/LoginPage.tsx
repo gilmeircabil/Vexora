@@ -49,7 +49,7 @@ export const LoginPage: React.FC = () => {
             <Sparkles className="w-5 h-5" />
           </div>
           <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-            Sign in to ToolNest
+            Sign in to Vexora - ToolNest
           </h1>
           <p className="text-xs text-neutral-500 mt-1">
             Access your daily AI credits, generation history, and subscriptions.

@@ -24,7 +24,9 @@ export const Footer: React.FC = () => {
                   <polyline points="2 12 12 17 22 12" />
                 </svg>
               </div>
-              <span className="font-bold text-neutral-900 dark:text-neutral-100">ToolNest</span>
+              <span className="font-bold text-neutral-900 dark:text-neutral-100">
+                Vexora <span className="text-neutral-400 font-normal">-</span> ToolNest
+              </span>
             </Link>
             <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
               Everyday tools. One place. No cost. Completely free, open-source, and private.
@@ -119,7 +121,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom copyright & disclaimer */}
         <div className="pt-8 border-t border-neutral-100 dark:border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-400">
-          <p>© {new Date().getFullYear()} ToolNest. MIT Licensed Open Source Project.</p>
+          <p>© {new Date().getFullYear()} Vexora - ToolNest. MIT Licensed Open Source Project.</p>
           <p className="text-center sm:text-right">
             Browser-based local execution. Sensitive files never leave your device.
           </p>

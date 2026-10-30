@@ -176,7 +176,7 @@ export const PricingPage: React.FC = () => {
           Supercharge your productivity with AI
         </h1>
         <p className="mt-4 text-base sm:text-lg text-neutral-600 dark:text-neutral-400">
-          All 32 offline utility tools remain completely free forever. Upgrade only when you need
+          All offline utility tools remain completely free forever. Upgrade only when you need
           high-performance neural AI processing and high-volume workloads.
         </p>
 

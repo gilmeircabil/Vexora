@@ -41,6 +41,7 @@ The repository is cleanly partitioned into dedicated `client/` and `server/` wor
 ## Workspace Structure
 
 ### `client/` (Frontend Application)
+
 - `client/src/`
   - `tools/`: Central tool catalog (`catalog.ts`) and code-split registry (`registry.ts`).
   - `features/`: 33 tool interfaces across `images/`, `text/`, `developer/`, `utilities/`, `pdf/`.
@@ -55,6 +56,7 @@ The repository is cleanly partitioned into dedicated `client/` and `server/` wor
 - `client/tsconfig.json`: Frontend TypeScript configuration.
 
 ### `server/` (Backend Application)
+
 - `server/src/`
   - `config/`: Central plan definitions, credit costs, and Zod-validated environment config.
   - `models/`: Mongoose schemas (`User`, `Subscription`, `CreditAccount`, `CreditTransaction`, `AIJob`, `Payment`, `WebhookEvent`, `AIToolConfig`).
@@ -74,6 +76,7 @@ The repository is cleanly partitioned into dedicated `client/` and `server/` wor
 ## Development Scripts (Root Orchestration)
 
 From the project root:
+
 - `npm run dev` or `npm run dev:client` — Start the Vite frontend server on `http://localhost:3000`.
 - `npm run dev:server` — Start the Express backend with hot-reloading on `http://localhost:5000`.
 - `npm run build` — Compile TypeScript and build production bundle into `client/dist/`.

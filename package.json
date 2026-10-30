@@ -1,8 +1,8 @@
 {
-  "name": "toolnest",
+  "name": "vexora-toolnest",
   "private": true,
   "version": "0.1.0",
-  "description": "ToolNest — everyday tools. One place. No cost. Free, open-source, local-first online tools.",
+  "description": "Vexora - ToolNest — everyday tools. One place. No cost. Free, open-source, local-first online tools.",
   "license": "MIT",
   "type": "module",
   "engines": {

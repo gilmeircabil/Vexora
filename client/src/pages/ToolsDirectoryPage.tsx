@@ -17,8 +17,8 @@ export const ToolsDirectoryPage: React.FC = () => {
           Tools Directory
         </h1>
         <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl">
-          Browse the complete catalog of all 30 browser-based tools available on ToolNest. Every
-          utility runs locally with zero uploads.
+          Browse the complete catalog of all {TOOL_CATALOG.length} browser-based tools available on
+          Vexora - ToolNest. Every utility runs locally with zero uploads.
         </p>
 
         <div className="relative max-w-md pt-2">
@@ -27,7 +27,7 @@ export const ToolsDirectoryPage: React.FC = () => {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search all 30 utilities..."
+            placeholder={`Search all ${TOOL_CATALOG.length} utilities...`}
             className="w-full pl-9 pr-4 py-2 text-sm bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-indigo-500"
           />
         </div>
