@@ -43,7 +43,7 @@ export const CopyButton: React.FC<CopyButtonProps> = ({
     >
       {copied ? (
         <>
-          <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+          <Check className="w-4 h-4 text-black stroke-[3]" />
           <span>Copied!</span>
         </>
       ) : (

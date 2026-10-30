@@ -66,35 +66,35 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={t.id}
             role="alert"
-            className={`pointer-events-auto flex items-start gap-3 p-4 rounded-xl shadow-lg border text-sm transition-all animate-in fade-in slide-in-from-bottom-2 duration-200 ${
+            className={`pointer-events-auto flex items-start gap-3 p-4 rounded-2xl shadow-[4px_4px_0px_#000000] border-2 border-black text-sm transition-all animate-in fade-in slide-in-from-bottom-2 duration-200 text-black ${
               t.type === 'success'
-                ? 'bg-emerald-50 text-emerald-950 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-50 dark:border-emerald-800'
+                ? 'bg-[#4ADE80]'
                 : t.type === 'error'
-                  ? 'bg-rose-50 text-rose-950 border-rose-200 dark:bg-rose-950 dark:text-rose-50 dark:border-rose-800'
-                  : 'bg-white text-neutral-900 border-neutral-200 dark:bg-neutral-900 dark:text-neutral-100 dark:border-neutral-800'
+                  ? 'bg-[#F472B6]'
+                  : 'bg-[#FACC15]'
             }`}
           >
             {t.type === 'success' && (
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-black stroke-[2.5] shrink-0 mt-0.5" />
             )}
             {t.type === 'error' && (
-              <AlertCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-black stroke-[2.5] shrink-0 mt-0.5" />
             )}
             {t.type === 'info' && (
-              <Info className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
+              <Info className="w-5 h-5 text-black stroke-[2.5] shrink-0 mt-0.5" />
             )}
 
             <div className="flex-1">
-              {t.title && <p className="font-semibold">{t.title}</p>}
-              <p className={t.title ? 'text-xs opacity-90 mt-0.5' : 'text-sm'}>{t.message}</p>
+              {t.title && <p className="font-black text-black">{t.title}</p>}
+              <p className={t.title ? 'text-xs font-bold mt-0.5 text-black' : 'text-xs font-black text-black'}>{t.message}</p>
             </div>
 
             <button
               onClick={() => removeToast(t.id)}
               aria-label="Close notification"
-              className="text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 p-0.5 rounded transition-colors"
+              className="text-black hover:bg-black/10 p-1 rounded-lg transition-colors cursor-pointer"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4 stroke-[2.5]" />
             </button>
           </div>
         ))}

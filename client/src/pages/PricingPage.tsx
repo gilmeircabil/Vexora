@@ -168,14 +168,14 @@ export const PricingPage: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto mb-12">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60 mb-4">
-          <Sparkles className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#FACC15] text-black border-2 border-black shadow-[2px_2px_0px_#000] mb-4">
+          <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
           <span>Transparent, No-Nonsense Pricing</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
+        <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-black">
           Supercharge your productivity with AI
         </h1>
-        <p className="mt-4 text-base sm:text-lg text-neutral-600 dark:text-neutral-400">
+        <p className="mt-4 text-base sm:text-lg font-bold text-neutral-700 leading-relaxed">
           All offline utility tools remain completely free forever. Upgrade only when you need
           high-performance neural AI processing and high-volume workloads.
         </p>
@@ -183,36 +183,32 @@ export const PricingPage: React.FC = () => {
         {/* Billing Switch */}
         <div className="mt-8 flex items-center justify-center gap-3">
           <span
-            className={`text-sm font-medium ${
-              billingInterval === 'monthly'
-                ? 'text-neutral-900 dark:text-neutral-100'
-                : 'text-neutral-500'
+            className={`text-sm font-black transition-colors ${
+              billingInterval === 'monthly' ? 'text-black' : 'text-neutral-500'
             }`}
           >
             Monthly billing
           </span>
           <button
             onClick={() => setBillingInterval(billingInterval === 'monthly' ? 'yearly' : 'monthly')}
-            className="w-12 h-6 flex items-center bg-neutral-200 dark:bg-neutral-700 rounded-full p-1 cursor-pointer transition-colors"
+            className="w-14 h-7 flex items-center bg-white border-2 border-black rounded-full p-1 cursor-pointer transition-all shadow-[2px_2px_0px_#000]"
             role="switch"
             aria-checked={billingInterval === 'yearly'}
             aria-label="Toggle annual billing"
           >
             <div
-              className={`bg-indigo-600 w-4 h-4 rounded-full shadow-md transform transition-transform ${
-                billingInterval === 'yearly' ? 'translate-x-6' : 'translate-x-0'
+              className={`bg-black w-4 h-4 rounded-full transition-transform ${
+                billingInterval === 'yearly' ? 'translate-x-7' : 'translate-x-0'
               }`}
             />
           </button>
           <span
-            className={`text-sm font-medium flex items-center gap-1.5 ${
-              billingInterval === 'yearly'
-                ? 'text-neutral-900 dark:text-neutral-100'
-                : 'text-neutral-500'
+            className={`text-sm font-black flex items-center gap-2 transition-colors ${
+              billingInterval === 'yearly' ? 'text-black' : 'text-neutral-500'
             }`}
           >
             <span>Annual billing</span>
-            <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
+            <span className="text-[11px] font-black px-2.5 py-0.5 rounded-md bg-[#4ADE80] text-black border-2 border-black shadow-[1.5px_1.5px_0px_#000]">
               Save 17%
             </span>
           </span>
@@ -230,43 +226,43 @@ export const PricingPage: React.FC = () => {
           return (
             <div
               key={p.id}
-              className={`relative flex flex-col justify-between p-6 sm:p-8 rounded-2xl transition-all ${
+              className={`relative flex flex-col justify-between p-7 sm:p-8 rounded-3xl bg-white border-2 border-black transition-all ${
                 p.isPopular
-                  ? 'bg-white dark:bg-neutral-900 border-2 border-indigo-600 shadow-xl dark:shadow-indigo-950/20'
-                  : 'bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xs'
+                  ? 'border-[3px] shadow-[8px_8px_0px_#000000] -translate-y-1'
+                  : 'shadow-[6px_6px_0px_#000000]'
               }`}
             >
               {p.isPopular && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-bold bg-indigo-600 text-white uppercase tracking-wider shadow-sm">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-black bg-[#FACC15] text-black border-2 border-black uppercase tracking-wider shadow-[2px_2px_0px_#000]">
                   Most Popular
                 </div>
               )}
 
               <div>
                 <div className="flex justify-between items-baseline mb-2">
-                  <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">
+                  <h2 className="text-2xl font-black text-black">
                     {p.name}
                   </h2>
                   {isCurrent && (
-                    <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                    <span className="text-[11px] font-black px-2.5 py-0.5 rounded-md bg-[#4ADE80] text-black border border-black shadow-[1px_1px_0px_#000]">
                       Current Plan
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-6">{p.tagline}</p>
+                <p className="text-xs font-bold text-neutral-600 mb-6">{p.tagline}</p>
 
                 <div className="mb-6 flex items-baseline gap-1">
-                  <span className="text-4xl font-extrabold text-neutral-900 dark:text-neutral-100">
+                  <span className="text-4xl sm:text-5xl font-black text-black tracking-tight">
                     ${price.toFixed(2)}
                   </span>
-                  <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                  <span className="text-xs font-black text-neutral-500 font-mono">
                     {billingSuffix}
                   </span>
                 </div>
 
-                <div className="p-3 mb-6 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 border border-neutral-100 dark:border-neutral-800">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-neutral-900 dark:text-neutral-100">
-                    <Zap className="w-4 h-4 text-indigo-500" />
+                <div className="p-3 mb-6 rounded-xl bg-[#FACC15]/20 border-2 border-black shadow-[2px_2px_0px_#000]">
+                  <div className="flex items-center gap-2 text-xs font-black text-black">
+                    <Zap className="w-4 h-4 text-black stroke-[2.5]" />
                     <span>
                       {p.id === 'free'
                         ? '3 Daily AI Generation Credits'
@@ -275,11 +271,13 @@ export const PricingPage: React.FC = () => {
                   </div>
                 </div>
 
-                <ul className="space-y-3 mb-8 text-xs text-neutral-600 dark:text-neutral-300">
+                <ul className="space-y-3 mb-8 text-xs font-bold text-neutral-800">
                   {p.features.map((f, i) => (
                     <li key={i} className="flex items-start gap-2.5">
-                      <Check className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                      <span>{f}</span>
+                      <div className="w-4 h-4 rounded-md bg-[#4ADE80] border border-black flex items-center justify-center shrink-0 mt-0.5">
+                        <Check className="w-3 h-3 text-black stroke-[3]" />
+                      </div>
+                      <span className="leading-tight">{f}</span>
                     </li>
                   ))}
                 </ul>
@@ -289,22 +287,24 @@ export const PricingPage: React.FC = () => {
                 <button
                   disabled={isCurrent || loadingPlan === p.id}
                   onClick={() => handleSelectPlan(p)}
-                  className={`w-full py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                  className={`w-full py-3 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 border-2 border-black transition-all active:translate-x-0.5 active:translate-y-0.5 ${
                     isCurrent
-                      ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400 cursor-not-allowed'
+                      ? 'bg-neutral-200 text-neutral-500 cursor-not-allowed shadow-none'
                       : p.isPopular
-                        ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm hover:shadow'
-                        : 'bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-200 text-white dark:text-neutral-900'
+                        ? 'bg-[#FACC15] hover:bg-[#EAB308] text-black shadow-[3px_3px_0px_#000] active:shadow-[1px_1px_0px_#000]'
+                        : p.id === 'premium'
+                          ? 'bg-[#A78BFA] hover:bg-[#906EE8] text-black shadow-[3px_3px_0px_#000] active:shadow-[1px_1px_0px_#000]'
+                          : 'bg-white hover:bg-neutral-100 text-black shadow-[3px_3px_0px_#000] active:shadow-[1px_1px_0px_#000]'
                   }`}
                 >
                   {loadingPlan === p.id ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin stroke-[2.5]" />
                   ) : isCurrent ? (
                     'Active Plan'
                   ) : (
                     <>
                       <span>{p.id === 'free' ? 'Get Started' : `Upgrade to ${p.name}`}</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4 stroke-[2.5]" />
                     </>
                   )}
                 </button>
@@ -315,12 +315,12 @@ export const PricingPage: React.FC = () => {
       </div>
 
       {/* FAQ Section */}
-      <div className="max-w-3xl mx-auto pt-8 border-t border-neutral-200 dark:border-neutral-800">
+      <div className="max-w-3xl mx-auto pt-8 border-t-2 border-black/10">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+          <h2 className="text-2xl sm:text-3xl font-black text-black">
             Frequently Asked Questions
           </h2>
-          <p className="mt-2 text-xs text-neutral-500">
+          <p className="mt-2 text-xs sm:text-sm font-bold text-neutral-600">
             Everything you need to know about credits, renewals, and privacy.
           </p>
         </div>
@@ -329,13 +329,13 @@ export const PricingPage: React.FC = () => {
           {FAQS.map((faq, idx) => (
             <div
               key={idx}
-              className="p-5 rounded-xl bg-neutral-50 dark:bg-neutral-850 border border-neutral-200/80 dark:border-neutral-800"
+              className="p-5 sm:p-6 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000000] transition-all"
             >
-              <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2 mb-2">
-                <HelpCircle className="w-4 h-4 text-indigo-500 shrink-0" />
+              <h3 className="text-sm sm:text-base font-black text-black flex items-center gap-2.5 mb-2">
+                <HelpCircle className="w-5 h-5 text-black stroke-[2.5] shrink-0" />
                 <span>{faq.q}</span>
               </h3>
-              <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-6">
+              <p className="text-xs sm:text-sm font-semibold text-neutral-700 leading-relaxed pl-7">
                 {faq.a}
               </p>
             </div>

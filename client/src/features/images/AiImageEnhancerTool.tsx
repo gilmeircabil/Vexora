@@ -124,66 +124,70 @@ export const AiImageEnhancerTool: React.FC = () => {
     <div className="space-y-6">
       {/* Credit & Auth Notice Banner */}
       {!isAuthenticated ? (
-        <div className="p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <Sparkles className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
-            <div className="text-xs">
-              <span className="font-bold text-neutral-900 dark:text-neutral-100">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#FACC15]/20 border-2 border-black shadow-[4px_4px_0px_#000000] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#FACC15] border-2 border-black flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#000]">
+              <Sparkles className="w-5 h-5 text-black stroke-[2.5]" />
+            </div>
+            <div>
+              <span className="font-black text-black text-sm block">
                 Sign in to get 3 Free AI Generation Credits Daily
               </span>
-              <p className="text-neutral-600 dark:text-neutral-400">
+              <p className="text-xs font-bold text-neutral-700">
                 Enhance, denoise, and restore photos with zero subscriptions required.
               </p>
             </div>
           </div>
-          <div className="flex gap-2 shrink-0">
+          <div className="flex gap-2.5 shrink-0 w-full sm:w-auto">
             <Link
               to="/login?redirect=/tools/ai-image-enhancer"
-              className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200"
+              className="flex-1 sm:flex-none text-center px-4 py-2 text-xs font-black rounded-xl bg-white hover:bg-neutral-100 border-2 border-black text-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all"
             >
               Sign In
             </Link>
             <Link
               to="/register?redirect=/tools/ai-image-enhancer"
-              className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 text-white shadow-xs"
+              className="flex-1 sm:flex-none text-center px-4 py-2 text-xs font-black rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all"
             >
               Register Free
             </Link>
           </div>
         </div>
       ) : isOutOfCredits ? (
-        <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
-            <div className="text-xs">
-              <span className="font-bold text-neutral-900 dark:text-neutral-100">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#F472B6]/20 border-2 border-black shadow-[4px_4px_0px_#000000] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#F472B6] border-2 border-black flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#000]">
+              <AlertCircle className="w-5 h-5 text-black stroke-[2.5]" />
+            </div>
+            <div>
+              <span className="font-black text-black text-sm block">
                 You've used all your AI credits for today
               </span>
-              <p className="text-neutral-600 dark:text-neutral-400">
+              <p className="text-xs font-bold text-neutral-700">
                 Upgrade your plan for instant monthly credits or wait for the 00:00 UTC daily reset.
               </p>
             </div>
           </div>
           <Link
             to="/pricing"
-            className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs shrink-0 flex items-center gap-1"
+            className="px-4 py-2 text-xs font-black rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-black shadow-[2px_2px_0px_#000] shrink-0 flex items-center gap-1.5 active:translate-x-0.5 active:translate-y-0.5 transition-all"
           >
             <span>Upgrade Plan</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
           </Link>
         </div>
       ) : (
-        <div className="p-3 px-4 rounded-xl bg-neutral-50 dark:bg-neutral-850 border border-neutral-200 dark:border-neutral-800 flex items-center justify-between text-xs">
+        <div className="p-3.5 px-5 rounded-2xl bg-white border-2 border-black shadow-[3px_3px_0px_#000000] flex items-center justify-between text-xs font-bold text-black flex-wrap gap-2">
           <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-            <span className="text-neutral-600 dark:text-neutral-400">Available Credits:</span>
-            <span className="font-mono font-bold text-neutral-900 dark:text-neutral-100">
+            <Zap className="w-4 h-4 text-black stroke-[2.5]" />
+            <span className="text-neutral-700">Available Credits:</span>
+            <span className="font-mono font-black text-black px-2 py-0.5 rounded-md bg-[#4ADE80] border border-black shadow-[1px_1px_0px_#000]">
               {availableCredits}
             </span>
           </div>
-          <div className="text-neutral-500">
+          <div className="text-neutral-700">
             Operation Cost:{' '}
-            <span className="font-mono font-semibold text-neutral-800 dark:text-neutral-200">
+            <span className="font-mono font-black text-black">
               {toolCost} Credit
             </span>
           </div>
@@ -197,7 +201,7 @@ export const AiImageEnhancerTool: React.FC = () => {
           {!previewUrl ? (
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-neutral-300 dark:border-neutral-700 hover:border-indigo-500 rounded-2xl p-12 text-center cursor-pointer bg-neutral-50/50 dark:bg-neutral-850/50 transition-colors"
+              className="border-2 border-dashed border-black hover:bg-neutral-50 rounded-3xl p-12 sm:p-16 text-center cursor-pointer bg-white shadow-[5px_5px_0px_#000000] transition-all"
             >
               <input
                 ref={fileInputRef}
@@ -208,11 +212,13 @@ export const AiImageEnhancerTool: React.FC = () => {
                   if (e.target.files?.[0]) handleFileSelect(e.target.files[0]);
                 }}
               />
-              <Upload className="w-10 h-10 text-neutral-400 mx-auto mb-3" />
-              <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">
+              <div className="w-14 h-14 rounded-2xl bg-[#FACC15] border-2 border-black text-black flex items-center justify-center mx-auto mb-4 shadow-[3px_3px_0px_#000]">
+                <Upload className="w-7 h-7 stroke-[2.5]" />
+              </div>
+              <p className="text-base font-black text-black">
                 Click to upload an image, or drag and drop
               </p>
-              <p className="text-xs text-neutral-500 mt-1">
+              <p className="text-xs font-bold text-neutral-600 mt-1">
                 Supports JPEG, PNG, and WebP (up to 15MB)
               </p>
             </div>
@@ -220,9 +226,11 @@ export const AiImageEnhancerTool: React.FC = () => {
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Original Preview */}
-                <div className="space-y-1.5">
-                  <span className="text-xs font-semibold text-neutral-500">Original Image</span>
-                  <div className="rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800 aspect-video flex items-center justify-center">
+                <div className="space-y-2">
+                  <span className="text-xs font-black text-black uppercase tracking-wider block">
+                    Original Image
+                  </span>
+                  <div className="rounded-2xl overflow-hidden border-2 border-black bg-neutral-100 shadow-[3px_3px_0px_#000] aspect-video flex items-center justify-center">
                     <img
                       src={previewUrl}
                       alt="Original input"
@@ -232,23 +240,23 @@ export const AiImageEnhancerTool: React.FC = () => {
                 </div>
 
                 {/* Enhanced Result */}
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                    <span className="text-xs font-black text-black uppercase tracking-wider">
                       Enhanced Result
                     </span>
                     {resultUrl && (
                       <a
                         href={resultUrl}
                         download={`enhanced_${file?.name || 'image.png'}`}
-                        className="text-[11px] font-semibold text-indigo-600 hover:underline flex items-center gap-1"
+                        className="text-xs font-black text-black bg-[#4ADE80] border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_#000] hover:bg-[#3ec470] flex items-center gap-1"
                       >
-                        <Download className="w-3 h-3" />
+                        <Download className="w-3 h-3 stroke-[2.5]" />
                         <span>Download</span>
                       </a>
                     )}
                   </div>
-                  <div className="rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800 aspect-video flex items-center justify-center relative">
+                  <div className="rounded-2xl overflow-hidden border-2 border-black bg-neutral-100 shadow-[3px_3px_0px_#000] aspect-video flex items-center justify-center relative">
                     {resultUrl ? (
                       <img
                         src={resultUrl}
@@ -257,13 +265,13 @@ export const AiImageEnhancerTool: React.FC = () => {
                       />
                     ) : isProcessing ? (
                       <div className="text-center p-4">
-                        <Loader2 className="w-8 h-8 animate-spin text-indigo-600 mx-auto mb-2" />
-                        <p className="text-xs text-neutral-600 dark:text-neutral-300 font-medium">
+                        <Loader2 className="w-8 h-8 animate-spin text-black stroke-[2.5] mx-auto mb-2" />
+                        <p className="text-xs font-black text-black">
                           {progressStage || 'Processing...'}
                         </p>
                       </div>
                     ) : (
-                      <div className="text-xs text-neutral-400 text-center p-4">
+                      <div className="text-xs font-bold text-neutral-500 text-center p-4">
                         Select options and click "Enhance Image"
                       </div>
                     )}
@@ -278,12 +286,12 @@ export const AiImageEnhancerTool: React.FC = () => {
                     setPreviewUrl(null);
                     setResultUrl(null);
                   }}
-                  className="text-xs text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200"
+                  className="text-xs font-black text-black underline hover:text-neutral-700 cursor-pointer"
                 >
                   Choose another image
                 </button>
                 {file && (
-                  <span className="text-xs text-neutral-400">
+                  <span className="text-xs font-bold text-neutral-600 font-mono">
                     {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
                   </span>
                 )}
@@ -293,18 +301,18 @@ export const AiImageEnhancerTool: React.FC = () => {
         </div>
 
         {/* Options & Action Controls (1 col) */}
-        <div className="space-y-4 bg-white dark:bg-neutral-900 p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-xs h-fit">
-          <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-            <Sliders className="w-4 h-4 text-indigo-500" />
+        <div className="space-y-4 bg-white p-6 rounded-3xl border-2 border-black shadow-[5px_5px_0px_#000000] h-fit">
+          <h3 className="text-sm font-black text-black flex items-center gap-2">
+            <Sliders className="w-4 h-4 text-black stroke-[2.5]" />
             <span>Enhancement Options</span>
           </h3>
 
-          <div className="space-y-3 text-xs">
+          <div className="space-y-4 text-xs">
             <div>
-              <label className="block font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+              <label className="block font-black text-black text-xs uppercase tracking-wider mb-2">
                 Processing Mode
               </label>
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 {[
                   {
                     id: 'enhance',
@@ -321,10 +329,10 @@ export const AiImageEnhancerTool: React.FC = () => {
                 ].map((opt) => (
                   <label
                     key={opt.id}
-                    className={`flex items-start gap-2.5 p-2.5 rounded-xl border cursor-pointer transition-all ${
+                    className={`flex items-start gap-2.5 p-3 rounded-2xl border-2 border-black cursor-pointer transition-all ${
                       mode === opt.id
-                        ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/30'
-                        : 'border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-850'
+                        ? 'bg-[#FACC15]/30 shadow-[3px_3px_0px_#000000]'
+                        : 'bg-white hover:bg-neutral-50 shadow-[1.5px_1.5px_0px_#000000]'
                     }`}
                   >
                     <input
@@ -333,13 +341,13 @@ export const AiImageEnhancerTool: React.FC = () => {
                       value={opt.id}
                       checked={mode === opt.id}
                       onChange={() => setMode(opt.id as any)}
-                      className="mt-0.5 text-indigo-600"
+                      className="mt-0.5 accent-black"
                     />
                     <div>
-                      <span className="font-semibold text-neutral-900 dark:text-neutral-100 block">
+                      <span className="font-black text-black block">
                         {opt.label}
                       </span>
-                      <span className="text-[11px] text-neutral-500">{opt.desc}</span>
+                      <span className="text-[11px] font-bold text-neutral-600">{opt.desc}</span>
                     </div>
                   </label>
                 ))}
@@ -347,10 +355,10 @@ export const AiImageEnhancerTool: React.FC = () => {
             </div>
 
             <div>
-              <label className="block font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+              <label className="block font-black text-black text-xs uppercase tracking-wider mb-2">
                 Super-Resolution Scale
               </label>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2.5">
                 {[
                   { scale: 2, label: '2x Upscale' },
                   { scale: 4, label: '4x Ultra-HD' },
@@ -359,10 +367,10 @@ export const AiImageEnhancerTool: React.FC = () => {
                     key={s.scale}
                     type="button"
                     onClick={() => setScale(s.scale)}
-                    className={`py-2 px-3 rounded-xl font-semibold border text-center transition-all ${
+                    className={`py-2.5 px-3 rounded-xl font-black border-2 border-black text-center transition-all cursor-pointer ${
                       scale === s.scale
-                        ? 'border-indigo-600 bg-indigo-600 text-white'
-                        : 'border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                        ? 'bg-[#FACC15] text-black shadow-[2.5px_2.5px_0px_#000000]'
+                        : 'bg-white text-black hover:bg-neutral-100 shadow-[1.5px_1.5px_0px_#000000]'
                     }`}
                   >
                     {s.label}
@@ -372,24 +380,24 @@ export const AiImageEnhancerTool: React.FC = () => {
             </div>
           </div>
 
-          <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800">
+          <div className="pt-3 border-t-2 border-black/10">
             <button
               onClick={handleEnhance}
               disabled={!file || isProcessing || isOutOfCredits}
-              className={`w-full py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+              className={`w-full py-3 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 border-2 border-black transition-all ${
                 !file || isOutOfCredits
-                  ? 'bg-neutral-200 dark:bg-neutral-800 text-neutral-400 cursor-not-allowed'
-                  : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs'
+                  ? 'bg-neutral-200 text-neutral-500 cursor-not-allowed shadow-none'
+                  : 'bg-[#FACC15] hover:bg-[#EAB308] text-black shadow-[3px_3px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#000000] cursor-pointer'
               }`}
             >
               {isProcessing ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin stroke-[2.5]" />
                   <span>Processing...</span>
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4 stroke-[2.5]" />
                   <span>Enhance Image (1 Credit)</span>
                 </>
               )}

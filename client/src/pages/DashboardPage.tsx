@@ -147,18 +147,18 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Dashboard Top Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-neutral-200 dark:border-neutral-800">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b-2 border-black/10">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 dark:text-neutral-100">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl sm:text-4xl font-black text-black">
               Account Dashboard
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase font-mono bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300">
+            <span className="px-3 py-1 rounded-full text-xs font-black uppercase font-mono bg-[#FACC15] text-black border-2 border-black shadow-[2px_2px_0px_#000]">
               {plan}
             </span>
           </div>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-            Logged in as <span className="font-semibold">{user.email}</span>
+          <p className="text-xs sm:text-sm font-bold text-neutral-600 mt-1">
+            Logged in as <span className="font-black text-black">{user.email}</span>
           </p>
         </div>
 
@@ -168,17 +168,17 @@ export const DashboardPage: React.FC = () => {
               refreshBalance();
               loadDashboardData();
             }}
-            className="p-2 text-xs font-medium rounded-xl border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
+            className="p-2.5 text-xs font-black rounded-xl border-2 border-black bg-white hover:bg-neutral-100 text-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
             title="Refresh credits & transactions"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
+            <RefreshCw className="w-3.5 h-3.5 stroke-[2.5]" />
             <span className="hidden sm:inline">Refresh</span>
           </button>
           <Link
             to="/pricing"
-            className="py-2 px-3.5 text-xs font-semibold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow-xs flex items-center gap-1.5 transition-colors"
+            className="py-2.5 px-4 text-xs font-black rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-black shadow-[3px_3px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5"
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>Manage Plans</span>
           </Link>
         </div>
@@ -187,57 +187,65 @@ export const DashboardPage: React.FC = () => {
       {/* Credit Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Total Available */}
-        <div className="p-5 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xs">
-          <div className="flex items-center justify-between text-neutral-500 mb-2">
-            <span className="text-xs font-medium">Available AI Credits</span>
-            <Zap className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+        <div className="p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000000]">
+          <div className="flex items-center justify-between text-neutral-600 mb-2">
+            <span className="text-xs font-black uppercase tracking-wider text-black">Available Credits</span>
+            <div className="w-7 h-7 rounded-lg bg-[#4ADE80] border border-black flex items-center justify-center">
+              <Zap className="w-4 h-4 text-black stroke-[2.5]" />
+            </div>
           </div>
-          <div className="text-3xl font-extrabold text-neutral-900 dark:text-neutral-100 font-mono">
+          <div className="text-3xl font-black text-black font-mono">
             {totalAvailable}
           </div>
-          <p className="text-[11px] text-neutral-500 mt-1">
+          <p className="text-[11px] font-bold text-neutral-600 mt-1">
             Ready to consume across all AI generation tools
           </p>
         </div>
 
         {/* Daily Credits */}
-        <div className="p-5 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xs">
-          <div className="flex items-center justify-between text-neutral-500 mb-2">
-            <span className="text-xs font-medium">Daily Free Allowance</span>
-            <Clock className="w-4 h-4 text-emerald-500" />
+        <div className="p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000000]">
+          <div className="flex items-center justify-between text-neutral-600 mb-2">
+            <span className="text-xs font-black uppercase tracking-wider text-black">Daily Free Allowance</span>
+            <div className="w-7 h-7 rounded-lg bg-[#FACC15] border border-black flex items-center justify-center">
+              <Clock className="w-4 h-4 text-black stroke-[2.5]" />
+            </div>
           </div>
-          <div className="text-3xl font-extrabold text-neutral-900 dark:text-neutral-100 font-mono">
+          <div className="text-3xl font-black text-black font-mono">
             {dailyRemaining}{' '}
-            <span className="text-sm font-normal text-neutral-400">/ {dailyAllowance}</span>
+            <span className="text-sm font-bold text-neutral-500">/ {dailyAllowance}</span>
           </div>
-          <p className="text-[11px] text-neutral-500 mt-1">Resets automatically at 00:00 UTC</p>
+          <p className="text-[11px] font-bold text-neutral-600 mt-1">Resets automatically at 00:00 UTC</p>
         </div>
 
         {/* Monthly Subscription Credits */}
-        <div className="p-5 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xs">
-          <div className="flex items-center justify-between text-neutral-500 mb-2">
-            <span className="text-xs font-medium">Monthly Plan Credits</span>
-            <Sparkles className="w-4 h-4 text-purple-500" />
+        <div className="p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000000]">
+          <div className="flex items-center justify-between text-neutral-600 mb-2">
+            <span className="text-xs font-black uppercase tracking-wider text-black">Monthly Plan Credits</span>
+            <div className="w-7 h-7 rounded-lg bg-[#A78BFA] border border-black flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-black stroke-[2.5]" />
+            </div>
           </div>
-          <div className="text-3xl font-extrabold text-neutral-900 dark:text-neutral-100 font-mono">
+          <div className="text-3xl font-black text-black font-mono">
             {monthlyRemaining}{' '}
-            <span className="text-sm font-normal text-neutral-400">/ {monthlyAllowance}</span>
+            <span className="text-sm font-bold text-neutral-500">/ {monthlyAllowance}</span>
           </div>
-          <p className="text-[11px] text-neutral-500 mt-1">
+          <p className="text-[11px] font-bold text-neutral-600 mt-1">
             {isFree ? 'Upgrade to Pro or Premium' : 'Active billing period balance'}
           </p>
         </div>
 
         {/* Plan Status & Renewal */}
-        <div className="p-5 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xs">
-          <div className="flex items-center justify-between text-neutral-500 mb-2">
-            <span className="text-xs font-medium">Subscription Status</span>
-            <CreditCard className="w-4 h-4 text-blue-500" />
+        <div className="p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000000]">
+          <div className="flex items-center justify-between text-neutral-600 mb-2">
+            <span className="text-xs font-black uppercase tracking-wider text-black">Subscription Status</span>
+            <div className="w-7 h-7 rounded-lg bg-[#38BDF8] border border-black flex items-center justify-center">
+              <CreditCard className="w-4 h-4 text-black stroke-[2.5]" />
+            </div>
           </div>
-          <div className="text-lg font-bold text-neutral-900 dark:text-neutral-100 capitalize">
+          <div className="text-lg font-black text-black capitalize">
             {user.subscription?.status || 'Active'}
           </div>
-          <p className="text-[11px] text-neutral-500 mt-1">
+          <p className="text-[11px] font-bold text-neutral-600 mt-1">
             {user.subscription?.currentPeriodEnd
               ? `Cycle ends ${new Date(user.subscription.currentPeriodEnd).toLocaleDateString()}`
               : 'Permanent free tier'}
@@ -246,7 +254,7 @@ export const DashboardPage: React.FC = () => {
             <button
               onClick={handleCancelSubscription}
               disabled={isCanceling}
-              className="mt-2 text-[11px] text-red-600 hover:underline block"
+              className="mt-2 text-[11px] font-black text-red-600 hover:underline block cursor-pointer"
             >
               {isCanceling ? 'Canceling...' : 'Cancel renewal'}
             </button>
@@ -259,26 +267,26 @@ export const DashboardPage: React.FC = () => {
         {/* Recent AI Generations (1 col) */}
         <div className="lg:col-span-1 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-              <FileImage className="w-4 h-4 text-indigo-500" />
+            <h2 className="text-base font-black text-black flex items-center gap-2">
+              <FileImage className="w-4 h-4 text-black stroke-[2.5]" />
               <span>Recent AI Jobs</span>
             </h2>
             <Link
               to="/tools/ai-image-enhancer"
-              className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-0.5"
+              className="text-xs font-black text-black hover:underline flex items-center gap-1"
             >
               <span>Launch Tool</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
             </Link>
           </div>
 
-          <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800 p-4 divide-y divide-neutral-100 dark:divide-neutral-800">
+          <div className="bg-white rounded-3xl border-2 border-black p-5 shadow-[4px_4px_0px_#000000] divide-y-2 divide-black/10">
             {jobs.length === 0 ? (
-              <div className="py-8 text-center text-xs text-neutral-500">
+              <div className="py-8 text-center text-xs font-bold text-neutral-600">
                 <p>No recent AI jobs yet.</p>
                 <Link
                   to="/tools/ai-image-enhancer"
-                  className="mt-2 inline-block text-indigo-600 dark:text-indigo-400 font-semibold hover:underline"
+                  className="mt-2 inline-block font-black text-black underline hover:text-neutral-700"
                 >
                   Enhance your first image
                 </Link>
@@ -290,10 +298,10 @@ export const DashboardPage: React.FC = () => {
                   className="py-3 first:pt-0 last:pb-0 flex items-center justify-between text-xs"
                 >
                   <div>
-                    <p className="font-semibold text-neutral-800 dark:text-neutral-200">
+                    <p className="font-black text-black">
                       {job.inputMetadata?.originalName || job.tool}
                     </p>
-                    <p className="text-[11px] text-neutral-500">
+                    <p className="text-[11px] font-bold text-neutral-600">
                       {new Date(job.createdAt).toLocaleString()} • {job.creditsConsumed} credit(s)
                     </p>
                   </div>
@@ -302,13 +310,13 @@ export const DashboardPage: React.FC = () => {
                       <a
                         href={job.outputUrl}
                         download
-                        className="p-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 flex items-center gap-1 text-[11px] font-medium"
+                        className="p-1.5 px-2.5 rounded-lg bg-[#4ADE80] border border-black hover:bg-[#3ec470] text-black shadow-[1px_1px_0px_#000] flex items-center gap-1 text-[11px] font-black"
                       >
-                        <Download className="w-3.5 h-3.5" />
+                        <Download className="w-3.5 h-3.5 stroke-[2.5]" />
                         <span>Download</span>
                       </a>
                     ) : (
-                      <span className="text-[11px] font-medium text-amber-600 dark:text-amber-400 capitalize">
+                      <span className="text-[11px] font-black text-neutral-800 bg-[#FACC15] border border-black px-2 py-0.5 rounded capitalize">
                         {job.status}
                       </span>
                     )}
@@ -322,27 +330,27 @@ export const DashboardPage: React.FC = () => {
         {/* Credit Transaction History Table (2 cols) */}
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
+            <h2 className="text-base font-black text-black">
               Credit Usage & Transaction History
             </h2>
           </div>
 
-          <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden shadow-xs">
+          <div className="bg-white rounded-3xl border-2 border-black overflow-hidden shadow-[5px_5px_0px_#000000]">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-neutral-50 dark:bg-neutral-850 border-b border-neutral-200 dark:border-neutral-800 text-neutral-500 uppercase tracking-wider font-semibold text-[10px]">
+                <thead className="bg-[#FAF7F2] border-b-2 border-black text-black uppercase tracking-wider font-black text-[11px]">
                   <tr>
-                    <th className="py-3 px-4">Date</th>
-                    <th className="py-3 px-4">Description</th>
-                    <th className="py-3 px-4">Type</th>
-                    <th className="py-3 px-4">Credits</th>
-                    <th className="py-3 px-4">Status</th>
+                    <th className="py-3.5 px-4">Date</th>
+                    <th className="py-3.5 px-4">Description</th>
+                    <th className="py-3.5 px-4">Type</th>
+                    <th className="py-3.5 px-4">Credits</th>
+                    <th className="py-3.5 px-4">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800 text-neutral-700 dark:text-neutral-300">
+                <tbody className="divide-y-2 divide-black/10 text-black font-bold">
                   {transactions.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="py-8 text-center text-neutral-500 text-xs">
+                      <td colSpan={5} className="py-8 text-center text-neutral-600 font-bold text-xs">
                         No transactions recorded yet.
                       </td>
                     </tr>
@@ -352,34 +360,34 @@ export const DashboardPage: React.FC = () => {
                       return (
                         <tr
                           key={tx._id}
-                          className="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/40"
+                          className="hover:bg-neutral-50 transition-colors"
                         >
-                          <td className="py-3 px-4 text-neutral-500 whitespace-nowrap">
+                          <td className="py-3 px-4 text-neutral-600 whitespace-nowrap">
                             {new Date(tx.createdAt).toLocaleDateString()}
                           </td>
-                          <td className="py-3 px-4 font-medium text-neutral-900 dark:text-neutral-100">
+                          <td className="py-3 px-4 font-black text-black">
                             {tx.description}
                           </td>
-                          <td className="py-3 px-4 uppercase text-[10px] font-mono text-neutral-500">
+                          <td className="py-3 px-4 uppercase text-[10px] font-mono font-bold text-neutral-600">
                             {tx.type.replace('_', ' ')}
                           </td>
                           <td
-                            className={`py-3 px-4 font-mono font-bold whitespace-nowrap ${
+                            className={`py-3 px-4 font-mono font-black whitespace-nowrap ${
                               isDeduction
-                                ? 'text-amber-600 dark:text-amber-400'
-                                : 'text-emerald-600 dark:text-emerald-400'
+                                ? 'text-red-600'
+                                : 'text-emerald-700'
                             }`}
                           >
                             {isDeduction ? `-${tx.amount}` : `+${tx.amount}`}
                           </td>
                           <td className="py-3 px-4">
                             <span
-                              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase ${
+                              className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase border border-black shadow-[1px_1px_0px_#000] ${
                                 tx.status === 'committed'
-                                  ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300'
+                                  ? 'bg-[#4ADE80] text-black'
                                   : tx.status === 'refunded'
-                                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300'
-                                    : 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300'
+                                    ? 'bg-[#38BDF8] text-black'
+                                    : 'bg-[#FACC15] text-black'
                               }`}
                             >
                               {tx.status}
