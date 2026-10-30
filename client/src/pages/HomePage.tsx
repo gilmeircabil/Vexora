@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router';
-import { Search, Shield, Zap, Lock, Sparkles, X, ArrowRight, Terminal, Cpu } from 'lucide-react';
+import { Search, Shield, Zap, Lock, Sparkles, X, Terminal } from 'lucide-react';
 import { TOOL_CATALOG, CATEGORIES, searchTools, type ToolCategory } from '../tools/catalog.js';
 import { ToolCard } from '../components/common/ToolCard.js';
 import { Icon } from '../components/common/Icon.js';
@@ -36,21 +35,21 @@ export const HomePage: React.FC = () => {
       {/* Hero Section */}
       <section className="text-center pt-6 sm:pt-10 pb-2 max-w-3xl mx-auto space-y-6">
         {/* Eyebrow Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50/80 dark:bg-indigo-950/50 border border-indigo-200/80 dark:border-indigo-800/60 text-indigo-700 dark:text-indigo-300 text-xs font-mono font-medium shadow-2xs">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-mono font-medium shadow-2xs">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span>OPEN UTILITY WORKBENCH</span>
-          <span className="text-neutral-400 dark:text-neutral-600">·</span>
+          <span className="text-neutral-400 dark:text-neutral-500">·</span>
           <span>{TOOL_CATALOG.length} TOOLS READY</span>
         </div>
 
         {/* Main Heading */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100 leading-[1.12]">
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-neutral-900 dark:text-white leading-[1.12]">
           Everyday tools. One place.{' '}
           <span className="text-indigo-600 dark:text-indigo-400">Zero tracking.</span>
         </h1>
 
         {/* Descriptive Deck */}
-        <p className="text-sm sm:text-base lg:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-sm sm:text-base lg:text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto leading-relaxed">
           High-performance, client-side utilities for images, PDFs, text, and developers. Processed
           instantly in your browser with zero file uploads or cloud storage.
         </p>
@@ -64,7 +63,7 @@ export const HomePage: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search tools by name, format, or task (e.g. compress, jwt, pdf)..."
-              className="w-full pl-12 pr-12 py-3.5 text-sm sm:text-base bg-white dark:bg-neutral-900/90 border border-neutral-300/80 dark:border-neutral-700/80 rounded-2xl shadow-xs focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100/70 dark:focus:ring-indigo-950/50 focus:outline-none transition-all text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400"
+              className="w-full pl-12 pr-12 py-3.5 text-sm sm:text-base bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-2xl shadow-xs focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-950/50 focus:outline-none transition-all text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400"
             />
             {searchQuery ? (
               <button
@@ -88,7 +87,7 @@ export const HomePage: React.FC = () => {
               <button
                 key={tag}
                 onClick={() => handleTagClick(tag)}
-                className="px-2.5 py-0.5 rounded-md bg-neutral-100/90 dark:bg-neutral-800/80 hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80 text-neutral-600 dark:text-neutral-300 text-[11px] font-medium transition-colors"
+                className="px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-xs font-medium transition-colors border border-neutral-200/60 dark:border-neutral-700/60"
               >
                 {tag}
               </button>
@@ -108,11 +107,11 @@ export const HomePage: React.FC = () => {
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all shrink-0 ${
               selectedCategory === 'all' && !searchQuery
                 ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 shadow-sm'
-                : 'bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 border border-neutral-200/80 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700'
+                : 'bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700'
             }`}
           >
             <span>All Utilities</span>
-            <span className="font-mono text-[11px] px-1.5 py-0.2 rounded bg-black/10 dark:bg-white/10">
+            <span className="font-mono text-[11px] px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10">
               {TOOL_CATALOG.length}
             </span>
           </button>
@@ -130,12 +129,12 @@ export const HomePage: React.FC = () => {
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all shrink-0 whitespace-nowrap ${
                   isSelected
                     ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 border border-neutral-200/80 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700'
+                    : 'bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700'
                 }`}
               >
                 <Icon name={cat.iconName} className="w-4 h-4" />
                 <span>{cat.name}</span>
-                <span className="font-mono text-[11px] px-1.5 py-0.2 rounded bg-black/10 dark:bg-white/10">
+                <span className="font-mono text-[11px] px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10">
                   {count}
                 </span>
               </button>
@@ -144,7 +143,7 @@ export const HomePage: React.FC = () => {
         </div>
 
         {/* Results Counter / Filter State */}
-        <div className="flex items-center justify-between text-xs text-neutral-500 px-1">
+        <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 px-1">
           <div className="flex items-center gap-2 font-mono">
             <span>
               {searchQuery

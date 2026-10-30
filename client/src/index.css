@@ -1,12 +1,14 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --bg-page: #f8fafc;
     --text-primary: #0f172a;
     --text-secondary: #475569;
     --border-subtle: #e2e8f0;
-    --grid-dot-color: rgba(148, 163, 184, 0.22);
+    --grid-dot-color: rgba(148, 163, 184, 0.25);
   }
 
   .dark {
@@ -17,9 +19,14 @@
     --grid-dot-color: rgba(255, 255, 255, 0.05);
   }
 
+  html,
   body {
     background-color: var(--bg-page);
     color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  body {
     font-family:
       system-ui,
       -apple-system,
@@ -35,7 +42,6 @@
     background-image: radial-gradient(var(--grid-dot-color) 1px, transparent 1px);
     background-size: 24px 24px;
     background-position: -1px -1px;
-    min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
