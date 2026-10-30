@@ -6,13 +6,15 @@
     --text-primary: #0f172a;
     --text-secondary: #475569;
     --border-subtle: #e2e8f0;
+    --grid-dot-color: rgba(148, 163, 184, 0.22);
   }
 
   .dark {
-    --bg-page: #090d16;
+    --bg-page: #0b0f17;
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --border-subtle: #1e293b;
+    --grid-dot-color: rgba(255, 255, 255, 0.05);
   }
 
   body {
@@ -30,11 +32,49 @@
       'Open Sans',
       'Helvetica Neue',
       sans-serif;
+    background-image: radial-gradient(var(--grid-dot-color) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: -1px -1px;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Refined scrollbar */
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.35);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.55);
+  }
+
+  /* Code & Mono typography styling */
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family:
+      ui-monospace,
+      SFMono-Regular,
+      Menlo,
+      Monaco,
+      Consolas,
+      'Liberation Mono',
+      'Courier New',
+      monospace;
   }
 }
 
 /* Custom accessible focus-visible styles */
 :focus-visible {
-  outline: 2px solid #4f46e5;
+  outline: 2px solid #6366f1;
   outline-offset: 2px;
 }

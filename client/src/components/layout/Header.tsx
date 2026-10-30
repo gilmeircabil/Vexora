@@ -125,18 +125,18 @@ export const Header: React.FC = () => {
 
         {/* Search Bar - Desktop */}
         <div ref={searchContainerRef} className="relative flex-1 max-w-md hidden md:block">
-          <div className="relative">
-            <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <div className="relative group">
+            <Search className="w-4 h-4 text-neutral-400 group-focus-within:text-indigo-500 absolute left-3 top-1/2 -translate-y-1/2 transition-colors pointer-events-none" />
             <input
               ref={searchInputRef}
               type="text"
               value={searchQuery}
               onChange={handleSearchChange}
               onFocus={() => searchQuery.trim() && setIsSearchOpen(true)}
-              placeholder="Search 30+ browser tools... (Press /)"
-              className="w-full pl-9 pr-8 py-1.5 text-xs sm:text-sm bg-neutral-100/80 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700/80 rounded-xl focus:bg-white dark:focus:bg-neutral-900 focus:border-indigo-500 focus:outline-none transition-colors text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400"
+              placeholder="Search 33 browser utilities..."
+              className="w-full pl-9 pr-8 py-1.5 text-xs sm:text-sm bg-neutral-100/90 dark:bg-neutral-800/90 border border-neutral-200/90 dark:border-neutral-700/80 rounded-xl focus:bg-white dark:focus:bg-neutral-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-950/60 focus:outline-none transition-all text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400"
             />
-            {searchQuery && (
+            {searchQuery ? (
               <button
                 onClick={() => {
                   setSearchQuery('');
@@ -146,6 +146,10 @@ export const Header: React.FC = () => {
               >
                 <X className="w-3.5 h-3.5" />
               </button>
+            ) : (
+              <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-neutral-200/70 dark:bg-neutral-700/70 text-neutral-500 dark:text-neutral-400 border border-neutral-300/70 dark:border-neutral-600/70">
+                /
+              </kbd>
             )}
           </div>
 
