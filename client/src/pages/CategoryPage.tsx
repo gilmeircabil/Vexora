@@ -16,38 +16,59 @@ export const CategoryPage: React.FC = () => {
 
   const tools = getToolsByCategory(category.id);
 
+  const getCategoryColor = () => {
+    switch (category.id) {
+      case 'images':
+        return 'bg-[#4ADE80]';
+      case 'pdf':
+        return 'bg-[#FACC15]';
+      case 'developer':
+        return 'bg-[#A78BFA]';
+      case 'text':
+        return 'bg-[#38BDF8]';
+      case 'utilities':
+        return 'bg-[#F472B6]';
+      default:
+        return 'bg-[#FACC15]';
+    }
+  };
+
+  const catColor = getCategoryColor();
+
   return (
     <div className="space-y-10">
       {/* Category Header */}
-      <div className="border-b border-neutral-200/90 pb-8 space-y-4">
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-neutral-500">
-          <Link to="/" className="hover:text-indigo-600 transition-colors">
+      <div className="border-b-2 border-black pb-8 space-y-4">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs font-black text-black">
+          <Link to="/" className="hover:underline">
             Home
           </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
-          <Link to="/tools" className="hover:text-indigo-600 transition-colors">
+          <ChevronRight className="w-3.5 h-3.5 stroke-[3]" />
+          <Link to="/tools" className="hover:underline">
             Tools
           </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
-          <span className="text-neutral-800 font-medium">
+          <ChevronRight className="w-3.5 h-3.5 stroke-[3]" />
+          <span className="bg-[#FACC15] border border-black px-2 py-0.5 rounded-md font-mono">
             {category.name}
           </span>
         </nav>
 
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50/90 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100 shadow-2xs">
-            <Icon name={category.iconName} className="w-6 h-6" />
+          <div
+            className={`w-14 h-14 rounded-2xl border-2 border-black flex items-center justify-center shrink-0 shadow-[4px_4px_0px_#000000] text-black ${catColor}`}
+          >
+            <Icon name={category.iconName} className="w-7 h-7 stroke-[2.3]" />
           </div>
           <div>
-            <div className="flex items-center gap-2.5">
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-800">
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-black">
                 {category.name}
               </h1>
-              <span className="text-xs font-mono font-medium px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-600">
+              <span className="text-xs font-mono font-black px-2.5 py-0.5 rounded-lg border-2 border-black bg-white shadow-[2px_2px_0px_#000000]">
                 {tools.length} utilities
               </span>
             </div>
-            <p className="text-sm text-neutral-600 mt-1 max-w-2xl leading-relaxed">
+            <p className="text-sm sm:text-base font-semibold text-neutral-700 mt-1 max-w-2xl leading-relaxed">
               {category.description}
             </p>
           </div>
@@ -55,25 +76,25 @@ export const CategoryPage: React.FC = () => {
       </div>
 
       {/* Category Tools Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {tools.map((tool) => (
           <ToolCard key={tool.id} tool={tool} />
         ))}
       </div>
 
       {/* Other Categories Links */}
-      <section className="pt-12 border-t border-neutral-200/90 space-y-4">
-        <h2 className="text-xs font-mono font-semibold uppercase tracking-wider text-neutral-500">
+      <section className="pt-12 border-t-2 border-black/10 space-y-4">
+        <h2 className="text-xs font-mono font-black uppercase tracking-wider text-black">
           Other Tool Suites
         </h2>
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2.5 flex-wrap">
           {CATEGORIES.filter((c) => c.id !== category.id).map((c) => (
             <Link
               key={c.id}
               to={`/category/${c.slug}`}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-neutral-200 hover:border-indigo-400 text-xs font-medium text-neutral-700 transition-colors shadow-2xs"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border-2 border-black hover:bg-[#FACC15] text-xs font-black text-black transition-all shadow-[2.5px_2.5px_0px_#000000] hover:-translate-y-0.5 active:translate-y-0.5"
             >
-              <Icon name={c.iconName} className="w-4 h-4 text-indigo-500" />
+              <Icon name={c.iconName} className="w-4 h-4 stroke-[2.5]" />
               <span>{c.name}</span>
             </Link>
           ))}

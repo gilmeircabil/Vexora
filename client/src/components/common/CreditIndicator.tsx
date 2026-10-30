@@ -13,9 +13,9 @@ export const CreditIndicator: React.FC<{ isMobile?: boolean }> = ({ isMobile = f
     return (
       <Link
         to="/pricing"
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200/80 hover:bg-indigo-100 transition-colors shadow-2xs"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black rounded-xl bg-[#FACC15] hover:bg-[#EAB308] text-black border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
       >
-        <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+        <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
         <span>3 Free AI Credits</span>
       </Link>
     );
@@ -36,17 +36,15 @@ export const CreditIndicator: React.FC<{ isMobile?: boolean }> = ({ isMobile = f
 
   if (isMobile) {
     return (
-      <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200">
+      <div className="p-3 bg-white rounded-xl border-2 border-black shadow-[3px_3px_0px_#000000]">
         <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-neutral-800">
-            <Sparkles className="w-4 h-4 text-indigo-600" />
+          <div className="flex items-center gap-1.5 text-xs font-black text-black">
+            <Sparkles className="w-4 h-4 text-purple-600" />
             <span>{planLabel}</span>
           </div>
           <span
-            className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-              isOutOfCredits
-                ? 'bg-amber-100 text-amber-800'
-                : 'bg-indigo-100 text-indigo-800'
+            className={`text-xs font-black px-2 py-0.5 rounded-lg border-2 border-black shadow-[1.5px_1.5px_0px_#000000] ${
+              isOutOfCredits ? 'bg-[#F472B6] text-black' : 'bg-[#4ADE80] text-black'
             }`}
           >
             {remaining} / {totalAllowance} Credits
@@ -54,20 +52,20 @@ export const CreditIndicator: React.FC<{ isMobile?: boolean }> = ({ isMobile = f
         </div>
 
         {isOutOfCredits ? (
-          <div className="mt-2 text-xs text-amber-700">
-            <p className="mb-2">
+          <div className="mt-2 text-xs text-neutral-800">
+            <p className="mb-2 font-bold">
               You've used all your AI credits. Upgrade your plan to continue generating.
             </p>
             <Link
               to="/pricing"
-              className="inline-flex items-center justify-center gap-1 w-full py-1.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium text-xs shadow-xs"
+              className="inline-flex items-center justify-center gap-1 w-full py-2 px-3 bg-[#FACC15] hover:bg-[#EAB308] text-black border-2 border-black rounded-xl font-black text-xs shadow-[2px_2px_0px_#000000]"
             >
               <span>Upgrade Plan</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
             </Link>
           </div>
         ) : (
-          <p className="text-[11px] text-neutral-500">
+          <p className="text-[11px] font-semibold text-neutral-600">
             {isFree ? 'Resets daily at 00:00 UTC' : 'Refreshes every billing month'}
           </p>
         )}
@@ -83,65 +81,62 @@ export const CreditIndicator: React.FC<{ isMobile?: boolean }> = ({ isMobile = f
     >
       <Link
         to={isOutOfCredits ? '/pricing' : '/dashboard'}
-        className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all ${
+        className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-black rounded-xl border-2 border-black transition-all ${
           isOutOfCredits
-            ? 'bg-amber-50 text-amber-800 border-amber-300 animate-pulse'
-            : 'bg-white text-neutral-700 border-neutral-200/90 hover:border-indigo-300 shadow-2xs'
+            ? 'bg-[#F472B6] text-black shadow-[2px_2px_0px_#000000] animate-pulse'
+            : 'bg-white text-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5'
         }`}
       >
         <span
-          className={`w-2 h-2 rounded-full ${isOutOfCredits ? 'bg-amber-500' : 'bg-emerald-500'}`}
+          className={`w-2.5 h-2.5 rounded-full border border-black ${
+            isOutOfCredits ? 'bg-red-500' : 'bg-[#4ADE80]'
+          }`}
         />
         <div className="flex items-center gap-1.5">
-          <span className="font-semibold">{planLabel}</span>
-          <span className="text-neutral-400">•</span>
-          <span className="font-mono font-bold">
-            {remaining} / {totalAllowance}
+          <span>{planLabel}</span>
+          <span className="text-black/30">•</span>
+          <span className="font-mono">
+            {remaining}/{totalAllowance}
           </span>
-          <span className="text-neutral-500 hidden lg:inline">Credits</span>
         </div>
-        {isOutOfCredits && <Zap className="w-3.5 h-3.5 text-amber-600" />}
+        {isOutOfCredits && <Zap className="w-3.5 h-3.5 text-black" />}
       </Link>
 
       {/* Hover Dropdown / Tooltip */}
       {showTooltip && (
-        <div className="absolute right-0 mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-neutral-200 text-xs z-50">
-          <div className="flex items-center justify-between mb-2 pb-2 border-b border-neutral-100">
-            <span className="font-semibold text-neutral-800">
-              AI Generation Balance
-            </span>
-            <span className="text-[10px] text-neutral-400 uppercase tracking-wider font-mono">
+        <div className="absolute right-0 mt-2 w-64 p-4 bg-white rounded-2xl shadow-[5px_5px_0px_#000000] border-2 border-black text-xs z-50">
+          <div className="flex items-center justify-between mb-2 pb-2 border-b-2 border-black/10">
+            <span className="font-black text-black">AI Generation Balance</span>
+            <span className="text-[10px] font-black uppercase tracking-wider font-mono px-1.5 py-0.5 bg-[#FACC15] border border-black rounded">
               {plan}
             </span>
           </div>
 
-          <div className="space-y-1.5 text-neutral-600">
+          <div className="space-y-1.5 text-neutral-800 font-semibold">
             <div className="flex justify-between">
               <span>Available Credits:</span>
-              <span className="font-mono font-bold text-neutral-800">
-                {remaining}
-              </span>
+              <span className="font-mono font-black text-black text-sm">{remaining}</span>
             </div>
-            <div className="flex justify-between text-[11px] text-neutral-500">
-              <span>{isFree ? 'Daily Limit:' : 'Monthly Limit:'}</span>
-              <span className="font-mono">{totalAllowance}</span>
+            <div className="flex justify-between text-[11px] text-neutral-600">
+              <span>{isFree ? 'Daily Allowance:' : 'Monthly Allowance:'}</span>
+              <span className="font-mono font-bold">{totalAllowance}</span>
             </div>
             {isFree && (
-              <div className="text-[11px] text-neutral-400 mt-1">
+              <div className="text-[11px] text-neutral-500 font-mono mt-1">
                 Resets daily at 00:00 UTC
               </div>
             )}
           </div>
 
-          <div className="mt-3 pt-2 border-t border-neutral-100 flex items-center justify-between">
+          <div className="mt-3 pt-2 border-t-2 border-black/10 flex items-center justify-between font-black">
             <Link
               to="/pricing"
-              className="text-indigo-600 hover:text-indigo-700 font-medium inline-flex items-center gap-1"
+              className="text-black hover:underline inline-flex items-center gap-1"
             >
               <span>{isOutOfCredits ? 'Upgrade Now' : 'View Plans'}</span>
-              <ArrowUpRight className="w-3 h-3" />
+              <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
             </Link>
-            <Link to="/dashboard" className="text-neutral-400 hover:text-neutral-600">
+            <Link to="/dashboard" className="text-neutral-500 hover:text-black">
               History
             </Link>
           </div>

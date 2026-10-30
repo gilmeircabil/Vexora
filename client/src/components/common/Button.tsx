@@ -21,23 +21,23 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer';
+      'inline-flex items-center justify-center font-black rounded-xl border-2 border-black transition-all select-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-[3px_3px_0px_#000000] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#000000]';
 
     const variants = {
       primary:
-        'bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 focus-visible:outline-indigo-600 shadow-sm',
+        'bg-[#FACC15] text-black hover:bg-[#EAB308]',
       secondary:
-        'bg-neutral-100 text-neutral-800 hover:bg-neutral-200 active:bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:bg-neutral-700',
+        'bg-white text-black hover:bg-neutral-100',
       outline:
-        'border border-neutral-300 bg-transparent text-neutral-700 hover:bg-neutral-50 active:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800',
+        'bg-transparent text-black hover:bg-black/5',
       ghost:
-        'bg-transparent text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100',
+        'border-transparent shadow-none hover:shadow-none hover:translate-x-0 hover:translate-y-0 bg-transparent text-black hover:bg-black/10',
       danger:
-        'bg-rose-600 text-white hover:bg-rose-700 active:bg-rose-800 focus-visible:outline-rose-600 shadow-sm',
+        'bg-[#F472B6] text-black hover:bg-[#E11D48] hover:text-white',
     };
 
     const sizes = {
-      sm: 'text-xs px-2.5 py-1.5 gap-1.5',
+      sm: 'text-xs px-3 py-1.5 gap-1.5',
       md: 'text-sm px-4 py-2 gap-2',
       lg: 'text-base px-5 py-2.5 gap-2.5',
     };

@@ -98,7 +98,6 @@ export const FileDropZone: React.FC<FileDropZoneProps> = ({
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     await processFiles(e.target.files);
-    // Reset so selecting the same file again triggers change
     if (inputRef.current) {
       inputRef.current.value = '';
     }
@@ -116,10 +115,10 @@ export const FileDropZone: React.FC<FileDropZoneProps> = ({
         onDrop={handleDrop}
         aria-label="File upload dropzone"
         className={cn(
-          'relative border-2 border-dashed rounded-2xl p-8 text-center transition-all flex flex-col items-center justify-center gap-3 cursor-pointer select-none outline-none',
+          'relative border-2 border-black rounded-2xl p-8 text-center transition-all flex flex-col items-center justify-center gap-3 cursor-pointer select-none bg-white shadow-[4px_4px_0px_#000000] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0px_#000000]',
           isDragging
-            ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20 scale-[0.99]'
-            : 'border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900/40 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/40 hover:border-neutral-400',
+            ? 'border-solid bg-[#FACC15]/20 scale-[0.99]'
+            : 'border-dashed hover:bg-[#FAF7F2]',
           disabled && 'opacity-50 cursor-not-allowed pointer-events-none',
         )}
       >
@@ -134,15 +133,15 @@ export const FileDropZone: React.FC<FileDropZoneProps> = ({
           tabIndex={-1}
         />
 
-        <div className="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-          <UploadCloud className="w-6 h-6" />
+        <div className="w-14 h-14 rounded-2xl bg-[#FACC15] border-2 border-black text-black shadow-[2px_2px_0px_#000000] flex items-center justify-center">
+          <UploadCloud className="w-7 h-7 stroke-[2.3]" />
         </div>
 
         <div>
-          <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
+          <p className="text-sm font-black text-black">
             {description}
           </p>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+          <p className="text-xs font-semibold text-neutral-600 mt-1">
             {multiple ? 'Select one or more files' : 'Single file upload'}
             {maxBytes ? ` · up to ${Math.round(maxBytes / (1024 * 1024))} MB` : ''}
           </p>
@@ -152,15 +151,15 @@ export const FileDropZone: React.FC<FileDropZoneProps> = ({
       {validationError && (
         <div
           role="alert"
-          className="flex items-start gap-2 p-3 text-xs rounded-lg bg-rose-50 text-rose-800 border border-rose-200 dark:bg-rose-950 dark:text-rose-200 dark:border-rose-900"
+          className="flex items-start gap-2 p-3 text-xs rounded-xl bg-[#F472B6]/20 text-black border-2 border-black shadow-[2px_2px_0px_#000000] font-bold"
         >
-          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 stroke-[2.5]" />
           <span className="flex-1">{validationError}</span>
           <button
             onClick={() => setValidationError(null)}
-            className="text-rose-600 hover:text-rose-900 dark:hover:text-rose-100"
+            className="text-black hover:scale-110"
           >
-            <X className="w-3.5 h-3.5" />
+            <X className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>
       )}
@@ -176,16 +175,16 @@ export const FileInfoCard: React.FC<{
   const dimensions = 'dimensions' in file ? file.dimensions : undefined;
 
   return (
-    <div className="flex items-center justify-between p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm">
+    <div className="flex items-center justify-between p-3.5 rounded-xl border-2 border-black bg-white text-sm shadow-[3px_3px_0px_#000000]">
       <div className="flex items-center gap-3 min-w-0">
-        <div className="p-2 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">
-          <FileIcon className="w-4 h-4" />
+        <div className="w-9 h-9 rounded-lg border-2 border-black bg-[#FACC15] text-black flex items-center justify-center shrink-0">
+          <FileIcon className="w-4 h-4 stroke-[2.5]" />
         </div>
         <div className="min-w-0">
-          <p className="font-medium text-neutral-900 dark:text-neutral-100 truncate">
+          <p className="font-black text-black truncate text-sm">
             {rawFile.name}
           </p>
-          <p className="text-xs text-neutral-500">
+          <p className="text-xs font-bold text-neutral-600">
             {formatBytes(rawFile.size)}
             {dimensions && ` · ${dimensions.width} × ${dimensions.height} px`}
           </p>
@@ -196,9 +195,9 @@ export const FileInfoCard: React.FC<{
         <button
           onClick={onRemove}
           aria-label={`Remove ${rawFile.name}`}
-          className="p-1 rounded text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
+          className="p-1 rounded-lg border border-black bg-neutral-100 hover:bg-[#F472B6] transition-colors"
         >
-          <X className="w-4 h-4" />
+          <X className="w-4 h-4 stroke-[2.5]" />
         </button>
       )}
     </div>

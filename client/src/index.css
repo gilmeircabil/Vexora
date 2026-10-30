@@ -2,11 +2,10 @@
 
 @layer base {
   :root {
-    --bg-page: #f1f3f6;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --border-subtle: #e2e8f0;
-    --grid-dot-color: rgba(100, 116, 139, 0.12);
+    --bg-page: #faf7f2;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --border-neo: #000000;
   }
 
   html,
@@ -29,27 +28,25 @@
       'Open Sans',
       'Helvetica Neue',
       sans-serif;
-    background-image: radial-gradient(var(--grid-dot-color) 1px, transparent 1px);
-    background-size: 24px 24px;
-    background-position: -1px -1px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Refined scrollbar */
+  /* Refined neo-brutalist scrollbar */
   ::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: transparent;
+    background: #f1ede4;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(156, 163, 175, 0.4);
-    border-radius: 9999px;
+    background: #000000;
+    border-radius: 4px;
+    border: 1px solid #f1ede4;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(156, 163, 175, 0.6);
+    background: #333333;
   }
 
   /* Code & Mono typography styling */
@@ -69,8 +66,8 @@
   }
 }
 
-/* Custom accessible focus-visible styles */
+/* Custom Neo-brutalist accessible focus-visible styles */
 :focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 3px solid #000000;
   outline-offset: 2px;
 }
