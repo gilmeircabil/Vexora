@@ -20,6 +20,7 @@ import { PrivacyPage } from './pages/PrivacyPage.js';
 import { LicensesPage } from './pages/LicensesPage.js';
 import { ContributingPage } from './pages/ContributingPage.js';
 import { NotFoundPage } from './pages/NotFoundPage.js';
+import { ScrollToTop } from './components/common/ScrollToTop.js';
 
 export const App: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ export const App: React.FC = () => {
         <AuthProvider>
           <CreditProvider>
             <BrowserRouter>
+              <ScrollToTop />
               <Routes>
                 <Route element={<AppLayout />}>
                   <Route path="/" element={<HomePage />} />
