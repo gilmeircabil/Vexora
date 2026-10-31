@@ -6,7 +6,7 @@ import { AuthService } from './services/authService.js';
 import { AIService } from './services/ai/aiService.js';
 
 async function bootstrap() {
-  console.log(`Starting VexoraTool Backend API in [${env.NODE_ENV}] mode...`);
+  console.log(`Starting VexoraMods Backend API in [${env.NODE_ENV}] mode...`);
 
   // Initialize upload directories
   await AIService.initDirs();
@@ -14,7 +14,7 @@ async function bootstrap() {
   const app = createApp();
 
   const server = app.listen(env.PORT, () => {
-    console.log(` VexoraTool API server running at http://localhost:${env.PORT}`);
+    console.log(` VexoraMods API server running at http://localhost:${env.PORT}`);
     console.log(` Client URL: ${env.CLIENT_URL}`);
   });
 
@@ -41,7 +41,7 @@ async function bootstrap() {
   }
 
   const shutdown = async () => {
-    console.log('Shutting down VexoraTool server...');
+    console.log('Shutting down VexoraMods server...');
     server.close(async () => {
       await mongoose.disconnect();
       console.log('Server terminated cleanly.');

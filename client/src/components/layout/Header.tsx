@@ -7,9 +7,16 @@ import {
   LayoutDashboard,
   ShieldCheck,
   Sparkles,
+  Heart,
+  Users,
+  Trophy,
+  FolderKanban,
+  UserCheck,
+  Wrench,
+  Bot,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
-import { CreditIndicator } from '../common/CreditIndicator.js';
+import { BrandLogo } from '../common/BrandLogo.js';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -38,50 +45,86 @@ export const Header: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 bg-[#FAF7F2] border-b-2 border-black transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        {/* Brand / Logo (Neo-Brutalist Badge) */}
-        <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
-          <div className="w-10 h-10 rounded-xl bg-[#FACC15] border-2 border-black shadow-[2.5px_2.5px_0px_#000000] flex items-center justify-center text-black group-hover:-translate-y-0.5 group-hover:-translate-x-0.5 group-hover:shadow-[3.5px_3.5px_0px_#000000] transition-all">
-            <svg
-              className="w-5 h-5 stroke-[2.5]"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polygon points="12 2 2 7 12 12 22 7 12 2" />
-              <polyline points="2 17 12 22 22 17" />
-              <polyline points="2 12 12 17 22 12" />
-            </svg>
-          </div>
-          <div>
-            <span className="text-xl font-black tracking-tight text-black">
-              VexoraTool
-            </span>
-          </div>
+        {/* Brand / Logo */}
+        <Link to="/" className="flex items-center shrink-0 group" aria-label="VexoraMods Home">
+          <BrandLogo size="md" />
         </Link>
 
-        {/* Navigation links & User Profile */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          <nav className="hidden md:flex items-center gap-2 text-sm font-black">
+        {/* Navigation Links */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <nav className="hidden lg:flex items-center gap-1.5 text-xs sm:text-sm font-black">
             <Link
               to="/tools"
-              className="px-3.5 py-2 rounded-xl text-black hover:bg-black/5 transition-colors"
+              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+                location.pathname === '/tools'
+                  ? 'bg-black text-white border-black shadow-[2px_2px_0px_#000]'
+                  : 'border-transparent hover:bg-black/5'
+              }`}
             >
-              All Tools
+              <Wrench className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>All Tools</span>
             </Link>
+
             <Link
-              to="/pricing"
-              className="px-3.5 py-2 rounded-xl text-black hover:bg-black/5 transition-colors"
+              to="/ai-tools"
+              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+                location.pathname.startsWith('/ai-tools')
+                  ? 'bg-[#4ADE80] border-black shadow-[2px_2px_0px_#000]'
+                  : 'border-transparent hover:bg-black/5'
+              }`}
             >
-              Pricing
+              <Bot className="w-3.5 h-3.5 text-emerald-700 stroke-[2.5]" />
+              <span>AI Tools</span>
+            </Link>
+
+            <Link
+              to="/design-studio"
+              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+                location.pathname.startsWith('/design-studio')
+                  ? 'bg-[#FACC15] border-black shadow-[2px_2px_0px_#000]'
+                  : 'border-transparent hover:bg-black/5'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-orange-600 stroke-[2.5]" />
+              <span>Studio</span>
+            </Link>
+
+            <Link
+              to="/developers"
+              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+                location.pathname.startsWith('/developers')
+                  ? 'bg-[#A78BFA] border-black shadow-[2px_2px_0px_#000]'
+                  : 'border-transparent hover:bg-black/5'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5 text-purple-700 stroke-[2.5]" />
+              <span>Developer Hub</span>
+            </Link>
+
+            <Link
+              to="/leaderboard"
+              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+                location.pathname === '/leaderboard'
+                  ? 'bg-[#38BDF8] border-black shadow-[2px_2px_0px_#000]'
+                  : 'border-transparent hover:bg-black/5'
+              }`}
+            >
+              <Trophy className="w-3.5 h-3.5 text-amber-600 stroke-[2.5]" />
+              <span>Leaderboard</span>
+            </Link>
+
+            <Link
+              to="/support"
+              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+                location.pathname === '/support'
+                  ? 'bg-[#F472B6] border-black shadow-[2px_2px_0px_#000]'
+                  : 'border-transparent hover:bg-black/5'
+              }`}
+            >
+              <Heart className="w-3.5 h-3.5 text-red-600 fill-red-500 stroke-[2.5]" />
+              <span>Support</span>
             </Link>
           </nav>
-
-          {/* Credit Indicator */}
-          <div className="hidden sm:block">
-            <CreditIndicator />
-          </div>
 
           {/* User Account / Sign In */}
           {isAuthenticated && user ? (
@@ -103,32 +146,42 @@ export const Header: React.FC = () => {
                       {user.name}
                     </p>
                     <p className="text-[11px] text-neutral-600 truncate">{user.email}</p>
-                    <span className="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] uppercase font-mono font-black bg-[#FACC15] border border-black text-black">
-                      {user.subscription?.plan || 'free'} plan
+                    <span className="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] uppercase font-mono font-black bg-[#4ADE80] border border-black text-black">
+                      100% Free Account
                     </span>
                   </div>
 
                   <div className="py-2 space-y-1">
                     <Link
-                      to="/dashboard"
-                      className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-bold rounded-lg text-black hover:bg-black/5 transition-colors"
+                      to="/developers/profile/edit"
+                      className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-black rounded-lg text-black hover:bg-neutral-100 transition-colors"
                     >
-                      <LayoutDashboard className="w-3.5 h-3.5" />
-                      <span>Dashboard & Usage</span>
+                      <UserCheck className="w-4 h-4 text-purple-600" />
+                      <span>My Developer Profile</span>
                     </Link>
+
                     <Link
-                      to="/pricing"
-                      className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-bold rounded-lg text-black hover:bg-black/5 transition-colors"
+                      to="/developers/projects/manage"
+                      className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-black rounded-lg text-black hover:bg-neutral-100 transition-colors"
                     >
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Subscription Plans</span>
+                      <FolderKanban className="w-4 h-4 text-blue-600" />
+                      <span>My Projects</span>
                     </Link>
+
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-black rounded-lg text-black hover:bg-neutral-100 transition-colors"
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                      <span>Saved Designs</span>
+                    </Link>
+
                     {user.role === 'admin' && (
                       <Link
                         to="/admin"
-                        className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-black rounded-lg text-black bg-[#F472B6]/20 border border-black"
+                        className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-black rounded-lg text-black bg-[#F472B6]/30 hover:bg-[#F472B6]/50 transition-colors"
                       >
-                        <ShieldCheck className="w-3.5 h-3.5" />
+                        <ShieldCheck className="w-4 h-4 text-black" />
                         <span>Admin Console</span>
                       </Link>
                     )}
@@ -137,9 +190,9 @@ export const Header: React.FC = () => {
                   <div className="pt-2 border-t-2 border-black/10">
                     <button
                       onClick={() => logout()}
-                      className="flex items-center gap-2 w-full px-2.5 py-1.5 text-xs font-black rounded-lg text-red-600 hover:bg-red-50 transition-colors text-left"
+                      className="flex items-center gap-2 w-full px-2.5 py-1.5 text-xs font-black rounded-lg text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
                     >
-                      <LogOut className="w-3.5 h-3.5" />
+                      <LogOut className="w-4 h-4" />
                       <span>Sign Out</span>
                     </button>
                   </div>
@@ -167,7 +220,7 @@ export const Header: React.FC = () => {
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle navigation menu"
-            className="p-2 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] text-black hover:-translate-y-0.5 transition-all lg:hidden"
+            className="p-2 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] text-black hover:-translate-y-0.5 transition-all md:hidden"
           >
             {isMobileMenuOpen ? <X className="w-5 h-5 stroke-[2.5]" /> : <Menu className="w-5 h-5 stroke-[2.5]" />}
           </button>
@@ -177,29 +230,75 @@ export const Header: React.FC = () => {
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
         <div className="lg:hidden border-t-2 border-black bg-[#FAF7F2] px-4 py-5 space-y-4">
-          <CreditIndicator isMobile={true} />
-
-          <div className="space-y-1.5 font-black">
+          <div className="space-y-2 font-black">
             <Link
               to="/tools"
-              className="block px-3 py-2 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000] text-sm text-black"
+              className="block px-3 py-2.5 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000] text-sm font-black text-black"
             >
-              All Tools Catalog
+              🛠️ All Tools Catalog
             </Link>
+
             <Link
-              to="/pricing"
-              className="block px-3 py-2 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000] text-sm text-black"
+              to="/ai-tools"
+              className="block px-3 py-2.5 rounded-xl bg-[#4ADE80] border-2 border-black shadow-[2px_2px_0px_#000] text-sm font-black text-black"
             >
-              Pricing & Plans
+              🤖 AI Tools
+            </Link>
+
+            <Link
+              to="/design-studio"
+              className="block px-3 py-2.5 rounded-xl bg-[#FACC15] border-2 border-black shadow-[2px_2px_0px_#000] text-sm font-black text-black"
+            >
+              🎨 VexoraMods Studio
+            </Link>
+
+            <Link
+              to="/developers"
+              className="block px-3 py-2.5 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000] text-sm font-black text-black"
+            >
+              👨‍💻 Developer Hub
+            </Link>
+
+            <Link
+              to="/developers/projects"
+              className="block px-3 py-2.5 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000] text-sm font-black text-black"
+            >
+              🚀 Showcase Projects
+            </Link>
+
+            <Link
+              to="/leaderboard"
+              className="block px-3 py-2.5 rounded-xl bg-[#38BDF8]/30 border-2 border-black shadow-[2px_2px_0px_#000] text-sm font-black text-black"
+            >
+              🏆 Supporter Leaderboard
+            </Link>
+
+            <Link
+              to="/support"
+              className="block px-3 py-2.5 rounded-xl bg-[#F472B6]/30 border-2 border-black shadow-[2px_2px_0px_#000] text-sm font-black text-black"
+            >
+              ❤️ Support VexoraMods
             </Link>
 
             {isAuthenticated ? (
               <>
                 <Link
-                  to="/dashboard"
-                  className="block px-3 py-2 rounded-xl bg-[#FACC15] border-2 border-black shadow-[2px_2px_0px_#000] text-sm text-black"
+                  to="/developers/profile/edit"
+                  className="block px-3 py-2 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000] text-sm text-black"
                 >
-                  My Dashboard
+                  My Developer Profile
+                </Link>
+                <Link
+                  to="/developers/projects/manage"
+                  className="block px-3 py-2 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000] text-sm text-black"
+                >
+                  My Projects
+                </Link>
+                <Link
+                  to="/dashboard"
+                  className="block px-3 py-2 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000] text-sm text-black"
+                >
+                  Saved Designs
                 </Link>
                 {user?.role === 'admin' && (
                   <Link

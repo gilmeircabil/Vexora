@@ -21,6 +21,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     root.classList.remove('dark');
     try {
       localStorage.removeItem('toolnest-theme');
+      localStorage.removeItem('vexora-theme');
+      localStorage.removeItem('vexoramods-theme');
     } catch {
       // safe fallback
     }

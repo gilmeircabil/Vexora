@@ -6,10 +6,10 @@ import { GitCompare, Plus, Minus } from 'lucide-react';
 
 export const TextDiffTool: React.FC = () => {
   const [original, setOriginal] = useState(
-    '{\n  "name": "ToolNest",\n  "status": "beta",\n  "price": 0\n}',
+    '{\n  "name": "VexoraMods",\n  "status": "beta",\n  "price": 0\n}',
   );
   const [modified, setModified] = useState(
-    '{\n  "name": "ToolNest",\n  "status": "released",\n  "price": 0,\n  "license": "MIT"\n}',
+    '{\n  "name": "VexoraMods",\n  "status": "released",\n  "price": 0,\n  "license": "MIT"\n}',
   );
 
   const diffParts = computeTextDiff(original, modified);

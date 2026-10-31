@@ -25,7 +25,7 @@ describe('Word and Character Counter', () => {
   });
 
   it('counts words and sentences with Unicode awareness', () => {
-    const text = 'Hello world! ToolNest is great.\nAnother line.';
+    const text = 'Hello world! VexoraMods is great.\nAnother line.';
     const stats = analyzeText(text);
     expect(stats.words).toBe(7);
     expect(stats.lines).toBe(2);

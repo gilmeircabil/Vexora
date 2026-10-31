@@ -1,9 +1,9 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
-export type JobStatus = 'pending' | 'processing' | 'completed' | 'failed';
+export type JobStatus = 'queued' | 'pending' | 'processing' | 'completed' | 'failed' | 'canceled';
 
 export interface IAIJob extends Document {
-  userId: Types.ObjectId;
+  userId?: Types.ObjectId;
   tool: string;
   status: JobStatus;
   inputMetadata: {
@@ -13,6 +13,8 @@ export interface IAIJob extends Document {
     size?: number;
     mimeType?: string;
     mode?: string;
+    prompt?: string;
+    language?: string;
   };
   outputMetadata?: {
     width?: number;
@@ -20,10 +22,14 @@ export interface IAIJob extends Document {
     size?: number;
     mimeType?: string;
     durationMs?: number;
+    pageCount?: number;
+    tokenCount?: number;
   };
   outputUrl?: string;
-  creditsReserved: number;
-  creditsConsumed: number;
+  outputText?: string;
+  outputData?: Record<string, any>;
+  creditsReserved?: number;
+  creditsConsumed?: number;
   errorMessage?: string;
   idempotencyKey?: string;
   createdAt: Date;
@@ -35,7 +41,7 @@ const AIJobSchema = new Schema<IAIJob>(
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
       index: true,
     },
     tool: {
@@ -45,8 +51,8 @@ const AIJobSchema = new Schema<IAIJob>(
     },
     status: {
       type: String,
-      enum: ['pending', 'processing', 'completed', 'failed'],
-      default: 'pending',
+      enum: ['queued', 'pending', 'processing', 'completed', 'failed', 'canceled'],
+      default: 'queued',
       index: true,
     },
     inputMetadata: {
@@ -56,6 +62,8 @@ const AIJobSchema = new Schema<IAIJob>(
       size: Number,
       mimeType: String,
       mode: String,
+      prompt: String,
+      language: String,
     },
     outputMetadata: {
       width: Number,
@@ -63,9 +71,17 @@ const AIJobSchema = new Schema<IAIJob>(
       size: Number,
       mimeType: String,
       durationMs: Number,
+      pageCount: Number,
+      tokenCount: Number,
     },
     outputUrl: {
       type: String,
+    },
+    outputText: {
+      type: String,
+    },
+    outputData: {
+      type: Schema.Types.Mixed,
     },
     creditsReserved: {
       type: Number,

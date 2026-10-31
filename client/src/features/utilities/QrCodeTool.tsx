@@ -7,7 +7,7 @@ import { triggerFileDownload } from '../../lib/files/blob.js';
 import { QrCode, Download, RefreshCw, AlertCircle } from 'lucide-react';
 
 export const QrCodeTool: React.FC = () => {
-  const [content, setContent] = useState('https://toolnest.org');
+  const [content, setContent] = useState('https://vexoramods.org');
   const [ecc, setEcc] = useState<'L' | 'M' | 'Q' | 'H'>('M');
   const [size, setSize] = useState<number>(300);
   const [darkColor, setDarkColor] = useState<string>('#000000');

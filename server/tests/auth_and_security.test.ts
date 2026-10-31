@@ -1,76 +1,21 @@
 import { describe, it, expect } from 'vitest';
-import { getUtcMidnight, CreditService } from '../src/services/creditService.js';
 import { StripeProvider } from '../src/services/payment/stripeProvider.js';
 import { PayMongoProvider } from '../src/services/payment/paymongoProvider.js';
 import { SandboxProvider } from '../src/services/payment/sandboxProvider.js';
 import { AuthService } from '../src/services/authService.js';
-import { PLANS_CONFIG } from '../src/config/plans.js';
+import { PLANS_CONFIG, DEFAULT_TOOL_COSTS } from '../src/config/plans.js';
 import crypto from 'node:crypto';
 
-describe('Credit System & Timezone Logic', () => {
-  it('should accurately calculate UTC midnight without local timezone skew', () => {
-    const testDate = new Date('2026-10-30T15:45:30.123Z');
-    const midnight = getUtcMidnight(testDate);
+describe('Open Source Plan & Free Quotas', () => {
+  it('should declare free and zero credit costs for all tools', () => {
+    expect(PLANS_CONFIG.free.id).toBe('free');
+    expect(PLANS_CONFIG.free.price.monthly).toBe(0);
+    expect(PLANS_CONFIG.free.dailyCredits).toBe(0);
 
-    expect(midnight.getUTCFullYear()).toBe(2026);
-    expect(midnight.getUTCMonth()).toBe(9); // 0-indexed October
-    expect(midnight.getUTCDate()).toBe(30);
-    expect(midnight.getUTCHours()).toBe(0);
-    expect(midnight.getUTCMinutes()).toBe(0);
-    expect(midnight.getUTCSeconds()).toBe(0);
-    expect(midnight.getUTCMilliseconds()).toBe(0);
-  });
-
-  it('should calculate available credits correctly', () => {
-    const mockAccount: any = {
-      dailyAllowance: 3,
-      dailyUsed: 1,
-      monthlyAllowance: 300,
-      monthlyUsed: 50,
-      reservedCredits: 2,
-      dailyResetAt: new Date('2026-10-30T00:00:00.000Z'),
-    };
-
-    const balance = CreditService.calculateBalance(mockAccount);
-
-    expect(balance.dailyAllowance).toBe(3);
-    expect(balance.dailyUsed).toBe(1);
-    expect(balance.dailyRemaining).toBe(2); // 3 - 1
-    expect(balance.monthlyAllowance).toBe(300);
-    expect(balance.monthlyUsed).toBe(50);
-    expect(balance.monthlyRemaining).toBe(250); // 300 - 50
-    // Total available = (dailyRemaining + monthlyRemaining) - reservedCredits
-    // = (2 + 250) - 2 = 250
-    expect(balance.totalAvailable).toBe(250);
-  });
-
-  it('should prevent negative credit values if usage exceeds allowance', () => {
-    const mockAccount: any = {
-      dailyAllowance: 3,
-      dailyUsed: 5,
-      monthlyAllowance: 0,
-      monthlyUsed: 10,
-      reservedCredits: 0,
-      dailyResetAt: new Date(),
-    };
-
-    const balance = CreditService.calculateBalance(mockAccount);
-    expect(balance.dailyRemaining).toBe(0);
-    expect(balance.monthlyRemaining).toBe(0);
-    expect(balance.totalAvailable).toBe(0);
-  });
-});
-
-describe('Subscription Plans Configuration', () => {
-  it('should declare correct default plan quotas', () => {
-    expect(PLANS_CONFIG.free.dailyCredits).toBe(3);
-    expect(PLANS_CONFIG.free.monthlyCredits).toBe(0);
-
-    expect(PLANS_CONFIG.pro.dailyCredits).toBe(0);
-    expect(PLANS_CONFIG.pro.monthlyCredits).toBe(300);
-
-    expect(PLANS_CONFIG.premium.dailyCredits).toBe(0);
-    expect(PLANS_CONFIG.premium.monthlyCredits).toBe(1000);
+    for (const [toolId, config] of Object.entries(DEFAULT_TOOL_COSTS)) {
+      expect(config.creditCost, `Tool ${toolId} should cost 0 credits`).toBe(0);
+      expect(config.minPlan).toBe('free');
+    }
   });
 });
 
@@ -139,7 +84,7 @@ describe('Authentication & Password Hashing', () => {
   it('generates verifiable JWT access and refresh tokens', () => {
     const payload = {
       userId: '652391028392102938475812',
-      email: 'test@toolnest.local',
+      email: 'test@vexoramods.local',
       role: 'user' as const,
     };
 

@@ -25,7 +25,14 @@ export interface UserProfile {
   id: string;
   name: string;
   email: string;
+  avatarUrl?: string;
+  bio?: string;
   role: 'user' | 'admin';
+  oauthProviders?: {
+    google?: boolean;
+    github?: boolean;
+    facebook?: boolean;
+  };
   subscription: UserSubscription;
   credits: UserCredits;
 }

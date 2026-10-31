@@ -39,8 +39,8 @@ export class StripeProvider implements IPaymentProvider {
       'metadata[interval]': params.interval,
       success_url: `${params.successUrl}?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: params.cancelUrl,
-      'line_items[0][price_data][currency]': 'usd',
-      'line_items[0][price_data][product_data][name]': `ToolNest ${planConfig.name} Plan`,
+      'line_items[0][price_data][currency]': 'php',
+      'line_items[0][price_data][product_data][name]': `VexoraMods ${planConfig.name} Plan`,
       'line_items[0][price_data][product_data][description]': `${planConfig.monthlyCredits} AI Credits per month`,
       'line_items[0][price_data][unit_amount]': amountInCents.toString(),
       'line_items[0][price_data][recurring][interval]':

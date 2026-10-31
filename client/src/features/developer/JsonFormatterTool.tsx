@@ -7,7 +7,7 @@ import { AlertCircle, CheckCircle2, Minimize2, Braces, Trash2 } from 'lucide-rea
 
 export const JsonFormatterTool: React.FC = () => {
   const [input, setInput] = useState(
-    '{"name":"ToolNest","tools":30,"free":true,"tags":["tools","privacy","offline"]}',
+    '{"name":"VexoraMods","tools":33,"free":true,"tags":["tools","privacy","offline"]}',
   );
   const [indent, setIndent] = useState<number | '\t'>(2);
   const [sortKeys, setSortKeys] = useState(false);

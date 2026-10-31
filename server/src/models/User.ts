@@ -2,12 +2,27 @@ import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export type UserRole = 'user' | 'admin';
 
+export interface OAuthProviderInfo {
+  id: string;
+  email?: string;
+  username?: string;
+  picture?: string;
+  linkedAt: Date;
+}
+
 export interface IUser extends Document {
   name: string;
   email: string;
-  passwordHash: string;
+  passwordHash?: string;
+  avatarUrl?: string;
+  bio?: string;
   role: UserRole;
   subscriptionId?: Types.ObjectId;
+  oauthProviders?: {
+    google?: OAuthProviderInfo;
+    github?: OAuthProviderInfo;
+    facebook?: OAuthProviderInfo;
+  };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -30,7 +45,37 @@ const UserSchema = new Schema<IUser>(
     },
     passwordHash: {
       type: String,
-      required: true,
+      required: false,
+      default: '',
+    },
+    avatarUrl: {
+      type: String,
+      default: '',
+    },
+    bio: {
+      type: String,
+      default: '',
+      maxlength: 500,
+    },
+    oauthProviders: {
+      google: {
+        id: { type: String },
+        email: { type: String },
+        picture: { type: String },
+        linkedAt: { type: Date },
+      },
+      github: {
+        id: { type: String },
+        username: { type: String },
+        avatarUrl: { type: String },
+        linkedAt: { type: Date },
+      },
+      facebook: {
+        id: { type: String },
+        email: { type: String },
+        name: { type: String },
+        linkedAt: { type: Date },
+      },
     },
     role: {
       type: String,

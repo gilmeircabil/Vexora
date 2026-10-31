@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
 import { AuthService } from '../services/authService.js';
+import { env } from '../config/env.js';
 import type { AuthenticatedRequest } from '../middleware/authMiddleware.js';
 
 const registerSchema = z.object({
@@ -133,5 +134,148 @@ export class AuthController {
         accessToken: tokens.accessToken,
       },
     });
+  }
+
+  static async oauthConfig(_req: Request, res: Response): Promise<void> {
+    res.status(200).json({
+      success: true,
+      data: {
+        google: {
+          enabled: Boolean(env.GOOGLE_CLIENT_ID),
+          clientId: env.GOOGLE_CLIENT_ID || '',
+        },
+        github: {
+          enabled: Boolean(env.GITHUB_CLIENT_ID),
+          clientId: env.GITHUB_CLIENT_ID || '',
+        },
+        facebook: {
+          enabled: Boolean(env.FACEBOOK_APP_ID),
+          appId: env.FACEBOOK_APP_ID || '',
+        },
+      },
+    });
+  }
+
+  static async oauthLogin(req: Request, res: Response): Promise<void> {
+    try {
+      const { provider, providerId, email, name, avatarUrl } = req.body;
+      if (!provider || !providerId || !email) {
+        res.status(400).json({
+          success: false,
+          error: 'Provider, providerId, and email are required for OAuth authentication.',
+        });
+        return;
+      }
+
+      if (!['google', 'github', 'facebook'].includes(provider)) {
+        res.status(400).json({ success: false, error: 'Unsupported OAuth provider.' });
+        return;
+      }
+
+      const result = await AuthService.authenticateOAuth({
+        provider,
+        providerId,
+        email,
+        name,
+        avatarUrl,
+      });
+
+      res.cookie('refreshToken', result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.status(200).json({
+        success: true,
+        data: {
+          user: result.user,
+          accessToken: result.accessToken,
+        },
+      });
+    } catch (err: any) {
+      res.status(400).json({
+        success: false,
+        error: err.message || 'OAuth authentication failed',
+      });
+    }
+  }
+
+  static async bindOAuth(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user) {
+        res.status(401).json({ success: false, error: 'Unauthorized' });
+        return;
+      }
+
+      const { provider, providerId, email, username, avatarUrl } = req.body;
+      if (!provider || !providerId) {
+        res.status(400).json({
+          success: false,
+          error: 'Provider and providerId are required.',
+        });
+        return;
+      }
+
+      const result = await AuthService.bindOAuthProvider(req.user.userId, {
+        provider,
+        providerId,
+        email,
+        username,
+        avatarUrl,
+      });
+
+      res.status(200).json(result);
+    } catch (err: any) {
+      res.status(400).json({ success: false, error: err.message });
+    }
+  }
+
+  static async unbindOAuth(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user) {
+        res.status(401).json({ success: false, error: 'Unauthorized' });
+        return;
+      }
+
+      const provider = String(req.params.provider || '');
+      if (!provider || !['google', 'github', 'facebook'].includes(provider)) {
+        res.status(400).json({ success: false, error: 'Invalid provider.' });
+        return;
+      }
+
+      const result = await AuthService.unbindOAuthProvider(
+        req.user.userId,
+        provider as 'google' | 'github' | 'facebook',
+      );
+
+      res.status(200).json(result);
+    } catch (err: any) {
+      res.status(400).json({ success: false, error: err.message });
+    }
+  }
+
+  static async updateProfile(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user) {
+        res.status(401).json({ success: false, error: 'Unauthorized' });
+        return;
+      }
+
+      const { name, bio, avatarUrl } = req.body;
+      const updatedUser = await AuthService.updateProfile(req.user.userId, {
+        name,
+        bio,
+        avatarUrl,
+      });
+
+      res.status(200).json({
+        success: true,
+        data: updatedUser,
+      });
+    } catch (err: any) {
+      res.status(400).json({ success: false, error: err.message });
+    }
   }
 }

@@ -14,6 +14,14 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool }) => {
 
   // Category palette inspired by the neo-brutalist reference image
   const getCategoryStyles = () => {
+    if (tool.slug === 'smart-image-studio') {
+      return {
+        tabBg: 'bg-[#FACC15]',
+        iconBg: 'bg-[#FACC15]',
+        label: '★ Flagship Studio',
+      };
+    }
+
     switch (tool.category) {
       case 'images':
         return {

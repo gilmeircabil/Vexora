@@ -72,6 +72,31 @@ export interface ToolDefinition {
 export const TOOL_CATALOG: readonly ToolDefinition[] = [
   // --- PHASE A: IMAGE & AI TOOLS ---
   {
+    id: 'smart-image-studio',
+    slug: 'smart-image-studio',
+    name: 'Smart Image Studio',
+    tagline: 'All-in-one image workspace with AI enhancement, background removal, and editing.',
+    description:
+      'All-in-one flagship studio to upscale images, remove backgrounds, erase unwanted objects, restore vintage photos, extract OCR text, and apply instant transformations in one unified editor.',
+    category: 'images',
+    keywords: [
+      'smart image studio',
+      'image editor',
+      'all in one image',
+      'ai photo',
+      'background remover',
+      'upscale',
+      'photo restoration',
+      'object eraser',
+    ],
+    iconName: 'Sparkles',
+    supportedInputTypes: ['image/png', 'image/jpeg', 'image/webp', 'image/bmp'],
+    processingLocation: 'browser',
+    status: 'available',
+    privacyNotice:
+      'Runs locally in memory with client canvas and local AI inference. No files are ever saved without your action.',
+  },
+  {
     id: 'ai-image-enhancer',
     slug: 'ai-image-enhancer',
     name: 'AI Image Enhancer',

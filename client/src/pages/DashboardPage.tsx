@@ -4,35 +4,22 @@ import {
   Sparkles,
   Zap,
   Clock,
-  Calendar,
-  CreditCard,
-  ArrowUpRight,
   RefreshCw,
-  AlertCircle,
-  FileImage,
   Download,
   CheckCircle,
   XCircle,
+  Cpu,
+  Layers,
+  ArrowRight,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
-import { useCredits } from '../context/CreditContext.js';
 import { useToast } from '../context/ToastContext.js';
-
-interface Transaction {
-  _id: string;
-  type: string;
-  amount: number;
-  tool?: string;
-  description: string;
-  status: string;
-  createdAt: string;
-}
 
 interface AIJobItem {
   _id: string;
   tool: string;
   status: string;
-  creditsConsumed: number;
+  creditsConsumed?: number;
   outputUrl?: string;
   inputMetadata?: {
     originalName?: string;
@@ -43,15 +30,12 @@ interface AIJobItem {
 }
 
 export const DashboardPage: React.FC = () => {
-  const { user, token, isAuthenticated, isLoading: authLoading, refreshUser } = useAuth();
-  const { balance, refreshBalance } = useCredits();
+  const { user, token, isAuthenticated, isLoading: authLoading } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [jobs, setJobs] = useState<AIJobItem[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
-  const [isCanceling, setIsCanceling] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -63,21 +47,9 @@ export const DashboardPage: React.FC = () => {
     if (!token) return;
     setIsLoadingData(true);
     try {
-      const [txRes, jobsRes] = await Promise.all([
-        fetch('/api/credits/history?limit=15', {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        fetch('/api/ai/history', {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-      ]);
-
-      if (txRes.ok) {
-        const txData = await txRes.json();
-        if (txData.success) {
-          setTransactions(txData.data.transactions || []);
-        }
-      }
+      const jobsRes = await fetch('/api/ai/history', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (jobsRes.ok) {
         const jobsData = await jobsRes.json();
@@ -86,7 +58,7 @@ export const DashboardPage: React.FC = () => {
         }
       }
     } catch {
-      showToast('Could not load transaction history.', 'error');
+      showToast('Could not load processing history.', 'error');
     } finally {
       setIsLoadingData(false);
     }
@@ -98,36 +70,6 @@ export const DashboardPage: React.FC = () => {
     }
   }, [token]);
 
-  const handleCancelSubscription = async () => {
-    if (!token) return;
-    if (
-      !confirm(
-        'Are you sure you want to cancel renewal? You will retain all your credits and benefits until the end of your billing cycle.',
-      )
-    ) {
-      return;
-    }
-
-    setIsCanceling(true);
-    try {
-      const res = await fetch('/api/subscriptions/cancel', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        showToast('Subscription set to cancel at end of billing cycle.', 'success');
-        await refreshUser();
-      } else {
-        showToast(data.error || 'Failed to cancel subscription', 'error');
-      }
-    } catch {
-      showToast('Network error while canceling subscription', 'error');
-    } finally {
-      setIsCanceling(false);
-    }
-  };
-
   if (authLoading || !user) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-20 text-center text-sm text-neutral-500">
@@ -136,14 +78,6 @@ export const DashboardPage: React.FC = () => {
     );
   }
 
-  const plan = user.subscription?.plan || 'free';
-  const isFree = plan === 'free';
-  const dailyRemaining = balance?.dailyRemaining ?? user.credits?.dailyRemaining ?? 3;
-  const dailyAllowance = balance?.dailyAllowance ?? user.credits?.dailyAllowance ?? 3;
-  const monthlyRemaining = balance?.monthlyRemaining ?? user.credits?.monthlyRemaining ?? 0;
-  const monthlyAllowance = balance?.monthlyAllowance ?? user.credits?.monthlyAllowance ?? 0;
-  const totalAvailable = balance?.totalAvailable ?? user.credits?.totalAvailable ?? 3;
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Dashboard Top Header */}
@@ -151,257 +85,175 @@ export const DashboardPage: React.FC = () => {
         <div>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl sm:text-4xl font-black text-black">
-              Account Dashboard
+              User Dashboard
             </h1>
-            <span className="px-3 py-1 rounded-full text-xs font-black uppercase font-mono bg-[#FACC15] text-black border-2 border-black shadow-[2px_2px_0px_#000]">
-              {plan}
+            <span className="px-3 py-1 rounded-full text-xs font-black uppercase font-mono bg-[#22C55E] text-white border-2 border-black shadow-[2px_2px_0px_#000]">
+              Free & Open Source
             </span>
           </div>
           <p className="text-xs sm:text-sm font-bold text-neutral-600 mt-1">
-            Logged in as <span className="font-black text-black">{user.email}</span>
+            Logged in as {user.name} ({user.email})
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => {
-              refreshBalance();
-              loadDashboardData();
-            }}
-            className="p-2.5 text-xs font-black rounded-xl border-2 border-black bg-white hover:bg-neutral-100 text-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
-            title="Refresh credits & transactions"
-          >
-            <RefreshCw className="w-3.5 h-3.5 stroke-[2.5]" />
-            <span className="hidden sm:inline">Refresh</span>
-          </button>
+        <div className="flex items-center gap-2">
           <Link
-            to="/pricing"
-            className="py-2.5 px-4 text-xs font-black rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-black shadow-[3px_3px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5"
+            to="/tools"
+            className="px-4 py-2 bg-[#FACC15] hover:bg-yellow-400 text-black font-black text-xs uppercase border-2 border-black shadow-[2px_2px_0px_#000] flex items-center gap-1.5"
           >
-            <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
-            <span>Manage Plans</span>
+            <Sparkles className="w-3.5 h-3.5" /> All Tools
+          </Link>
+          <Link
+            to="/design-studio"
+            className="px-4 py-2 bg-white hover:bg-gray-50 text-black font-black text-xs uppercase border-2 border-black shadow-[2px_2px_0px_#000] flex items-center gap-1.5"
+          >
+            <Layers className="w-3.5 h-3.5" /> Design Studio
           </Link>
         </div>
       </div>
 
-      {/* Credit Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/* Total Available */}
-        <div className="p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000000]">
-          <div className="flex items-center justify-between text-neutral-600 mb-2">
-            <span className="text-xs font-black uppercase tracking-wider text-black">Available Credits</span>
-            <div className="w-7 h-7 rounded-lg bg-[#4ADE80] border border-black flex items-center justify-center">
-              <Zap className="w-4 h-4 text-black stroke-[2.5]" />
-            </div>
+      {/* Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Platform Status */}
+        <div className="p-6 bg-white border-2 border-black shadow-[4px_4px_0px_#000] space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono font-bold uppercase text-neutral-500">Platform Edition</span>
+            <Sparkles className="w-4 h-4 text-[#FACC15]" />
           </div>
-          <div className="text-3xl font-black text-black font-mono">
-            {totalAvailable}
-          </div>
-          <p className="text-[11px] font-bold text-neutral-600 mt-1">
-            Ready to consume across all AI generation tools
+          <div className="text-2xl font-black">100% Free Forever</div>
+          <p className="text-xs text-neutral-600 font-medium">
+            No subscriptions, no credits, and no daily limits. Ready out-of-the-box with zero setup.
           </p>
         </div>
 
-        {/* Daily Credits */}
-        <div className="p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000000]">
-          <div className="flex items-center justify-between text-neutral-600 mb-2">
-            <span className="text-xs font-black uppercase tracking-wider text-black">Daily Free Allowance</span>
-            <div className="w-7 h-7 rounded-lg bg-[#FACC15] border border-black flex items-center justify-center">
-              <Clock className="w-4 h-4 text-black stroke-[2.5]" />
-            </div>
+        {/* Studio Card */}
+        <div className="p-6 bg-white border-2 border-black shadow-[4px_4px_0px_#000] space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono font-bold uppercase text-neutral-500">VexoraMods Studio</span>
+            <Layers className="w-4 h-4 text-[#EA580C]" />
           </div>
-          <div className="text-3xl font-black text-black font-mono">
-            {dailyRemaining}{' '}
-            <span className="text-sm font-bold text-neutral-500">/ {dailyAllowance}</span>
-          </div>
-          <p className="text-[11px] font-bold text-neutral-600 mt-1">Resets automatically at 00:00 UTC</p>
+          <div className="text-xl font-black">Canva-like Design Editor</div>
+          <Link
+            to="/design-studio"
+            className="text-xs font-bold text-blue-700 hover:underline flex items-center gap-1"
+          >
+            Open Design Studio <ArrowRight className="w-3 h-3" />
+          </Link>
         </div>
 
-        {/* Monthly Subscription Credits */}
-        <div className="p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000000]">
-          <div className="flex items-center justify-between text-neutral-600 mb-2">
-            <span className="text-xs font-black uppercase tracking-wider text-black">Monthly Plan Credits</span>
-            <div className="w-7 h-7 rounded-lg bg-[#A78BFA] border border-black flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-black stroke-[2.5]" />
-            </div>
+        {/* Total Processed */}
+        <div className="p-6 bg-white border-2 border-black shadow-[4px_4px_0px_#000] space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono font-bold uppercase text-neutral-500">Jobs Executed</span>
+            <Zap className="w-4 h-4 text-orange-500" />
           </div>
-          <div className="text-3xl font-black text-black font-mono">
-            {monthlyRemaining}{' '}
-            <span className="text-sm font-bold text-neutral-500">/ {monthlyAllowance}</span>
-          </div>
-          <p className="text-[11px] font-bold text-neutral-600 mt-1">
-            {isFree ? 'Upgrade to Pro or Premium' : 'Active billing period balance'}
+          <div className="text-2xl font-black">{jobs.length} Runs</div>
+          <p className="text-xs text-neutral-600 font-medium">
+            Saved history across AI tools and image processing pipelines.
           </p>
-        </div>
-
-        {/* Plan Status & Renewal */}
-        <div className="p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000000]">
-          <div className="flex items-center justify-between text-neutral-600 mb-2">
-            <span className="text-xs font-black uppercase tracking-wider text-black">Subscription Status</span>
-            <div className="w-7 h-7 rounded-lg bg-[#38BDF8] border border-black flex items-center justify-center">
-              <CreditCard className="w-4 h-4 text-black stroke-[2.5]" />
-            </div>
-          </div>
-          <div className="text-lg font-black text-black capitalize">
-            {user.subscription?.status || 'Active'}
-          </div>
-          <p className="text-[11px] font-bold text-neutral-600 mt-1">
-            {user.subscription?.currentPeriodEnd
-              ? `Cycle ends ${new Date(user.subscription.currentPeriodEnd).toLocaleDateString()}`
-              : 'Permanent free tier'}
-          </p>
-          {!isFree && !user.subscription?.cancelAtPeriodEnd && (
-            <button
-              onClick={handleCancelSubscription}
-              disabled={isCanceling}
-              className="mt-2 text-[11px] font-black text-red-600 hover:underline block cursor-pointer"
-            >
-              {isCanceling ? 'Canceling...' : 'Cancel renewal'}
-            </button>
-          )}
         </div>
       </div>
 
-      {/* Main Content: Recent AI Generations & Transactions */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent AI Generations (1 col) */}
-        <div className="lg:col-span-1 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-black text-black flex items-center gap-2">
-              <FileImage className="w-4 h-4 text-black stroke-[2.5]" />
-              <span>Recent AI Jobs</span>
-            </h2>
-            <Link
-              to="/tools/ai-image-enhancer"
-              className="text-xs font-black text-black hover:underline flex items-center gap-1"
-            >
-              <span>Launch Tool</span>
-              <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
-            </Link>
+      {/* Processing History Table */}
+      <div className="p-6 bg-white border-2 border-black shadow-[4px_4px_0px_#000] space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b-2 border-black">
+          <div className="flex items-center gap-2">
+            <Clock className="w-5 h-5 text-black" />
+            <h2 className="text-xl font-black text-black">Processing History</h2>
           </div>
+          <button
+            type="button"
+            onClick={loadDashboardData}
+            disabled={isLoadingData}
+            className="p-1.5 rounded bg-white hover:bg-neutral-100 border border-black shadow-[1.5px_1.5px_0px_#000] text-black"
+            title="Refresh history"
+          >
+            <RefreshCw className={`w-4 h-4 ${isLoadingData ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
 
-          <div className="bg-white rounded-3xl border-2 border-black p-5 shadow-[4px_4px_0px_#000000] divide-y-2 divide-black/10">
-            {jobs.length === 0 ? (
-              <div className="py-8 text-center text-xs font-bold text-neutral-600">
-                <p>No recent AI jobs yet.</p>
-                <Link
-                  to="/tools/ai-image-enhancer"
-                  className="mt-2 inline-block font-black text-black underline hover:text-neutral-700"
-                >
-                  Enhance your first image
-                </Link>
-              </div>
-            ) : (
-              jobs.map((job) => (
-                <div
-                  key={job._id}
-                  className="py-3 first:pt-0 last:pb-0 flex items-center justify-between text-xs"
-                >
-                  <div>
-                    <p className="font-black text-black">
-                      {job.inputMetadata?.originalName || job.tool}
-                    </p>
-                    <p className="text-[11px] font-bold text-neutral-600">
-                      {new Date(job.createdAt).toLocaleString()} • {job.creditsConsumed} credit(s)
-                    </p>
-                  </div>
-                  <div>
-                    {job.status === 'completed' && job.outputUrl ? (
-                      <a
-                        href={job.outputUrl}
-                        download
-                        className="p-1.5 px-2.5 rounded-lg bg-[#4ADE80] border border-black hover:bg-[#3ec470] text-black shadow-[1px_1px_0px_#000] flex items-center gap-1 text-[11px] font-black"
+        {isLoadingData ? (
+          <div className="py-12 text-center text-xs text-neutral-500">
+            Loading recent processing runs...
+          </div>
+        ) : jobs.length === 0 ? (
+          <div className="py-12 text-center text-sm font-bold text-neutral-500">
+            No tools executed yet. Try out one of the{' '}
+            <Link to="/ai-tools" className="text-blue-700 underline">
+              AI Tools
+            </Link>{' '}
+            or design on{' '}
+            <Link to="/design-studio" className="text-blue-700 underline">
+              Design Studio
+            </Link>
+            .
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b-2 border-black font-black uppercase text-neutral-500 bg-[#FAF7F2]">
+                  <th className="py-2.5 px-3">Tool</th>
+                  <th className="py-2.5 px-3">Status</th>
+                  <th className="py-2.5 px-3">Input File</th>
+                  <th className="py-2.5 px-3">Date</th>
+                  <th className="py-2.5 px-3 text-right">Result</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-black/10 font-bold">
+                {jobs.map((job) => (
+                  <tr key={job._id} className="hover:bg-neutral-50 transition-colors">
+                    <td className="py-3 px-3 uppercase font-mono font-black text-neutral-800">
+                      {job.tool}
+                    </td>
+                    <td className="py-3 px-3">
+                      <span
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-black uppercase font-mono border ${
+                          job.status === 'completed'
+                            ? 'bg-green-100 text-green-900 border-green-800'
+                            : job.status === 'failed'
+                            ? 'bg-red-100 text-red-900 border-red-800'
+                            : 'bg-yellow-100 text-yellow-900 border-yellow-800'
+                        }`}
                       >
-                        <Download className="w-3.5 h-3.5 stroke-[2.5]" />
-                        <span>Download</span>
-                      </a>
-                    ) : (
-                      <span className="text-[11px] font-black text-neutral-800 bg-[#FACC15] border border-black px-2 py-0.5 rounded capitalize">
+                        {job.status === 'completed' ? (
+                          <CheckCircle className="w-3 h-3" />
+                        ) : job.status === 'failed' ? (
+                          <XCircle className="w-3 h-3" />
+                        ) : (
+                          <RefreshCw className="w-3 h-3 animate-spin" />
+                        )}
                         {job.status}
                       </span>
-                    )}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Credit Transaction History Table (2 cols) */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-black text-black">
-              Credit Usage & Transaction History
-            </h2>
-          </div>
-
-          <div className="bg-white rounded-3xl border-2 border-black overflow-hidden shadow-[5px_5px_0px_#000000]">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-[#FAF7F2] border-b-2 border-black text-black uppercase tracking-wider font-black text-[11px]">
-                  <tr>
-                    <th className="py-3.5 px-4">Date</th>
-                    <th className="py-3.5 px-4">Description</th>
-                    <th className="py-3.5 px-4">Type</th>
-                    <th className="py-3.5 px-4">Credits</th>
-                    <th className="py-3.5 px-4">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y-2 divide-black/10 text-black font-bold">
-                  {transactions.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="py-8 text-center text-neutral-600 font-bold text-xs">
-                        No transactions recorded yet.
-                      </td>
-                    </tr>
-                  ) : (
-                    transactions.map((tx) => {
-                      const isDeduction = tx.type === 'consumption' || tx.type === 'reservation';
-                      return (
-                        <tr
-                          key={tx._id}
-                          className="hover:bg-neutral-50 transition-colors"
+                    </td>
+                    <td className="py-3 px-3 text-neutral-600 truncate max-w-xs">
+                      {job.inputMetadata?.originalName || 'Direct upload'}
+                    </td>
+                    <td className="py-3 px-3 text-neutral-500 font-mono">
+                      {new Date(job.createdAt).toLocaleDateString()}{' '}
+                      {new Date(job.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </td>
+                    <td className="py-3 px-3 text-right">
+                      {job.outputUrl ? (
+                        <a
+                          href={job.outputUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          download
+                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FACC15] hover:bg-yellow-400 text-black font-black text-[11px] border border-black shadow-[1.5px_1.5px_0px_#000]"
                         >
-                          <td className="py-3 px-4 text-neutral-600 whitespace-nowrap">
-                            {new Date(tx.createdAt).toLocaleDateString()}
-                          </td>
-                          <td className="py-3 px-4 font-black text-black">
-                            {tx.description}
-                          </td>
-                          <td className="py-3 px-4 uppercase text-[10px] font-mono font-bold text-neutral-600">
-                            {tx.type.replace('_', ' ')}
-                          </td>
-                          <td
-                            className={`py-3 px-4 font-mono font-black whitespace-nowrap ${
-                              isDeduction
-                                ? 'text-red-600'
-                                : 'text-emerald-700'
-                            }`}
-                          >
-                            {isDeduction ? `-${tx.amount}` : `+${tx.amount}`}
-                          </td>
-                          <td className="py-3 px-4">
-                            <span
-                              className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase border border-black shadow-[1px_1px_0px_#000] ${
-                                tx.status === 'committed'
-                                  ? 'bg-[#4ADE80] text-black'
-                                  : tx.status === 'refunded'
-                                    ? 'bg-[#38BDF8] text-black'
-                                    : 'bg-[#FACC15] text-black'
-                              }`}
-                            >
-                              {tx.status}
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
-            </div>
+                          <Download className="w-3 h-3" /> Download
+                        </a>
+                      ) : (
+                        <span className="text-neutral-400 font-mono">-</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

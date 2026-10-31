@@ -37,12 +37,12 @@ export class PayMongoProvider implements IPaymentProvider {
           send_email_receipt: true,
           show_description: true,
           show_line_items: true,
-          description: `ToolNest ${planConfig.name} Plan (${params.interval})`,
+          description: `VexoraMods ${planConfig.name} Plan (${params.interval})`,
           line_items: [
             {
               currency: 'PHP',
               amount: amountInCentavos,
-              name: `ToolNest ${planConfig.name} Subscription`,
+              name: `VexoraMods ${planConfig.name} Subscription`,
               quantity: 1,
               description: `${planConfig.monthlyCredits} AI Credits per month`,
             },

@@ -8,6 +8,11 @@ export interface ToolRegistryEntry {
 
 export const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   // Phase A: Image & AI Tools
+  'smart-image-studio': lazy(() =>
+    import('../features/images/SmartImageStudio.js').then((m) => ({
+      default: m.SmartImageStudio,
+    })),
+  ),
   'ai-image-enhancer': lazy(() =>
     import('../features/images/AiImageEnhancerTool.js').then((m) => ({
       default: m.AiImageEnhancerTool,

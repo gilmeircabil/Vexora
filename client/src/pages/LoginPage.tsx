@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router';
 import { Sparkles, ArrowRight, Loader2, Lock, Mail } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
 import { useToast } from '../context/ToastContext.js';
+import { SocialAuthButtons } from '../components/auth/SocialAuthButtons.js';
 
 export const LoginPage: React.FC = () => {
   const { login } = useAuth();
@@ -49,11 +50,15 @@ export const LoginPage: React.FC = () => {
             <Sparkles className="w-7 h-7 stroke-[2.5]" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-black">
-            Sign in to VexoraTool
+            Sign in to VexoraMods
           </h1>
           <p className="text-xs sm:text-sm font-bold text-neutral-600 mt-2">
-            Access your daily AI credits, generation history, and subscriptions.
+            Sign in with your email or social account to manage your saved designs and developer showcase profile.
           </p>
+        </div>
+
+        <div className="mb-5">
+          <SocialAuthButtons mode="login" />
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">

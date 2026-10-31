@@ -23,7 +23,7 @@ const CreditAccountSchema = new Schema<ICreditAccount>(
     },
     dailyAllowance: {
       type: Number,
-      default: 3,
+      default: 10,
       min: 0,
     },
     dailyUsed: {

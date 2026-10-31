@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router';
 import { Sparkles, Loader2, Lock, Mail, User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
 import { useToast } from '../context/ToastContext.js';
+import { SocialAuthButtons } from '../components/auth/SocialAuthButtons.js';
 
 export const RegisterPage: React.FC = () => {
   const { login } = useAuth();
@@ -34,7 +35,7 @@ export const RegisterPage: React.FC = () => {
       const data = await res.json();
       if (res.ok && data.success) {
         login(data.data.accessToken, data.data.user);
-        showToast(`Account created! You have been granted 3 free daily AI credits.`, 'success');
+        showToast('Account created successfully! Welcome to VexoraMods.', 'success');
         navigate(redirect);
       } else {
         showToast(data.error || 'Registration failed.', 'error');
@@ -54,15 +55,19 @@ export const RegisterPage: React.FC = () => {
             <Sparkles className="w-7 h-7 stroke-[2.5]" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-black">
-            Create your VexoraTool Account
+            Create your VexoraMods Account
           </h1>
           <p className="text-xs sm:text-sm font-bold text-neutral-600 mt-2">
-            Includes{' '}
+            VexoraMods is{' '}
             <span className="font-black text-black bg-[#4ADE80] px-1.5 py-0.5 rounded border border-black">
-              3 free AI credits
-            </span>{' '}
-            refreshed every day at 00:00 UTC.
+              100% Free & Open Source
+            </span>
+            . All 33+ tools work without an account. An account lets you save design projects and publish developer portfolio showcases.
           </p>
+        </div>
+
+        <div className="mb-5">
+          <SocialAuthButtons mode="register" />
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">

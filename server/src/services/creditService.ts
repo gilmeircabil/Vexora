@@ -34,7 +34,7 @@ export class CreditService {
       const todayMidnight = getUtcMidnight();
       account = await CreditAccount.create({
         userId: uid,
-        dailyAllowance: 3,
+        dailyAllowance: PLANS_CONFIG.free.dailyCredits,
         dailyUsed: 0,
         dailyResetAt: todayMidnight,
         monthlyAllowance: 0,
@@ -46,8 +46,8 @@ export class CreditService {
       await CreditTransaction.create({
         userId: uid,
         type: 'daily_reset',
-        amount: 3,
-        description: 'Initial daily free credit grant (3 credits)',
+        amount: PLANS_CONFIG.free.dailyCredits,
+        description: `Initial daily free credit grant (${PLANS_CONFIG.free.dailyCredits} credits)`,
         status: 'committed',
       });
     } else {

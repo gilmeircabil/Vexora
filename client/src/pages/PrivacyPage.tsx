@@ -14,7 +14,7 @@ export const PrivacyPage: React.FC = () => {
           Privacy Policy & Architecture
         </h1>
         <p className="text-base font-bold text-neutral-700 leading-relaxed">
-          How VexoraTool processes your data, why your files never leave your device, and our
+          How VexoraMods processes your data, why your files never leave your device, and our
           commitment to transparency.
         </p>
       </div>
@@ -28,7 +28,7 @@ export const PrivacyPage: React.FC = () => {
             </h2>
           </div>
           <p>
-            Every currently published tool on VexoraTool operates{' '}
+            Every currently published tool on VexoraMods operates{' '}
             <strong>entirely inside your browser</strong>. When you drop a PDF, image, or text
             snippet into a tool:
           </p>
@@ -61,7 +61,7 @@ export const PrivacyPage: React.FC = () => {
             </h2>
           </div>
           <p>
-            VexoraTool does not use Google Analytics, Facebook Pixels, user fingerprinting, or
+            VexoraMods does not use Google Analytics, Facebook Pixels, user fingerprinting, or
             tracking cookies. We do not maintain user profiles or monitor individual tool usage.
           </p>
           <p>
@@ -93,7 +93,7 @@ export const PrivacyPage: React.FC = () => {
             <h2 className="text-base font-black">4. Honest Security Boundaries</h2>
           </div>
           <p className="text-xs text-neutral-800 font-semibold">
-            While VexoraTool does not upload or retain your files, local-first web applications still
+            While VexoraMods does not upload or retain your files, local-first web applications still
             run inside your browser environment. If your computer has malware, untrusted browser
             extensions with permission to read web pages, or compromised memory, those extensions
             could theoretically inspect DOM data. Always keep your browser updated and review

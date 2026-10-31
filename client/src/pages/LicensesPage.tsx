@@ -24,23 +24,23 @@ export const LicensesPage: React.FC = () => {
           Open Source Licenses
         </h1>
         <p className="text-base font-bold text-neutral-700 leading-relaxed">
-          VexoraTool is licensed under the MIT License and built upon open-source software.
+          VexoraMods is licensed under the MIT License and built upon open-source software.
         </p>
       </div>
 
       <div className="space-y-6">
-        {/* VexoraTool MIT License */}
+        {/* VexoraMods MIT License */}
         <Card className="space-y-3">
           <div className="flex items-center gap-2 pb-2 border-b-2 border-black/10">
             <Shield className="w-5 h-5 text-black stroke-[2.5]" />
             <h2 className="text-base font-black text-black">
-              VexoraTool License (MIT)
+              VexoraMods License (MIT)
             </h2>
           </div>
           <pre className="p-4 rounded-xl bg-[#FAF7F2] border-2 border-black text-black font-mono text-xs overflow-x-auto whitespace-pre-wrap leading-relaxed shadow-[2px_2px_0px_#000]">
             {`MIT License
 
-Copyright (c) 2026 VexoraTool Contributors
+Copyright (c) 2026 VexoraMods Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

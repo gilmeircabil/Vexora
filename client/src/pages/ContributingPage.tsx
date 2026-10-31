@@ -7,10 +7,10 @@ export const ContributingPage: React.FC = () => {
     <div className="max-w-3xl mx-auto space-y-10">
       <div className="space-y-3">
         <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-black">
-          Contributing to VexoraTool
+          Contributing to VexoraMods
         </h1>
         <p className="text-base font-bold text-neutral-700 leading-relaxed">
-          VexoraTool is community-driven and welcomes new offline-first browser utilities,
+          VexoraMods is community-driven and welcomes new offline-first browser utilities,
           accessibility fixes, and performance improvements.
         </p>
       </div>

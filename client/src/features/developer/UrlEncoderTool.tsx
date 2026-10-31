@@ -6,9 +6,9 @@ import { encodeUrl, decodeUrl } from '../../lib/dev/url.js';
 import { AlertCircle, Trash2 } from 'lucide-react';
 
 export const UrlEncoderTool: React.FC = () => {
-  const [plain, setPlain] = useState('https://toolnest.org/search?q=free tools & local-first=yes!');
+  const [plain, setPlain] = useState('https://vexoramods.org/search?q=free tools & local-first=yes!');
   const [encoded, setEncoded] = useState(() =>
-    encodeUrl('https://toolnest.org/search?q=free tools & local-first=yes!', 'component'),
+    encodeUrl('https://vexoramods.org/search?q=free tools & local-first=yes!', 'component'),
   );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 

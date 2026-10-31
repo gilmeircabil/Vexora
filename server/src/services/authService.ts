@@ -3,8 +3,6 @@ import jwt from 'jsonwebtoken';
 import { Types } from 'mongoose';
 import { env } from '../config/env.js';
 import { User, type IUser } from '../models/User.js';
-import { Subscription } from '../models/Subscription.js';
-import { CreditService } from './creditService.js';
 
 export interface TokenPayload {
   userId: string;
@@ -17,7 +15,14 @@ export interface AuthResult {
     id: string;
     name: string;
     email: string;
+    avatarUrl?: string;
+    bio?: string;
     role: 'user' | 'admin';
+    oauthProviders?: {
+      google?: boolean;
+      github?: boolean;
+      facebook?: boolean;
+    };
     subscription: {
       plan: string;
       status: string;
@@ -104,27 +109,7 @@ export class AuthService {
       role: params.email.toLowerCase() === env.ADMIN_EMAIL.toLowerCase() ? 'admin' : 'user',
     });
 
-    // Create default Free subscription
-    const nextYear = new Date();
-    nextYear.setFullYear(nextYear.getFullYear() + 10);
-
-    const subscription = await Subscription.create({
-      userId: user._id,
-      plan: 'free',
-      billingInterval: 'monthly',
-      provider: 'system',
-      status: 'active',
-      currentPeriodStart: new Date(),
-      currentPeriodEnd: nextYear,
-    });
-
-    user.subscriptionId = subscription._id as Types.ObjectId;
-    await user.save();
-
-    // Initialize Credit Account with 3 free daily credits
-    const creditAccount = await CreditService.getOrCreateAccount(user._id as Types.ObjectId);
-    const balance = CreditService.calculateBalance(creditAccount);
-
+    // Free open-source user - no subscription or credit restrictions
     const tokens = this.generateTokens({
       userId: (user._id as Types.ObjectId).toString(),
       email: user.email,
@@ -138,14 +123,13 @@ export class AuthService {
         email: user.email,
         role: user.role,
         subscription: {
-          plan: subscription.plan,
-          status: subscription.status,
-          currentPeriodEnd: subscription.currentPeriodEnd,
+          plan: 'free',
+          status: 'active',
         },
         credits: {
-          dailyRemaining: balance.dailyRemaining,
-          monthlyRemaining: balance.monthlyRemaining,
-          totalAvailable: balance.totalAvailable,
+          dailyRemaining: 999999,
+          monthlyRemaining: 999999,
+          totalAvailable: 999999,
         },
       },
       ...tokens,
@@ -161,14 +145,14 @@ export class AuthService {
       throw new Error('Invalid email or password.');
     }
 
+    if (!user.passwordHash) {
+      throw new Error('This account was created with social login. Please sign in with Google, GitHub, or Facebook.');
+    }
+
     const validPassword = await this.comparePassword(params.password, user.passwordHash);
     if (!validPassword) {
       throw new Error('Invalid email or password.');
     }
-
-    const subscription = await Subscription.findOne({ userId: user._id });
-    const creditAccount = await CreditService.getOrCreateAccount(user._id as Types.ObjectId);
-    const balance = CreditService.calculateBalance(creditAccount);
 
     const tokens = this.generateTokens({
       userId: (user._id as Types.ObjectId).toString(),
@@ -183,14 +167,13 @@ export class AuthService {
         email: user.email,
         role: user.role,
         subscription: {
-          plan: subscription?.plan || 'free',
-          status: subscription?.status || 'active',
-          currentPeriodEnd: subscription?.currentPeriodEnd,
+          plan: 'free',
+          status: 'active',
         },
         credits: {
-          dailyRemaining: balance.dailyRemaining,
-          monthlyRemaining: balance.monthlyRemaining,
-          totalAvailable: balance.totalAvailable,
+          dailyRemaining: 999999,
+          monthlyRemaining: 999999,
+          totalAvailable: 999999,
         },
       },
       ...tokens,
@@ -207,24 +190,210 @@ export class AuthService {
       throw new Error('User not found.');
     }
 
-    const subscription = await Subscription.findOne({ userId: uid });
-    const creditAccount = await CreditService.getOrCreateAccount(uid);
-    const balance = CreditService.calculateBalance(creditAccount);
-
     return {
       id: (user._id as Types.ObjectId).toString(),
       name: user.name,
       email: user.email,
+      avatarUrl: user.avatarUrl,
+      bio: user.bio,
       role: user.role,
-      subscription: {
-        plan: subscription?.plan || 'free',
-        status: subscription?.status || 'active',
-        billingInterval: subscription?.billingInterval || 'monthly',
-        currentPeriodStart: subscription?.currentPeriodStart,
-        currentPeriodEnd: subscription?.currentPeriodEnd,
-        cancelAtPeriodEnd: subscription?.cancelAtPeriodEnd || false,
+      oauthProviders: {
+        google: Boolean(user.oauthProviders?.google?.id),
+        github: Boolean(user.oauthProviders?.github?.id),
+        facebook: Boolean(user.oauthProviders?.facebook?.id),
       },
-      credits: balance,
+      subscription: {
+        plan: 'free',
+        status: 'active',
+      },
+      credits: {
+        dailyRemaining: 999999,
+        monthlyRemaining: 999999,
+        totalAvailable: 999999,
+      },
     };
+  }
+
+  /**
+   * Authenticates or registers a user via OAuth (Google, GitHub, Facebook).
+   */
+  static async authenticateOAuth(params: {
+    provider: 'google' | 'github' | 'facebook';
+    providerId: string;
+    email: string;
+    name?: string;
+    avatarUrl?: string;
+  }): Promise<AuthResult> {
+    const cleanEmail = params.email.toLowerCase().trim();
+    const cleanName = params.name?.trim() || cleanEmail.split('@')[0];
+
+    // Find user by email or by existing oauth provider id
+    let user = await User.findOne({
+      $or: [
+        { email: cleanEmail },
+        { [`oauthProviders.${params.provider}.id`]: params.providerId },
+      ],
+    });
+
+    if (user) {
+      // Bind or update provider details
+      if (!user.oauthProviders) user.oauthProviders = {};
+      user.oauthProviders[params.provider] = {
+        id: params.providerId,
+        email: cleanEmail,
+        picture: params.avatarUrl,
+        linkedAt: new Date(),
+      };
+      if (!user.avatarUrl && params.avatarUrl) {
+        user.avatarUrl = params.avatarUrl;
+      }
+      await user.save();
+    } else {
+      // Create new user authenticated via OAuth
+      user = await User.create({
+        name: cleanName,
+        email: cleanEmail,
+        avatarUrl: params.avatarUrl || '',
+        role: cleanEmail === env.ADMIN_EMAIL.toLowerCase() ? 'admin' : 'user',
+        oauthProviders: {
+          [params.provider]: {
+            id: params.providerId,
+            email: cleanEmail,
+            picture: params.avatarUrl,
+            linkedAt: new Date(),
+          },
+        },
+      });
+    }
+
+    const tokens = this.generateTokens({
+      userId: (user._id as Types.ObjectId).toString(),
+      email: user.email,
+      role: user.role,
+    });
+
+    return {
+      user: {
+        id: (user._id as Types.ObjectId).toString(),
+        name: user.name,
+        email: user.email,
+        avatarUrl: user.avatarUrl,
+        bio: user.bio,
+        role: user.role,
+        oauthProviders: {
+          google: Boolean(user.oauthProviders?.google?.id),
+          github: Boolean(user.oauthProviders?.github?.id),
+          facebook: Boolean(user.oauthProviders?.facebook?.id),
+        },
+        subscription: {
+          plan: 'free',
+          status: 'active',
+        },
+        credits: {
+          dailyRemaining: 999999,
+          monthlyRemaining: 999999,
+          totalAvailable: 999999,
+        },
+      },
+      ...tokens,
+    };
+  }
+
+  /**
+   * Binds an OAuth provider (Google, GitHub, Facebook) to an existing authenticated user.
+   */
+  static async bindOAuthProvider(
+    userId: string | Types.ObjectId,
+    params: {
+      provider: 'google' | 'github' | 'facebook';
+      providerId: string;
+      email?: string;
+      username?: string;
+      avatarUrl?: string;
+    },
+  ) {
+    const uid = typeof userId === 'string' ? new Types.ObjectId(userId) : userId;
+    const user = await User.findById(uid);
+    if (!user) throw new Error('User not found.');
+
+    if (!user.oauthProviders) user.oauthProviders = {};
+    user.oauthProviders[params.provider] = {
+      id: params.providerId,
+      email: params.email?.trim().toLowerCase(),
+      username: params.username,
+      picture: params.avatarUrl,
+      linkedAt: new Date(),
+    };
+
+    if (!user.avatarUrl && params.avatarUrl) {
+      user.avatarUrl = params.avatarUrl;
+    }
+
+    await user.save();
+    return {
+      success: true,
+      provider: params.provider,
+      linkedAt: user.oauthProviders[params.provider]?.linkedAt,
+    };
+  }
+
+  /**
+   * Unbinds an OAuth provider from an existing user.
+   */
+  static async unbindOAuthProvider(
+    userId: string | Types.ObjectId,
+    provider: 'google' | 'github' | 'facebook',
+  ) {
+    const uid = typeof userId === 'string' ? new Types.ObjectId(userId) : userId;
+    const user = await User.findById(uid);
+    if (!user) throw new Error('User not found.');
+
+    // Ensure user has a password or at least one other login method
+    const remainingProviders = ['google', 'github', 'facebook'].filter(
+      (p) => p !== provider && user.oauthProviders?.[p as 'google' | 'github' | 'facebook']?.id,
+    );
+
+    if (!user.passwordHash && remainingProviders.length === 0) {
+      throw new Error(
+        'Cannot disconnect this provider because you do not have a password or other connected provider.',
+      );
+    }
+
+    if (user.oauthProviders) {
+      delete user.oauthProviders[provider];
+      user.markModified('oauthProviders');
+      await user.save();
+    }
+
+    return { success: true };
+  }
+
+  /**
+   * Updates basic user profile info (name, bio, avatarUrl).
+   */
+  static async updateProfile(
+    userId: string | Types.ObjectId,
+    params: {
+      name?: string;
+      avatarUrl?: string;
+      bio?: string;
+    },
+  ) {
+    const uid = typeof userId === 'string' ? new Types.ObjectId(userId) : userId;
+    const user = await User.findById(uid);
+    if (!user) throw new Error('User not found.');
+
+    if (params.name && params.name.trim()) {
+      user.name = params.name.trim().slice(0, 100);
+    }
+    if (params.avatarUrl !== undefined) {
+      user.avatarUrl = params.avatarUrl;
+    }
+    if (params.bio !== undefined) {
+      user.bio = params.bio.slice(0, 500);
+    }
+
+    await user.save();
+    return this.getCurrentUser(user._id as Types.ObjectId);
   }
 }

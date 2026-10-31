@@ -1,119 +1,100 @@
-# VexoraTool
+# VexoraMods
 
-> **Everyday tools. One place. No cost.**
+> **Everything You Need. One Platform. Free.**
 
-VexoraTool is a free, open-source, hybrid utility platform containing 33 indispensable tools for images, PDFs, text manipulation, developers, everyday calculations, and premium AI-powered tools powered by a 2-phase atomic credit engine.
-
----
-
-## Key Features
-
-- **Local-First Core:** 32 standard utilities run 100% in your browser using HTML5 Canvas, Web Crypto, WebAssembly, and PDF-Lib. Zero registration required for ordinary tools.
-- **Credit-Based AI Architecture:** Daily free AI generation credits (3 credits/day, automatic 00:00 UTC server-side reset) and Pro (300/mo) / Premium (1,000/mo) subscription tiers.
-- **Two-Phase Atomic Credit Reservation:** Prevents concurrent overspending and guarantees full automatic refund if an AI operation fails.
-- **Pluggable Payment Integration:** Multi-provider abstraction supporting Stripe, PayMongo (GCash, Maya, cards in SEA), and Sandbox mode with verified HMAC webhooks and duplicate replay protection.
-- **Admin & User Dashboards:** Responsive credit indicator in navigation, user dashboard with usage history, and secure role-protected admin console.
-- **Modern Full-Stack Architecture:** React 19, TypeScript strict mode, Vite 6, Tailwind CSS v4, Node.js, Express, MongoDB (Mongoose), and Vitest.
+VexoraMods is a free and open-source all-in-one online tools platform that provides useful utilities, AI-assisted tools, an online design editor, and a developer community.
 
 ---
 
-## Implemented Tools
+## 🌟 Core Pillars
 
-### Image Tools
-
-1. **Image Compressor:** Compress PNG, JPEG, and WebP with custom quality, format transcoding, and percentage reduction comparison.
-2. **Image Resizer:** Scale images to exact dimensions or percentage with aspect ratio lock.
-3. **Image Format Converter:** Convert raster images between PNG, JPEG, and WebP with content verification.
-4. **Image Cropper:** Accessible crop interface with freeform and 1:1, 4:3, 16:9 aspect ratio presets.
-5. **Image Rotator & Flipper:** 90° clockwise/counter-clockwise rotation and horizontal/vertical mirroring.
-6. **Color Picker & Eyedropper:** Native browser eyedropper and click-to-sample canvas inspector from user images.
-7. **Image Metadata Viewer:** Fast client-side image header parser showing dimensions, format, MIME, and size.
-8. **Background Remover:** Client-side background removal using color-keying, contiguous flood-fill, and edge feathering with transparent PNG export.
-9. **AI Image Enhancer:** Neural super-resolution upscaling, face restoration, and noise reduction with credit management.
-
-### Text Tools
-
-9. **Word & Character Counter:** Real-time character, word, line, paragraph, and reading time statistics.
-10. **Case Converter:** Transform text into UPPERCASE, lowercase, Title Case, Sentence case, camelCase, kebab-case, snake_case.
-11. **Text Reverser:** Grapheme-cluster aware reversing by character or word, preventing emoji corruption.
-12. **Duplicate Line Remover:** Deduplicate lines preserving first occurrence with case and whitespace toggles.
-13. **Text Diff Checker:** Unified line-by-line visual difference tool highlighting additions and deletions.
-14. **Lorem Ipsum Generator:** Generate placeholder paragraphs, sentences, or words for UI design.
-
-### Developer Tools
-
-15. **JSON Formatter & Validator:** AST parse, minify, pretty-print (2/4 spaces, tabs) with descriptive error line/column reporting.
-16. **Base64 Encoder & Decoder:** UTF-8 text encoder/decoder and binary file to Data URI generator.
-17. **URL Encoder & Decoder:** Percent-encode and decode URI components with malformed sequence alerts.
-18. **UUID / GUID Generator:** Cryptographically secure RFC 4122 v4 UUID generator using Web Crypto API.
-19. **Password Generator:** High-entropy password generator with custom character classes and entropy estimation.
-20. **JWT Generator & Debugger:** Create, sign, decode, and verify JSON Web Tokens with HS256/384/512 using Web Crypto HMAC.
-21. **HTML Entity Encoder & Decoder:** XML/HTML entity escaping and decoding without DOM injection risks.
-22. **CSS Formatter & Beautifier:** AST-based CSS beautification and minification via Prettier standalone.
-
-### Everyday Utilities
-
-23. **QR Code Generator:** Generate downloadable PNG and vector SVG QR codes with error-correction levels (L, M, Q, H).
-24. **Percentage Calculator:** Three-in-one calculator for percentage of value, ratio, and percentage change.
-25. **Unit Converter:** Convert between metric and imperial units for length, mass, temperature, area, and volume.
-26. **Date Difference Calculator:** Calculate elapsed calendar days, weeks, months, and business days between UTC dates.
-27. **Color Converter:** Multi-format conversion between HEX, RGB, and HSL with WCAG contrast ratio analysis.
-
-### PDF Tools
-
-28. **PDF Merger:** Combine multiple PDF documents into a single document with drag/button reordering.
-29. **PDF Page Extractor & Splitter:** Extract custom page ranges (e.g. `1-3, 5`) into a downloadable PDF.
-30. **PDF Rotator:** Rotate all pages of a PDF by 90°, 180°, or 270°.
-31. **Image to PDF Converter:** Transform multiple PNG, JPEG, and WebP images into a multi-page PDF document.
-32. **PDF Viewer & Inspector:** Client-side PDF page preview powered by PDF.js with zoom and pagination.
+1. **All-in-One Online Tools:** Over 33+ high-performance, client-side browser utilities for image processing, PDF manipulation, developer workflows, and text tools.
+2. **AI Tools:** Powered by optional local/self-hosted AI models (Ollama, local Python microservice) with zero external API fees or credit deductions.
+3. **VexoraMods Studio:** Canva-inspired vector and raster design editor with templates, layer manipulation, and non-destructive history.
+4. **Developer Hub:** Developer community directory and professional portfolio showcase where developers display their work and businesses discover talent.
+5. **Developer Discovery:** Open directory for recruiters, business owners, and collaborators to discover developers by skill, framework, and experience.
+6. **Support VexoraMods & Leaderboard:** Voluntary contribution system with custom donation amounts, multi-provider verification, and a public supporter leaderboard.
+7. **User Accounts & Project Management:** Completely optional guest mode with zero friction, plus social sign-in (Google, GitHub, Facebook) for saving designs and publishing portfolio showcases.
 
 ---
 
-## Development and Build Commands
+## 🛡️ Business Principles
+
+- **100% Free to Use:** All ordinary tools and studio features remain permanently free.
+- **No Subscriptions or Paywalls:** No premium tiers, artificial restrictions, or feature gating.
+- **No AI Credit System:** No credit deduction, token balances, or daily run limitations.
+- **Voluntary Contributions:** Support is strictly voluntary and never unlocks paid features.
+- **Privacy & Local-First:** Core tools process your files directly inside your browser memory using HTML5 Canvas, Web Crypto, and WebAssembly with zero server file storage.
+
+---
+
+## 🛠️ Workspaces & Capabilities
+
+### 1. Image Utilities & Smart Image Studio
+- **Smart Image Studio:** Unified studio for upscaling, background removal, object erasing, vintage photo restoration, and color transforms.
+- **Image Compressor:** Compress PNG, JPEG, and WebP with custom compression levels.
+- **Image Resizer:** Exact dimension and percentage resizing with aspect ratio preservation.
+- **Image Converter:** Transcode between PNG, JPEG, and WebP client-side.
+- **Image Cropper & Rotator:** Crop to popular aspect ratios (1:1, 4:3, 16:9) and rotate 90°/180°/270°.
+- **Metadata Viewer & Color Picker:** Header parsing and canvas eyedropper.
+
+### 2. PDF Utilities
+- **PDF Merger & Splitter:** Combine multiple documents or extract custom page ranges.
+- **PDF Rotator:** Rotate orientation of individual PDF pages.
+- **Image to PDF:** Convert multi-image collections into single structured PDF files.
+- **PDF Viewer:** In-browser sandboxed PDF inspector powered by PDF.js.
+
+### 3. Developer Utilities
+- **JSON Formatter & Validator:** Pretty-print, syntax validate, and minify JSON with descriptive error markers.
+- **Base64 Encoder & Decoder:** Bidirectional UTF-8 text and binary data-URI converter.
+- **JWT Debugger:** Encode, decode, and verify JSON Web Tokens with HS256/384/512 algorithms.
+- **UUID / GUID Generator:** Cryptographically secure RFC 4122 v4 UUID generator.
+- **Password Generator:** Customizable character set entropy generator using Web Crypto.
+- **HTML Entity & URL Encoder:** Safe entity escaping and URI percent-encoding.
+- **CSS Formatter & Beautifier:** AST-based CSS beautification via Prettier.
+
+### 4. Text & Calculation Utilities
+- **Word & Character Counter:** Real-time character, word, line, and paragraph counters.
+- **Case Converter:** Transform text to UPPERCASE, lowercase, Title Case, camelCase, kebab-case, snake_case.
+- **Text Diff Checker:** Visual diff highlighter comparing text versions.
+- **Percentage & Unit Converters:** Instant calculations and metric/imperial conversions.
+- **Date Difference Calculator:** Calculate elapsed calendar and business days between UTC dates.
+
+### 5. VexoraMods Studio (Online Design Editor)
+- **Interactive Fabric Canvas:** Drag-and-drop elements, shapes, vector graphics, typography, and uploads.
+- **Layer & Object Control:** Z-index reordering, opacity controls, group, clone, and lock objects.
+- **Export Options:** High-resolution PNG, JPG, and vector PDF exports directly from canvas.
+- **Templates & History:** Built-in social media presets and revision version history.
+
+### 6. Developer Hub & Portfolio Showcase
+- **Public Profiles:** Showcase programming languages, experience levels, services, and social links.
+- **Project Directory:** Publish live demo links, source code repositories, screenshots, and tech stacks.
+- **Community Engagement:** Real-time view counts, 5-reaction emoji bars, and discussion comment threads.
+- **Client Discovery:** Filter developers by skill, framework, availability, and location with direct contact links.
+
+---
+
+## 💻 Development & Build Setup
 
 ```bash
 # Install dependencies
 npm install
 
-# Start local dev server (http://localhost:3000)
+# Run frontend & backend concurrently (http://localhost:3000)
 npm run dev
 
-# Run TypeScript typecheck
+# Run TypeScript typechecks across the entire repository
 npm run typecheck
 
 # Run unit and component test suite (Vitest)
-npm run test
+npm test
 
-# Run ESLint
-npm run lint
-
-# Check code formatting (Prettier)
-npm run format:check
-
-# Format codebase
-npm run format
-
-# Production build
+# Build production bundle
 npm run build
-
-# Preview production build locally (http://localhost:4173)
-npm run preview
 ```
 
 ---
 
-## Privacy & Security
+## 📜 License
 
-ToolNest operates strictly on a **local-first** security model:
-
-- No file or sensitive text leaves your browser.
-- No third-party tracking scripts, cookies, or remote analytics.
-- Web Crypto API (`crypto.getRandomValues`, `crypto.randomUUID`) is used exclusively for secrets.
-- Passwords and private documents are never written to `localStorage` or `sessionStorage`.
-
----
-
-## License
-
-ToolNest is open-source software licensed under the [MIT License](LICENSE).
-Third-party libraries retain their respective permissive licenses (see [docs/LICENSE_AUDIT.md](docs/LICENSE_AUDIT.md)).
+MIT License — Copyright (c) 2026 VexoraMods Contributors. Free and open-source for personal and commercial use.

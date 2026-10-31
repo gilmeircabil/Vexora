@@ -1,27 +1,22 @@
 import React, { useState, useRef } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import {
   Upload,
   Sparkles,
-  Zap,
   Download,
   AlertCircle,
   Loader2,
   Sliders,
   Check,
   RefreshCw,
-  ArrowRight,
-  ShieldAlert,
+  Cpu,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
-import { useCredits } from '../../context/CreditContext.js';
 import { useToast } from '../../context/ToastContext.js';
 
 export const AiImageEnhancerTool: React.FC = () => {
-  const { user, token, isAuthenticated } = useAuth();
-  const { balance, refreshBalance } = useCredits();
+  const { token } = useAuth();
   const { showToast } = useToast();
-  const navigate = useNavigate();
 
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -32,10 +27,6 @@ export const AiImageEnhancerTool: React.FC = () => {
   const [progressStage, setProgressStage] = useState<string>('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const availableCredits = balance?.totalAvailable ?? user?.credits?.totalAvailable ?? 0;
-  const toolCost = 1;
-  const isOutOfCredits = isAuthenticated && availableCredits < toolCost;
 
   const handleFileSelect = (selectedFile: File) => {
     if (!selectedFile.type.startsWith('image/')) {
@@ -54,27 +45,13 @@ export const AiImageEnhancerTool: React.FC = () => {
   };
 
   const handleEnhance = async () => {
-    if (!isAuthenticated) {
-      showToast('Please sign in to use the AI Image Enhancer.', 'info');
-      navigate('/login?redirect=/tools/ai-image-enhancer');
-      return;
-    }
-
-    if (isOutOfCredits) {
-      showToast(
-        'Insufficient credits. Please upgrade your plan or wait for the daily reset.',
-        'error',
-      );
-      return;
-    }
-
     if (!file) {
       showToast('Please select an image first.', 'error');
       return;
     }
 
     setIsProcessing(true);
-    setProgressStage('Reserving credit & validating payload...');
+    setProgressStage('Validating payload & preparing image...');
 
     try {
       const formData = new FormData();
@@ -87,12 +64,16 @@ export const AiImageEnhancerTool: React.FC = () => {
 
       setProgressStage('Executing AI enhancement model...');
 
+      const headers: Record<string, string> = {
+        'Idempotency-Key': idempotencyKey,
+      };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const res = await fetch('/api/ai/enhance', {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Idempotency-Key': idempotencyKey,
-        },
+        headers,
         body: formData,
       });
 
@@ -100,20 +81,12 @@ export const AiImageEnhancerTool: React.FC = () => {
 
       if (res.ok && data.success && data.data?.outputUrl) {
         setResultUrl(data.data.outputUrl);
-        showToast('Image enhanced successfully! 1 credit consumed.', 'success');
-        await refreshBalance();
+        showToast('Image enhanced successfully!', 'success');
       } else {
-        if (res.status === 402) {
-          showToast(data.error || 'Insufficient credits. Upgrade to continue.', 'error');
-        } else {
-          showToast(data.error || 'Enhancement failed. Your credit has been refunded.', 'error');
-        }
+        showToast(data.error || 'Enhancement failed. Please try again.', 'error');
       }
     } catch {
-      showToast(
-        'Network error during image processing. Any reserved credit has been released.',
-        'error',
-      );
+      showToast('Network error during image processing.', 'error');
     } finally {
       setIsProcessing(false);
       setProgressStage('');
@@ -122,77 +95,22 @@ export const AiImageEnhancerTool: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Credit & Auth Notice Banner */}
-      {!isAuthenticated ? (
-        <div className="p-4 sm:p-5 rounded-2xl bg-[#FACC15]/20 border-2 border-black shadow-[4px_4px_0px_#000000] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#FACC15] border-2 border-black flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#000]">
-              <Sparkles className="w-5 h-5 text-black stroke-[2.5]" />
-            </div>
-            <div>
-              <span className="font-black text-black text-sm block">
-                Sign in to get 3 Free AI Generation Credits Daily
-              </span>
-              <p className="text-xs font-bold text-neutral-700">
-                Enhance, denoise, and restore photos with zero subscriptions required.
-              </p>
-            </div>
+      {/* Open-Source Free Banner */}
+      <div className="p-4 sm:p-5 rounded-2xl bg-[#22C55E]/15 border-2 border-black shadow-[4px_4px_0px_#000000] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-[#22C55E] text-white border-2 border-black flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#000]">
+            <Sparkles className="w-5 h-5 stroke-[2.5]" />
           </div>
-          <div className="flex gap-2.5 shrink-0 w-full sm:w-auto">
-            <Link
-              to="/login?redirect=/tools/ai-image-enhancer"
-              className="flex-1 sm:flex-none text-center px-4 py-2 text-xs font-black rounded-xl bg-white hover:bg-neutral-100 border-2 border-black text-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all"
-            >
-              Sign In
-            </Link>
-            <Link
-              to="/register?redirect=/tools/ai-image-enhancer"
-              className="flex-1 sm:flex-none text-center px-4 py-2 text-xs font-black rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all"
-            >
-              Register Free
-            </Link>
-          </div>
-        </div>
-      ) : isOutOfCredits ? (
-        <div className="p-4 sm:p-5 rounded-2xl bg-[#F472B6]/20 border-2 border-black shadow-[4px_4px_0px_#000000] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#F472B6] border-2 border-black flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#000]">
-              <AlertCircle className="w-5 h-5 text-black stroke-[2.5]" />
-            </div>
-            <div>
-              <span className="font-black text-black text-sm block">
-                You've used all your AI credits for today
-              </span>
-              <p className="text-xs font-bold text-neutral-700">
-                Upgrade your plan for instant monthly credits or wait for the 00:00 UTC daily reset.
-              </p>
-            </div>
-          </div>
-          <Link
-            to="/pricing"
-            className="px-4 py-2 text-xs font-black rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-black shadow-[2px_2px_0px_#000] shrink-0 flex items-center gap-1.5 active:translate-x-0.5 active:translate-y-0.5 transition-all"
-          >
-            <span>Upgrade Plan</span>
-            <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
-          </Link>
-        </div>
-      ) : (
-        <div className="p-3.5 px-5 rounded-2xl bg-white border-2 border-black shadow-[3px_3px_0px_#000000] flex items-center justify-between text-xs font-bold text-black flex-wrap gap-2">
-          <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-black stroke-[2.5]" />
-            <span className="text-neutral-700">Available Credits:</span>
-            <span className="font-mono font-black text-black px-2 py-0.5 rounded-md bg-[#4ADE80] border border-black shadow-[1px_1px_0px_#000]">
-              {availableCredits}
+          <div>
+            <span className="font-black text-black text-sm block">
+              100% Free AI Image Enhancer
             </span>
-          </div>
-          <div className="text-neutral-700">
-            Operation Cost:{' '}
-            <span className="font-mono font-black text-black">
-              {toolCost} Credit
-            </span>
+            <p className="text-xs font-bold text-neutral-700">
+              Upscale, denoise, and sharpen images using Real-ESRGAN & Sharp. No external setup or AI models required.
+            </p>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Main Workspace */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -383,9 +301,9 @@ export const AiImageEnhancerTool: React.FC = () => {
           <div className="pt-3 border-t-2 border-black/10">
             <button
               onClick={handleEnhance}
-              disabled={!file || isProcessing || isOutOfCredits}
+              disabled={!file || isProcessing}
               className={`w-full py-3 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 border-2 border-black transition-all ${
-                !file || isOutOfCredits
+                !file
                   ? 'bg-neutral-200 text-neutral-500 cursor-not-allowed shadow-none'
                   : 'bg-[#FACC15] hover:bg-[#EAB308] text-black shadow-[3px_3px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#000000] cursor-pointer'
               }`}
@@ -398,7 +316,7 @@ export const AiImageEnhancerTool: React.FC = () => {
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 stroke-[2.5]" />
-                  <span>Enhance Image (1 Credit)</span>
+                  <span>Enhance Image (Free)</span>
                 </>
               )}
             </button>

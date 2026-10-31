@@ -25,7 +25,7 @@ export const JwtGeneratorTool: React.FC = () => {
 
   // Generator State
   const [alg, setAlg] = useState<JwtAlgorithm>('HS256');
-  const [secret, setSecret] = useState('your-256-bit-secret-key-toolnest');
+  const [secret, setSecret] = useState('your-256-bit-secret-key-vexoramods');
   const [payloadText, setPayloadText] = useState(
     JSON.stringify(
       {

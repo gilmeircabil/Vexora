@@ -24,11 +24,11 @@ describe('JSON Formatter & Minifier', () => {
   });
 
   it('minifies valid JSON cleanly', () => {
-    const raw = '{\n  "title": "ToolNest",\n  "active": true\n}';
+    const raw = '{\n  "title": "VexoraMods",\n  "active": true\n}';
     const res = minifyJson(raw);
     expect(res.ok).toBe(true);
     if (res.ok) {
-      expect(res.value).toBe('{"title":"ToolNest","active":true}');
+      expect(res.value).toBe('{"title":"VexoraMods","active":true}');
     }
   });
 
@@ -44,7 +44,7 @@ describe('JSON Formatter & Minifier', () => {
 
 describe('Base64 Encoder & Decoder', () => {
   it('encodes and decodes UTF-8 strings accurately without truncation', () => {
-    const text = 'ToolNest: 🚀 Multilingual 世界 / café / 100€';
+    const text = 'VexoraMods: 🚀 Multilingual 世界 / café / 100€';
     const b64 = encodeBase64Text(text);
     const decoded = decodeBase64Text(b64);
 

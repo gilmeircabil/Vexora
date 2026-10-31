@@ -36,6 +36,26 @@ export function authenticate(req: AuthenticatedRequest, res: Response, next: Nex
   next();
 }
 
+export function optionalAuthenticate(req: AuthenticatedRequest, _res: Response, next: NextFunction): void {
+  const authHeader = req.headers.authorization;
+  let token: string | undefined;
+
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.substring(7);
+  } else if (req.cookies && req.cookies.token) {
+    token = req.cookies.token;
+  }
+
+  if (token) {
+    const payload = AuthService.verifyAccessToken(token);
+    if (payload) {
+      req.user = payload;
+    }
+  }
+
+  next();
+}
+
 export function requireAdmin(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
   if (!req.user || req.user.role !== 'admin') {
     res.status(403).json({

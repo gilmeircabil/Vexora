@@ -25,7 +25,7 @@ export const ToolsDirectoryPage: React.FC = () => {
         </h1>
         <p className="text-sm sm:text-base font-semibold text-neutral-700 max-w-2xl leading-relaxed">
           Browse the complete catalog of all {TOOL_CATALOG.length} browser-based tools available on
-          VexoraTool. Every utility runs locally in your browser with zero file uploads.
+          VexoraMods. Every utility runs locally in your browser with zero file uploads.
         </p>
 
         <div className="relative max-w-md pt-2">

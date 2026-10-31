@@ -19,6 +19,38 @@ export const uploadImage = multer({
   },
 });
 
+export const uploadImageAndMask = multer({
+  storage,
+  limits: {
+    fileSize: 15 * 1024 * 1024,
+    files: 2,
+  },
+  fileFilter: (_req, file, cb) => {
+    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowed.includes(file.mimetype)) {
+      cb(new Error('Unsupported file format. Image and mask must be JPEG, PNG, or WebP.'));
+      return;
+    }
+    cb(null, true);
+  },
+});
+
+export const uploadDocument = multer({
+  storage,
+  limits: {
+    fileSize: 30 * 1024 * 1024, // 30MB max
+    files: 1,
+  },
+  fileFilter: (_req, file, cb) => {
+    const allowed = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
+    if (!allowed.includes(file.mimetype)) {
+      cb(new Error('Unsupported file format. Please upload a PDF or an image.'));
+      return;
+    }
+    cb(null, true);
+  },
+});
+
 /**
  * Validates real magic bytes of image buffer before passing to processing.
  */
@@ -54,6 +86,38 @@ export function validateImageMagicBytes(req: Request, res: Response, next: NextF
     res.status(400).json({
       success: false,
       error: 'The uploaded file does not contain valid image data (magic bytes mismatch).',
+    });
+    return;
+  }
+
+  next();
+}
+
+export function validateDocMagicBytes(req: Request, res: Response, next: NextFunction): void {
+  const file = req.file;
+  if (!file || !file.buffer || file.buffer.length < 5) {
+    next();
+    return;
+  }
+
+  const buf = file.buffer;
+  const isPdf =
+    buf[0] === 0x25 && // %
+    buf[1] === 0x50 && // P
+    buf[2] === 0x44 && // D
+    buf[3] === 0x46;   // F
+
+  const isJpeg = buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff;
+  const isPng =
+    buf[0] === 0x89 &&
+    buf[1] === 0x50 &&
+    buf[2] === 0x4e &&
+    buf[3] === 0x47;
+
+  if (!isPdf && !isJpeg && !isPng) {
+    res.status(400).json({
+      success: false,
+      error: 'The uploaded document does not match recognized PDF or image magic bytes.',
     });
     return;
   }
