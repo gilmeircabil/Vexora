@@ -12,6 +12,14 @@ export interface MascotContextType {
 
 const STORAGE_KEY = 'vexora_mascot_minimized';
 
+export const DEFAULT_MASCOT_CONTEXT: MascotContextType = {
+  mood: 'idle',
+  isMinimized: false,
+  setMood: () => {},
+  setIsMinimized: () => {},
+  triggerMood: () => {},
+};
+
 const MascotContext = createContext<MascotContextType | undefined>(undefined);
 
 export const MascotProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -71,8 +79,5 @@ export const MascotProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
 export const useMascot = (): MascotContextType => {
   const context = useContext(MascotContext);
-  if (!context) {
-    throw new Error('useMascot must be used within a MascotProvider');
-  }
-  return context;
+  return context || DEFAULT_MASCOT_CONTEXT;
 };

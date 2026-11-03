@@ -23,12 +23,15 @@ describe('Mascot Integration', () => {
             </MascotProvider>
           </ToastProvider>
         </AuthProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const mascots = screen.getAllByRole('img', { name: /Vexora Squirrel Mascot/i });
     expect(mascots.length).toBeGreaterThan(0);
     const heroMascot = mascots[0];
+    if (!heroMascot) {
+      throw new Error('Hero mascot not found');
+    }
     expect(heroMascot.getAttribute('data-state')).toBe('idle');
 
     // Type in search bar
@@ -47,9 +50,11 @@ describe('Mascot Integration', () => {
     render(
       <MascotProvider>
         <FloatingMascotWidget />
-      </MascotProvider>
+      </MascotProvider>,
     );
 
-    expect(screen.getByRole('complementary', { name: /Interactive Mascot Companion/i })).toBeDefined();
+    expect(
+      screen.getByRole('complementary', { name: /Interactive Mascot Companion/i }),
+    ).toBeDefined();
   });
 });

@@ -86,11 +86,9 @@ describe('MascotContext', () => {
     expect(localStorage.getItem('vexora_mascot_minimized')).toBe('true');
   });
 
-  it('throws error when useMascot is called outside MascotProvider', () => {
-    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
-    expect(() => render(<TestConsumer />)).toThrow(
-      'useMascot must be used within a MascotProvider',
-    );
-    consoleError.mockRestore();
+  it('returns default fallback state when useMascot is called outside MascotProvider', () => {
+    render(<TestConsumer />);
+    expect(screen.getByTestId('mood').textContent).toBe('idle');
+    expect(screen.getByTestId('minimized').textContent).toBe('no');
   });
 });
