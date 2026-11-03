@@ -101,132 +101,137 @@ export const App: React.FC = () => {
               <BroadcastNotificationProvider>
                 <MascotProvider>
                   <BrowserRouter>
-                  <ScrollToTop />
-                  <PageTitleUpdater />
-                  <BroadcastToastContainer />
-                  <Routes>
-                    {/* Full-screen dedicated VexoraMods Studio Editor */}
-                    <Route
-                      path="/studio/editor/:projectId"
-                      element={
-                        <React.Suspense
-                          fallback={
-                            <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
-                              Loading Studio Editor...
-                            </div>
-                          }
-                        >
-                          <DesignEditorPage />
-                        </React.Suspense>
-                      }
-                    />
-                    <Route
-                      path="/design-studio/editor/:projectId"
-                      element={
-                        <React.Suspense
-                          fallback={
-                            <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
-                              Loading Studio Editor...
-                            </div>
-                          }
-                        >
-                          <DesignEditorPage />
-                        </React.Suspense>
-                      }
-                    />
-
-                    {/* Standalone Auth Pages (No Navbar) */}
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
-                    <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
-                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                    <Route path="/reset-password" element={<ForgotPasswordPage />} />
-
-                    <Route element={<AppLayout />}>
-                      {/* 1. Home */}
-                      <Route path="/" element={<HomePage />} />
-
-                      {/* 2. All Tools (Unified Normal + AI Tools) */}
-                      <Route path="/tools" element={<ToolsDirectoryPage />} />
-                      <Route path="/tools/:toolSlug" element={<ToolDetailPage />} />
-                      <Route path="/category/:categorySlug" element={<CategoryPage />} />
-
-                      {/* AI Tools Redirect & Preserved Functional Tool Routes */}
-                      <Route path="/ai-tools" element={<Navigate to="/tools?type=ai" replace />} />
-                      <Route path="/ai-tools/image-enhancer" element={<AiImageEnhancerPage />} />
+                    <ScrollToTop />
+                    <PageTitleUpdater />
+                    <BroadcastToastContainer />
+                    <Routes>
+                      {/* Full-screen dedicated VexoraMods Studio Editor */}
                       <Route
-                        path="/ai-tools/background-remover"
-                        element={<AiBackgroundRemoverPage />}
-                      />
-                      <Route path="/ai-tools/object-remover" element={<AiObjectRemoverPage />} />
-                      <Route
-                        path="/ai-tools/photo-restoration"
-                        element={<AiPhotoRestorationPage />}
-                      />
-                      <Route path="/ai-tools/ocr" element={<AiOcrPage />} />
-                      <Route path="/ai-tools/code-explainer" element={<AiCodeExplainerPage />} />
-                      <Route
-                        path="/ai-tools/document-summarizer"
-                        element={<AiDocumentSummarizerPage />}
+                        path="/studio/editor/:projectId"
+                        element={
+                          <React.Suspense
+                            fallback={
+                              <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                                Loading Studio Editor...
+                              </div>
+                            }
+                          >
+                            <DesignEditorPage />
+                          </React.Suspense>
+                        }
                       />
                       <Route
-                        path="/ai-tools/writing-assistant"
-                        element={<AiWritingAssistantPage />}
+                        path="/design-studio/editor/:projectId"
+                        element={
+                          <React.Suspense
+                            fallback={
+                              <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                                Loading Studio Editor...
+                              </div>
+                            }
+                          >
+                            <DesignEditorPage />
+                          </React.Suspense>
+                        }
                       />
-                      <Route path="/ai-tools/chat" element={<AiChatPage />} />
-                      <Route path="/ai-chat" element={<AiChatPage />} />
-                      <Route path="/chat" element={<Navigate to="/ai-tools/chat" replace />} />
 
-                      {/* 3. Studio */}
-                      <Route path="/studio" element={<DesignStudioPage />} />
-                      <Route path="/design-studio" element={<Navigate to="/studio" replace />} />
+                      {/* Standalone Auth Pages (No Navbar) */}
+                      <Route path="/login" element={<LoginPage />} />
+                      <Route path="/register" element={<RegisterPage />} />
+                      <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
+                      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                      <Route path="/reset-password" element={<ForgotPasswordPage />} />
 
-                      {/* 4. Learning Hub */}
-                      <Route path="/learning" element={<LearningHubPage />} />
-                      <Route path="/learning/:slug" element={<LearningPostDetailPage />} />
+                      <Route element={<AppLayout />}>
+                        {/* 1. Home */}
+                        <Route path="/" element={<HomePage />} />
 
-                      {/* 5. Study Space (Zero-Cost Education Suite) */}
-                      <Route path="/study" element={<StudySpacePage />} />
-                      <Route path="/study-space" element={<Navigate to="/study" replace />} />
+                        {/* 2. All Tools (Unified Normal + AI Tools) */}
+                        <Route path="/tools" element={<ToolsDirectoryPage />} />
+                        <Route path="/tools/:toolSlug" element={<ToolDetailPage />} />
+                        <Route path="/category/:categorySlug" element={<CategoryPage />} />
 
-                      {/* Legacy Developer Hub Redirect + Preserved Profile/Project Routes */}
-                      <Route path="/developers" element={<Navigate to="/learning" replace />} />
-                      <Route
-                        path="/developers/profile/edit"
-                        element={<DeveloperProfileEditPage />}
-                      />
-                      <Route
-                        path="/developers/profile/:username"
-                        element={<DeveloperProfilePage />}
-                      />
-                      <Route path="/developers/projects" element={<ProjectsDirectoryPage />} />
-                      <Route path="/developers/projects/manage" element={<ManageProjectsPage />} />
-                      <Route path="/developers/projects/:slug" element={<ProjectDetailPage />} />
+                        {/* AI Tools Redirect & Preserved Functional Tool Routes */}
+                        <Route
+                          path="/ai-tools"
+                          element={<Navigate to="/tools?type=ai" replace />}
+                        />
+                        <Route path="/ai-tools/image-enhancer" element={<AiImageEnhancerPage />} />
+                        <Route
+                          path="/ai-tools/background-remover"
+                          element={<AiBackgroundRemoverPage />}
+                        />
+                        <Route path="/ai-tools/object-remover" element={<AiObjectRemoverPage />} />
+                        <Route
+                          path="/ai-tools/photo-restoration"
+                          element={<AiPhotoRestorationPage />}
+                        />
+                        <Route path="/ai-tools/ocr" element={<AiOcrPage />} />
+                        <Route path="/ai-tools/code-explainer" element={<AiCodeExplainerPage />} />
+                        <Route
+                          path="/ai-tools/document-summarizer"
+                          element={<AiDocumentSummarizerPage />}
+                        />
+                        <Route
+                          path="/ai-tools/writing-assistant"
+                          element={<AiWritingAssistantPage />}
+                        />
+                        <Route path="/ai-tools/chat" element={<AiChatPage />} />
+                        <Route path="/ai-chat" element={<AiChatPage />} />
+                        <Route path="/chat" element={<Navigate to="/ai-tools/chat" replace />} />
 
-                      {/* 5. Community (Donations + Leaderboard Combined) */}
-                      <Route path="/community" element={<CommunityPage />} />
-                      <Route path="/support" element={<Navigate to="/community" replace />} />
-                      <Route path="/leaderboard" element={<Navigate to="/community" replace />} />
+                        {/* 3. Studio */}
+                        <Route path="/studio" element={<DesignStudioPage />} />
+                        <Route path="/design-studio" element={<Navigate to="/studio" replace />} />
 
-                      {/* 6. Public Ratings & Reviews */}
-                      <Route path="/reviews" element={<ReviewsPage />} />
+                        {/* 4. Learning Hub */}
+                        <Route path="/learning" element={<LearningHubPage />} />
+                        <Route path="/learning/:slug" element={<LearningPostDetailPage />} />
 
-                      {/* Account, Admin & Legal */}
-                      <Route path="/dashboard" element={<DashboardPage />} />
-                      <Route path="/admin" element={<AdminDashboardPage />} />
-                      <Route path="/about" element={<AboutPage />} />
-                      <Route path="/privacy" element={<PrivacyPage />} />
-                      <Route path="/licenses" element={<LicensesPage />} />
-                      <Route path="/terms" element={<TermsPage />} />
-                      <Route path="/contributing" element={<ContributingPage />} />
-                      <Route path="/404" element={<NotFoundPage />} />
-                      <Route path="*" element={<NotFoundPage />} />
-                    </Route>
-                  </Routes>
-                  <FloatingMascotWidget />
-                </BrowserRouter>
-              </MascotProvider>
-            </BroadcastNotificationProvider>
+                        {/* 5. Study Space (Zero-Cost Education Suite) */}
+                        <Route path="/study" element={<StudySpacePage />} />
+                        <Route path="/study-space" element={<Navigate to="/study" replace />} />
+
+                        {/* Legacy Developer Hub Redirect + Preserved Profile/Project Routes */}
+                        <Route path="/developers" element={<Navigate to="/learning" replace />} />
+                        <Route
+                          path="/developers/profile/edit"
+                          element={<DeveloperProfileEditPage />}
+                        />
+                        <Route
+                          path="/developers/profile/:username"
+                          element={<DeveloperProfilePage />}
+                        />
+                        <Route path="/developers/projects" element={<ProjectsDirectoryPage />} />
+                        <Route
+                          path="/developers/projects/manage"
+                          element={<ManageProjectsPage />}
+                        />
+                        <Route path="/developers/projects/:slug" element={<ProjectDetailPage />} />
+
+                        {/* 5. Community (Donations + Leaderboard Combined) */}
+                        <Route path="/community" element={<CommunityPage />} />
+                        <Route path="/support" element={<Navigate to="/community" replace />} />
+                        <Route path="/leaderboard" element={<Navigate to="/community" replace />} />
+
+                        {/* 6. Public Ratings & Reviews */}
+                        <Route path="/reviews" element={<ReviewsPage />} />
+
+                        {/* Account, Admin & Legal */}
+                        <Route path="/dashboard" element={<DashboardPage />} />
+                        <Route path="/admin" element={<AdminDashboardPage />} />
+                        <Route path="/about" element={<AboutPage />} />
+                        <Route path="/privacy" element={<PrivacyPage />} />
+                        <Route path="/licenses" element={<LicensesPage />} />
+                        <Route path="/terms" element={<TermsPage />} />
+                        <Route path="/contributing" element={<ContributingPage />} />
+                        <Route path="/404" element={<NotFoundPage />} />
+                        <Route path="*" element={<NotFoundPage />} />
+                      </Route>
+                    </Routes>
+                  </BrowserRouter>
+                </MascotProvider>
+              </BroadcastNotificationProvider>
             </FavoritesProvider>
           </MaintenanceProvider>
         </AuthProvider>
