@@ -39,7 +39,7 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({
     (import.meta as any).env?.VITE_TURNSTILE_SITE_KEY || DEFAULT_TEST_SITE_KEY,
   );
   const [verified, setVerified] = useState(false);
-  const [usingFallback, setUsingFallback] = useState(false);
+  const [usingFallback, setUsingFallback] = useState(true);
   const [isVerifying, setIsVerifying] = useState(false);
 
   const issueLocalToken = () => {
@@ -91,43 +91,85 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({
       siteKey.startsWith('2x') ||
       siteKey.startsWith('3x');
 
-    // If Cloudflare Turnstile SDK is loaded in browser and a custom site key is active, render native widget
-    if (
-      typeof window !== 'undefined' &&
-      window.turnstile &&
-      containerRef.current &&
-      !isTestSiteKey
-    ) {
-      setUsingFallback(false);
-      if (widgetIdRef.current) {
+    if (isTestSiteKey) {
+      setUsingFallback(true);
+      return;
+    }
+
+    let active = true;
+
+    const tryRenderWidget = () => {
+      if (!active || !containerRef.current || !window.turnstile) return false;
+      try {
+        if (widgetIdRef.current) {
+          try {
+            window.turnstile.remove(widgetIdRef.current);
+          } catch {
+            // ignore
+          }
+        }
+        widgetIdRef.current = window.turnstile.render(containerRef.current, {
+          sitekey: siteKey,
+          theme: 'light',
+          callback: (token: string) => {
+            if (active) {
+              setVerified(true);
+              onVerify(token);
+            }
+          },
+          'expired-callback': () => {
+            if (active) {
+              setVerified(false);
+              onVerify('');
+              onExpire?.();
+            }
+          },
+          'error-callback': () => {
+            if (active) {
+              setVerified(false);
+              onVerify('');
+            }
+          },
+        });
+        setUsingFallback(false);
+        return true;
+      } catch {
+        setUsingFallback(true);
+        return false;
+      }
+    };
+
+    if (typeof window !== 'undefined' && window.turnstile) {
+      tryRenderWidget();
+    } else {
+      setUsingFallback(true);
+      if (typeof window !== 'undefined') {
+        const checkTurnstile = setInterval(() => {
+          if (window.turnstile) {
+            clearInterval(checkTurnstile);
+            tryRenderWidget();
+          }
+        }, 150);
+        const timeout = setTimeout(() => clearInterval(checkTurnstile), 4000);
+        return () => {
+          active = false;
+          clearInterval(checkTurnstile);
+          clearTimeout(timeout);
+        };
+      }
+    }
+
+    return () => {
+      active = false;
+      if (widgetIdRef.current && typeof window !== 'undefined' && window.turnstile) {
         try {
           window.turnstile.remove(widgetIdRef.current);
         } catch {
           // ignore
         }
+        widgetIdRef.current = null;
       }
-      widgetIdRef.current = window.turnstile.render(containerRef.current, {
-        sitekey: siteKey,
-        theme: 'light',
-        callback: (token: string) => {
-          setVerified(true);
-          onVerify(token);
-        },
-        'expired-callback': () => {
-          setVerified(false);
-          onVerify('');
-          onExpire?.();
-        },
-        'error-callback': () => {
-          setVerified(false);
-          onVerify('');
-        },
-      });
-      return;
-    }
-
-    // For local dev / test sitekey or when external script is blocked in sandbox, use manual interactive verification control
-    setUsingFallback(true);
+    };
   }, [siteKey, resetKey]);
 
   return (
