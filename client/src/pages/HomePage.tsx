@@ -12,16 +12,35 @@ import {
   AlertCircle,
   Search,
   GraduationCap,
+  Bot,
+  Palette,
+  BookOpen,
+  CheckCircle2,
+  FileText,
+  Clock,
+  Layers,
+  Code,
+  ShieldCheck,
+  ChevronRight,
+  Award,
+  BookMarked,
+  BrainCircuit,
+  FolderKanban,
+  Calculator,
 } from 'lucide-react';
 import { TOOL_CATALOG } from '../tools/catalog.js';
 import { ToolCard } from '../components/common/ToolCard.js';
 import { platformApi } from '../services/platformApi.js';
 import { reviewApi, type ReviewSummary } from '../services/reviewApi.js';
 import { ReviewSubmissionModal } from '../components/reviews/ReviewSubmissionModal.js';
+import { useMascot } from '../context/MascotContext.js';
+import { SquirrelMascot } from '../components/mascot/SquirrelMascot.js';
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const [heroSearch, setHeroSearch] = useState('');
+  const [studyWorkspaceTab, setStudyWorkspaceTab] = useState<'student' | 'teacher'>('student');
+  const { mood, triggerMood } = useMascot();
   const [overview, setOverview] = useState<{
     stats?: {
       totalMembers: number;
@@ -125,7 +144,7 @@ export const HomePage: React.FC = () => {
     };
   }, [fetchReviewsSummary]);
 
-  // Show 3 curated flagship tools in a single clean row instead of a dense grid of cards
+  // Show 3 curated flagship tools in a single clean row
   const featuredTools = useMemo(() => {
     const ids = overview?.config?.featuredToolIds?.length
       ? overview.config.featuredToolIds
@@ -147,111 +166,205 @@ export const HomePage: React.FC = () => {
       overview?.statistics?.totalVerifiedDonations ?? overview?.stats?.totalDonationsCount ?? 0,
   };
 
+  // Comprehensive Platform Suites Summary
+  const platformSuites = [
+    {
+      id: 'utilities',
+      title: 'Tools & Utilities Suite',
+      badge: '38+ Free Tools',
+      badgeBg: 'bg-[#4ADE80]',
+      icon: Wrench,
+      description:
+        'Fast, zero-latency browser utilities with client-side privacy. Process PDFs, optimize images, convert files, and generate code artifacts with zero uploads.',
+      features: [
+        'PDF Suite: Merge, Split, Compress & Extract',
+        'Image Studio, Resizer, Cropper & Palette Generator',
+        'Developer Tools: JSON Formatter, Hash, Regex & Base64',
+        'Local browser processing: files never leave your device',
+      ],
+      primaryLink: '/tools',
+      primaryLabel: 'Browse All 38+ Tools',
+      quickLinks: [
+        { label: 'PDF Merger', path: '/tools/pdf-merger' },
+        { label: 'JSON Formatter', path: '/tools/json-formatter' },
+        { label: 'Image Resizer', path: '/tools/image-resizer' },
+      ],
+    },
+    {
+      id: 'ai-suite',
+      title: 'AI Intelligence Suite',
+      badge: 'Interactive AI & Vision',
+      badgeBg: 'bg-[#FACC15]',
+      icon: Bot,
+      description:
+        'A dedicated generative AI workstation featuring multi-turn AI Chat alongside specialized vision enhancement, OCR extraction, code explanation, and document summarization.',
+      features: [
+        'Full-Screen AI Chat with customizable prompts and exports',
+        'Vision AI: Background Remover, Object Eraser & Enhancer',
+        'AI Photo Restoration, Colorization & OCR Text Extraction',
+        'AI Code Explainer, Refactorer & Document Summarizer',
+      ],
+      primaryLink: '/ai-chat',
+      primaryLabel: 'Launch AI Chat',
+      quickLinks: [
+        { label: 'AI Chat', path: '/ai-chat' },
+        { label: 'Background Remover', path: '/ai-tools/background-remover' },
+        { label: 'Code Explainer', path: '/ai-tools/code-explainer' },
+      ],
+    },
+    {
+      id: 'studio',
+      title: 'VexoraMods Studio',
+      badge: 'Vector Design Canvas',
+      badgeBg: 'bg-[#38BDF8]',
+      icon: Palette,
+      description:
+        'A full-fledged in-browser vector graphics and document editor. Design social banners, flyers, multi-page slides, and vector graphics with layer management and instant export.',
+      features: [
+        'Infinite vector canvas with shapes, custom SVG & text controls',
+        'Multi-page layout engine and precise alignment tools',
+        'Cloud project sync with automatic guest offline caching',
+        'Multi-format export: High-res PNG, JPEG, SVG & multi-page PDF',
+      ],
+      primaryLink: '/studio',
+      primaryLabel: 'Open Studio Editor',
+      quickLinks: [{ label: 'Launch Studio', path: '/studio' }],
+    },
+    {
+      id: 'study-space',
+      title: 'Study Space',
+      badge: 'Zero-Cost Academic Hub',
+      badgeBg: 'bg-[#FFD21A]',
+      icon: GraduationCap,
+      description:
+        'Comprehensive dual-workspace educational system designed for students and educators. Convert study materials into interactive quizzes, plan schedules, and generate classroom exams.',
+      features: [
+        'Student Workspace: Document-to-Quiz AI, Flashcards & Pomodoro',
+        'Teacher Workspace: Lesson Planner, Exam Builder & Gradebook',
+        'Citation Generator (APA/MLA/Chicago) & Timetable Generator',
+        'Interactive Rubrics, Smart Notes & Completion Certificates',
+      ],
+      primaryLink: '/study',
+      primaryLabel: 'Enter Study Space',
+      quickLinks: [
+        { label: 'Student Workspace', path: '/study?workspace=student' },
+        { label: 'Teacher Workspace', path: '/study?workspace=teacher' },
+      ],
+    },
+    {
+      id: 'community-hub',
+      title: 'Learning Hub & Community',
+      badge: 'Collaborative Knowledge',
+      badgeBg: 'bg-[#A78BFA]',
+      icon: BookOpen,
+      description:
+        'Share knowledge, showcase engineering work, and connect. Explore in-depth developer tutorials, browse community project showcases, and support transparent open-source development.',
+      features: [
+        'Community-authored programming tutorials & technical guides',
+        'Developer Showcase with project portfolios & verified badges',
+        'Transparent community funding with live supporter leaderboard',
+        'Moderated public ratings and verified reviews system',
+      ],
+      primaryLink: '/learning',
+      primaryLabel: 'Explore Learning Hub',
+      quickLinks: [
+        { label: 'Community Feed', path: '/community' },
+        { label: 'Developer Projects', path: '/developers/projects' },
+        { label: 'Public Reviews', path: '/reviews' },
+      ],
+    },
+  ];
+
   return (
     <div className="space-y-20 pb-12">
-      {/* A. OPEN EDITORIAL HERO + B/C. INLINE TELEMETRY & TOP SUPPORTER STRIP */}
-      <section className="pt-4 sm:pt-8 space-y-12">
-        <div className="max-w-4xl lg:max-w-5xl space-y-5">
-          <p className="text-xs font-mono font-bold text-neutral-600">
-            VexoraMods — Free &amp; Open-Source Creative &amp; Utility Platform
-          </p>
+      {/* 1. HERO SECTION & FAST DISCOVERY */}
+      <section className="pt-4 sm:pt-8 space-y-10">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+          <div className="max-w-4xl lg:max-w-3xl space-y-5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 border border-black text-xs font-mono font-bold text-black shadow-[1.5px_1.5px_0px_#000000]">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-400" />
+              <span>VexoraMods — All-in-One Creative, Utility &amp; AI Platform</span>
+            </div>
 
-          <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-black leading-[1.05]">
-            {overview?.config?.heroHeadline || 'Everything You Need. One Platform.'}
-          </h1>
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-black leading-[1.05]">
+              {overview?.config?.heroHeadline || 'Everything You Need. One Platform.'}
+            </h1>
 
-          <p className="text-base sm:text-xl font-semibold text-neutral-700 max-w-2xl leading-relaxed">
-            {overview?.config?.heroDescription ||
-              'Discover free online tools, explore AI-powered utilities, create designs, and learn with a growing community.'}
-          </p>
+            <p className="text-base sm:text-xl font-semibold text-neutral-700 max-w-3xl leading-relaxed">
+              {overview?.config?.heroDescription ||
+                'Discover 38+ free browser tools, full-screen AI chat, vector design studio, and dual-workspace study suite — completely open and unlocked with zero paywalls.'}
+            </p>
 
-          {/* Hero Search Bar */}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (heroSearch.trim()) {
-                navigate(`/tools?q=${encodeURIComponent(heroSearch.trim())}`);
-              } else {
-                navigate('/tools');
-              }
-            }}
-            className="relative max-w-xl"
-          >
-            <Search className="w-4 h-4 text-neutral-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
-            <input
-              type="text"
-              value={heroSearch}
-              onChange={(e) => setHeroSearch(e.target.value)}
-              aria-label="Search all tools by name, description, or keyword"
-              placeholder="Search 38+ tools (e.g. background remover, pdf merger, ocr, json)..."
-              className="w-full pl-11 pr-24 py-3 bg-white border-2 border-black rounded-xl text-xs sm:text-sm font-bold text-black placeholder:text-neutral-400 shadow-[2.5px_2.5px_0px_#000000] focus:shadow-[4px_4px_0px_#000000] focus:outline-none transition-all"
+            {/* Hero Search Bar */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                triggerMood('celebrate', 2000);
+                if (heroSearch.trim()) {
+                  navigate(`/tools?q=${encodeURIComponent(heroSearch.trim())}`);
+                } else {
+                  navigate('/tools');
+                }
+              }}
+              className="relative max-w-xl"
+            >
+              <Search className="w-4 h-4 text-neutral-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
+              <input
+                type="text"
+                value={heroSearch}
+                onChange={(e) => {
+                  setHeroSearch(e.target.value);
+                  triggerMood('crunch', 1500);
+                }}
+                aria-label="Search all tools by name, description, or keyword"
+                placeholder="Search 38+ tools (e.g. background remover, pdf merger, ocr, json)..."
+                className="w-full pl-11 pr-24 py-3 bg-white border-2 border-black rounded-xl text-xs sm:text-sm font-bold text-black placeholder:text-neutral-400 shadow-[2.5px_2.5px_0px_#000000] focus:shadow-[4px_4px_0px_#000000] focus:outline-none transition-all"
+              />
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-[#FACC15] hover:bg-[#EAB308] border border-black font-black text-xs text-black transition-colors cursor-pointer"
+              >
+                Search
+              </button>
+            </form>
+          </div>
+
+          {/* Squirrel Mascot Hero Companion */}
+          <div className="hidden sm:flex flex-col items-center justify-center p-4 bg-amber-50/70 dark:bg-amber-950/20 border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000000] shrink-0 self-start lg:self-center">
+            <SquirrelMascot
+              state={mood}
+              size={140}
+              onClick={() => triggerMood('celebrate', 2500)}
             />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-[#FACC15] hover:bg-[#EAB308] border border-black font-black text-xs text-black transition-colors cursor-pointer"
-            >
-              Search
-            </button>
-          </form>
-
-          {/* Primary Action CTAs */}
-          <div className="pt-2 flex flex-wrap items-center gap-3">
-            <Link
-              to="/tools"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-black font-black text-sm shadow-[3px_3px_0px_#000000] transition-colors whitespace-nowrap"
-            >
-              <Wrench className="w-4 h-4 stroke-[2.5]" />
-              <span>Explore All Tools</span>
-              <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-            </Link>
-
-            <Link
-              to="/studio"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#38BDF8] hover:bg-sky-300 border-2 border-black text-black font-black text-sm shadow-[3px_3px_0px_#000000] transition-colors whitespace-nowrap"
-            >
-              <Sparkles className="w-4 h-4 stroke-[2.5]" />
-              <span>Open Studio</span>
-            </Link>
-
-            <Link
-              to="/study"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FFD21A] hover:bg-amber-300 border-2 border-black text-black font-black text-sm shadow-[3px_3px_0px_#000000] transition-colors whitespace-nowrap"
-            >
-              <GraduationCap className="w-4 h-4 stroke-[2.5]" />
-              <span>Study Space</span>
-            </Link>
-
-            <Link
-              to="/community"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-neutral-100 border-2 border-black text-black font-black text-sm shadow-[3px_3px_0px_#000000] transition-colors whitespace-nowrap"
-            >
-              <Heart className="w-4 h-4 text-red-600 fill-red-500 stroke-[2.5]" />
-              <span>Join the Community</span>
-            </Link>
+            <div className="text-[11px] font-mono font-bold text-neutral-700 dark:text-neutral-300 mt-1 flex items-center gap-1">
+              <span>🌰 Click to celebrate!</span>
+            </div>
           </div>
         </div>
 
-        {/* B & C. Single Divided Telemetry & Top Supporter Strip (No separate stat cards) */}
+        {/* Live Platform Telemetry & Top Supporter Strip */}
         <div className="border-y-2 border-black py-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:divide-x-2 lg:divide-black/15">
           <div className="lg:pr-4">
             <div className="text-2xl sm:text-3xl font-black text-black">
               {loadingStats ? '—' : stats.totalMembers.toLocaleString()}
             </div>
-            <div className="text-xs font-bold text-neutral-600 mt-0.5">Community</div>
+            <div className="text-xs font-bold text-neutral-600 mt-0.5">Community Members</div>
           </div>
 
           <div className="lg:px-5">
             <div className="text-2xl sm:text-3xl font-black text-black">
               {loadingStats ? '—' : stats.totalPublishedPosts.toLocaleString()}
             </div>
-            <div className="text-xs font-bold text-neutral-600 mt-0.5">Learning Hub Posts</div>
+            <div className="text-xs font-bold text-neutral-600 mt-0.5">
+              Published Tutorials &amp; Posts
+            </div>
           </div>
 
           <div className="lg:px-5">
             <div className="text-2xl sm:text-3xl font-black text-black">
               {loadingStats ? '—' : stats.totalSupporters.toLocaleString()}
             </div>
-            <div className="text-xs font-bold text-neutral-600 mt-0.5">Supporter</div>
+            <div className="text-xs font-bold text-neutral-600 mt-0.5">Community Supporters</div>
           </div>
 
           <div className="col-span-2 sm:col-span-1 lg:pl-5 flex flex-col justify-center">
@@ -282,10 +395,342 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* D. FEATURED TOOLS (Single 3-Card Row) */}
-      <section className="space-y-6">
+      {/* 2. COMPREHENSIVE WEBSITE SUMMARY: THE 5 VEXORA SUITES */}
+      <section className="space-y-8" id="overview-suites">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-2 text-xs font-mono font-bold text-neutral-600 uppercase tracking-wider">
+              <span>Platform Overview &amp; Architecture</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-black tracking-tight">
+              Explore Everything in Vexora
+            </h2>
+            <p className="text-xs sm:text-base font-semibold text-neutral-600 max-w-2xl">
+              An interconnected ecosystem of zero-cost creative, utility, artificial intelligence,
+              and academic suites built for open access.
+            </p>
+          </div>
+        </div>
+
+        {/* 5-Suite Architecture Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 items-stretch">
+          {/* Suite 1: Browser Tools (span 7) */}
+          <div className="lg:col-span-7 bg-white rounded-2xl border-2 border-black p-6 sm:p-7 shadow-[3px_3px_0px_#000000] flex flex-col justify-between space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#4ADE80] border-2 border-black flex items-center justify-center text-black shadow-[1.5px_1.5px_0px_#000000]">
+                    <Wrench className="w-5 h-5 stroke-[2.5]" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-black leading-tight">
+                      Browser Tools &amp; Utilities
+                    </h3>
+                    <span className="text-xs font-mono font-bold text-neutral-500">
+                      38+ Client-Side Processors
+                    </span>
+                  </div>
+                </div>
+                <span className="px-2.5 py-1 rounded-lg bg-green-100 border border-black font-mono text-[11px] font-bold text-green-900 shrink-0">
+                  Private &amp; Offline-Ready
+                </span>
+              </div>
+
+              <p className="text-xs sm:text-sm font-semibold text-neutral-700 leading-relaxed">
+                High-performance file converters, PDF mergers, image processors, and code
+                formatters. All calculations run client-side in your browser, ensuring confidential
+                files and data never leave your device.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                <div className="flex items-start gap-2 text-xs font-bold text-neutral-800">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>PDF Suite: Merge, Split, Compress &amp; Images</span>
+                </div>
+                <div className="flex items-start gap-2 text-xs font-bold text-neutral-800">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>Image Optimizer, Resizer &amp; Palette Studio</span>
+                </div>
+                <div className="flex items-start gap-2 text-xs font-bold text-neutral-800">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>Developer JSON, Regex, Base64 &amp; Hashes</span>
+                </div>
+                <div className="flex items-start gap-2 text-xs font-bold text-neutral-800">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>Zero Server Uploads &amp; Instant Execution</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-black/15 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <Link
+                  to="/tools/pdf-merger"
+                  className="text-xs font-bold text-neutral-700 hover:text-black hover:underline"
+                >
+                  PDF Merger
+                </Link>
+                <span className="text-neutral-300">·</span>
+                <Link
+                  to="/tools/json-formatter"
+                  className="text-xs font-bold text-neutral-700 hover:text-black hover:underline"
+                >
+                  JSON Formatter
+                </Link>
+                <span className="text-neutral-300">·</span>
+                <Link
+                  to="/tools/image-resizer"
+                  className="text-xs font-bold text-neutral-700 hover:text-black hover:underline"
+                >
+                  Image Resizer
+                </Link>
+              </div>
+
+              <Link
+                to="/tools"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#4ADE80] hover:bg-green-400 border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_#000000] transition-transform hover:-translate-y-0.5"
+              >
+                <span>Browse All 38+ Tools</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Suite 2: AI Intelligence Suite (span 5) */}
+          <div className="lg:col-span-5 bg-white rounded-2xl border-2 border-black p-6 sm:p-7 shadow-[3px_3px_0px_#000000] flex flex-col justify-between space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#FACC15] border-2 border-black flex items-center justify-center text-black shadow-[1.5px_1.5px_0px_#000000]">
+                    <Bot className="w-5 h-5 stroke-[2.5]" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-black leading-tight">
+                      AI Intelligence Suite
+                    </h3>
+                    <span className="text-xs font-mono font-bold text-neutral-500">
+                      Chat &amp; Vision Models
+                    </span>
+                  </div>
+                </div>
+                <span className="px-2.5 py-1 rounded-lg bg-amber-100 border border-black font-mono text-[11px] font-bold text-amber-900 shrink-0">
+                  Multimodal AI
+                </span>
+              </div>
+
+              <p className="text-xs sm:text-sm font-semibold text-neutral-700 leading-relaxed">
+                Intelligent vision and language utilities. Engage with the interactive AI Chat
+                assistant, remove backgrounds automatically, enhance degraded photos, extract text
+                with OCR, and summarize long documents.
+              </p>
+
+              <div className="space-y-2 pt-1">
+                <div className="flex items-start gap-2 text-xs font-bold text-neutral-800">
+                  <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <span>AI Chat with model presets, prompt templates &amp; exports</span>
+                </div>
+                <div className="flex items-start gap-2 text-xs font-bold text-neutral-800">
+                  <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <span>Vision AI: Background Remover, Object Eraser &amp; Upscaler</span>
+                </div>
+                <div className="flex items-start gap-2 text-xs font-bold text-neutral-800">
+                  <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <span>Code Explainer, Writing Assistant &amp; Document Summarizer</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-black/15 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <Link
+                  to="/ai-tools/background-remover"
+                  className="text-xs font-bold text-neutral-700 hover:text-black hover:underline"
+                >
+                  BG Remover
+                </Link>
+                <span className="text-neutral-300">·</span>
+                <Link
+                  to="/ai-tools/code-explainer"
+                  className="text-xs font-bold text-neutral-700 hover:text-black hover:underline"
+                >
+                  Code Explainer
+                </Link>
+              </div>
+
+              <Link
+                to="/ai-chat"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#FACC15] hover:bg-amber-300 border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_#000000] transition-transform hover:-translate-y-0.5"
+              >
+                <span>Launch AI Chat</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Suite 3: VexoraMods Studio (span 4) */}
+          <div className="lg:col-span-4 bg-white rounded-2xl border-2 border-black p-6 shadow-[3px_3px_0px_#000000] flex flex-col justify-between space-y-5">
+            <div className="space-y-3.5">
+              <div className="flex items-center justify-between gap-3">
+                <div className="w-9 h-9 rounded-xl bg-[#38BDF8] border-2 border-black flex items-center justify-center text-black shadow-[1.5px_1.5px_0px_#000000]">
+                  <Palette className="w-4 h-4 stroke-[2.5]" />
+                </div>
+                <span className="px-2 py-0.5 rounded-md bg-sky-100 border border-black font-mono text-[10px] font-bold text-sky-900">
+                  Vector Engine
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-black text-black">VexoraMods Studio</h3>
+                <p className="text-xs font-mono font-bold text-neutral-500 mt-0.5">
+                  In-Browser Vector Canvas
+                </p>
+              </div>
+
+              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
+                Create graphics, banners, and multi-page documents directly in your browser.
+                Features layer controls, SVG vector shapes, and multi-format exports.
+              </p>
+
+              <div className="space-y-1.5 pt-1 text-xs font-bold text-neutral-800">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                  <span>Multi-Page Vector Canvas</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                  <span>Cloud &amp; Offline Autosave</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                  <span>Export PNG, SVG &amp; PDF</span>
+                </div>
+              </div>
+            </div>
+
+            <Link
+              to="/studio"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#38BDF8] hover:bg-sky-300 border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_#000000] transition-transform hover:-translate-y-0.5"
+            >
+              <span>Open Studio Editor</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {/* Suite 4: Study Space (span 4) */}
+          <div className="lg:col-span-4 bg-white rounded-2xl border-2 border-black p-6 shadow-[3px_3px_0px_#000000] flex flex-col justify-between space-y-5">
+            <div className="space-y-3.5">
+              <div className="flex items-center justify-between gap-3">
+                <div className="w-9 h-9 rounded-xl bg-[#FFD21A] border-2 border-black flex items-center justify-center text-black shadow-[1.5px_1.5px_0px_#000000]">
+                  <GraduationCap className="w-4 h-4 stroke-[2.5]" />
+                </div>
+                <span className="px-2 py-0.5 rounded-md bg-amber-100 border border-black font-mono text-[10px] font-bold text-amber-900">
+                  Dual Workspace
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-black text-black">Study Space</h3>
+                <p className="text-xs font-mono font-bold text-neutral-500 mt-0.5">
+                  Students &amp; Educators
+                </p>
+              </div>
+
+              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
+                Zero-cost academic toolset. AI Document-to-Quiz, Flashcards, Pomodoro, and Planners
+                for learners, plus Lesson Planning and Gradebooks for teachers.
+              </p>
+
+              <div className="space-y-1.5 pt-1 text-xs font-bold text-neutral-800">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                  <span>Doc-to-Quiz AI &amp; Flashcards</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                  <span>Pomodoro Timer &amp; Citations</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                  <span>Lesson Planner &amp; Gradebook</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Link
+                to="/study?workspace=student"
+                className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl bg-[#FFD21A] hover:bg-amber-300 border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_#000000] transition-transform hover:-translate-y-0.5"
+              >
+                <span>Student Hub</span>
+              </Link>
+              <Link
+                to="/study?workspace=teacher"
+                className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl bg-white hover:bg-neutral-100 border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_#000000] transition-transform hover:-translate-y-0.5"
+              >
+                <span>Teacher Hub</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Suite 5: Learning Hub & Community (span 4) */}
+          <div className="lg:col-span-4 bg-white rounded-2xl border-2 border-black p-6 shadow-[3px_3px_0px_#000000] flex flex-col justify-between space-y-5">
+            <div className="space-y-3.5">
+              <div className="flex items-center justify-between gap-3">
+                <div className="w-9 h-9 rounded-xl bg-[#A78BFA] border-2 border-black flex items-center justify-center text-black shadow-[1.5px_1.5px_0px_#000000]">
+                  <BookOpen className="w-4 h-4 stroke-[2.5]" />
+                </div>
+                <span className="px-2 py-0.5 rounded-md bg-purple-100 border border-black font-mono text-[10px] font-bold text-purple-900">
+                  Open Community
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-black text-black">Learning &amp; Community</h3>
+                <p className="text-xs font-mono font-bold text-neutral-500 mt-0.5">
+                  Knowledge &amp; Developer Hub
+                </p>
+              </div>
+
+              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
+                Read community-written tutorials and tech articles, showcase your open-source
+                repositories, and support the project via transparent voluntary donations.
+              </p>
+
+              <div className="space-y-1.5 pt-1 text-xs font-bold text-neutral-800">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+                  <span>Engineering Guides &amp; Tutorials</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+                  <span>Developer Project Showcase</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+                  <span>Transparent Supporter Board</span>
+                </div>
+              </div>
+            </div>
+
+            <Link
+              to="/learning"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#A78BFA] hover:bg-purple-300 border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_#000000] transition-transform hover:-translate-y-0.5"
+            >
+              <span>Explore Learning Hub</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. FEATURED TOOLS (Single 3-Card Row for Quick Utilities) */}
+      <section className="border-t-2 border-black pt-12 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
+              <Wrench className="w-3.5 h-3.5 text-black" />
+              <span>Instant Client-Side Tools</span>
+            </div>
             <h2 className="text-2xl sm:text-3xl font-black text-black">
               Featured Tools &amp; AI Utilities
             </h2>
@@ -310,10 +755,167 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* MINIMAL STUDIO INTRODUCTION */}
+      {/* 4. INTERACTIVE STUDY SPACE SPOTLIGHT (Dual Student / Teacher Capabilities) */}
+      <section className="border-t-2 border-black pt-12 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
+              <GraduationCap className="w-3.5 h-3.5 text-black" />
+              <span>Zero-Cost Education Suite</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-black">
+              Study Space for Learners &amp; Educators
+            </h2>
+            <p className="text-xs sm:text-sm font-semibold text-neutral-600 mt-1">
+              Switch between the student study workstation and teacher classroom tools.
+            </p>
+          </div>
+
+          {/* Interactive Toggle Pill */}
+          <div className="inline-flex items-center p-1 bg-neutral-100 rounded-xl border-2 border-black self-start sm:self-auto shadow-[2px_2px_0px_#000000]">
+            <button
+              type="button"
+              onClick={() => setStudyWorkspaceTab('student')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
+                studyWorkspaceTab === 'student'
+                  ? 'bg-[#FFD21A] text-black border border-black shadow-[1px_1px_0px_#000000]'
+                  : 'text-neutral-600 hover:text-black border border-transparent'
+              }`}
+            >
+              Student Workspace
+            </button>
+            <button
+              type="button"
+              onClick={() => setStudyWorkspaceTab('teacher')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
+                studyWorkspaceTab === 'teacher'
+                  ? 'bg-[#FFD21A] text-black border border-black shadow-[1px_1px_0px_#000000]'
+                  : 'text-neutral-600 hover:text-black border border-transparent'
+              }`}
+            >
+              Teacher Workspace
+            </button>
+          </div>
+        </div>
+
+        {studyWorkspaceTab === 'student' ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-amber-100 border border-black flex items-center justify-center text-amber-900 font-black">
+                <BrainCircuit className="w-4 h-4" />
+              </div>
+              <h4 className="font-black text-sm text-black">Doc-to-Quiz AI</h4>
+              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
+                Upload PDFs or notes and automatically generate interactive multiple-choice
+                assessments.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-emerald-100 border border-black flex items-center justify-center text-emerald-900 font-black">
+                <BookMarked className="w-4 h-4" />
+              </div>
+              <h4 className="font-black text-sm text-black">Flashcards &amp; Quizzes</h4>
+              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
+                Spaced repetition decks and self-testing quizzes with instant scoring and review
+                modes.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-sky-100 border border-black flex items-center justify-center text-sky-900 font-black">
+                <Clock className="w-4 h-4" />
+              </div>
+              <h4 className="font-black text-sm text-black">Pomodoro Focus Timer</h4>
+              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
+                Configurable study sessions, short/long break cycles, and audio alerts to stay in
+                the zone.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-purple-100 border border-black flex items-center justify-center text-purple-900 font-black">
+                <FileText className="w-4 h-4" />
+              </div>
+              <h4 className="font-black text-sm text-black">Citations &amp; Planner</h4>
+              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
+                Format citations in APA, MLA, or Chicago and manage weekly study timetables and
+                deadlines.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-amber-100 border border-black flex items-center justify-center text-amber-900 font-black">
+                <FolderKanban className="w-4 h-4" />
+              </div>
+              <h4 className="font-black text-sm text-black">Lesson Plan Creator</h4>
+              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
+                Draft structured curriculum objectives, instructional phases, and learning
+                materials.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-emerald-100 border border-black flex items-center justify-center text-emerald-900 font-black">
+                <FileText className="w-4 h-4" />
+              </div>
+              <h4 className="font-black text-sm text-black">Exam &amp; Worksheet Builder</h4>
+              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
+                Generate printable tests, question banks, worksheets, and automatic answer keys.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-sky-100 border border-black flex items-center justify-center text-sky-900 font-black">
+                <Calculator className="w-4 h-4" />
+              </div>
+              <h4 className="font-black text-sm text-black">Gradebook &amp; Attendance</h4>
+              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
+                Track student performance, calculate weighted averages, and monitor daily
+                attendance.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-purple-100 border border-black flex items-center justify-center text-purple-900 font-black">
+                <Award className="w-4 h-4" />
+              </div>
+              <h4 className="font-black text-sm text-black">Rubrics &amp; Certificates</h4>
+              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
+                Design custom grading criteria matrices and award completion certificates for
+                milestones.
+              </p>
+            </div>
+          </div>
+        )}
+
+        <div className="pt-2">
+          <Link
+            to={
+              studyWorkspaceTab === 'teacher'
+                ? '/study?workspace=teacher'
+                : '/study?workspace=student'
+            }
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FFD21A] hover:bg-amber-300 border-2 border-black text-black font-black text-xs sm:text-sm shadow-[2.5px_2.5px_0px_#000000] transition-transform hover:-translate-y-0.5"
+          >
+            <span>
+              Launch {studyWorkspaceTab === 'teacher' ? 'Teacher Workspace' : 'Student Workspace'}
+            </span>
+            <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+          </Link>
+        </div>
+      </section>
+
+      {/* 5. VEXORAMODS STUDIO INTRODUCTION */}
       <section className="border-t-2 border-black pt-12 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
+              <Palette className="w-3.5 h-3.5 text-black" />
+              <span>Vector Graphic Studio</span>
+            </div>
             <h2 className="text-2xl sm:text-3xl font-black text-black">
               Design in VexoraMods Studio
             </h2>
@@ -372,10 +974,14 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* E. RECENT LEARNING HUB POSTS (Clean Editorial Feed List — No Cards) */}
+      {/* 6. RECENT LEARNING HUB POSTS (Clean Editorial Feed List) */}
       <section className="border-t-2 border-black pt-12 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
+              <BookOpen className="w-3.5 h-3.5 text-black" />
+              <span>Peer Knowledge &amp; Tutorials</span>
+            </div>
             <h2 className="text-2xl sm:text-3xl font-black text-black">
               Recent Learning Hub Posts
             </h2>
@@ -451,7 +1057,7 @@ export const HomePage: React.FC = () => {
         )}
       </section>
 
-      {/* F. ABOUT VEXORAMODS (Open Two-Column Manifesto — No Nested Cards) */}
+      {/* 7. ABOUT VEXORAMODS MANIFESTO */}
       <section className="border-t-2 border-black pt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div className="lg:col-span-5 space-y-3">
           <h2 className="text-2xl sm:text-3xl font-black text-black leading-tight">
@@ -490,7 +1096,7 @@ export const HomePage: React.FC = () => {
         </dl>
       </section>
 
-      {/* G. RATINGS & REVIEWS SECTION (Open Layout — Minimal Chrome) */}
+      {/* 8. RATINGS & REVIEWS SECTION (Required by platform test assertions) */}
       <section
         id="reviews"
         aria-labelledby="homepage-reviews-heading"
@@ -589,7 +1195,7 @@ export const HomePage: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Recent Approved Reviews Stream (Clean Divided Rows — No Heavy Cards) */}
+          {/* Right Column: Recent Approved Reviews Stream */}
           <div className="lg:col-span-8">
             {loadingReviews ? (
               <div className="space-y-4">
