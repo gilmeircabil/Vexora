@@ -2,11 +2,5 @@
   "files.associations": {
     "_redirects": "plaintext",
     "_headers": "plaintext"
-  },
-  "json.schemas": [
-    {
-      "fileMatch": ["wrangler.json", "wrangler.jsonc"],
-      "url": "https://json.schemastore.org/wrangler"
-    }
-  ]
+  }
 }
