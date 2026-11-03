@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { Types } from 'mongoose';
 import fs from 'node:fs';
+import { env } from '../config/env.js';
 import { DesignAsset } from '../models/DesignAsset.js';
 import { StorageService } from '../services/storageService.js';
 import type { AuthenticatedRequest } from '../middleware/authMiddleware.js';
@@ -61,7 +62,11 @@ export class DesignAssetController {
       });
     } catch (err: any) {
       console.error('Upload asset error:', err);
-      res.status(500).json({ success: false, error: err.message || 'Failed to upload asset' });
+      const isQuotaError = err.message && err.message.includes('safety cap');
+      res.status(isQuotaError ? 413 : 500).json({
+        success: false,
+        error: err.message || 'Failed to upload asset',
+      });
     }
   }
 
@@ -135,7 +140,7 @@ export class DesignAssetController {
   }
 
   /**
-   * Serve raw asset or thumbnail safely with cache control
+   * Serve raw asset or thumbnail safely with cache control (supports Cloudflare R2 and local disk)
    * Route: GET /api/design-assets/files/:storageKey
    * Route: GET /api/design-assets/files/thumbs/:storageKey
    */
@@ -149,8 +154,16 @@ export class DesignAssetController {
         return;
       }
 
-      const filePath = StorageService.getAssetFilePath(storageKey, isThumb);
-      if (!filePath || !fs.existsSync(filePath)) {
+      // If a public R2/S3 domain is configured and S3 is enabled, redirect directly to CDN
+      if (StorageService.isS3Enabled() && env.S3_PUBLIC_URL) {
+        const publicBase = env.S3_PUBLIC_URL.replace(/\/+$/, '');
+        const targetPath = isThumb ? `thumbs/${storageKey}` : `assets/${storageKey}`;
+        res.redirect(302, `${publicBase}/${targetPath}`);
+        return;
+      }
+
+      const assetStream = await StorageService.getAssetStream(storageKey, isThumb);
+      if (!assetStream) {
         res.status(404).send('File not found');
         return;
       }
@@ -158,16 +171,12 @@ export class DesignAssetController {
       // Safe cache headers
       res.setHeader('Cache-Control', 'public, max-age=86400, immutable');
       res.setHeader('X-Content-Type-Options', 'nosniff');
-
-      if (isThumb || storageKey.endsWith('.webp')) {
-        res.setHeader('Content-Type', 'image/webp');
-      } else if (storageKey.endsWith('.png')) {
-        res.setHeader('Content-Type', 'image/png');
-      } else if (storageKey.endsWith('.jpg') || storageKey.endsWith('.jpeg')) {
-        res.setHeader('Content-Type', 'image/jpeg');
+      res.setHeader('Content-Type', assetStream.contentType);
+      if (assetStream.contentLength) {
+        res.setHeader('Content-Length', assetStream.contentLength);
       }
 
-      fs.createReadStream(filePath).pipe(res);
+      assetStream.stream.pipe(res);
     } catch (err: any) {
       console.error('Serve file error:', err);
       res.status(500).send('Error reading file');
