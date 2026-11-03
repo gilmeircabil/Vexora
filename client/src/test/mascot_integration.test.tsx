@@ -36,6 +36,11 @@ describe('Mascot Integration', () => {
     }
     expect(heroMascot.getAttribute('data-state')).toBe('idle');
 
+    // Hero speech bubble displays initial idle greeting
+    const speechBubble = screen.getByTestId('mascot-speech-bubble');
+    expect(speechBubble).toBeDefined();
+    expect(speechBubble.textContent).toContain('Hi! Click me to high-five! 🌰');
+
     // Type in search bar
     const searchInput = screen.getByRole('textbox', {
       name: /Search all tools by name, description, or keyword/i,
@@ -44,8 +49,16 @@ describe('Mascot Integration', () => {
       fireEvent.change(searchInput, { target: { value: 'pdf' } });
     });
 
-    // Mascot should now be in crunch state
+    // Mascot and speech bubble should now be in crunch state
     expect(heroMascot.getAttribute('data-state')).toBe('crunch');
+    expect(speechBubble.textContent).toContain('Crunching code! High focus! 🔥');
+
+    // Clicking mascot triggers celebrate state
+    await act(async () => {
+      fireEvent.click(heroMascot);
+    });
+    expect(heroMascot.getAttribute('data-state')).toBe('celebrate');
+    expect(speechBubble.textContent).toContain('Woohoo! Sparkle power! 🌰✨');
   });
 
   it('renders floating mascot widget inside layout with MascotProvider', () => {

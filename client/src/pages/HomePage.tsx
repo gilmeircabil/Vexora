@@ -41,6 +41,16 @@ export const HomePage: React.FC = () => {
   const [heroSearch, setHeroSearch] = useState('');
   const [studyWorkspaceTab, setStudyWorkspaceTab] = useState<'student' | 'teacher'>('student');
   const { mood, triggerMood } = useMascot();
+
+  const getHeroSpeechText = () => {
+    if (mood === 'celebrate') {
+      return 'Woohoo! Sparkle power! 🌰✨';
+    }
+    if (mood === 'crunch') {
+      return 'Crunching code! High focus! 🔥';
+    }
+    return 'Hi! Click me to high-five! 🌰';
+  };
   const [overview, setOverview] = useState<{
     stats?: {
       totalMembers: number;
@@ -329,16 +339,31 @@ export const HomePage: React.FC = () => {
             </form>
           </div>
 
-          {/* Squirrel Mascot Hero Companion */}
-          <div className="hidden sm:flex flex-col items-center justify-center p-4 bg-amber-50/70 dark:bg-amber-950/20 border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000000] shrink-0 self-start lg:self-center">
+          {/* Squirrel Mascot Hero Companion (Transparent Background with Animated Speech Bubble) */}
+          <div className="hidden sm:flex flex-col items-center justify-center shrink-0 self-start lg:self-center relative">
+            {/* Animated Speech Bubble */}
+            <div
+              data-testid="mascot-speech-bubble"
+              aria-live="polite"
+              className="relative mb-2 max-w-[210px] rounded-2xl bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-100 px-3.5 py-2 shadow-[2.5px_2.5px_0px_#000000] border-2 border-black backdrop-blur-md text-xs font-semibold leading-relaxed"
+            >
+              <div
+                key={mood}
+                className="text-[11.5px] leading-snug font-bold text-center animate-in fade-in zoom-in-95 duration-200"
+              >
+                {getHeroSpeechText()}
+              </div>
+              {/* Bubble pointer pointing down */}
+              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-slate-900 border-r-2 border-b-2 border-black transform rotate-45" />
+            </div>
+
+            {/* Mascot */}
             <SquirrelMascot
               state={mood}
-              size={140}
+              size={145}
               onClick={() => triggerMood('celebrate', 2500)}
+              className="drop-shadow-lg"
             />
-            <div className="text-[11px] font-mono font-bold text-neutral-700 dark:text-neutral-300 mt-1 flex items-center gap-1">
-              <span>🌰 Click to celebrate!</span>
-            </div>
           </div>
         </div>
 
