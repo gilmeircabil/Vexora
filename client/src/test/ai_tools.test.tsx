@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 import { AI_TOOLS_REGISTRY } from '../lib/ai/aiToolsRegistry.js';
 import { AiToolsDashboardPage } from '../pages/AiToolsDashboardPage.js';
@@ -8,6 +8,7 @@ import { AiImageEnhancerPage } from '../pages/ai/AiImageEnhancerPage.js';
 import { AiCodeExplainerPage } from '../pages/ai/AiCodeExplainerPage.js';
 import { AiDocumentSummarizerPage } from '../pages/ai/AiDocumentSummarizerPage.js';
 import { AiWritingAssistantPage } from '../pages/ai/AiWritingAssistantPage.js';
+import { AiChatPage } from '../pages/ai/AiChatPage.js';
 import { ToastProvider } from '../context/ToastContext.js';
 import { AuthProvider } from '../context/AuthContext.js';
 
@@ -134,5 +135,23 @@ describe('AI Tools Frontend Registry & Pages Suite', () => {
     expect(screen.getByText(/AI Writing & ATS Resume Assistant/i)).toBeInTheDocument();
     expect(screen.getByText(/ATS Resume Builder/i)).toBeInTheDocument();
     expect(screen.getByText(/Tone & Grammar Rewrite/i)).toBeInTheDocument();
+  });
+
+  it('renders dedicated tool page AiChatPage with Full Screen focus mode toggle button', () => {
+    render(
+      <ToastProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <AiChatPage />
+          </BrowserRouter>
+        </AuthProvider>
+      </ToastProvider>,
+    );
+
+    const fullscreenBtn = screen.getByRole('button', { name: /full screen/i });
+    expect(fullscreenBtn).toBeInTheDocument();
+
+    fireEvent.click(fullscreenBtn);
+    expect(screen.getByRole('button', { name: /exit full screen/i })).toBeInTheDocument();
   });
 });

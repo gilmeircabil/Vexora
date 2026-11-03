@@ -31,10 +31,13 @@ import {
   Volume2,
   RotateCw,
   Search,
+  Maximize2,
+  Minimize2,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 import { useToast } from '../../context/ToastContext.js';
 import { aiToolsApi } from '../../services/aiToolsApi.js';
+import { useFullscreenMode } from '../../features/education/shared/useFullscreenMode.js';
 
 export interface AttachedFile {
   file: File;
@@ -430,6 +433,8 @@ export const AiChatPage: React.FC = () => {
     }
   }, [isInspectorOpen]);
 
+  const { isFullscreen, toggleFullscreen } = useFullscreenMode();
+
   useEffect(() => {
     try {
       localStorage.setItem(MODEL_STORAGE_KEY, selectedModelId);
@@ -491,10 +496,14 @@ export const AiChatPage: React.FC = () => {
 
   const scrollToBottom = (smooth = true) => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTo({
-        top: chatContainerRef.current.scrollHeight,
-        behavior: smooth ? 'smooth' : 'auto',
-      });
+      if (typeof chatContainerRef.current.scrollTo === 'function') {
+        chatContainerRef.current.scrollTo({
+          top: chatContainerRef.current.scrollHeight,
+          behavior: smooth ? 'smooth' : 'auto',
+        });
+      } else {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
     }
   };
 
@@ -795,7 +804,11 @@ export const AiChatPage: React.FC = () => {
   const userBadge = isAuthenticated && user ? (user.role === 'admin' ? 'Admin' : 'Free') : 'Guest';
 
   return (
-    <div className="w-full h-[calc(100vh-4rem)] bg-transparent text-black flex overflow-hidden font-sans select-text">
+    <div
+      className={`w-full ${
+        isFullscreen ? 'h-screen fixed inset-0 z-50 bg-[#FAF7F2]' : 'h-[calc(100vh-4rem)] bg-transparent'
+      } text-black flex overflow-hidden font-sans select-text`}
+    >
       {/* Mobile Drawer Overlay */}
       {isSidebarOpen && (
         <div
@@ -1044,6 +1057,31 @@ export const AiChatPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Fullscreen / Focus Mode Toggle Button */}
+            <button
+              type="button"
+              onClick={toggleFullscreen}
+              className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border-2 border-black text-xs font-black uppercase font-mono shadow-[1.5px_1.5px_0px_#000] transition-all cursor-pointer active:translate-y-0.5 ${
+                isFullscreen
+                  ? 'bg-[#FACC15] text-black'
+                  : 'bg-[#FAF7F2] hover:bg-neutral-100 text-black'
+              }`}
+              aria-label={isFullscreen ? 'Exit Full Screen' : 'Full Screen (Focus Mode)'}
+              title={isFullscreen ? 'Exit Full Screen (Esc)' : 'Enter Full Screen Focus Mode'}
+            >
+              {isFullscreen ? (
+                <>
+                  <Minimize2 className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span className="hidden sm:inline">Exit Full Screen</span>
+                </>
+              ) : (
+                <>
+                  <Maximize2 className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span className="hidden sm:inline">Full Screen</span>
+                </>
+              )}
+            </button>
+
             <button
               type="button"
               onClick={() => setIsInspectorOpen((prev) => !prev)}
