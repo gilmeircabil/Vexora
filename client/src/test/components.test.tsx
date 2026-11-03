@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, renderHook } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 import { Button } from '../components/common/Button.js';
 import { CopyButton } from '../components/common/CopyButton.js';
@@ -8,6 +8,7 @@ import { Card } from '../components/common/Card.js';
 import { ToolCard } from '../components/common/ToolCard.js';
 import { ToastProvider } from '../context/ToastContext.js';
 import { TOOL_CATALOG } from '../tools/catalog.js';
+import { useFullscreenMode } from '../features/education/shared/useFullscreenMode.js';
 
 describe('Common UI Components', () => {
   it('renders Button with variants and handles click events', () => {
@@ -68,5 +69,45 @@ describe('Common UI Components', () => {
     expect(screen.getByText(tool.name)).toBeInTheDocument();
     expect(screen.getByText(tool.tagline)).toBeInTheDocument();
     expect(screen.getByRole('link')).toHaveAttribute('href', `/tools/${tool.slug}`);
+  });
+
+  describe('useFullscreenMode Hook', () => {
+    it('initializes with isFullscreen false and responds to toggleFullscreen', async () => {
+      const requestFullscreenMock = vi.fn().mockResolvedValue(undefined);
+      const exitFullscreenMock = vi.fn().mockResolvedValue(undefined);
+      Object.defineProperty(document.documentElement, 'requestFullscreen', {
+        value: requestFullscreenMock,
+        writable: true,
+        configurable: true,
+      });
+      Object.defineProperty(document, 'exitFullscreen', {
+        value: exitFullscreenMock,
+        writable: true,
+        configurable: true,
+      });
+
+      const { result } = renderHook(() => useFullscreenMode());
+      expect(result.current.isFullscreen).toBe(false);
+
+      await act(async () => {
+        result.current.toggleFullscreen();
+      });
+
+      expect(requestFullscreenMock).toHaveBeenCalled();
+      expect(result.current.isFullscreen).toBe(true);
+
+      // Simulate fullscreenchange event to exit
+      await act(async () => {
+        // Mock document.fullscreenElement as null
+        Object.defineProperty(document, 'fullscreenElement', {
+          value: null,
+          writable: true,
+          configurable: true,
+        });
+        document.dispatchEvent(new Event('fullscreenchange'));
+      });
+
+      expect(result.current.isFullscreen).toBe(false);
+    });
   });
 });

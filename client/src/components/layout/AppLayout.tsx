@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Outlet, useLocation, Link } from 'react-router';
 import { Wrench } from 'lucide-react';
 import { Header } from './Header.js';
@@ -8,6 +8,7 @@ import { MaintenanceModal } from '../common/LockedPageModal.js';
 import { AuthRequiredModal } from '../common/AuthRequiredModal.js';
 import { useAuth } from '../../context/AuthContext.js';
 import { useMaintenance } from '../../context/MaintenanceContext.js';
+import { FULLSCREEN_EVENT } from '../../features/education/shared/useFullscreenMode.js';
 
 // Public pages that are 100% free and open to view without requiring login
 const PUBLIC_PATHS = new Set([
@@ -42,6 +43,24 @@ export const AppLayout: React.FC = () => {
     location.pathname.startsWith('/ai-tools/chat') ||
     location.pathname === '/ai-chat' ||
     location.pathname === '/chat';
+  const isStudySpaceRoute =
+    location.pathname.startsWith('/study') ||
+    location.pathname.startsWith('/study-space');
+  const isFullBleedRoute = isAiChatRoute || isStudySpaceRoute;
+
+  const [isFocusMode, setIsFocusMode] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<{ isFullscreen: boolean }>;
+      setIsFocusMode(Boolean(customEvent.detail?.isFullscreen));
+    };
+    window.addEventListener(FULLSCREEN_EVENT, handleFullscreenEvent);
+    return () => {
+      window.removeEventListener(FULLSCREEN_EVENT, handleFullscreenEvent);
+    };
+  }, []);
+
   const requiresAuth =
     REQUIRE_AUTH_TO_OPEN_PAGES &&
     !isPublicPage &&
@@ -66,12 +85,12 @@ export const AppLayout: React.FC = () => {
       {/* Neo-Brutalist Falling Stars Canvas Animation */}
       <FallingStarsBackground />
 
-      <Header />
+      {!isFocusMode && <Header />}
       <main
         id="main-content"
         tabIndex={-1}
         className={
-          isAiChatRoute
+          isFullBleedRoute
             ? 'flex-1 w-full p-0 relative z-10 focus:outline-none flex flex-col min-h-0'
             : 'flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 focus:outline-none'
         }
@@ -120,7 +139,7 @@ export const AppLayout: React.FC = () => {
           className={
             isMaintenanceActiveForUser || requiresAuth
               ? 'pointer-events-none select-none filter blur-[3px] opacity-40'
-              : isAiChatRoute
+              : isFullBleedRoute
                 ? 'flex-1 w-full flex flex-col min-h-0'
                 : ''
           }
@@ -136,7 +155,7 @@ export const AppLayout: React.FC = () => {
           </Suspense>
         </div>
       </main>
-      {!isAiChatRoute && <Footer />}
+      {!isFullBleedRoute && !isFocusMode && <Footer />}
     </div>
   );
 };
