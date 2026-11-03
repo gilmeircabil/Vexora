@@ -42,7 +42,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (token: string, user: UserProfile) => void;
-  logout: () => Promise<void>;
+  logout: (redirectTo?: string) => Promise<void>;
   refreshUser: () => Promise<void>;
   updateUser: (updated: Partial<UserProfile>) => void;
 }
@@ -139,7 +139,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(newUser);
   };
 
-  const logout = async () => {
+  const logout = async (redirectTo: string = '/login') => {
     try {
       const activeToken = token || localStorage.getItem('tn_token');
       await fetch('/api/auth/logout', {
@@ -154,13 +154,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     setUser(null);
 
-    // Full page reload & redirect back to home page
+    // Redirect to login page
     if (typeof window !== 'undefined') {
       try {
-        if (window.location.pathname === '/') {
+        if (window.location.pathname === redirectTo) {
           window.location.reload();
         } else {
-          window.location.href = '/';
+          window.location.href = redirectTo;
         }
       } catch {
         // Fallback for non-browser/test environments
