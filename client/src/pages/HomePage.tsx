@@ -289,7 +289,7 @@ export const HomePage: React.FC = () => {
     <div className="space-y-20 pb-12">
       {/* 1. HERO SECTION & FAST DISCOVERY */}
       <section className="pt-4 sm:pt-8 space-y-10">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
           <div className="max-w-4xl lg:max-w-3xl space-y-5">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 border border-black text-xs font-mono font-bold text-black shadow-[1.5px_1.5px_0px_#000000]">
               <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-400" />
@@ -340,29 +340,29 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Squirrel Mascot Hero Companion (Transparent Background with Animated Speech Bubble) */}
-          <div className="hidden sm:flex flex-col items-center justify-center shrink-0 self-start lg:self-center relative">
+          <div className="hidden sm:flex flex-col items-center justify-center shrink-0 self-center lg:self-end relative lg:mr-4 xl:mr-8 pb-1">
             {/* Animated Speech Bubble */}
             <div
               data-testid="mascot-speech-bubble"
               aria-live="polite"
-              className="relative mb-2 max-w-[210px] rounded-2xl bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-100 px-3.5 py-2 shadow-[2.5px_2.5px_0px_#000000] border-2 border-black backdrop-blur-md text-xs font-semibold leading-relaxed"
+              className="relative mb-2 max-w-[240px] rounded-2xl bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-100 px-4 py-2.5 shadow-[2.5px_2.5px_0px_#000000] border-2 border-black backdrop-blur-md text-xs font-semibold leading-relaxed"
             >
               <div
                 key={mood}
-                className="text-[11.5px] leading-snug font-bold text-center animate-in fade-in zoom-in-95 duration-200"
+                className="text-xs sm:text-[12.5px] leading-snug font-bold text-center animate-in fade-in zoom-in-95 duration-200"
               >
                 {getHeroSpeechText()}
               </div>
               {/* Bubble pointer pointing down */}
-              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-slate-900 border-r-2 border-b-2 border-black transform rotate-45" />
+              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-slate-900 border-r-2 border-b-2 border-black transform rotate-45" />
             </div>
 
             {/* Mascot */}
             <SquirrelMascot
               state={mood}
-              size={145}
+              size={210}
               onClick={() => triggerMood('celebrate', 2500)}
-              className="drop-shadow-lg"
+              className="drop-shadow-xl"
             />
           </div>
         </div>
