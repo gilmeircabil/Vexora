@@ -10,19 +10,7 @@ export function createApp() {
   // Trust reverse proxy (e.g. Cloudflare, AWS ALB, Nginx, Render) for HTTPS detection
   app.set('trust proxy', 1);
 
-  // HTTPS Transport Encryption enforcement: redirect insecure HTTP requests in production
-  app.use((req, res, next) => {
-    const isProd = env.NODE_ENV === 'production' || process.env.NODE_ENV === 'production';
-    if (isProd) {
-      const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
-      if (!isSecure && req.headers.host) {
-        return res.redirect(301, `https://${req.headers.host}${req.originalUrl || req.url}`);
-      }
-    }
-    next();
-  });
-
-  // Security headers
+  // Security headers: Apply FIRST so all responses (including 301 redirects, errors, 404s) include them
   app.use((_req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
@@ -47,6 +35,18 @@ export function createApp() {
       'upgrade-insecure-requests',
     ].join('; ');
     res.setHeader('Content-Security-Policy', csp);
+    next();
+  });
+
+  // HTTPS Transport Encryption enforcement: redirect insecure HTTP requests in production
+  app.use((req, res, next) => {
+    const isProd = env.NODE_ENV === 'production' || process.env.NODE_ENV === 'production';
+    if (isProd) {
+      const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
+      if (!isSecure && req.headers.host) {
+        return res.redirect(301, `https://${req.headers.host}${req.originalUrl || req.url}`);
+      }
+    }
     next();
   });
 

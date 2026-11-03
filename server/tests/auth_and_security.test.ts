@@ -716,6 +716,11 @@ describe('VexoraMods Username & Password Auth Suite', () => {
 
       expect(insecureRes.statusCode).toBe(301);
       expect(insecureRes.redirectUrl).toBe('https://vexora.dev/api/health');
+      expect(insecureRes.headers['Strict-Transport-Security']).toBe(
+        'max-age=31536000; includeSubDomains; preload',
+      );
+      expect(insecureRes.headers['X-Content-Type-Options']).toBe('nosniff');
+      expect(insecureRes.headers['X-Frame-Options']).toBe('DENY');
       expect(nextCalled).toBe(false);
 
       // Secure HTTPS request with x-forwarded-proto
