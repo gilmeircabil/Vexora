@@ -1,5 +1,5 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
+  "$schema": "https://json.schemastore.org/wrangler.json",
   "name": "vexora",
   "compatibility_date": "2026-11-01",
   "assets": {
