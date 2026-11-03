@@ -23,7 +23,7 @@ export const DEFAULT_MASCOT_CONTEXT: MascotContextType = {
 const MascotContext = createContext<MascotContextType | undefined>(undefined);
 
 export const MascotProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [mood, setMood] = useState<MascotMood>('idle');
+  const [mood, setMoodState] = useState<MascotMood>('idle');
   const [isMinimized, setIsMinimizedState] = useState<boolean>(() => {
     try {
       return localStorage.getItem(STORAGE_KEY) === 'true';
@@ -33,6 +33,14 @@ export const MascotProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   });
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const setMood = useCallback((newMood: MascotMood) => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    setMoodState(newMood);
+  }, []);
 
   const setIsMinimized = useCallback((minimized: boolean) => {
     setIsMinimizedState(minimized);
@@ -47,9 +55,9 @@ export const MascotProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
-    setMood(temporaryMood);
+    setMoodState(temporaryMood);
     timerRef.current = setTimeout(() => {
-      setMood('idle');
+      setMoodState('idle');
       timerRef.current = null;
     }, durationMs);
   }, []);

@@ -71,6 +71,33 @@ describe('MascotContext', () => {
     expect(screen.getByTestId('mood').textContent).toBe('idle');
   });
 
+  it('cancels pending triggerMood timer when setMood is called', () => {
+    render(
+      <MascotProvider>
+        <TestConsumer />
+      </MascotProvider>,
+    );
+
+    act(() => {
+      screen.getByText('Trigger Celebrate').click();
+    });
+    expect(screen.getByTestId('mood').textContent).toBe('celebrate');
+
+    // Explicitly set crunch before timer expires
+    act(() => {
+      screen.getByText('Set Crunch').click();
+    });
+    expect(screen.getByTestId('mood').textContent).toBe('crunch');
+
+    // Advance timer past original 50ms trigger duration
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+
+    // Should remain crunch, NOT overridden back to idle!
+    expect(screen.getByTestId('mood').textContent).toBe('crunch');
+  });
+
   it('persists minimized state to localStorage', () => {
     render(
       <MascotProvider>

@@ -6,9 +6,15 @@ export const FloatingMascotWidget: React.FC = () => {
   const { mood, isMinimized, setIsMinimized, triggerMood } = useMascot();
   const [customQuote, setCustomQuote] = useState<string | null>(null);
 
+  // Safely check if we're on the dedicated full-screen Studio editor route
+  let pathname = '';
+  if (typeof window !== 'undefined' && window.location) {
+    pathname = window.location.pathname;
+  }
+
   const handleMascotClick = () => {
-    triggerMood('celebrate', 2500);
     setCustomQuote('Woohoo! Sparkle power! 🌰✨');
+    triggerMood('celebrate', 2500);
   };
 
   const getSpeechText = () => {
@@ -18,8 +24,13 @@ export const FloatingMascotWidget: React.FC = () => {
     if (mood === 'crunch') {
       return 'Crunching code! High focus! 🔥';
     }
-    return customQuote || 'Hi! Ready to build something cool? 🌰';
+    return 'Hi! Ready to build something cool? 🌰';
   };
+
+  // Do not render floating mascot on full-screen Studio Editor canvas
+  if (pathname.startsWith('/studio/editor')) {
+    return null;
+  }
 
   if (isMinimized) {
     return (
@@ -49,7 +60,8 @@ export const FloatingMascotWidget: React.FC = () => {
       {/* Speech Bubble */}
       <div
         data-testid="mascot-speech-bubble"
-        className="relative mb-2 max-w-[210px] rounded-2xl bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-100 p-3 shadow-xl border border-slate-200 dark:border-slate-800 backdrop-blur-md text-xs font-medium leading-relaxed animate-in fade-in slide-in-from-bottom-2 duration-200"
+        aria-live="polite"
+        className="relative mb-2 max-w-[80vw] sm:max-w-[210px] rounded-2xl bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-100 p-3 shadow-xl border border-slate-200 dark:border-slate-800 backdrop-blur-md text-xs font-medium leading-relaxed animate-in fade-in slide-in-from-bottom-2 duration-200"
       >
         <div className="flex items-start justify-between gap-1 mb-1">
           <span className="font-bold text-[10px] tracking-wider uppercase text-amber-600 dark:text-amber-400">

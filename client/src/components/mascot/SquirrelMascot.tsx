@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 
 export interface SquirrelMascotProps {
   state?: 'idle' | 'crunch' | 'celebrate';
@@ -15,19 +15,39 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
 }) => {
   const isCrunch = state === 'crunch';
   const isCelebrate = state === 'celebrate';
+  const isInteractive = Boolean(onClick);
+
+  // Namespace SVG gradient IDs so multiple mascot instances don't collide
+  const rawId = useId();
+  const id = rawId.replace(/:/g, '');
+
+  const redGlowId = `${id}-screenRedGlow`;
+  const blueGlowId = `${id}-screenBlueGlow`;
+  const capGradId = `${id}-acornCapGrad`;
+  const bodyGradId = `${id}-acornBodyGrad`;
+  const laptopGradId = `${id}-laptopGrad`;
+
+  const handleKeyDown = (e: React.KeyboardEvent<SVGSVGElement>) => {
+    if (isInteractive && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      onClick?.();
+    }
+  };
 
   return (
     <svg
-      role="img"
+      role={isInteractive ? 'button' : 'img'}
       aria-label="Vexora Squirrel Mascot"
+      tabIndex={isInteractive ? 0 : undefined}
       data-state={state}
       width={size}
       height={size}
       viewBox="0 0 200 200"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`select-none ${onClick ? 'cursor-pointer hover:scale-105 active:scale-95 transition-transform' : ''} ${className}`}
+      className={`select-none ${isInteractive ? 'cursor-pointer hover:scale-105 active:scale-95 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-2xl' : ''} ${className}`}
       onClick={onClick}
+      onKeyDown={handleKeyDown}
     >
       <style>{`
         @keyframes tailWag {
@@ -102,24 +122,24 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
 
       <defs>
         {/* Glow Filters */}
-        <radialGradient id="screenRedGlow" cx="50%" cy="50%" r="50%">
+        <radialGradient id={redGlowId} cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#ff2a2a" stopOpacity="0.8" />
           <stop offset="60%" stopColor="#ff5533" stopOpacity="0.3" />
           <stop offset="100%" stopColor="#ff5533" stopOpacity="0" />
         </radialGradient>
-        <radialGradient id="screenBlueGlow" cx="50%" cy="50%" r="50%">
+        <radialGradient id={blueGlowId} cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.5" />
           <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
         </radialGradient>
-        <linearGradient id="acornCapGrad" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id={capGradId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#452715" />
           <stop offset="100%" stopColor="#2c160a" />
         </linearGradient>
-        <linearGradient id="acornBodyGrad" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id={bodyGradId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#8d562b" />
           <stop offset="100%" stopColor="#5f3517" />
         </linearGradient>
-        <linearGradient id="laptopGrad" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id={laptopGradId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#334155" />
           <stop offset="100%" stopColor="#1e293b" />
         </linearGradient>
@@ -154,7 +174,15 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
         <circle cx="132" cy="172" r="4" fill="#f4a896" />
 
         {/* Squirrel Body */}
-        <ellipse cx="100" cy="140" rx="36" ry="34" fill="#f7eedf" stroke="#261b17" strokeWidth="5" />
+        <ellipse
+          cx="100"
+          cy="140"
+          rx="36"
+          ry="34"
+          fill="#f7eedf"
+          stroke="#261b17"
+          strokeWidth="5"
+        />
         {/* White chest belly patch */}
         <ellipse cx="100" cy="144" rx="22" ry="22" fill="#fffaf2" />
 
@@ -207,8 +235,24 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
           // Intense "fast coding" eyebrows and eyes
           <g>
             {/* Angry / Determined slanted eyebrows */}
-            <line x1="70" y1="65" x2="88" y2="72" stroke="#261b17" strokeWidth="4" strokeLinecap="round" />
-            <line x1="130" y1="65" x2="112" y2="72" stroke="#261b17" strokeWidth="4" strokeLinecap="round" />
+            <line
+              x1="70"
+              y1="65"
+              x2="88"
+              y2="72"
+              stroke="#261b17"
+              strokeWidth="4"
+              strokeLinecap="round"
+            />
+            <line
+              x1="130"
+              y1="65"
+              x2="112"
+              y2="72"
+              stroke="#261b17"
+              strokeWidth="4"
+              strokeLinecap="round"
+            />
             {/* Focused sharp eyes */}
             <circle cx="80" cy="78" r="6" fill="#261b17" />
             <circle cx="120" cy="78" r="6" fill="#261b17" />
@@ -218,8 +262,20 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
         ) : isCelebrate ? (
           // Joyful smiling eyes (^ ^)
           <g>
-            <path d="M 74 79 Q 80 72 86 79" stroke="#261b17" strokeWidth="4" strokeLinecap="round" fill="none" />
-            <path d="M 114 79 Q 120 72 126 79" stroke="#261b17" strokeWidth="4" strokeLinecap="round" fill="none" />
+            <path
+              d="M 74 79 Q 80 72 86 79"
+              stroke="#261b17"
+              strokeWidth="4"
+              strokeLinecap="round"
+              fill="none"
+            />
+            <path
+              d="M 114 79 Q 120 72 126 79"
+              stroke="#261b17"
+              strokeWidth="4"
+              strokeLinecap="round"
+              fill="none"
+            />
           </g>
         ) : (
           // Idle big cute eyes with blink animation
@@ -241,17 +297,29 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
           <path d="M 95 89 Q 100 97 105 89 Z" fill="#e11d48" stroke="#261b17" strokeWidth="2.5" />
         ) : (
           // Cute cat-like mouth line
-          <path d="M 96 88 Q 100 91 104 88" stroke="#261b17" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+          <path
+            d="M 96 88 Q 100 91 104 88"
+            stroke="#261b17"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            fill="none"
+          />
         )}
 
         {/* Acorn (Resting beside the laptop) */}
         <g id="acorn-prop" transform="translate(142, 126) rotate(12)">
           {/* Acorn stem */}
-          <path d="M 13 4 Q 15 -2 20 -4" stroke="#2c160a" strokeWidth="3" strokeLinecap="round" fill="none" />
+          <path
+            d="M 13 4 Q 15 -2 20 -4"
+            stroke="#2c160a"
+            strokeWidth="3"
+            strokeLinecap="round"
+            fill="none"
+          />
           {/* Acorn nut body */}
           <path
             d="M 5 12 Q 13 28 21 12 Q 13 2 5 12 Z"
-            fill="url(#acornBodyGrad)"
+            fill={`url(#${bodyGradId})`}
             stroke="#261b17"
             strokeWidth="3"
             strokeLinejoin="round"
@@ -259,15 +327,26 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
           {/* Acorn nut cap */}
           <path
             d="M 3 10 C 3 4 23 4 23 10 C 23 13 3 13 3 10 Z"
-            fill="url(#acornCapGrad)"
+            fill={`url(#${capGradId})`}
             stroke="#261b17"
             strokeWidth="3"
             strokeLinejoin="round"
           />
           {/* Cap crosshatch texture */}
-          <path d="M 7 7 L 11 11 M 15 7 L 19 11 M 11 7 L 7 11 M 19 7 L 15 11" stroke="#5a371c" strokeWidth="1" />
+          <path
+            d="M 7 7 L 11 11 M 15 7 L 19 11 M 11 7 L 7 11 M 19 7 L 15 11"
+            stroke="#5a371c"
+            strokeWidth="1"
+          />
           {/* Nut shine */}
-          <path d="M 8 14 Q 10 20 12 22" stroke="#d97706" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.6" />
+          <path
+            d="M 8 14 Q 10 20 12 22"
+            stroke="#d97706"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.6"
+          />
         </g>
 
         {/* Laptop & Typing Area */}
@@ -280,25 +359,17 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
               cy="125"
               rx="40"
               ry="25"
-              fill="url(#screenRedGlow)"
+              fill={`url(#${redGlowId})`}
             />
           )}
 
           {/* Normal Screen Ambient Glare (when idle/celebrate) */}
-          {!isCrunch && (
-            <ellipse
-              cx="100"
-              cy="132"
-              rx="30"
-              ry="18"
-              fill="url(#screenBlueGlow)"
-            />
-          )}
+          {!isCrunch && <ellipse cx="100" cy="132" rx="30" ry="18" fill={`url(#${blueGlowId})`} />}
 
           {/* Laptop Base (Keyboard area facing squirrel) */}
           <polygon
             points="62,154 138,154 146,166 54,166"
-            fill="url(#laptopGrad)"
+            fill={`url(#${laptopGradId})`}
             stroke="#0f172a"
             strokeWidth="3.5"
             strokeLinejoin="round"
@@ -312,8 +383,22 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
             opacity="0.9"
           />
           {/* Key row indicator lines */}
-          <line x1="66" y1="159" x2="134" y2="159" stroke={isCrunch ? '#f87171' : '#64748b'} strokeWidth="1" />
-          <line x1="64" y1="162" x2="136" y2="162" stroke={isCrunch ? '#f87171' : '#64748b'} strokeWidth="1" />
+          <line
+            x1="66"
+            y1="159"
+            x2="134"
+            y2="159"
+            stroke={isCrunch ? '#f87171' : '#64748b'}
+            strokeWidth="1"
+          />
+          <line
+            x1="64"
+            y1="162"
+            x2="136"
+            y2="162"
+            stroke={isCrunch ? '#f87171' : '#64748b'}
+            strokeWidth="1"
+          />
 
           {/* Laptop Lid/Screen (Angled upward towards squirrel) */}
           <polygon
@@ -330,17 +415,57 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
             opacity="0.85"
           />
           {/* Screen code lines */}
-          <line x1="77" y1="135" x2="105" y2="135" stroke={isCrunch ? '#fca5a5' : '#e0f2fe'} strokeWidth="1.5" strokeLinecap="round" />
-          <line x1="82" y1="140" x2="118" y2="140" stroke={isCrunch ? '#fca5a5' : '#bae6fd'} strokeWidth="1.5" strokeLinecap="round" />
-          <line x1="77" y1="145" x2="110" y2="145" stroke={isCrunch ? '#fca5a5' : '#7dd3fc'} strokeWidth="1.5" strokeLinecap="round" />
+          <line
+            x1="77"
+            y1="135"
+            x2="105"
+            y2="135"
+            stroke={isCrunch ? '#fca5a5' : '#e0f2fe'}
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          <line
+            x1="82"
+            y1="140"
+            x2="118"
+            y2="140"
+            stroke={isCrunch ? '#fca5a5' : '#bae6fd'}
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          <line
+            x1="77"
+            y1="145"
+            x2="110"
+            y2="145"
+            stroke={isCrunch ? '#fca5a5' : '#7dd3fc'}
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
         </g>
 
         {/* Typing Paws (In front of laptop!) */}
         {isCelebrate ? (
           // Paws raised high in celebration
           <g>
-            <ellipse cx="68" cy="118" rx="8" ry="7" fill="#f7eedf" stroke="#261b17" strokeWidth="3.5" />
-            <ellipse cx="132" cy="118" rx="8" ry="7" fill="#f7eedf" stroke="#261b17" strokeWidth="3.5" />
+            <ellipse
+              cx="68"
+              cy="118"
+              rx="8"
+              ry="7"
+              fill="#f7eedf"
+              stroke="#261b17"
+              strokeWidth="3.5"
+            />
+            <ellipse
+              cx="132"
+              cy="118"
+              rx="8"
+              ry="7"
+              fill="#f7eedf"
+              stroke="#261b17"
+              strokeWidth="3.5"
+            />
             <circle cx="68" cy="118" r="3" fill="#f4a896" />
             <circle cx="132" cy="118" r="3" fill="#f4a896" />
           </g>

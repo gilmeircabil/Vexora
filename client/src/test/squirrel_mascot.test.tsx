@@ -27,12 +27,37 @@ describe('SquirrelMascot', () => {
     expect(sparkles.length).toBeGreaterThan(0);
   });
 
-  it('fires onClick callback when clicked', () => {
+  it('fires onClick callback when clicked and supports keyboard Enter/Space', () => {
     const handleClick = vi.fn();
     render(<SquirrelMascot onClick={handleClick} />);
-    const mascot = screen.getByRole('img', { name: /Vexora Squirrel Mascot/i });
+    const mascot = screen.getByRole('button', { name: /Vexora Squirrel Mascot/i });
+    expect(mascot.getAttribute('tabindex')).toBe('0');
+
+    // Click
     fireEvent.click(mascot);
     expect(handleClick).toHaveBeenCalledTimes(1);
+
+    // Enter key
+    fireEvent.keyDown(mascot, { key: 'Enter' });
+    expect(handleClick).toHaveBeenCalledTimes(2);
+
+    // Space key
+    fireEvent.keyDown(mascot, { key: ' ' });
+    expect(handleClick).toHaveBeenCalledTimes(3);
+  });
+
+  it('namespaces gradient IDs so multiple instances do not collide', () => {
+    const { container } = render(
+      <div>
+        <SquirrelMascot />
+        <SquirrelMascot />
+      </div>,
+    );
+
+    const gradients = container.querySelectorAll('radialGradient, linearGradient');
+    const ids = Array.from(gradients).map((g) => g.getAttribute('id'));
+    const uniqueIds = new Set(ids);
+    expect(uniqueIds.size).toBe(ids.length);
   });
 
   it('applies custom size and className', () => {

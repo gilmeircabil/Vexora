@@ -13,20 +13,22 @@ vi.mock('../components/common/ScrollToTop', () => ({
 }));
 
 describe('Mascot Integration', () => {
-  it('renders hero mascot on HomePage and typing in search triggers crunch state', () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <AuthProvider>
-          <ToastProvider>
-            <MascotProvider>
-              <HomePage />
-            </MascotProvider>
-          </ToastProvider>
-        </AuthProvider>
-      </MemoryRouter>,
-    );
+  it('renders hero mascot on HomePage and typing in search triggers crunch state', async () => {
+    await act(async () => {
+      render(
+        <MemoryRouter initialEntries={['/']}>
+          <AuthProvider>
+            <ToastProvider>
+              <MascotProvider>
+                <HomePage />
+              </MascotProvider>
+            </ToastProvider>
+          </AuthProvider>
+        </MemoryRouter>,
+      );
+    });
 
-    const mascots = screen.getAllByRole('img', { name: /Vexora Squirrel Mascot/i });
+    const mascots = screen.getAllByRole('button', { name: /Vexora Squirrel Mascot/i });
     expect(mascots.length).toBeGreaterThan(0);
     const heroMascot = mascots[0];
     if (!heroMascot) {
@@ -38,7 +40,7 @@ describe('Mascot Integration', () => {
     const searchInput = screen.getByRole('textbox', {
       name: /Search all tools by name, description, or keyword/i,
     });
-    act(() => {
+    await act(async () => {
       fireEvent.change(searchInput, { target: { value: 'pdf' } });
     });
 
