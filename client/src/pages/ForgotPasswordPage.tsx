@@ -359,7 +359,11 @@ export const ForgotPasswordPage: React.FC = () => {
                   </div>
                 </div>
 
-                <TurnstileWidget onVerify={setTurnstileToken} resetKey={turnstileResetKey} />
+                <TurnstileWidget
+                  action="forgot-password"
+                  onVerify={setTurnstileToken}
+                  resetKey={turnstileResetKey}
+                />
 
                 <button
                   type="submit"

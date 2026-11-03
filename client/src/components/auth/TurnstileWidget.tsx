@@ -8,6 +8,7 @@ declare global {
         container: HTMLElement,
         options: {
           sitekey: string;
+          action?: string;
           callback?: (token: string) => void;
           'expired-callback'?: () => void;
           'error-callback'?: () => void;
@@ -24,6 +25,7 @@ interface TurnstileWidgetProps {
   onVerify: (token: string) => void;
   onExpire?: () => void;
   resetKey?: number;
+  action?: string;
 }
 
 const DEFAULT_TEST_SITE_KEY = '1x00000000000000000000AA';
@@ -32,6 +34,7 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({
   onVerify,
   onExpire,
   resetKey = 0,
+  action,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const widgetIdRef = useRef<string | null>(null);
@@ -111,6 +114,7 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({
         widgetIdRef.current = window.turnstile.render(containerRef.current, {
           sitekey: siteKey,
           theme: 'light',
+          action: action || undefined,
           callback: (token: string) => {
             if (active) {
               setVerified(true);

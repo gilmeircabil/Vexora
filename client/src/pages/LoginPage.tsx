@@ -302,7 +302,11 @@ export const LoginPage: React.FC = () => {
                   </div>
                 </div>
 
-                <TurnstileWidget onVerify={setTurnstileToken} resetKey={turnstileResetKey} />
+                <TurnstileWidget
+                  action="login"
+                  onVerify={setTurnstileToken}
+                  resetKey={turnstileResetKey}
+                />
 
                 <button
                   type="submit"

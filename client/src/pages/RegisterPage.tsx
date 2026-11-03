@@ -583,7 +583,11 @@ export const RegisterPage: React.FC = () => {
                   </span>
                 </div>
 
-                <TurnstileWidget onVerify={setTurnstileToken} resetKey={turnstileResetKey} />
+                <TurnstileWidget
+                  action="register"
+                  onVerify={setTurnstileToken}
+                  resetKey={turnstileResetKey}
+                />
 
                 <button
                   type="submit"
