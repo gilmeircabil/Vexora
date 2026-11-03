@@ -22,6 +22,7 @@ const registerSchema = z
     password: z.string().min(8, 'Password must be at least 8 characters').max(128),
     confirmPassword: z.string().min(1, 'Please confirm your password'),
     name: z.string().optional(),
+    educationRole: z.enum(['student', 'teacher', 'educator']).optional(),
     turnstileToken: z.string().optional(),
     website: z.string().optional(),
   })
@@ -127,6 +128,7 @@ export class AuthController {
         password: parsed.data.password,
         confirmPassword: parsed.data.confirmPassword,
         name: parsed.data.name,
+        educationRole: parsed.data.educationRole,
         ip,
       });
 

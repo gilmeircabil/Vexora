@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import {
   GraduationCap,
   Calendar,
@@ -23,6 +23,7 @@ import {
   Lock,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
+import { educationApi } from '../../services/educationApi.js';
 import { useFullscreenMode } from '../../features/education/shared/useFullscreenMode.js';
 import { StudySpaceHeader } from '../../features/education/shared/StudySpaceHeader.js';
 
@@ -54,7 +55,7 @@ import { RubricBuilder } from '../../features/education/teacher/RubricBuilder.js
 import { CertificateGenerator } from '../../features/education/teacher/CertificateGenerator.js';
 
 export const StudySpacePage: React.FC = () => {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Determine initial workspace from URL param or user's role
@@ -81,10 +82,14 @@ export const StudySpacePage: React.FC = () => {
   const { isFullscreen, toggleFullscreen } = useFullscreenMode();
 
   const isTeacherAuthorized =
-    educationRole === 'teacher' || educationRole === 'educator' || user?.role === 'admin';
+    educationRole === 'teacher' ||
+    educationRole === 'educator' ||
+    user?.educationRole === 'teacher' ||
+    user?.educationRole === 'educator' ||
+    user?.role === 'admin';
 
   // Synchronize workspace changes with URL parameters and active role
-  const handleWorkspaceChange = (newWorkspace: 'student' | 'teacher') => {
+  const handleWorkspaceChange = async (newWorkspace: 'student' | 'teacher') => {
     setWorkspace(newWorkspace);
     setEducationRole(newWorkspace);
     setActiveTab('dashboard');
@@ -92,8 +97,21 @@ export const StudySpacePage: React.FC = () => {
     const newParams = new URLSearchParams(searchParams);
     newParams.set('workspace', newWorkspace);
     setSearchParams(newParams, { replace: true });
+
+    // Sync role change to user profile on server if logged in
+    if (user && user.educationRole !== newWorkspace) {
+      try {
+        await educationApi.updateEducationRole(newWorkspace);
+        if (refreshUser) {
+          await refreshUser();
+        }
+      } catch (err) {
+        console.error('Failed to sync education role change', err);
+      }
+    }
   };
 
+  // Sync workspace and education role when URL search param changes
   useEffect(() => {
     const ws = searchParams.get('workspace');
     if (ws === 'student' || ws === 'teacher') {
@@ -101,6 +119,23 @@ export const StudySpacePage: React.FC = () => {
       setEducationRole(ws);
     }
   }, [searchParams]);
+
+  // Automatically activate Teacher Workspace when authenticated user has teacher or educator role
+  useEffect(() => {
+    if (!user) return;
+    const isTeacher = user.educationRole === 'teacher' || user.educationRole === 'educator';
+    const ws = searchParams.get('workspace');
+
+    if (isTeacher && ws !== 'student') {
+      setWorkspace('teacher');
+      setEducationRole('teacher');
+      if (ws !== 'teacher') {
+        const newParams = new URLSearchParams(searchParams);
+        newParams.set('workspace', 'teacher');
+        setSearchParams(newParams, { replace: true });
+      }
+    }
+  }, [user, searchParams, setSearchParams]);
 
   const handleSelectTool = (toolId: string) => {
     setActiveTab(toolId);
@@ -252,15 +287,38 @@ export const StudySpacePage: React.FC = () => {
                 <span className="text-[11px] font-black">Teacher Mode Required</span>
               </div>
               <p className="text-[10px] text-amber-800 leading-tight">
-                Enable teacher mode to create curriculum documents and manage student records.
+                Log in with a teacher account or enable teacher mode to create curriculum documents and manage student records.
               </p>
-              <button
-                type="button"
-                onClick={() => setEducationRole('teacher')}
-                className="w-full py-1.5 px-2 bg-[#FFD21A] text-black font-black text-xs rounded-lg border-2 border-black shadow-[1.5px_1.5px_0px_#000] cursor-pointer hover:bg-yellow-400 active:translate-y-0.5 transition-all"
-              >
-                Enable Teacher Mode
-              </button>
+              <div className="flex flex-col gap-1.5">
+                {!user && (
+                  <Link
+                    to="/login?redirect=/study?workspace=teacher"
+                    className="w-full py-1.5 px-2 bg-[#FFD21A] text-black font-black text-xs rounded-lg border-2 border-black shadow-[1.5px_1.5px_0px_#000] text-center hover:bg-yellow-400 active:translate-y-0.5 transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <School className="w-3.5 h-3.5" />
+                    <span>Log In as Teacher</span>
+                  </Link>
+                )}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setEducationRole('teacher');
+                    if (user) {
+                      try {
+                        await educationApi.updateEducationRole('teacher');
+                        if (refreshUser) {
+                          await refreshUser();
+                        }
+                      } catch (err) {
+                        console.error('Failed to activate teacher role', err);
+                      }
+                    }
+                  }}
+                  className="w-full py-1.5 px-2 bg-white text-black font-black text-xs rounded-lg border-2 border-black shadow-[1.5px_1.5px_0px_#000] cursor-pointer hover:bg-neutral-100 active:translate-y-0.5 transition-all"
+                >
+                  Enable Teacher Mode
+                </button>
+              </div>
             </div>
           )}
         </aside>

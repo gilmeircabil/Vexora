@@ -71,7 +71,15 @@ export const LoginPage: React.FC = () => {
       if (res.ok && data.success) {
         login(data.data.accessToken, data.data.user);
         showToast(`Welcome back, ${data.data.user.name || data.data.user.username}!`, 'success');
-        navigate(redirect);
+        
+        const isTeacher =
+          data.data.user?.educationRole === 'teacher' ||
+          data.data.user?.educationRole === 'educator';
+        let targetRedirect = redirect;
+        if (isTeacher && (redirect === '/study' || redirect === '/study-space')) {
+          targetRedirect = '/study?workspace=teacher';
+        }
+        navigate(targetRedirect);
       } else {
         const errMsg = data.error || 'Invalid username or password.';
         setFormError(errMsg);

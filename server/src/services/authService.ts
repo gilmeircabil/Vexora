@@ -245,6 +245,7 @@ export class AuthService {
     confirmPassword?: string;
     name?: string;
     email?: string;
+    educationRole?: 'student' | 'teacher' | 'educator';
     ip?: string;
   }): Promise<AuthResult> {
     // 1. Username validation
@@ -303,6 +304,7 @@ export class AuthService {
       passwordHash,
       recoveryCodeHash,
       role: isAdmin ? 'admin' : 'user',
+      educationRole: params.educationRole || 'student',
       emailVerified: true,
       emailVerifiedAt: new Date(),
       accountStatus: 'active',

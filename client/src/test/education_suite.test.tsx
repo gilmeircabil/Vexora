@@ -342,5 +342,62 @@ describe('VexoraMods Zero-Cost Education Suite Tests', () => {
       expect(screen.queryByRole('button', { name: /study planner/i })).toBeNull();
       expect(screen.queryByRole('button', { name: /flashcard maker/i })).toBeNull();
     });
+
+    it('automatically activates Teacher Workspace when user is logged in as teacher', async () => {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockImplementation(async (url: string) => {
+          if (typeof url === 'string' && url.includes('/api/auth/me')) {
+            return {
+              ok: true,
+              json: async () => ({
+                success: true,
+                data: {
+                  id: 'teacher-456',
+                  email: 'teacher@example.com',
+                  username: 'prof_smith',
+                  name: 'Professor Smith',
+                  role: 'user',
+                  educationRole: 'teacher',
+                },
+              }),
+            };
+          }
+          if (typeof url === 'string' && url.includes('/api/education')) {
+            return {
+              ok: true,
+              json: async () => ({
+                success: true,
+                data: { pendingTasks: 2, lessonPlanCount: 5 },
+              }),
+            };
+          }
+          return {
+            ok: true,
+            json: async () => ({ success: true, data: {} }),
+          };
+        }),
+      );
+
+      localStorage.setItem('tn_token', 'mock-teacher-token');
+
+      render(
+        <BrowserRouter>
+          <AuthProvider>
+            <ToastProvider>
+              <StudySpacePage />
+            </ToastProvider>
+          </AuthProvider>
+        </BrowserRouter>,
+      );
+
+      // Teacher tools should automatically appear in the active sidebar
+      expect(await screen.findByRole('button', { name: /lesson plan creator/i })).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /study planner/i })).toBeNull();
+      expect(screen.getByText(/curriculum milestones/i)).toBeInTheDocument();
+      expect(screen.queryByText(/enable teacher mode/i)).toBeNull();
+
+      localStorage.removeItem('tn_token');
+    });
   });
 });

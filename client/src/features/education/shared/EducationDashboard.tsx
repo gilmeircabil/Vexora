@@ -49,8 +49,15 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
   onRoleChange,
   workspace,
 }) => {
-  const currentWorkspace = workspace || (activeRole === 'teacher' || activeRole === 'educator' ? 'teacher' : 'student');
   const { user, refreshUser } = useAuth();
+  const currentWorkspace =
+    workspace ||
+    (user?.educationRole === 'teacher' ||
+    user?.educationRole === 'educator' ||
+    activeRole === 'teacher' ||
+    activeRole === 'educator'
+      ? 'teacher'
+      : 'student');
   const [stats, setStats] = useState<DashboardStats>({
     pendingTasks: 0,
     completedTasks: 0,
