@@ -130,8 +130,8 @@ export const StudySpacePage: React.FC = () => {
   return (
     <div
       className={`w-full ${
-        isFullscreen ? 'h-screen fixed inset-0 z-50' : 'h-[calc(100vh-4rem)]'
-      } flex flex-col overflow-hidden bg-[#FAF7F2] select-text font-sans`}
+        isFullscreen ? 'h-screen' : 'h-[calc(100vh-4rem)]'
+      } flex flex-col overflow-hidden bg-transparent select-text font-sans`}
     >
       {/* Top Header Strip with Workspace Switcher & Fullscreen Mode */}
       <StudySpaceHeader
@@ -158,7 +158,7 @@ export const StudySpacePage: React.FC = () => {
 
         {/* Dedicated Sidebar for Active Workspace */}
         <aside
-          className={`fixed md:static top-0 bottom-0 left-0 z-50 md:z-10 bg-white border-r-2 border-black flex flex-col shrink-0 transition-all duration-200 ${
+          className={`fixed md:static top-0 bottom-0 left-0 z-50 md:z-10 bg-white/80 backdrop-blur-md border-r-2 border-black flex flex-col shrink-0 transition-all duration-200 ${
             isMobileNavOpen ? 'translate-x-0 w-72' : '-translate-x-full md:translate-x-0'
           } ${
             isSidebarCollapsed
@@ -256,7 +256,7 @@ export const StudySpacePage: React.FC = () => {
 
         {/* Content Canvas Area */}
         <main
-          className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#FAF7F2]"
+          className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-transparent"
           id="study-space-canvas"
         >
           <div className="max-w-6xl mx-auto w-full">

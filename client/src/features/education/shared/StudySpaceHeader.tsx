@@ -33,7 +33,7 @@ export const StudySpaceHeader: React.FC<StudySpaceHeaderProps> = ({
   onToggleFullscreen,
 }) => {
   return (
-    <header className="h-14 bg-white border-b-2 border-black px-3 sm:px-4 flex items-center justify-between shrink-0 select-none z-20 shadow-[0_2px_0px_#000000]">
+    <header className="h-14 bg-white/80 backdrop-blur-md border-b-2 border-black px-3 sm:px-4 flex items-center justify-between shrink-0 select-none z-20 shadow-[0_2px_0px_#000000]">
       {/* Left: Sidebar Toggles & Title */}
       <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         {/* Mobile Nav Toggle Button */}

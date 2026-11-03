@@ -806,8 +806,8 @@ export const AiChatPage: React.FC = () => {
   return (
     <div
       className={`w-full ${
-        isFullscreen ? 'h-screen fixed inset-0 z-50 bg-[#FAF7F2]' : 'h-[calc(100vh-4rem)] bg-transparent'
-      } text-black flex overflow-hidden font-sans select-text`}
+        isFullscreen ? 'h-screen' : 'h-[calc(100vh-4rem)]'
+      } bg-transparent text-black flex overflow-hidden font-sans select-text`}
     >
       {/* Mobile Drawer Overlay */}
       {isSidebarOpen && (
@@ -819,7 +819,7 @@ export const AiChatPage: React.FC = () => {
 
       {/* Left Sidebar: Vexora Neo-Brutalist Theme */}
       <aside
-        className={`fixed md:static top-0 bottom-0 left-0 z-50 bg-[#FAF7F2]/90 backdrop-blur-md border-r-2 border-black flex flex-col transition-all duration-200 shrink-0 ${
+        className={`fixed md:static top-0 bottom-0 left-0 z-50 bg-white/85 backdrop-blur-md border-r-2 border-black flex flex-col transition-all duration-200 shrink-0 ${
           isSidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full md:translate-x-0'
         } ${
           isSidebarCollapsed
@@ -828,7 +828,7 @@ export const AiChatPage: React.FC = () => {
         }`}
       >
         {/* Sidebar Header */}
-        <div className="p-3.5 border-b-2 border-black flex items-center justify-between bg-white">
+        <div className="p-3.5 border-b-2 border-black flex items-center justify-between bg-white/60 backdrop-blur-xs">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-[#FACC15] border-2 border-black flex items-center justify-center text-black font-black text-xs shadow-[1.5px_1.5px_0px_#000]">
               V
@@ -931,7 +931,7 @@ export const AiChatPage: React.FC = () => {
         </div>
 
         {/* Sidebar Footer: User Profile Card */}
-        <div className="p-3 border-t-2 border-black bg-white">
+        <div className="p-3 border-t-2 border-black bg-white/60 backdrop-blur-xs">
           <Link
             to={isAuthenticated ? '/dashboard' : '/login'}
             className="flex items-center justify-between gap-2 p-2 rounded-xl bg-[#FAF7F2] border-2 border-black shadow-[1.5px_1.5px_0px_#000] hover:bg-[#FFF9D2] hover:-translate-y-0.5 transition-all cursor-pointer block"
