@@ -91,8 +91,7 @@ export const StudySpaceHeader: React.FC<StudySpaceHeaderProps> = ({
           aria-label="Student Workspace"
         >
           <BookOpen className="w-3.5 h-3.5 stroke-[2.5]" />
-          <span className="hidden xs:inline sm:inline">Student</span>
-          <span className="hidden md:inline">Workspace</span>
+          <span>Student Workspace</span>
         </button>
 
         <button
@@ -106,8 +105,7 @@ export const StudySpaceHeader: React.FC<StudySpaceHeaderProps> = ({
           aria-label="Teacher Workspace"
         >
           <School className="w-3.5 h-3.5 stroke-[2.5]" />
-          <span className="hidden xs:inline sm:inline">Teacher</span>
-          <span className="hidden md:inline">Workspace</span>
+          <span>Teacher Workspace</span>
         </button>
       </div>
 

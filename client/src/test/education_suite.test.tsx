@@ -306,5 +306,41 @@ describe('VexoraMods Zero-Cost Education Suite Tests', () => {
 
       expect(screen.getByRole('button', { name: /exit full screen/i })).toBeInTheDocument();
     });
+
+    it('separates Student and Teacher workspaces in StudySpacePage', async () => {
+      render(
+        <BrowserRouter>
+          <AuthProvider>
+            <ToastProvider>
+              <StudySpacePage />
+            </ToastProvider>
+          </AuthProvider>
+        </BrowserRouter>,
+      );
+
+      // In default Student Workspace:
+      expect(screen.getByRole('button', { name: /student workspace/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /teacher workspace/i })).toBeInTheDocument();
+
+      // Student items must exist in the sidebar and dashboard launchpad
+      expect(screen.getAllByRole('button', { name: /study planner/i }).length).toBeGreaterThan(0);
+      expect(screen.getAllByRole('button', { name: /flashcard maker/i }).length).toBeGreaterThan(0);
+
+      // Teacher items must NOT exist in the student sidebar
+      expect(screen.queryByRole('button', { name: /lesson plan creator/i })).toBeNull();
+      expect(screen.queryByRole('button', { name: /rubric builder/i })).toBeNull();
+
+      // Switch to Teacher Workspace
+      const teacherWorkspaceBtn = screen.getByRole('button', { name: /teacher workspace/i });
+      fireEvent.click(teacherWorkspaceBtn);
+
+      // Now Teacher items must exist in the sidebar
+      expect(screen.getAllByRole('button', { name: /lesson plan creator/i }).length).toBeGreaterThan(0);
+      expect(screen.getAllByRole('button', { name: /rubric builder/i }).length).toBeGreaterThan(0);
+
+      // And Student items must NOT exist in the teacher sidebar
+      expect(screen.queryByRole('button', { name: /study planner/i })).toBeNull();
+      expect(screen.queryByRole('button', { name: /flashcard maker/i })).toBeNull();
+    });
   });
 });

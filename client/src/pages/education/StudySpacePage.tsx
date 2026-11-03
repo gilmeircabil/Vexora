@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router';
 import {
   GraduationCap,
   Calendar,
@@ -15,13 +16,15 @@ import {
   Table,
   FileCode,
   ShieldCheck,
-  ChevronRight,
-  Menu,
-  X,
-  BookOpen,
   FileQuestion,
+  X,
+  School,
+  BookOpen,
+  Lock,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
+import { useFullscreenMode } from '../../features/education/shared/useFullscreenMode.js';
+import { StudySpaceHeader } from '../../features/education/shared/StudySpaceHeader.js';
 
 // Shared Components
 import { EducationDashboard } from '../../features/education/shared/EducationDashboard.js';
@@ -52,360 +55,257 @@ import { CertificateGenerator } from '../../features/education/teacher/Certifica
 
 export const StudySpacePage: React.FC = () => {
   const { user } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Determine initial workspace from URL param or user's role
+  const urlWorkspace = searchParams.get('workspace');
+  const [workspace, setWorkspace] = useState<'student' | 'teacher'>(() => {
+    if (urlWorkspace === 'student' || urlWorkspace === 'teacher') {
+      return urlWorkspace;
+    }
+    return user?.educationRole === 'teacher' || user?.educationRole === 'educator'
+      ? 'teacher'
+      : 'student';
+  });
+
   const [activeTab, setActiveTab] = useState<string>('dashboard');
   const [educationRole, setEducationRole] = useState<'student' | 'teacher' | 'educator'>(() => {
     return (user?.educationRole as any) || 'student';
   });
+
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
+  const { isFullscreen, toggleFullscreen } = useFullscreenMode();
 
   const isTeacherAuthorized =
     educationRole === 'teacher' || educationRole === 'educator' || user?.role === 'admin';
+
+  // Synchronize workspace changes with URL parameters
+  const handleWorkspaceChange = (newWorkspace: 'student' | 'teacher') => {
+    setWorkspace(newWorkspace);
+    setActiveTab('dashboard');
+    setIsMobileNavOpen(false);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('workspace', newWorkspace);
+    setSearchParams(newParams, { replace: true });
+  };
 
   const handleSelectTool = (toolId: string) => {
     setActiveTab(toolId);
     setIsMobileNavOpen(false);
   };
 
+  // Student Navigation Items
+  const studentNavItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: GraduationCap },
+    { id: 'study-planner', label: 'Study Planner', icon: Calendar },
+    { id: 'flashcards', label: 'Flashcard Maker', icon: Layers },
+    { id: 'quizzes', label: 'Practice Tests & Quizzes', icon: HelpCircle },
+    { id: 'doc-quiz', label: 'Document to Quiz', icon: FileQuestion, badge: 'Auto' },
+    { id: 'grade-calculator', label: 'Grade & GPA Calculator', icon: Calculator },
+    { id: 'smart-notes', label: 'Smart Notes', icon: FileText },
+    { id: 'pomodoro', label: 'Focus Timer', icon: Clock },
+    { id: 'citations', label: 'Citation Generator', icon: Quote },
+    { id: 'timetable', label: 'Class Timetable', icon: Calendar },
+    { id: 'goals', label: 'Learning Goals', icon: Target },
+    { id: 'backup', label: 'Data Backup & Privacy', icon: ShieldCheck },
+  ];
+
+  // Teacher Navigation Items
+  const teacherNavItems = [
+    { id: 'dashboard', label: 'Teacher Dashboard', icon: School },
+    { id: 'lesson-plans', label: 'Lesson Plan Creator', icon: FileCheck },
+    { id: 'worksheets', label: 'Worksheet Generator', icon: FileText },
+    { id: 'exams', label: 'Exam Builder', icon: FileCode },
+    { id: 'attendance', label: 'Attendance Tracker', icon: Users },
+    { id: 'gradebook', label: 'Gradebook Ledger', icon: GraduationCap },
+    { id: 'rubrics', label: 'Rubric Builder', icon: Table },
+    { id: 'certificates', label: 'Certificate Generator', icon: Award },
+    { id: 'backup', label: 'Data Backup & Privacy', icon: ShieldCheck },
+  ];
+
+  const currentNavItems = workspace === 'student' ? studentNavItems : teacherNavItems;
+
   return (
-    <div className="space-y-6 max-w-full overflow-x-hidden">
-      {/* Top Breadcrumb & Mobile Bar */}
-      <div className="flex items-center justify-between pb-2 border-b-2 border-black/10 gap-2">
-        <div className="flex items-center gap-2 text-xs font-black text-neutral-600 min-w-0 truncate">
-          <GraduationCap className="w-4 h-4 text-black shrink-0" />
-          <span className="shrink-0">Study Space</span>
-          <ChevronRight className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
-          <span className="text-black capitalize truncate">{activeTab.replace('-', ' ')}</span>
-        </div>
+    <div
+      className={`w-full ${
+        isFullscreen ? 'h-screen fixed inset-0 z-50' : 'h-[calc(100vh-4rem)]'
+      } flex flex-col overflow-hidden bg-[#FAF7F2] select-text font-sans`}
+    >
+      {/* Top Header Strip with Workspace Switcher & Fullscreen Mode */}
+      <StudySpaceHeader
+        workspace={workspace}
+        onWorkspaceChange={handleWorkspaceChange}
+        activeTab={activeTab}
+        isSidebarCollapsed={isSidebarCollapsed}
+        onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+        onToggleMobileNav={() => setIsMobileNavOpen(!isMobileNavOpen)}
+        isFullscreen={isFullscreen}
+        onToggleFullscreen={toggleFullscreen}
+      />
 
-        <button
-          onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
-          className="md:hidden min-h-[40px] flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-black rounded-xl text-xs font-black shadow-[2px_2px_0px_#000000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
-          aria-label="Toggle navigation menu"
+      {/* Main Workspace Body */}
+      <div className="flex-1 flex min-h-0 overflow-hidden relative">
+        {/* Mobile Navigation Drawer Backdrop */}
+        {isMobileNavOpen && (
+          <div
+            onClick={() => setIsMobileNavOpen(false)}
+            className="md:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-xs"
+            aria-hidden="true"
+          />
+        )}
+
+        {/* Dedicated Sidebar for Active Workspace */}
+        <aside
+          className={`fixed md:static top-0 bottom-0 left-0 z-50 md:z-10 bg-white border-r-2 border-black flex flex-col shrink-0 transition-all duration-200 ${
+            isMobileNavOpen ? 'translate-x-0 w-72' : '-translate-x-full md:translate-x-0'
+          } ${
+            isSidebarCollapsed
+              ? 'md:w-0 md:opacity-0 md:overflow-hidden md:border-r-0 pointer-events-none md:pointer-events-none'
+              : 'md:w-64 lg:w-72 md:opacity-100'
+          }`}
         >
-          {isMobileNavOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          <span>Menu</span>
-        </button>
-      </div>
-
-      {/* Main Grid: Sidebar Nav + Module Content */}
-      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6">
-        {/* Sidebar Nav - Minimal Unified Panel */}
-        <div className={`md:col-span-1 ${isMobileNavOpen ? 'block' : 'hidden md:block'}`}>
-          <div className="bg-white rounded-2xl border-2 border-black p-2.5 shadow-[3px_3px_0px_#000000] space-y-3">
-            {/* Dashboard Link */}
-            <button
-              onClick={() => handleSelectTool('dashboard')}
-              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
-                activeTab === 'dashboard'
-                  ? 'bg-[#FFD21A] text-black shadow-sm'
-                  : 'text-neutral-700 hover:bg-neutral-100'
-              }`}
-            >
-              <GraduationCap className="w-4 h-4" />
-              <span>Dashboard</span>
-            </button>
-
-            {/* Student Workspace Links */}
-            <div className="pt-2 border-t border-black/10 space-y-0.5">
-              <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 px-3 py-1 block">
-                Student Workspace
+          {/* Mobile Drawer Header */}
+          <div className="p-3 border-b-2 border-black flex items-center justify-between md:hidden bg-[#FAF7F2]">
+            <div className="flex items-center gap-2">
+              <span className="font-black text-xs uppercase tracking-wider text-black">
+                {workspace === 'student' ? 'Student Menu' : 'Teacher Menu'}
               </span>
-
-              <button
-                onClick={() => handleSelectTool('study-planner')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'study-planner'
-                    ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                    : 'text-neutral-700 hover:bg-neutral-100'
-                }`}
-              >
-                <Calendar className="w-4 h-4" />
-                <span>Study Planner</span>
-              </button>
-
-              <button
-                onClick={() => handleSelectTool('flashcards')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'flashcards'
-                    ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                    : 'text-neutral-700 hover:bg-neutral-100'
-                }`}
-              >
-                <Layers className="w-4 h-4" />
-                <span>Flashcard Maker</span>
-              </button>
-
-              <button
-                onClick={() => handleSelectTool('quizzes')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'quizzes'
-                    ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                    : 'text-neutral-700 hover:bg-neutral-100'
-                }`}
-              >
-                <HelpCircle className="w-4 h-4" />
-                <span>Practice Tests & Quizzes</span>
-              </button>
-
-              <button
-                onClick={() => handleSelectTool('doc-quiz')}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'doc-quiz'
-                    ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                    : 'text-neutral-700 hover:bg-neutral-100'
-                }`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <FileQuestion className="w-4 h-4 text-black" />
-                  <span>Document to Quiz</span>
-                </div>
-                <span className="text-[9px] font-black bg-[#4ADE80] text-black px-1.5 py-0.2 rounded border border-black/40">
-                  Auto
-                </span>
-              </button>
-
-              <button
-                onClick={() => handleSelectTool('grade-calculator')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'grade-calculator'
-                    ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                    : 'text-neutral-700 hover:bg-neutral-100'
-                }`}
-              >
-                <Calculator className="w-4 h-4" />
-                <span>Grade & GPA Calculator</span>
-              </button>
-
-              <button
-                onClick={() => handleSelectTool('smart-notes')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'smart-notes'
-                    ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                    : 'text-neutral-700 hover:bg-neutral-100'
-                }`}
-              >
-                <FileText className="w-4 h-4" />
-                <span>Smart Notes</span>
-              </button>
-
-              <button
-                onClick={() => handleSelectTool('pomodoro')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'pomodoro'
-                    ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                    : 'text-neutral-700 hover:bg-neutral-100'
-                }`}
-              >
-                <Clock className="w-4 h-4" />
-                <span>Focus Timer</span>
-              </button>
-
-              <button
-                onClick={() => handleSelectTool('citations')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'citations'
-                    ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                    : 'text-neutral-700 hover:bg-neutral-100'
-                }`}
-              >
-                <Quote className="w-4 h-4" />
-                <span>Citation Generator</span>
-              </button>
-
-              <button
-                onClick={() => handleSelectTool('timetable')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'timetable'
-                    ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                    : 'text-neutral-700 hover:bg-neutral-100'
-                }`}
-              >
-                <Calendar className="w-4 h-4" />
-                <span>Class Timetable</span>
-              </button>
-
-              <button
-                onClick={() => handleSelectTool('goals')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'goals'
-                    ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                    : 'text-neutral-700 hover:bg-neutral-100'
-                }`}
-              >
-                <Target className="w-4 h-4" />
-                <span>Learning Goals</span>
-              </button>
             </div>
-
-            {/* Teacher Workspace Links */}
-            <div className="pt-2 border-t border-black/10 space-y-0.5">
-              <div className="flex items-center justify-between px-3 py-1">
-                <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400">
-                  Teacher Workspace
-                </span>
-                {!isTeacherAuthorized && (
-                  <span className="text-[9px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.2 rounded">
-                    Teacher Mode Required
-                  </span>
-                )}
-              </div>
-
-              {isTeacherAuthorized ? (
-                <>
-                  <button
-                    onClick={() => handleSelectTool('lesson-plans')}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      activeTab === 'lesson-plans'
-                        ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                        : 'text-neutral-700 hover:bg-neutral-100'
-                    }`}
-                  >
-                    <FileCheck className="w-4 h-4" />
-                    <span>Lesson Plan Creator</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleSelectTool('worksheets')}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      activeTab === 'worksheets'
-                        ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                        : 'text-neutral-700 hover:bg-neutral-100'
-                    }`}
-                  >
-                    <FileText className="w-4 h-4" />
-                    <span>Worksheet Generator</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleSelectTool('exams')}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      activeTab === 'exams'
-                        ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                        : 'text-neutral-700 hover:bg-neutral-100'
-                    }`}
-                  >
-                    <FileCode className="w-4 h-4" />
-                    <span>Exam Builder</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleSelectTool('attendance')}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      activeTab === 'attendance'
-                        ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                        : 'text-neutral-700 hover:bg-neutral-100'
-                    }`}
-                  >
-                    <Users className="w-4 h-4" />
-                    <span>Attendance Tracker</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleSelectTool('gradebook')}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      activeTab === 'gradebook'
-                        ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                        : 'text-neutral-700 hover:bg-neutral-100'
-                    }`}
-                  >
-                    <GraduationCap className="w-4 h-4" />
-                    <span>Gradebook Ledger</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleSelectTool('rubrics')}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      activeTab === 'rubrics'
-                        ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                        : 'text-neutral-700 hover:bg-neutral-100'
-                    }`}
-                  >
-                    <Table className="w-4 h-4" />
-                    <span>Rubric Builder</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleSelectTool('certificates')}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      activeTab === 'certificates'
-                        ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                        : 'text-neutral-700 hover:bg-neutral-100'
-                    }`}
-                  >
-                    <Award className="w-4 h-4" />
-                    <span>Certificate Generator</span>
-                  </button>
-                </>
-              ) : (
-                <div className="p-3 bg-neutral-50 rounded-xl text-center space-y-2">
-                  <p className="text-[11px] text-neutral-500 font-medium">
-                    Teacher tools are protected to ensure student data privacy and integrity.
-                  </p>
-                  <button
-                    onClick={() => setEducationRole('teacher')}
-                    className="px-3 py-1 bg-[#FFD21A] text-black font-black text-xs rounded-lg border border-black shadow-[1px_1px_0px_#000000]"
-                  >
-                    Enable Teacher Mode
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Privacy & Backup Link */}
-            <div className="pt-2 border-t border-black/10">
-              <button
-                onClick={() => handleSelectTool('backup')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'backup'
-                    ? 'bg-[#FFD21A] font-black text-black shadow-sm'
-                    : 'text-neutral-700 hover:bg-neutral-100'
-                }`}
-              >
-                <ShieldCheck className="w-4 h-4" />
-                <span>Data Backup & Privacy</span>
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setIsMobileNavOpen(false)}
+              className="p-1.5 rounded-lg border-2 border-black bg-white hover:bg-neutral-100 text-black shadow-[1px_1px_0px_#000]"
+              aria-label="Close navigation menu"
+            >
+              <X className="w-4 h-4 stroke-[2.5]" />
+            </button>
           </div>
-        </div>
 
-        {/* Main Content Area */}
-        <div className="md:col-span-3 lg:col-span-4 min-w-0">
-          {activeTab === 'dashboard' && (
-            <EducationDashboard
-              onSelectTool={handleSelectTool}
-              activeRole={educationRole}
-              onRoleChange={setEducationRole}
-            />
+          {/* Workspace Identity Tag in Sidebar */}
+          <div className="p-3 border-b border-black/10 bg-[#FAF7F2]/60 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {workspace === 'student' ? (
+                <BookOpen className="w-4 h-4 text-black stroke-[2.5]" />
+              ) : (
+                <School className="w-4 h-4 text-black stroke-[2.5]" />
+              )}
+              <span className="text-xs font-black uppercase tracking-wider text-black">
+                {workspace === 'student' ? 'Student Workspace' : 'Teacher Workspace'}
+              </span>
+            </div>
+            <span className="text-[10px] font-mono font-bold bg-[#FFD21A] text-black px-1.5 py-0.5 rounded border border-black/30">
+              {currentNavItems.length} Tools
+            </span>
+          </div>
+
+          {/* Navigation Items List */}
+          <div className="flex-1 overflow-y-auto p-2.5 space-y-1">
+            {currentNavItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleSelectTool(item.id)}
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    isActive
+                      ? 'bg-[#FFD21A] text-black font-black border-2 border-black shadow-[2px_2px_0px_#000]'
+                      : 'text-neutral-700 hover:bg-neutral-100 border border-transparent'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <Icon
+                      className={`w-4 h-4 shrink-0 ${
+                        isActive ? 'text-black stroke-[2.5]' : 'text-neutral-600'
+                      }`}
+                    />
+                    <span className="truncate">{item.label}</span>
+                  </div>
+                  {item.badge && (
+                    <span className="text-[9px] font-black bg-[#4ADE80] text-black px-1.5 py-0.2 rounded border border-black/40 shrink-0">
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Teacher Mode Authorization Status Bar (if in Teacher Workspace) */}
+          {workspace === 'teacher' && !isTeacherAuthorized && (
+            <div className="p-3 border-t-2 border-black bg-amber-50 space-y-2">
+              <div className="flex items-center gap-1.5 text-amber-900">
+                <Lock className="w-3.5 h-3.5 shrink-0" />
+                <span className="text-[11px] font-black">Teacher Mode Required</span>
+              </div>
+              <p className="text-[10px] text-amber-800 leading-tight">
+                Enable teacher mode to create curriculum documents and manage student records.
+              </p>
+              <button
+                type="button"
+                onClick={() => setEducationRole('teacher')}
+                className="w-full py-1.5 px-2 bg-[#FFD21A] text-black font-black text-xs rounded-lg border-2 border-black shadow-[1.5px_1.5px_0px_#000] cursor-pointer hover:bg-yellow-400 active:translate-y-0.5 transition-all"
+              >
+                Enable Teacher Mode
+              </button>
+            </div>
           )}
+        </aside>
 
-          {/* Student Workspace */}
-          {activeTab === 'study-planner' && <StudyPlanner />}
-          {activeTab === 'flashcards' && <FlashcardMaker />}
-          {activeTab === 'quizzes' && (
-            <QuizMaker onOpenDocQuiz={() => handleSelectTool('doc-quiz')} />
-          )}
-          {activeTab === 'doc-quiz' && (
-            <DocumentQuizGenerator onBackToQuizzes={() => handleSelectTool('quizzes')} />
-          )}
-          {activeTab === 'grade-calculator' && <GradeCalculator />}
-          {activeTab === 'smart-notes' && <SmartNotes />}
-          {activeTab === 'pomodoro' && <PomodoroTimer />}
-          {activeTab === 'citations' && <CitationGenerator />}
-          {activeTab === 'timetable' && <TimetableGenerator />}
-          {activeTab === 'goals' && <LearningGoalsTracker />}
+        {/* Content Canvas Area */}
+        <main
+          className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#FAF7F2]"
+          id="study-space-canvas"
+        >
+          <div className="max-w-6xl mx-auto w-full">
+            {activeTab === 'dashboard' && (
+              <EducationDashboard
+                onSelectTool={handleSelectTool}
+                activeRole={educationRole}
+                onRoleChange={setEducationRole}
+                workspace={workspace}
+              />
+            )}
 
-          {/* Teacher Workspace */}
-          {activeTab === 'lesson-plans' && <LessonPlanCreator />}
-          {activeTab === 'worksheets' && <WorksheetGenerator />}
-          {activeTab === 'exams' && <ExamBuilder />}
-          {activeTab === 'attendance' && <AttendanceTracker />}
-          {activeTab === 'gradebook' && <TeacherGradebookView />}
-          {activeTab === 'rubrics' && <RubricBuilder />}
-          {activeTab === 'certificates' && <CertificateGenerator />}
+            {/* Student Workspace Modules */}
+            {workspace === 'student' && (
+              <>
+                {activeTab === 'study-planner' && <StudyPlanner />}
+                {activeTab === 'flashcards' && <FlashcardMaker />}
+                {activeTab === 'quizzes' && (
+                  <QuizMaker onOpenDocQuiz={() => handleSelectTool('doc-quiz')} />
+                )}
+                {activeTab === 'doc-quiz' && (
+                  <DocumentQuizGenerator onBackToQuizzes={() => handleSelectTool('quizzes')} />
+                )}
+                {activeTab === 'grade-calculator' && <GradeCalculator />}
+                {activeTab === 'smart-notes' && <SmartNotes />}
+                {activeTab === 'pomodoro' && <PomodoroTimer />}
+                {activeTab === 'citations' && <CitationGenerator />}
+                {activeTab === 'timetable' && <TimetableGenerator />}
+                {activeTab === 'goals' && <LearningGoalsTracker />}
+              </>
+            )}
 
-          {/* Data & Backup */}
-          {activeTab === 'backup' && <DataExportImport />}
-        </div>
+            {/* Teacher Workspace Modules */}
+            {workspace === 'teacher' && (
+              <>
+                {activeTab === 'lesson-plans' && <LessonPlanCreator />}
+                {activeTab === 'worksheets' && <WorksheetGenerator />}
+                {activeTab === 'exams' && <ExamBuilder />}
+                {activeTab === 'attendance' && <AttendanceTracker />}
+                {activeTab === 'gradebook' && <TeacherGradebookView />}
+                {activeTab === 'rubrics' && <RubricBuilder />}
+                {activeTab === 'certificates' && <CertificateGenerator />}
+              </>
+            )}
+
+            {/* Data & Backup Module (Available in both workspaces) */}
+            {activeTab === 'backup' && <DataExportImport />}
+          </div>
+        </main>
       </div>
     </div>
   );
