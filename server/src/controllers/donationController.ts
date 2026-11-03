@@ -5,7 +5,8 @@ import type { AuthenticatedRequest } from '../middleware/authMiddleware.js';
 export class DonationController {
   static async createCheckout(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
-      const { amount, displayName, isAnonymous, message, donorEmail, successUrl, cancelUrl } = req.body;
+      const { amount, displayName, isAnonymous, message, donorEmail, successUrl, cancelUrl } =
+        req.body;
 
       if (!amount) {
         res.status(400).json({ success: false, error: 'Please enter a donation amount.' });
@@ -44,7 +45,9 @@ export class DonationController {
         },
       });
     } catch (err: any) {
-      res.status(500).json({ success: false, error: err.message || 'Failed to initialize donation' });
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to initialize donation' });
     }
   }
 
@@ -76,7 +79,9 @@ export class DonationController {
         },
       });
     } catch (err: any) {
-      res.status(500).json({ success: false, error: err.message || 'Failed to fetch donation status' });
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to fetch donation status' });
     }
   }
 
@@ -85,7 +90,9 @@ export class DonationController {
       const summary = await DonationService.getSummary();
       res.status(200).json({ success: true, data: summary });
     } catch (err: any) {
-      res.status(500).json({ success: false, error: err.message || 'Failed to load donation metrics' });
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to load donation metrics' });
     }
   }
 
@@ -102,7 +109,8 @@ export class DonationController {
   static async handleWebhook(req: Request, res: Response): Promise<void> {
     try {
       const signatureHeader =
-        (req.headers['paymongo-signature'] as string) || (req.headers['x-paymongo-signature'] as string);
+        (req.headers['paymongo-signature'] as string) ||
+        (req.headers['x-paymongo-signature'] as string);
 
       const rawBody = (req as any).rawBody || JSON.stringify(req.body);
 

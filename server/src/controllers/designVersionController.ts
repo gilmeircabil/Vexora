@@ -80,7 +80,10 @@ export class DesignVersionController {
       }
 
       const nextVersionNumber = project.currentVersion + 1;
-      const label = String(versionName || '').trim().slice(0, 120) || `Version ${nextVersionNumber}`;
+      const label =
+        String(versionName || '')
+          .trim()
+          .slice(0, 120) || `Version ${nextVersionNumber}`;
       const doc = documentData || project.documentData;
       const thumb = thumbnailUrl || project.thumbnailUrl;
 
@@ -130,7 +133,12 @@ export class DesignVersionController {
       const projectId = getParam(req.params.projectId);
       const versionId = getParam(req.params.versionId);
 
-      if (!projectId || !versionId || !Types.ObjectId.isValid(projectId) || !Types.ObjectId.isValid(versionId)) {
+      if (
+        !projectId ||
+        !versionId ||
+        !Types.ObjectId.isValid(projectId) ||
+        !Types.ObjectId.isValid(versionId)
+      ) {
         res.status(400).json({ success: false, error: 'Invalid ID parameters' });
         return;
       }
@@ -166,7 +174,12 @@ export class DesignVersionController {
       const projectId = getParam(req.params.projectId);
       const versionId = getParam(req.params.versionId);
 
-      if (!projectId || !versionId || !Types.ObjectId.isValid(projectId) || !Types.ObjectId.isValid(versionId)) {
+      if (
+        !projectId ||
+        !versionId ||
+        !Types.ObjectId.isValid(projectId) ||
+        !Types.ObjectId.isValid(versionId)
+      ) {
         res.status(400).json({ success: false, error: 'Invalid ID parameters' });
         return;
       }

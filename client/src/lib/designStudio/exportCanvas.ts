@@ -85,7 +85,8 @@ export async function exportCanvas(
       triggerDownload(pdfBlob, `${fileName}.pdf`);
     } else {
       // Raster formats (png, jpeg, webp)
-      const mimeType = format === 'jpeg' ? 'image/jpeg' : format === 'webp' ? 'image/webp' : 'image/png';
+      const mimeType =
+        format === 'jpeg' ? 'image/jpeg' : format === 'webp' ? 'image/webp' : 'image/png';
       const dataUrl = canvas.toDataURL({
         format: format === 'jpeg' ? 'jpeg' : 'png',
         quality: Math.min(Math.max(quality, 0.1), 1),

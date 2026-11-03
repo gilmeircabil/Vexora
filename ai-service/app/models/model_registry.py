@@ -73,6 +73,28 @@ class ModelRegistry:
                 "instructions": "Run pip install paddleocr or place ONNX weights in models directory."
             },
             {
+                "model_id": "gemini-cloud-llm",
+                "name": f"Google Gemini Cloud LLM ({settings.GEMINI_MODEL})",
+                "tool": "ai-writing-assistant, ai-resume-builder, ai-pdf-summarizer, ai-pdf-chat, ai-code-explainer",
+                "version": "Latest",
+                "license": "Google Gemini Free API Tier",
+                "hardware": "Google Cloud Infrastructure (Zero Local RAM)",
+                "description": "High-throughput, free cloud generative language and coding model via Google AI Studio.",
+                "filename": None,
+                "instructions": "Add GEMINI_API_KEY to your .env file from https://aistudio.google.com."
+            },
+            {
+                "model_id": "nvidia-cloud-llm",
+                "name": f"NVIDIA NIM Cloud LLM ({settings.NVIDIA_MODEL})",
+                "tool": "ai-writing-assistant, ai-resume-builder, ai-pdf-summarizer, ai-pdf-chat, ai-code-explainer",
+                "version": "Latest",
+                "license": "NVIDIA Evaluation Free Tier",
+                "hardware": "NVIDIA H100 Cloud Acceleration",
+                "description": "Open-source frontier models (Llama 3.3, Qwen 2.5 Coder) accelerated on NVIDIA infrastructure.",
+                "filename": None,
+                "instructions": "Add NVIDIA_API_KEY to your .env file from https://build.nvidia.com."
+            },
+            {
                 "model_id": "ollama-general-llm",
                 "name": f"Ollama Local LLM ({settings.OLLAMA_MODEL})",
                 "tool": "ai-writing-assistant, ai-resume-builder, ai-pdf-summarizer, ai-pdf-chat, ai-social-design",
@@ -124,7 +146,11 @@ class ModelRegistry:
             status = "available"
             path = None
 
-            if "ollama" in item["model_id"]:
+            if "gemini" in item["model_id"]:
+                status = "available" if settings.GEMINI_API_KEY else "unconfigured"
+            elif "nvidia" in item["model_id"]:
+                status = "available" if settings.NVIDIA_API_KEY else "unconfigured"
+            elif "ollama" in item["model_id"]:
                 if ollama_active:
                     status = "available"
                 else:

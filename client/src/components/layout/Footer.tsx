@@ -1,10 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import { Lock, Cpu, Sparkles, Terminal } from 'lucide-react';
-import { CATEGORIES } from '../../tools/catalog.js';
+import { Lock, Cpu, Sparkles, Terminal, ExternalLink, Mail } from 'lucide-react';
 import { BrandLogo } from '../common/BrandLogo.js';
+import { platformApi } from '../../services/platformApi.js';
 
 export const Footer: React.FC = () => {
+  const [contactEmail, setContactEmail] = useState<string>('');
+  const [githubUrl, setGithubUrl] = useState<string>('');
+  const [socialLinks, setSocialLinks] = useState<Array<{ label: string; url: string }>>([]);
+
+  useEffect(() => {
+    platformApi
+      .getHomeOverview()
+      .then((res) => {
+        if (res?.success && res.data?.config) {
+          const cfg = res.data.config;
+          if (cfg.contactEmail) setContactEmail(cfg.contactEmail);
+          if (cfg.githubUrl) setGithubUrl(cfg.githubUrl);
+          if (Array.isArray(cfg.socialLinks)) setSocialLinks(cfg.socialLinks);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <footer className="mt-20 border-t-2 border-black bg-white transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -15,117 +33,97 @@ export const Footer: React.FC = () => {
               <BrandLogo size="md" />
             </Link>
             <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
-              Everything You Need. One Platform. Free. High-performance browser utilities, creative design studio, and developer community.
+              Everything You Need. One Platform. Discover free online tools, explore AI-powered
+              utilities, create designs, and learn with a growing community.
             </p>
-            <div className="pt-1 inline-flex items-center gap-2 text-xs font-black text-black bg-[#4ADE80] border-2 border-black px-2.5 py-1 rounded-lg shadow-[2px_2px_0px_#000000]">
-              <span className="w-2 h-2 rounded-full bg-black animate-pulse" />
-              <span>100% Free · Zero Subscriptions</span>
-            </div>
           </div>
 
-          {/* Col 2: Categories */}
+          {/* Col 2: Core Platform Workspaces */}
           <div>
             <h4 className="text-xs font-black uppercase tracking-wider text-black font-mono mb-3.5">
-              Workspaces
+              Platform Workspaces
             </h4>
             <ul className="space-y-2 text-xs font-bold">
               <li>
-                <Link to="/tools" className="text-neutral-700 hover:text-black hover:underline transition-colors">
-                  All Online Tools
+                <Link
+                  to="/tools"
+                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
+                >
+                  All Tools
                 </Link>
               </li>
               <li>
-                <Link to="/ai-tools" className="text-neutral-700 hover:text-black hover:underline transition-colors">
-                  AI Tools Suite
+                <Link
+                  to="/studio"
+                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
+                >
+                  Studio
                 </Link>
               </li>
               <li>
-                <Link to="/design-studio" className="text-neutral-700 hover:text-black hover:underline transition-colors">
-                  VexoraMods Studio
+                <Link
+                  to="/learning"
+                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
+                >
+                  Learning Hub
                 </Link>
               </li>
-              {CATEGORIES.map((c) => (
-                <li key={c.id}>
-                  <Link
-                    to={`/category/${c.slug}`}
-                    className="text-neutral-700 hover:text-black hover:underline transition-colors"
-                  >
-                    {c.name}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link
+                  to="/community"
+                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
+                >
+                  Community
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/reviews"
+                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
+                >
+                  Reviews
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Col 3: Architecture & Privacy */}
+          {/* Col 3: Guarantees & Values */}
           <div>
             <h4 className="text-xs font-black uppercase tracking-wider text-black font-mono mb-3.5">
-              Guarantees & Values
+              Open Philosophy
             </h4>
             <ul className="space-y-2.5 text-xs font-bold text-neutral-800">
               <li className="flex items-center gap-2">
                 <Lock className="w-4 h-4 text-black shrink-0 stroke-[2.5]" />
-                <span>Zero Cloud Storage of Files</span>
+                <span>Zero Cloud Lock-in</span>
               </li>
               <li className="flex items-center gap-2">
                 <Cpu className="w-4 h-4 text-black shrink-0 stroke-[2.5]" />
-                <span>In-Browser Client Execution</span>
+                <span>Local &amp; Built-in AI Processing</span>
               </li>
               <li className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-black shrink-0 stroke-[2.5]" />
-                <span>Zero Tracking Pixels & No Ads</span>
+                <span>No Subscriptions or Paywalls</span>
               </li>
               <li className="flex items-center gap-2">
                 <Terminal className="w-4 h-4 text-black shrink-0 stroke-[2.5]" />
-                <span>MIT Licensed Open Source</span>
+                <span>Community-Driven Knowledge</span>
               </li>
             </ul>
           </div>
 
-          {/* Col 4: Platform & Community */}
+          {/* Col 4: About, Contact Info (if configured) & Legal */}
           <div>
             <h4 className="text-xs font-black uppercase tracking-wider text-black font-mono mb-3.5">
-              Community & Platform
+              Information &amp; Legal
             </h4>
             <ul className="space-y-2 text-xs font-bold">
-              <li>
-                <Link
-                  to="/developers"
-                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
-                >
-                  Developer Hub
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/developers/projects"
-                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
-                >
-                  Project Showcases
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/support"
-                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
-                >
-                  Support VexoraMods ❤️
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/leaderboard"
-                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
-                >
-                  Supporter Leaderboard
-                </Link>
-              </li>
               <li>
                 <Link
                   to="/about"
                   className="text-neutral-700 hover:text-black hover:underline transition-colors"
                 >
-                  About VexoraMods
+                  About
                 </Link>
               </li>
               <li>
@@ -133,9 +131,62 @@ export const Footer: React.FC = () => {
                   to="/privacy"
                   className="text-neutral-700 hover:text-black hover:underline transition-colors"
                 >
-                  Privacy Architecture
+                  Privacy Policy
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/terms"
+                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
+                >
+                  Terms of Use
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/licenses"
+                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
+                >
+                  Licenses
+                </Link>
+              </li>
+              {contactEmail && (
+                <li>
+                  <a
+                    href={`mailto:${contactEmail}`}
+                    className="inline-flex items-center gap-1.5 text-neutral-700 hover:text-black hover:underline transition-colors"
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>{contactEmail}</span>
+                  </a>
+                </li>
+              )}
+              {githubUrl && (
+                <li>
+                  <a
+                    href={githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-neutral-700 hover:text-black hover:underline transition-colors"
+                  >
+                    <span>Open-Source Repository</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </li>
+              )}
+              {socialLinks.map((social, idx) => (
+                <li key={idx}>
+                  <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-neutral-700 hover:text-black hover:underline transition-colors"
+                  >
+                    <span>{social.label}</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -143,10 +194,10 @@ export const Footer: React.FC = () => {
         {/* Bottom copyright & disclaimer */}
         <div className="pt-6 border-t-2 border-black/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-neutral-600">
           <p className="font-mono">
-            © {new Date().getFullYear()} VexoraMods · Free & Open Source
+            © {new Date().getFullYear()} VexoraMods · Everything You Need. One Platform.
           </p>
           <p className="text-center sm:text-right">
-            Browser-based local execution. Sensitive files never leave your device.
+            Free &amp; open-source utilities, visual design studio, and learning community.
           </p>
         </div>
       </div>

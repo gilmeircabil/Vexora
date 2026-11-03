@@ -23,11 +23,24 @@ async function bootstrap() {
     await mongoose.connect(env.MONGODB_URI, { serverSelectionTimeoutMS: 3000 });
     console.log(` Connected to MongoDB at ${env.MONGODB_URI}`);
 
+    // Run safe migration for existing accounts without a username
+    const migratedCount = await AuthService.migrateExistingUsers();
+    if (migratedCount > 0) {
+      console.log(` Migrated ${migratedCount} existing user accounts to unique usernames.`);
+    }
+
     // Ensure default admin user exists
-    const adminExists = await User.findOne({ email: env.ADMIN_EMAIL.toLowerCase() });
+    const adminUsername = env.ADMIN_USERNAME || 'admin';
+    const adminExists = await User.findOne({
+      $or: [
+        { username: adminUsername },
+        ...(env.ADMIN_EMAIL ? [{ email: env.ADMIN_EMAIL.toLowerCase() }] : []),
+      ],
+    });
     if (!adminExists) {
-      console.log(` Creating default admin user: ${env.ADMIN_EMAIL}`);
+      console.log(` Creating default admin user (username: ${adminUsername})`);
       await AuthService.register({
+        username: adminUsername,
         name: 'System Administrator',
         email: env.ADMIN_EMAIL,
         password: env.ADMIN_PASSWORD,
@@ -36,7 +49,7 @@ async function bootstrap() {
     }
   } catch (err) {
     console.warn(
-      ` Could not connect to MongoDB (${(err as Error).message}). Server running with local in-memory fallback where applicable.`,
+      ` Could not connect to MongoDB (${(err as Error).message}). Database-dependent endpoints will return errors until MongoDB is reachable.`,
     );
   }
 

@@ -53,6 +53,19 @@ export const CATEGORIES: readonly CategoryInfo[] = [
 
 export type ProcessingLocation = 'browser' | 'server';
 export type ToolStatus = 'available' | 'planned' | 'maintenance';
+export type ToolType = 'standard' | 'ai-powered';
+export type UnifiedToolCategory =
+  'Image' | 'PDF' | 'Text' | 'Developer' | 'Productivity' | 'Media' | 'Design' | 'Other';
+
+export const UNIFIED_CATEGORIES: readonly UnifiedToolCategory[] = [
+  'Image',
+  'PDF',
+  'Text',
+  'Developer',
+  'Productivity',
+  'Media',
+  'Design',
+];
 
 export interface ToolDefinition {
   id: string;
@@ -61,6 +74,16 @@ export interface ToolDefinition {
   tagline: string;
   description: string;
   category: ToolCategory;
+  unifiedCategory?: UnifiedToolCategory;
+  route?: string;
+  toolType?: ToolType;
+  aiRequired?: boolean;
+  requiredModel?: string;
+  isExternal?: boolean;
+  externalUrl?: string;
+  provider?: string;
+  features?: readonly string[];
+  externalNotice?: string;
   keywords: readonly string[];
   iconName: string;
   supportedInputTypes: readonly string[];
@@ -71,6 +94,51 @@ export interface ToolDefinition {
 
 export const TOOL_CATALOG: readonly ToolDefinition[] = [
   // --- PHASE A: IMAGE & AI TOOLS ---
+  {
+    id: 'google-flow',
+    slug: 'google-flow',
+    name: 'Google Flow',
+    tagline: "Google's AI-powered creative workspace for visual storytelling and video generation.",
+    description:
+      "Create stunning visuals and cinematic videos using Google's AI-powered creative workspace. Explore AI-assisted image generation, visual storytelling, and creative workflows.",
+    category: 'images',
+    unifiedCategory: 'Media',
+    route: '/tools/google-flow',
+    toolType: 'ai-powered',
+    aiRequired: true,
+    isExternal: true,
+    externalUrl: 'https://labs.google/fx/tools/flow',
+    provider: 'Google',
+    features: [
+      'AI image generation',
+      'AI video generation',
+      'Visual storytelling',
+      'AI-assisted creative workflows',
+      'Creative experimentation',
+    ],
+    externalNotice:
+      'Google Flow is an external service operated by Google. Opening it will take you outside VexoraMods. Google account requirements, availability, and usage limits apply.',
+    requiredModel: 'Google DeepMind & Labs Creative Flow Models (Hosted by Google)',
+    keywords: [
+      'google flow',
+      'google',
+      'flow',
+      'labs google',
+      'ai video generation',
+      'ai image generation',
+      'cinematic video',
+      'visual storytelling',
+      'creative workspace',
+      'external tool',
+      'multimodal ai',
+    ],
+    iconName: 'Sparkles',
+    supportedInputTypes: ['text/prompt', 'image/reference'],
+    processingLocation: 'server',
+    status: 'available',
+    privacyNotice:
+      'Google Flow is operated externally by Google. No prompt data is processed or stored on VexoraMods.',
+  },
   {
     id: 'smart-image-studio',
     slug: 'smart-image-studio',
@@ -105,6 +173,11 @@ export const TOOL_CATALOG: readonly ToolDefinition[] = [
     description:
       'Enhance photo clarity, restore soft facial details, remove noise artifacts, and upscale up to 4x ultra-HD resolution using high-performance AI models.',
     category: 'images',
+    unifiedCategory: 'Image',
+    route: '/tools/ai-image-enhancer',
+    toolType: 'ai-powered',
+    aiRequired: true,
+    requiredModel: 'Built-in Sharp & Neural Upscaler (No Ollama needed)',
     keywords: [
       'ai enhancer',
       'image upscaler',
@@ -119,6 +192,194 @@ export const TOOL_CATALOG: readonly ToolDefinition[] = [
     status: 'available',
     privacyNotice:
       'Processed securely with temporary server memory and immediate file lifecycle cleanup. Uploads are never retained permanently or used to train models.',
+  },
+  {
+    id: 'ai-background-remover',
+    slug: 'ai-background-remover',
+    name: 'AI Background Remover',
+    tagline: 'Automatically isolate subjects and generate transparent PNGs with AI segmentation.',
+    description:
+      'High-precision AI background segmentation producing transparent PNGs or custom studio color backgrounds instantly without external model configuration.',
+    category: 'images',
+    unifiedCategory: 'Image',
+    route: '/ai-tools/background-remover',
+    toolType: 'ai-powered',
+    aiRequired: true,
+    requiredModel: 'Built-in Vision Segmentation Engine (No Ollama needed)',
+    keywords: [
+      'ai background remover',
+      'transparent png',
+      'cutout subject',
+      'remove bg ai',
+      'portrait segmentation',
+    ],
+    iconName: 'Scissors',
+    supportedInputTypes: ['image/png', 'image/jpeg', 'image/webp'],
+    processingLocation: 'server',
+    status: 'available',
+    privacyNotice:
+      'Processed in ephemeral server memory and cleaned up automatically. Never stored or used for training.',
+  },
+  {
+    id: 'ai-object-remover',
+    slug: 'ai-object-remover',
+    name: 'AI Object Remover',
+    tagline:
+      'Erase unwanted objects, watermarks, or photobombers with an interactive inpainting brush.',
+    description:
+      'Interactive mask canvas with adjustable brush sizes to cleanly inpaint and remove unwanted elements from photos.',
+    category: 'images',
+    unifiedCategory: 'Design',
+    route: '/ai-tools/object-remover',
+    toolType: 'ai-powered',
+    aiRequired: true,
+    requiredModel: 'Built-in Canvas & Neural Inpainting Engine',
+    keywords: [
+      'ai object remover',
+      'inpainting',
+      'magic eraser',
+      'remove photobomber',
+      'clean photo',
+    ],
+    iconName: 'Eraser',
+    supportedInputTypes: ['image/png', 'image/jpeg', 'image/webp'],
+    processingLocation: 'server',
+    status: 'available',
+    privacyNotice: 'Inpainting runs in ephemeral memory with zero persistent storage.',
+  },
+  {
+    id: 'ai-photo-restoration',
+    slug: 'ai-photo-restoration',
+    name: 'AI Photo Restoration',
+    tagline: 'Repair old scratched photos, fix fading, and recover vintage image contrast.',
+    description:
+      'Removes scratch lines, dust spots, and recovers vintage photo contrast and facial details using built-in restoration algorithms.',
+    category: 'images',
+    unifiedCategory: 'Media',
+    route: '/ai-tools/photo-restoration',
+    toolType: 'ai-powered',
+    aiRequired: true,
+    requiredModel: 'Built-in Photo Restoration Filter Engine',
+    keywords: [
+      'ai photo restoration',
+      'restore old photo',
+      'vintage photo repair',
+      'denoise',
+      'scratch removal',
+    ],
+    iconName: 'History',
+    supportedInputTypes: ['image/png', 'image/jpeg', 'image/webp'],
+    processingLocation: 'server',
+    status: 'available',
+    privacyNotice: 'Restored photos are processed in memory and deleted right after download.',
+  },
+  {
+    id: 'ai-ocr',
+    slug: 'ai-ocr',
+    name: 'AI Document OCR',
+    tagline:
+      'Extract accurate editable text and structured paragraphs from scanned PDFs and images.',
+    description:
+      'Extract paragraphs, text lines, and structured content from scanned PDFs and photos using built-in optical character recognition engines.',
+    category: 'pdf',
+    unifiedCategory: 'PDF',
+    route: '/ai-tools/ocr',
+    toolType: 'ai-powered',
+    aiRequired: true,
+    requiredModel: 'Built-in PyMuPDF & Vision OCR Engine',
+    keywords: [
+      'ai ocr',
+      'extract text from pdf',
+      'image to text',
+      'document scanner',
+      'optical character recognition',
+    ],
+    iconName: 'ScanText',
+    supportedInputTypes: ['application/pdf', 'image/png', 'image/jpeg'],
+    processingLocation: 'server',
+    status: 'available',
+    privacyNotice:
+      'Documents are parsed in temporary memory and purged immediately after text extraction.',
+  },
+  {
+    id: 'ai-code-explainer',
+    slug: 'ai-code-explainer',
+    name: 'AI Code Explainer & Debugger',
+    tagline: 'Explain code logic, syntax walkthroughs, and instant bug fixes.',
+    description:
+      'Analyze code snippets, explain complex programming logic step-by-step, calculate complexity, and get instant bug diagnoses and fixes.',
+    category: 'developer',
+    unifiedCategory: 'Developer',
+    route: '/ai-tools/code-explainer',
+    toolType: 'ai-powered',
+    aiRequired: true,
+    requiredModel: 'Google Gemini & NVIDIA Cloud Models',
+    keywords: ['code explainer', 'debugger', 'ai code', 'explain code', 'fix bugs', 'syntax review'],
+    iconName: 'Code2',
+    supportedInputTypes: ['text/plain'],
+    processingLocation: 'server',
+    status: 'available',
+    privacyNotice: 'Code snippets are processed transiently via secure cloud AI API and are never stored.',
+  },
+  {
+    id: 'ai-document-summarizer',
+    slug: 'ai-document-summarizer',
+    name: 'AI Document Summarizer & Q&A',
+    tagline: 'Generate bulleted executive summaries and interactive Q&A citations.',
+    description:
+      'Condense long technical documents, articles, and research papers into executive summaries, key takeaways, and ask custom questions.',
+    category: 'pdf',
+    unifiedCategory: 'PDF',
+    route: '/ai-tools/document-summarizer',
+    toolType: 'ai-powered',
+    aiRequired: true,
+    requiredModel: 'Google Gemini Cloud Model',
+    keywords: ['summarize', 'document chat', 'pdf summary', 'q and a', 'notes summarizer'],
+    iconName: 'FileText',
+    supportedInputTypes: ['text/plain', 'application/pdf'],
+    processingLocation: 'server',
+    status: 'available',
+    privacyNotice: 'Document text is parsed in memory and never retained on disk.',
+  },
+  {
+    id: 'ai-writing-assistant',
+    slug: 'ai-writing-assistant',
+    name: 'AI Writing & ATS Resume Assistant',
+    tagline: 'Tone rewriting, grammar polish, and ATS-optimized resume builder.',
+    description:
+      'Transform draft text into polished professional prose or generate high-impact, quantifiable resume achievement bullets tailored for job applications.',
+    category: 'text',
+    unifiedCategory: 'Text',
+    route: '/ai-tools/writing-assistant',
+    toolType: 'ai-powered',
+    aiRequired: true,
+    requiredModel: 'Google Gemini Cloud Model',
+    keywords: ['writing assistant', 'resume builder', 'ats resume', 'paraphrase', 'tone rewrite'],
+    iconName: 'PenTool',
+    supportedInputTypes: ['text/plain'],
+    processingLocation: 'server',
+    status: 'available',
+    privacyNotice: 'Your text is processed transiently and never saved to any database.',
+  },
+  {
+    id: 'vexora-ai-chat',
+    slug: 'ai-chat',
+    name: 'Vexora AI Chat Assistant',
+    tagline: 'Interactive free AI chatbot powered by Google Gemini & Llama 3.3.',
+    description:
+      'Chat, code, brainstorm, and solve complex problems in real-time with an intelligent AI assistant. Free forever with zero credit limits.',
+    category: 'text',
+    unifiedCategory: 'Productivity',
+    route: '/ai-tools/chat',
+    toolType: 'ai-powered',
+    aiRequired: true,
+    requiredModel: 'Google Gemini 2.0 Flash & NVIDIA Llama 3.3',
+    keywords: ['ai chat', 'chatgpt', 'gemini', 'chatbot', 'assistant', 'ai coding', 'free ai'],
+    iconName: 'Bot',
+    supportedInputTypes: ['text/plain'],
+    processingLocation: 'server',
+    status: 'available',
+    privacyNotice: 'Your chat messages are processed transiently in memory and stored locally in your browser only.',
   },
   {
     id: 'image-compressor',
@@ -707,4 +968,70 @@ export function getRelatedTools(toolId: string, limit = 4): readonly ToolDefinit
   // Fill remainder from other categories
   const others = TOOL_CATALOG.filter((t) => t.category !== target.category && t.id !== target.id);
   return [...sameCategory, ...others].slice(0, limit);
+}
+
+/**
+ * Helper functions for the Unified All Tools Directory
+ */
+export function getToolType(tool: ToolDefinition): ToolType {
+  if (tool.toolType) return tool.toolType;
+  if (
+    tool.processingLocation === 'server' ||
+    tool.id.startsWith('ai-') ||
+    tool.id === 'smart-image-studio'
+  ) {
+    return 'ai-powered';
+  }
+  return 'standard';
+}
+
+export function isAiPoweredTool(tool: ToolDefinition): boolean {
+  return getToolType(tool) === 'ai-powered';
+}
+
+export function getToolRoute(tool: ToolDefinition): string {
+  return tool.route || `/tools/${tool.slug}`;
+}
+
+export function getRequiredModel(tool: ToolDefinition): string {
+  if (tool.requiredModel) return tool.requiredModel;
+  if (tool.id === 'smart-image-studio') {
+    return 'Hybrid Client Canvas + Built-in Vision AI';
+  }
+  if (isAiPoweredTool(tool)) {
+    return 'Built-in Vision Engine (No Ollama required)';
+  }
+  return 'In-Browser Web APIs (Zero Server Dependency)';
+}
+
+export function getUnifiedCategory(tool: ToolDefinition): UnifiedToolCategory {
+  if (tool.unifiedCategory) return tool.unifiedCategory;
+
+  if (
+    tool.id === 'smart-image-studio' ||
+    tool.id === 'color-picker' ||
+    tool.id === 'color-converter' ||
+    tool.id === 'lorem-ipsum'
+  ) {
+    return 'Design';
+  }
+
+  if (tool.id === 'image-metadata' || tool.id === 'image-converter') {
+    return 'Media';
+  }
+
+  switch (tool.category) {
+    case 'images':
+      return 'Image';
+    case 'pdf':
+      return 'PDF';
+    case 'text':
+      return 'Text';
+    case 'developer':
+      return 'Developer';
+    case 'utilities':
+      return 'Productivity';
+    default:
+      return 'Other';
+  }
 }

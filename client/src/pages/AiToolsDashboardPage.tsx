@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import { Search, Sparkles, Cpu, Clock, ArrowRight, Zap, RefreshCw, ShieldCheck } from 'lucide-react';
+import {
+  Search,
+  Sparkles,
+  Cpu,
+  Clock,
+  ArrowRight,
+  Zap,
+  RefreshCw,
+  ShieldCheck,
+} from 'lucide-react';
 import { AI_TOOLS_REGISTRY, type AICategory } from '../lib/ai/aiToolsRegistry.js';
 import { Icon } from '../components/common/Icon.js';
 import { aiToolsApi } from '../services/aiToolsApi.js';
@@ -49,8 +58,26 @@ export const AiToolsDashboardPage: React.FC = () => {
 
   const categories: { id: AICategory; label: string; count: number }[] = [
     { id: 'all', label: 'All AI Tools', count: AI_TOOLS_REGISTRY.length },
-    { id: 'image', label: 'Image AI', count: AI_TOOLS_REGISTRY.filter(t => t.category === 'image').length },
-    { id: 'document', label: 'Document AI', count: AI_TOOLS_REGISTRY.filter(t => t.category === 'document').length },
+    {
+      id: 'image',
+      label: 'Image AI',
+      count: AI_TOOLS_REGISTRY.filter((t) => t.category === 'image').length,
+    },
+    {
+      id: 'document',
+      label: 'Document AI',
+      count: AI_TOOLS_REGISTRY.filter((t) => t.category === 'document').length,
+    },
+    {
+      id: 'developer',
+      label: 'Coding AI',
+      count: AI_TOOLS_REGISTRY.filter((t) => t.category === 'developer').length,
+    },
+    {
+      id: 'writing',
+      label: 'Writing & Resume',
+      count: AI_TOOLS_REGISTRY.filter((t) => t.category === 'writing').length,
+    },
   ];
 
   const filteredTools = AI_TOOLS_REGISTRY.filter((tool) => {
@@ -77,7 +104,9 @@ export const AiToolsDashboardPage: React.FC = () => {
                 Free & Built-in AI Tools
               </h1>
               <p className="mt-2 text-base text-gray-700 max-w-2xl font-medium">
-                High-performance computer vision, image restoration, inpainting, and document extraction. Built-in engines with zero configuration, no external models, and no subscriptions.
+                High-performance computer vision, image restoration, inpainting, and document
+                extraction. Built-in engines with zero configuration, no external models, and no
+                subscriptions.
               </p>
             </div>
 
@@ -92,7 +121,10 @@ export const AiToolsDashboardPage: React.FC = () => {
               </div>
               <div className="text-xs text-gray-600 mt-2 flex items-center justify-between">
                 <span>Built-in Processing</span>
-                <Link to="/design-studio" className="font-bold underline hover:text-black flex items-center gap-1">
+                <Link
+                  to="/design-studio"
+                  className="font-bold underline hover:text-black flex items-center gap-1"
+                >
                   Design Studio &rarr;
                 </Link>
               </div>
@@ -108,8 +140,7 @@ export const AiToolsDashboardPage: React.FC = () => {
               <div className="flex items-center gap-2 text-xs font-semibold">
                 <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
                 <span>
-                  Processing Engines:{' '}
-                  <strong>Built-in Computer Vision & OCR (Ready)</strong>
+                  Processing Engines: <strong>Built-in Computer Vision & OCR (Ready)</strong>
                 </span>
               </div>
             </div>
@@ -245,8 +276,8 @@ export const AiToolsDashboardPage: React.FC = () => {
                             job.status === 'completed'
                               ? 'bg-green-100 border-green-500 text-green-800'
                               : job.status === 'processing'
-                              ? 'bg-yellow-100 border-yellow-500 text-yellow-800'
-                              : 'bg-red-100 border-red-500 text-red-800'
+                                ? 'bg-yellow-100 border-yellow-500 text-yellow-800'
+                                : 'bg-red-100 border-red-500 text-red-800'
                           }`}
                         >
                           {job.status}

@@ -58,4 +58,5 @@ DesignVersionSchema.index({ projectId: 1, versionNumber: -1 });
 DesignVersionSchema.index({ projectId: 1, createdAt: -1 });
 
 export const DesignVersion: mongoose.Model<IDesignVersion> =
-  mongoose.models.DesignVersion || mongoose.model<IDesignVersion>('DesignVersion', DesignVersionSchema);
+  mongoose.models.DesignVersion ||
+  mongoose.model<IDesignVersion>('DesignVersion', DesignVersionSchema);

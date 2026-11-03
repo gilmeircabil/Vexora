@@ -38,14 +38,27 @@ router.delete('/projects/:id', authenticate, DeveloperController.deleteProject);
 
 // Project Engagement: Views, Reactions, Comments
 router.post('/projects/:idOrSlug/view', DeveloperController.recordProjectView);
-router.get('/projects/:projectId/reactions', optionalAuthenticate, DeveloperController.getProjectReactions);
-router.post('/projects/:projectId/react', optionalAuthenticate, DeveloperController.toggleProjectReaction);
+router.get(
+  '/projects/:projectId/reactions',
+  optionalAuthenticate,
+  DeveloperController.getProjectReactions,
+);
+router.post(
+  '/projects/:projectId/react',
+  optionalAuthenticate,
+  DeveloperController.toggleProjectReaction,
+);
 router.get('/projects/:projectId/comments', DeveloperController.getProjectComments);
-router.post('/projects/:projectId/comments', optionalAuthenticate, DeveloperController.addProjectComment);
-router.delete('/projects/comments/:commentId', authenticate, DeveloperController.deleteProjectComment);
-
-// Contact & Inquiries
-router.post('/contact/:username', DeveloperController.contactDeveloper);
+router.post(
+  '/projects/:projectId/comments',
+  optionalAuthenticate,
+  DeveloperController.addProjectComment,
+);
+router.delete(
+  '/projects/comments/:commentId',
+  authenticate,
+  DeveloperController.deleteProjectComment,
+);
 
 // Abuse Reporting
 router.post('/reports', optionalAuthenticate, DeveloperController.submitReport);

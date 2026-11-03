@@ -83,7 +83,12 @@ export class StorageService {
    */
   static getAssetFilePath(storageKey: string, isThumb = false): string | null {
     // Prevent directory traversal
-    if (!storageKey || storageKey.includes('..') || storageKey.includes('/') || storageKey.includes('\\')) {
+    if (
+      !storageKey ||
+      storageKey.includes('..') ||
+      storageKey.includes('/') ||
+      storageKey.includes('\\')
+    ) {
       return null;
     }
     const targetDir = isThumb ? this.thumbsDir : this.assetsDir;

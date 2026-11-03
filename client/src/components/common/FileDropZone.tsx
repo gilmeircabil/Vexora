@@ -138,9 +138,7 @@ export const FileDropZone: React.FC<FileDropZoneProps> = ({
         </div>
 
         <div>
-          <p className="text-sm font-black text-black">
-            {description}
-          </p>
+          <p className="text-sm font-black text-black">{description}</p>
           <p className="text-xs font-semibold text-neutral-600 mt-1">
             {multiple ? 'Select one or more files' : 'Single file upload'}
             {maxBytes ? ` · up to ${Math.round(maxBytes / (1024 * 1024))} MB` : ''}
@@ -155,10 +153,7 @@ export const FileDropZone: React.FC<FileDropZoneProps> = ({
         >
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 stroke-[2.5]" />
           <span className="flex-1">{validationError}</span>
-          <button
-            onClick={() => setValidationError(null)}
-            className="text-black hover:scale-110"
-          >
+          <button onClick={() => setValidationError(null)} className="text-black hover:scale-110">
             <X className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>
@@ -181,9 +176,7 @@ export const FileInfoCard: React.FC<{
           <FileIcon className="w-4 h-4 stroke-[2.5]" />
         </div>
         <div className="min-w-0">
-          <p className="font-black text-black truncate text-sm">
-            {rawFile.name}
-          </p>
+          <p className="font-black text-black truncate text-sm">{rawFile.name}</p>
           <p className="text-xs font-bold text-neutral-600">
             {formatBytes(rawFile.size)}
             {dimensions && ` · ${dimensions.width} × ${dimensions.height} px`}

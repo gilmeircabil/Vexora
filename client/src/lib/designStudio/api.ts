@@ -163,7 +163,9 @@ export const designStudioApi = {
   },
 
   // Versions
-  async listVersions(projectId: string): Promise<{ versions: DesignVersionDTO[]; currentVersion: number }> {
+  async listVersions(
+    projectId: string,
+  ): Promise<{ versions: DesignVersionDTO[]; currentVersion: number }> {
     const res = await fetch(`/api/designs/${projectId}/versions`, {
       headers: getAuthHeaders(),
     });
@@ -253,7 +255,10 @@ export const designStudioApi = {
   },
 
   // Templates
-  async listTemplates(params?: { category?: string; search?: string }): Promise<DesignTemplateDTO[]> {
+  async listTemplates(params?: {
+    category?: string;
+    search?: string;
+  }): Promise<DesignTemplateDTO[]> {
     const query = new URLSearchParams();
     if (params?.category && params.category !== 'all') query.set('category', params.category);
     if (params?.search) query.set('search', params.search);

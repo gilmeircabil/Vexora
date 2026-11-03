@@ -10,9 +10,11 @@
   },
   "scripts": {
     "dev": "concurrently -n \"client,server\" -c \"cyan.bold,magenta.bold\" \"npm run dev:client\" \"npm run dev:server\"",
-    "dev:all": "concurrently -n \"client,server\" -c \"cyan.bold,magenta.bold\" \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:full": "concurrently -n \"client,server,ai\" -c \"cyan.bold,magenta.bold,green.bold\" \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:ai\"",
+    "dev:all": "concurrently -n \"client,server,ai\" -c \"cyan.bold,magenta.bold,green.bold\" \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:ai\"",
     "dev:client": "vite client",
     "dev:server": "tsx watch server/src/index.ts",
+    "dev:ai": "python -m uvicorn app.main:app --app-dir ai-service --port 8000 --reload",
     "start": "concurrently -n \"client,server\" -c \"cyan.bold,magenta.bold\" \"npm run preview\" \"npm run start:server\"",
     "start:client": "vite preview client",
     "start:server": "tsx server/src/index.ts",
@@ -32,6 +34,7 @@
     "test:e2e:install": "playwright install chromium"
   },
   "dependencies": {
+    "@imgly/background-removal": "^1.7.0",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",

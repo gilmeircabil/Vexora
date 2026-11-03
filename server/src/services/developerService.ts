@@ -1,9 +1,12 @@
 import crypto from 'node:crypto';
 import { Types } from 'mongoose';
 import { DeveloperProfile, type IDeveloperProfile } from '../models/DeveloperProfile.js';
-import { DeveloperProject, type IDeveloperProject, type ProjectCategory } from '../models/DeveloperProject.js';
+import {
+  DeveloperProject,
+  type IDeveloperProject,
+  type ProjectCategory,
+} from '../models/DeveloperProject.js';
 import { DeveloperReport } from '../models/DeveloperReport.js';
-import { DeveloperMessage } from '../models/DeveloperMessage.js';
 import { ProjectReaction, type ReactionType } from '../models/ProjectReaction.js';
 import { ProjectComment } from '../models/ProjectComment.js';
 import { User } from '../models/User.js';
@@ -66,7 +69,10 @@ export class DeveloperService {
     if (!profile) return null;
 
     // Check visibility: if suspended or unpublished, only the owner can view it
-    if ((profile.isSuspended || !profile.isPublished) && profile.userId.toString() !== viewerUserId) {
+    if (
+      (profile.isSuspended || !profile.isPublished) &&
+      profile.userId.toString() !== viewerUserId
+    ) {
       return null;
     }
 
@@ -93,7 +99,9 @@ export class DeveloperService {
   static async createOrUpdateProfile(userId: string | Types.ObjectId, data: any) {
     const uid = typeof userId === 'string' ? new Types.ObjectId(userId) : userId;
 
-    let username = this.sanitize(data.username).toLowerCase().replace(/[^a-z0-9_-]/g, '');
+    let username = this.sanitize(data.username)
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]/g, '');
     if (!username || username.length < 3) {
       // Auto-fallback username from user name/email if empty
       const user = await User.findById(uid);
@@ -257,7 +265,7 @@ export class DeveloperService {
     const title = this.sanitize(data.title);
     if (!title) throw new Error('Project title is required.');
 
-    let baseSlug = this.slugify(title) || 'project';
+    const baseSlug = this.slugify(title) || 'project';
     let slug = baseSlug;
     let counter = 1;
 
@@ -498,8 +506,15 @@ export class DeveloperService {
     userId?: Types.ObjectId | string;
     reaction: ReactionType;
   }) {
-    const pid = typeof params.projectId === 'string' ? new Types.ObjectId(params.projectId) : params.projectId;
-    const uid = params.userId ? (typeof params.userId === 'string' ? new Types.ObjectId(params.userId) : params.userId) : undefined;
+    const pid =
+      typeof params.projectId === 'string'
+        ? new Types.ObjectId(params.projectId)
+        : params.projectId;
+    const uid = params.userId
+      ? typeof params.userId === 'string'
+        ? new Types.ObjectId(params.userId)
+        : params.userId
+      : undefined;
 
     const existing = await ProjectReaction.findOne({
       projectId: pid,
@@ -540,8 +555,15 @@ export class DeveloperService {
     authorAvatar?: string;
     content: string;
   }) {
-    const pid = typeof params.projectId === 'string' ? new Types.ObjectId(params.projectId) : params.projectId;
-    const uid = params.userId ? (typeof params.userId === 'string' ? new Types.ObjectId(params.userId) : params.userId) : undefined;
+    const pid =
+      typeof params.projectId === 'string'
+        ? new Types.ObjectId(params.projectId)
+        : params.projectId;
+    const uid = params.userId
+      ? typeof params.userId === 'string'
+        ? new Types.ObjectId(params.userId)
+        : params.userId
+      : undefined;
 
     const project = await DeveloperProject.findById(pid);
     if (!project) throw new Error('Project not found.');
@@ -586,60 +608,6 @@ export class DeveloperService {
 
     await ProjectComment.deleteOne({ _id: comment._id });
     return { success: true };
-  }
-
-  // --------------------------------------------------------------------------
-  // Contact & Message Dispatch
-  // --------------------------------------------------------------------------
-
-  static async sendMessageToDeveloper(params: {
-    recipientUsername: string;
-    senderName: string;
-    senderEmail: string;
-    subject: string;
-    message: string;
-    clientIp: string;
-  }) {
-    const cleanUsername = params.recipientUsername.toLowerCase().trim();
-    const profile = await DeveloperProfile.findOne({
-      username: cleanUsername,
-      isPublished: true,
-      isSuspended: false,
-    });
-
-    if (!profile) {
-      throw new Error('Developer profile not found or unavailable for contact.');
-    }
-
-    if (!profile.contactPreferences?.allowContactForm) {
-      throw new Error('This developer does not accept contact form submissions.');
-    }
-
-    // IP Hash for rate-limiting
-    const ipHash = crypto.createHash('sha256').update(params.clientIp || '127.0.0.1').digest('hex');
-
-    // Rate Limit: max 5 messages per IP per hour
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-    const recentCount = await DeveloperMessage.countDocuments({
-      ipHash,
-      createdAt: { $gte: oneHourAgo },
-    });
-
-    if (recentCount >= 5) {
-      throw new Error('Message rate limit exceeded. Please wait a while before sending another inquiry.');
-    }
-
-    const messageDoc = await DeveloperMessage.create({
-      recipientProfileId: profile._id,
-      recipientUserId: profile.userId,
-      senderName: this.sanitize(params.senderName),
-      senderEmail: params.senderEmail.trim().toLowerCase(),
-      subject: this.sanitize(params.subject).slice(0, 140),
-      message: this.sanitize(params.message).slice(0, 3000),
-      ipHash,
-    });
-
-    return messageDoc;
   }
 
   // --------------------------------------------------------------------------
@@ -721,7 +689,12 @@ export class DeveloperService {
     return profile;
   }
 
-  static async adminListProjects(filters: { q?: string; category?: string; page?: number; limit?: number }) {
+  static async adminListProjects(filters: {
+    q?: string;
+    category?: string;
+    page?: number;
+    limit?: number;
+  }) {
     const page = Math.max(1, filters.page || 1);
     const limit = Math.min(100, Math.max(1, filters.limit || 20));
     const skip = (page - 1) * limit;

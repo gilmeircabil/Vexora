@@ -9,22 +9,18 @@ import {
   AlertCircle,
   Sparkles,
   ArrowLeft,
-  Link2,
-  Check,
 } from 'lucide-react';
 import { developerApi } from '../../services/developerApi.js';
-import { authApi } from '../../services/authApi.js';
 import { useAuth } from '../../context/AuthContext.js';
 import { useToast } from '../../context/ToastContext.js';
 
 export const DeveloperProfileEditPage: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, refreshUser } = useAuth();
+  const { user, updateUser } = useAuth();
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [bindingProvider, setBindingProvider] = useState<string | null>(null);
 
   // Form Fields
   const [username, setUsername] = useState('');
@@ -43,7 +39,9 @@ export const DeveloperProfileEditPage: React.FC = () => {
   const [linkedinUrl, setLinkedinUrl] = useState('');
   const [websiteUrl, setWebsiteUrl] = useState('');
   const [allowContactForm, setAllowContactForm] = useState(true);
-  const [preferredMethod, setPreferredMethod] = useState<'form' | 'email' | 'linkedin' | 'github'>('form');
+  const [preferredMethod, setPreferredMethod] = useState<'form' | 'email' | 'linkedin' | 'github'>(
+    'form',
+  );
   const [isPublished, setIsPublished] = useState(true);
 
   // Media previews
@@ -90,41 +88,6 @@ export const DeveloperProfileEditPage: React.FC = () => {
     }
   };
 
-  const handleToggleBinding = async (provider: 'google' | 'github' | 'facebook', isCurrentlyBound: boolean) => {
-    setBindingProvider(provider);
-    try {
-      if (isCurrentlyBound) {
-        if (!confirm(`Are you sure you want to disconnect your ${provider} account?`)) return;
-        const res = await authApi.unbindOAuth(provider);
-        if (res.success) {
-          toast(`${provider.charAt(0).toUpperCase() + provider.slice(1)} disconnected.`, 'success');
-          await refreshUser();
-        } else {
-          toast(res.error || 'Failed to disconnect account', 'error');
-        }
-      } else {
-        const dummyId = `${provider}_${Math.random().toString(36).substring(2, 10)}`;
-        const email = user?.email || window.prompt(`Enter your ${provider} email address to link:`);
-        if (!email) return;
-        const res = await authApi.bindOAuth({
-          provider,
-          providerId: dummyId,
-          email,
-        });
-        if (res.success) {
-          toast(`${provider.charAt(0).toUpperCase() + provider.slice(1)} account connected successfully!`, 'success');
-          await refreshUser();
-        } else {
-          toast(res.error || 'Failed to connect account', 'error');
-        }
-      }
-    } catch (err: any) {
-      toast(err.message || 'Binding error', 'error');
-    } finally {
-      setBindingProvider(null);
-    }
-  };
-
   const handleAvatarFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -134,6 +97,7 @@ export const DeveloperProfileEditPage: React.FC = () => {
       const res = await developerApi.uploadAvatar(file);
       if (res.success && res.data?.url) {
         setProfileImage(res.data.url);
+        updateUser({ avatarUrl: res.data.url });
         toast('Avatar updated successfully!', 'success');
       } else {
         throw new Error(res.error || 'Avatar upload failed');
@@ -283,7 +247,9 @@ export const DeveloperProfileEditPage: React.FC = () => {
                       <Upload className="w-3.5 h-3.5" />
                       <span>{isUploadingAvatar ? 'Uploading...' : 'Upload Avatar'}</span>
                     </button>
-                    <span className="text-[10px] text-neutral-500 font-mono block mt-1">PNG, JPG up to 10MB</span>
+                    <span className="text-[10px] text-neutral-500 font-mono block mt-1">
+                      PNG, JPG up to 10MB
+                    </span>
                   </div>
                 </div>
               </div>
@@ -295,7 +261,9 @@ export const DeveloperProfileEditPage: React.FC = () => {
                   {coverImage ? (
                     <img src={coverImage} alt="Cover" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-xs font-mono font-bold text-neutral-500">Default Gradient Banner</span>
+                    <span className="text-xs font-mono font-bold text-neutral-500">
+                      Default Gradient Banner
+                    </span>
                   )}
                   <input
                     type="file"
@@ -319,11 +287,15 @@ export const DeveloperProfileEditPage: React.FC = () => {
 
           {/* Identity & Bio */}
           <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-[5px_5px_0px_#000] space-y-4">
-            <h2 className="text-base font-black text-black font-mono uppercase">Personal & Professional Info</h2>
+            <h2 className="text-base font-black text-black font-mono uppercase">
+              Personal & Professional Info
+            </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-black uppercase font-mono mb-1">Display Name *</label>
+                <label className="block text-xs font-black uppercase font-mono mb-1">
+                  Display Name *
+                </label>
                 <input
                   type="text"
                   required
@@ -335,22 +307,30 @@ export const DeveloperProfileEditPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase font-mono mb-1">Username (URL handle) *</label>
+                <label className="block text-xs font-black uppercase font-mono mb-1">
+                  Username (URL handle) *
+                </label>
                 <input
                   type="text"
                   required
                   pattern="[a-z0-9_-]+"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
+                  onChange={(e) =>
+                    setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))
+                  }
                   placeholder="e.g. alexrivera"
                   className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-mono font-bold focus:outline-none"
                 />
-                <span className="text-[10px] font-mono text-neutral-500 mt-0.5 block">vexoramods.local/developers/profile/{username || 'username'}</span>
+                <span className="text-[10px] font-mono text-neutral-500 mt-0.5 block">
+                  vexoramods.local/developers/profile/{username || 'username'}
+                </span>
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-black uppercase font-mono mb-1">Headline (Short summary)</label>
+              <label className="block text-xs font-black uppercase font-mono mb-1">
+                Headline (Short summary)
+              </label>
               <input
                 type="text"
                 value={headline}
@@ -387,11 +367,15 @@ export const DeveloperProfileEditPage: React.FC = () => {
 
           {/* Experience & Work Preferences */}
           <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-[5px_5px_0px_#000] space-y-4">
-            <h2 className="text-base font-black text-black font-mono uppercase">Work & Availability</h2>
+            <h2 className="text-base font-black text-black font-mono uppercase">
+              Work & Availability
+            </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-black uppercase font-mono mb-1">Experience Level</label>
+                <label className="block text-xs font-black uppercase font-mono mb-1">
+                  Experience Level
+                </label>
                 <select
                   value={experienceLevel}
                   onChange={(e) => setExperienceLevel(e.target.value)}
@@ -406,7 +390,9 @@ export const DeveloperProfileEditPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase font-mono mb-1">Work Mode</label>
+                <label className="block text-xs font-black uppercase font-mono mb-1">
+                  Work Mode
+                </label>
                 <select
                   value={remotePreference}
                   onChange={(e) => setRemotePreference(e.target.value)}
@@ -420,7 +406,9 @@ export const DeveloperProfileEditPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase font-mono mb-1">Availability</label>
+                <label className="block text-xs font-black uppercase font-mono mb-1">
+                  Availability
+                </label>
                 <select
                   value={availability}
                   onChange={(e) => setAvailability(e.target.value)}
@@ -436,7 +424,9 @@ export const DeveloperProfileEditPage: React.FC = () => {
 
           {/* Skills, Tech, Services */}
           <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-[5px_5px_0px_#000] space-y-4">
-            <h2 className="text-base font-black text-black font-mono uppercase">Skills & Services</h2>
+            <h2 className="text-base font-black text-black font-mono uppercase">
+              Skills & Services
+            </h2>
 
             <div>
               <label className="block text-xs font-black uppercase font-mono mb-1">
@@ -480,11 +470,15 @@ export const DeveloperProfileEditPage: React.FC = () => {
 
           {/* Social & Portfolio Links */}
           <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-[5px_5px_0px_#000] space-y-4">
-            <h2 className="text-base font-black text-black font-mono uppercase">Portfolio & Social Links</h2>
+            <h2 className="text-base font-black text-black font-mono uppercase">
+              Portfolio & Social Links
+            </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-black uppercase font-mono mb-1">Portfolio URL</label>
+                <label className="block text-xs font-black uppercase font-mono mb-1">
+                  Portfolio URL
+                </label>
                 <input
                   type="url"
                   value={portfolioUrl}
@@ -495,7 +489,9 @@ export const DeveloperProfileEditPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase font-mono mb-1">GitHub URL</label>
+                <label className="block text-xs font-black uppercase font-mono mb-1">
+                  GitHub URL
+                </label>
                 <input
                   type="url"
                   value={githubUrl}
@@ -506,7 +502,9 @@ export const DeveloperProfileEditPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase font-mono mb-1">LinkedIn URL</label>
+                <label className="block text-xs font-black uppercase font-mono mb-1">
+                  LinkedIn URL
+                </label>
                 <input
                   type="url"
                   value={linkedinUrl}
@@ -517,7 +515,9 @@ export const DeveloperProfileEditPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase font-mono mb-1">Personal Website</label>
+                <label className="block text-xs font-black uppercase font-mono mb-1">
+                  Personal Website
+                </label>
                 <input
                   type="url"
                   value={websiteUrl}
@@ -531,7 +531,9 @@ export const DeveloperProfileEditPage: React.FC = () => {
 
           {/* Privacy & Visibility Settings */}
           <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-[5px_5px_0px_#000] space-y-4">
-            <h2 className="text-base font-black text-black font-mono uppercase">Visibility & Contact Preferences</h2>
+            <h2 className="text-base font-black text-black font-mono uppercase">
+              Visibility & Contact Preferences
+            </h2>
 
             <label className="flex items-start gap-3 p-3 bg-[#FAF7F2] border-2 border-black rounded-xl cursor-pointer">
               <input
@@ -543,7 +545,8 @@ export const DeveloperProfileEditPage: React.FC = () => {
               <div className="text-xs">
                 <span className="font-black text-black block">Publish profile publicly</span>
                 <span className="font-medium text-neutral-600 block">
-                  Allow clients, businesses, and developers to discover your profile in the directory.
+                  Allow clients, businesses, and developers to discover your profile in the
+                  directory.
                 </span>
               </div>
             </label>
@@ -558,69 +561,11 @@ export const DeveloperProfileEditPage: React.FC = () => {
               <div className="text-xs">
                 <span className="font-black text-black block">Allow contact form inquiries</span>
                 <span className="font-medium text-neutral-600 block">
-                  Visitors can send job opportunities or project inquiries directly without exposing your email address.
+                  Visitors can send job opportunities or project inquiries directly without exposing
+                  your email address.
                 </span>
               </div>
             </label>
-          </div>
-
-          {/* Social OAuth Account Bindings */}
-          <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-[5px_5px_0px_#000] space-y-4">
-            <div className="flex items-center gap-2 border-b-2 border-black/10 pb-3">
-              <Link2 className="w-4 h-4 text-black stroke-[2.5]" />
-              <h2 className="text-base font-black text-black font-mono uppercase">
-                Connected Social & OAuth Accounts
-              </h2>
-            </div>
-            <p className="text-xs font-semibold text-neutral-600">
-              Bind your Google, GitHub, or Facebook account to sign in with one click.
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-              {[
-                { provider: 'google', name: 'Google', isBound: Boolean(user?.oauthProviders?.google) },
-                { provider: 'github', name: 'GitHub', isBound: Boolean(user?.oauthProviders?.github) },
-                { provider: 'facebook', name: 'Facebook', isBound: Boolean(user?.oauthProviders?.facebook) },
-              ].map(({ provider, name, isBound }) => (
-                <div
-                  key={provider}
-                  className="p-4 bg-[#FAF7F2] border-2 border-black rounded-xl space-y-2 flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-black text-xs text-black">{name}</span>
-                      {isBound ? (
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-green-100 border border-green-800 text-green-900">
-                          <Check className="w-3 h-3 text-green-700" />
-                          <span>Linked</span>
-                        </span>
-                      ) : (
-                        <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-neutral-200 text-neutral-700">
-                          Unlinked
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    disabled={bindingProvider === provider}
-                    onClick={() => handleToggleBinding(provider as any, isBound)}
-                    className={`w-full py-1.5 px-2.5 rounded-lg border-2 border-black font-mono text-xs font-black shadow-[1.5px_1.5px_0px_#000] cursor-pointer transition-all ${
-                      isBound
-                        ? 'bg-red-50 text-red-600 hover:bg-red-100'
-                        : 'bg-[#FACC15] hover:bg-[#EAB308] text-black'
-                    }`}
-                  >
-                    {bindingProvider === provider
-                      ? 'Processing...'
-                      : isBound
-                        ? 'Disconnect'
-                        : `Connect ${name}`}
-                  </button>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Submit Actions */}

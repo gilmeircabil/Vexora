@@ -11,9 +11,7 @@ export const NotFoundPage: React.FC = () => {
       </div>
 
       <div className="space-y-2">
-        <h1 className="text-4xl font-black tracking-tight text-black">
-          Page Not Found
-        </h1>
+        <h1 className="text-4xl font-black tracking-tight text-black">Page Not Found</h1>
         <p className="text-sm font-bold text-neutral-600">
           The requested tool or page does not exist or has been relocated.
         </p>

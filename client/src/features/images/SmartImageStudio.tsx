@@ -16,19 +16,14 @@ import {
   ArrowRight,
   Eye,
   Columns,
-  Maximize2
+  Maximize2,
 } from 'lucide-react';
 import { aiToolsApi } from '../../services/aiToolsApi.js';
 import { useToast } from '../../context/ToastContext.js';
 import { useNavigate } from 'react-router';
+import { removeImageBackground } from '../../lib/ai/backgroundRemovalHelper.js';
 
-export type SmartOperation =
-  | 'enhance'
-  | 'background'
-  | 'inpaint'
-  | 'restore'
-  | 'compress'
-  | 'ocr';
+export type SmartOperation = 'enhance' | 'background' | 'inpaint' | 'restore' | 'compress' | 'ocr';
 
 interface SmartImageStudioProps {
   initialFile?: File | null;
@@ -49,7 +44,12 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
   const [file, setFile] = useState<File | null>(initialFile);
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
-  const [imageMeta, setImageMeta] = useState<{ width: number; height: number; size: string; name: string } | null>(null);
+  const [imageMeta, setImageMeta] = useState<{
+    width: number;
+    height: number;
+    size: string;
+    name: string;
+  } | null>(null);
 
   // In-progress state
   const [isProcessing, setIsProcessing] = useState(false);
@@ -57,11 +57,15 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
 
   // Before/After comparison slider
   const [sliderPos, setSliderPos] = useState<number>(50);
-  const [compareMode, setCompareMode] = useState<'slider' | 'side-by-side' | 'result-only'>('slider');
+  const [compareMode, setCompareMode] = useState<'slider' | 'side-by-side' | 'result-only'>(
+    'slider',
+  );
 
   // 1. Enhance parameters
   const [scale, setScale] = useState<number>(2);
-  const [enhanceMode, setEnhanceMode] = useState<'enhance' | 'sharpen' | 'restore_faces' | 'denoise'>('enhance');
+  const [enhanceMode, setEnhanceMode] = useState<
+    'enhance' | 'sharpen' | 'restore_faces' | 'denoise'
+  >('enhance');
 
   // 2. Background parameters
   const [bgColor, setBgColor] = useState<string>('transparent');
@@ -78,7 +82,9 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
   const [autoColorize, setAutoColorize] = useState<boolean>(false);
 
   // 5. Compress & Convert parameters
-  const [targetFormat, setTargetFormat] = useState<'image/webp' | 'image/jpeg' | 'image/png'>('image/webp');
+  const [targetFormat, setTargetFormat] = useState<'image/webp' | 'image/jpeg' | 'image/png'>(
+    'image/webp',
+  );
   const [targetQuality, setTargetQuality] = useState<number>(85);
   const [compressedBlob, setCompressedBlob] = useState<Blob | null>(null);
 
@@ -255,21 +261,33 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
           throw new Error(res.error || 'Enhancement failed');
         }
       } else if (activeOp === 'background') {
-        setProgressStatus('Removing background with edge refinement...');
-        const fd = new FormData();
-        fd.append('image', file);
-        if (bgColor === 'custom') {
-          fd.append('bgColor', customHex);
-        } else if (bgColor !== 'transparent') {
-          fd.append('bgColor', bgColor);
-        }
+        setProgressStatus('Isolating foreground subject with neural AI...');
+        const effectiveBgColor = bgColor === 'custom' ? customHex : bgColor;
 
-        const res = await aiToolsApi.removeBackground(fd);
-        if (res.success && res.data?.outputUrl) {
-          setResultUrl(res.data.outputUrl);
+        try {
+          const result = await removeImageBackground(file, {
+            bgColor: effectiveBgColor,
+            onProgress: (status) => setProgressStatus(status),
+          });
+          setResultUrl(result.url);
           toast('Background removed cleanly!', 'success');
-        } else {
-          throw new Error(res.error || 'Background removal failed');
+        } catch (clientErr) {
+          console.warn('Client background removal error, trying server fallback:', clientErr);
+          const fd = new FormData();
+          fd.append('image', file);
+          if (bgColor === 'custom') {
+            fd.append('bgColor', customHex);
+          } else if (bgColor !== 'transparent') {
+            fd.append('bgColor', bgColor);
+          }
+
+          const res = await aiToolsApi.removeBackground(fd);
+          if (res.success && res.data?.outputUrl) {
+            setResultUrl(res.data.outputUrl);
+            toast('Background removed cleanly!', 'success');
+          } else {
+            throw new Error(res.error || 'Background removal failed');
+          }
         }
       } else if (activeOp === 'inpaint') {
         setProgressStatus('Inpainting masked object...');
@@ -332,7 +350,10 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
           setCompressedBlob(blob);
           const compressedUrl = URL.createObjectURL(blob);
           setResultUrl(compressedUrl);
-          toast(`Compressed: ${(blob.size / 1024).toFixed(0)} KB (${Math.round((1 - blob.size / file.size) * 100)}% smaller)`, 'success');
+          toast(
+            `Compressed: ${(blob.size / 1024).toFixed(0)} KB (${Math.round((1 - blob.size / file.size) * 100)}% smaller)`,
+            'success',
+          );
         }
       } else if (activeOp === 'ocr') {
         setProgressStatus('Extracting document text and characters...');
@@ -576,12 +597,42 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
           {/* Operation Navigation Tabs */}
           <div className="flex border-b-2 border-black bg-[#FAF7F2] overflow-x-auto p-2 gap-2">
             {[
-              { id: 'enhance' as SmartOperation, label: 'Super-Res Enhance', icon: Sparkles, color: '#FACC15' },
-              { id: 'background' as SmartOperation, label: 'Remove BG', icon: Scissors, color: '#4ADE80' },
-              { id: 'inpaint' as SmartOperation, label: 'Erase Object', icon: Eraser, color: '#F472B6' },
-              { id: 'restore' as SmartOperation, label: 'Photo Restore', icon: Wand2, color: '#A78BFA' },
-              { id: 'compress' as SmartOperation, label: 'Compress & Convert', icon: Minimize2, color: '#38BDF8' },
-              { id: 'ocr' as SmartOperation, label: 'Extract OCR', icon: FileText, color: '#FB923C' },
+              {
+                id: 'enhance' as SmartOperation,
+                label: 'Super-Res Enhance',
+                icon: Sparkles,
+                color: '#FACC15',
+              },
+              {
+                id: 'background' as SmartOperation,
+                label: 'Remove BG',
+                icon: Scissors,
+                color: '#4ADE80',
+              },
+              {
+                id: 'inpaint' as SmartOperation,
+                label: 'Erase Object',
+                icon: Eraser,
+                color: '#F472B6',
+              },
+              {
+                id: 'restore' as SmartOperation,
+                label: 'Photo Restore',
+                icon: Wand2,
+                color: '#A78BFA',
+              },
+              {
+                id: 'compress' as SmartOperation,
+                label: 'Compress & Convert',
+                icon: Minimize2,
+                color: '#38BDF8',
+              },
+              {
+                id: 'ocr' as SmartOperation,
+                label: 'Extract OCR',
+                icon: FileText,
+                color: '#FB923C',
+              },
             ].map((op) => {
               const IconComp = op.icon;
               const isActive = activeOp === op.id;
@@ -610,7 +661,9 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
                 <div className="p-3 bg-[#FAF7F2] border-2 border-black rounded-xl font-mono text-xs space-y-1">
                   <div className="font-black text-black truncate">{imageMeta.name}</div>
                   <div className="text-neutral-600 flex items-center gap-3">
-                    <span>{imageMeta.width} × {imageMeta.height} px</span>
+                    <span>
+                      {imageMeta.width} × {imageMeta.height} px
+                    </span>
                     <span>·</span>
                     <span>{imageMeta.size}</span>
                   </div>
@@ -725,7 +778,8 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
                   </div>
 
                   <p className="text-xs font-medium text-neutral-600 bg-[#FAF7F2] p-2.5 rounded-xl border border-black/20">
-                    💡 Paint red mask over unwanted elements, text, or photobombers directly on the canvas preview to erase them.
+                    💡 Paint red mask over unwanted elements, text, or photobombers directly on the
+                    canvas preview to erase them.
                   </p>
 
                   <button
@@ -826,7 +880,9 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
                   {extractedText && (
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-mono font-black uppercase">Extracted Text</span>
+                        <span className="text-xs font-mono font-black uppercase">
+                          Extracted Text
+                        </span>
                         <button
                           onClick={() => {
                             navigator.clipboard.writeText(extractedText);
@@ -835,7 +891,11 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
                           }}
                           className="px-2 py-1 text-[11px] font-mono font-bold bg-[#FAF7F2] border border-black rounded-lg flex items-center gap-1"
                         >
-                          {hasCopied ? <Check className="w-3 h-3 text-green-600" /> : <Copy className="w-3 h-3" />}
+                          {hasCopied ? (
+                            <Check className="w-3 h-3 text-green-600" />
+                          ) : (
+                            <Copy className="w-3 h-3" />
+                          )}
                           <span>{hasCopied ? 'Copied' : 'Copy'}</span>
                         </button>
                       </div>
@@ -982,19 +1042,33 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
                       <div className="space-y-1 text-center">
                         <span className="font-mono text-xs font-bold uppercase">Original</span>
                         <div className="border-2 border-black rounded-xl overflow-hidden bg-white">
-                          <img src={originalUrl} alt="Original" className="max-h-[300px] mx-auto object-contain" />
+                          <img
+                            src={originalUrl}
+                            alt="Original"
+                            className="max-h-[300px] mx-auto object-contain"
+                          />
                         </div>
                       </div>
                       <div className="space-y-1 text-center">
-                        <span className="font-mono text-xs font-bold uppercase text-green-700">Processed</span>
+                        <span className="font-mono text-xs font-bold uppercase text-green-700">
+                          Processed
+                        </span>
                         <div className="border-2 border-black rounded-xl overflow-hidden bg-white">
-                          <img src={resultUrl} alt="Processed" className="max-h-[300px] mx-auto object-contain" />
+                          <img
+                            src={resultUrl}
+                            alt="Processed"
+                            className="max-h-[300px] mx-auto object-contain"
+                          />
                         </div>
                       </div>
                     </div>
                   ) : (
                     <div className="border-2 border-black rounded-xl overflow-hidden bg-white shadow-[4px_4px_0px_#000]">
-                      <img src={resultUrl} alt="Output" className="max-h-[460px] w-auto block object-contain" />
+                      <img
+                        src={resultUrl}
+                        alt="Output"
+                        className="max-h-[460px] w-auto block object-contain"
+                      />
                     </div>
                   )}
                 </div>

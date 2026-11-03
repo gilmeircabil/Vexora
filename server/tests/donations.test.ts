@@ -17,7 +17,9 @@ describe('VexoraMods Support & Voluntary Donation System', () => {
     it('should reject amounts below the minimum threshold (₱20)', () => {
       const result = DonationService.validateAmount(19.99);
       expect(result.valid).toBe(false);
-      expect(result.error).toContain(`Minimum donation amount is ${env.DONATION_CURRENCY} ₱${env.DONATION_MIN_AMOUNT}`);
+      expect(result.error).toContain(
+        `Minimum donation amount is ${env.DONATION_CURRENCY} ₱${env.DONATION_MIN_AMOUNT}`,
+      );
     });
 
     it('should reject amounts above the maximum allowed threshold (₱500,000)', () => {
@@ -75,7 +77,9 @@ describe('VexoraMods Support & Voluntary Donation System', () => {
     });
 
     it('should reject malformed or missing signature parts', () => {
-      expect(DonationService.verifyPayMongoSignature(rawPayload, 'invalid_header', testSecret)).toBe(false);
+      expect(
+        DonationService.verifyPayMongoSignature(rawPayload, 'invalid_header', testSecret),
+      ).toBe(false);
       expect(DonationService.verifyPayMongoSignature(rawPayload, '', testSecret)).toBe(false);
     });
   });

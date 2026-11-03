@@ -1,8 +1,12 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import { ThemeProvider } from './context/ThemeContext.js';
 import { ToastProvider } from './context/ToastContext.js';
 import { AuthProvider } from './context/AuthContext.js';
+import { FavoritesProvider } from './context/FavoritesContext.js';
+import { MaintenanceProvider } from './context/MaintenanceContext.js';
+import { BroadcastNotificationProvider } from './context/BroadcastNotificationContext.js';
+import { BroadcastToastContainer } from './components/notifications/BroadcastToastContainer.js';
 import { AppLayout } from './components/layout/AppLayout.js';
 
 import { HomePage } from './pages/HomePage.js';
@@ -13,29 +17,63 @@ import { DashboardPage } from './pages/DashboardPage.js';
 import { AdminDashboardPage } from './pages/AdminDashboardPage.js';
 import { LoginPage } from './pages/LoginPage.js';
 import { RegisterPage } from './pages/RegisterPage.js';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage.js';
 import { AboutPage } from './pages/AboutPage.js';
 import { PrivacyPage } from './pages/PrivacyPage.js';
 import { LicensesPage } from './pages/LicensesPage.js';
+import { TermsPage } from './pages/TermsPage.js';
 import { ContributingPage } from './pages/ContributingPage.js';
 import { NotFoundPage } from './pages/NotFoundPage.js';
 import { DesignStudioPage } from './pages/DesignStudioPage.js';
 import { DesignEditorPage } from './pages/DesignEditorPage.js';
 import { ScrollToTop } from './components/common/ScrollToTop.js';
+import { PageTitleUpdater } from './components/common/PageTitleUpdater.js';
 
-// Smart Media & Image Processing Tools Pages
-import { AiToolsDashboardPage } from './pages/AiToolsDashboardPage.js';
-import { AiImageEnhancerPage } from './pages/ai/AiImageEnhancerPage.js';
-import { AiBackgroundRemoverPage } from './pages/ai/AiBackgroundRemoverPage.js';
-import { AiObjectRemoverPage } from './pages/ai/AiObjectRemoverPage.js';
-import { AiPhotoRestorationPage } from './pages/ai/AiPhotoRestorationPage.js';
-import { AiOcrPage } from './pages/ai/AiOcrPage.js';
+// AI-Powered Tool Pages (lazy-loaded for optimal chunk splitting)
+const AiImageEnhancerPage = React.lazy(() =>
+  import('./pages/ai/AiImageEnhancerPage.js').then((m) => ({ default: m.AiImageEnhancerPage })),
+);
+const AiBackgroundRemoverPage = React.lazy(() =>
+  import('./pages/ai/AiBackgroundRemoverPage.js').then((m) => ({
+    default: m.AiBackgroundRemoverPage,
+  })),
+);
+const AiObjectRemoverPage = React.lazy(() =>
+  import('./pages/ai/AiObjectRemoverPage.js').then((m) => ({ default: m.AiObjectRemoverPage })),
+);
+const AiPhotoRestorationPage = React.lazy(() =>
+  import('./pages/ai/AiPhotoRestorationPage.js').then((m) => ({
+    default: m.AiPhotoRestorationPage,
+  })),
+);
+const AiOcrPage = React.lazy(() =>
+  import('./pages/ai/AiOcrPage.js').then((m) => ({ default: m.AiOcrPage })),
+);
+const AiCodeExplainerPage = React.lazy(() =>
+  import('./pages/ai/AiCodeExplainerPage.js').then((m) => ({ default: m.AiCodeExplainerPage })),
+);
+const AiDocumentSummarizerPage = React.lazy(() =>
+  import('./pages/ai/AiDocumentSummarizerPage.js').then((m) => ({
+    default: m.AiDocumentSummarizerPage,
+  })),
+);
+const AiWritingAssistantPage = React.lazy(() =>
+  import('./pages/ai/AiWritingAssistantPage.js').then((m) => ({
+    default: m.AiWritingAssistantPage,
+  })),
+);
+const AiChatPage = React.lazy(() =>
+  import('./pages/ai/AiChatPage.js').then((m) => ({ default: m.AiChatPage })),
+);
 
-// Support & Public Leaderboard Pages
-import { SupportPage } from './pages/support/SupportPage.js';
-import { LeaderboardPage } from './pages/support/LeaderboardPage.js';
+// Learning Hub & Community Pages
+import { LearningHubPage } from './pages/learning/LearningHubPage.js';
+import { LearningPostDetailPage } from './pages/learning/LearningPostDetailPage.js';
+import { StudySpacePage } from './pages/education/StudySpacePage.js';
+import { CommunityPage } from './pages/community/CommunityPage.js';
+import { ReviewsPage } from './pages/ReviewsPage.js';
 
-// Developer Hub & Showcase Pages
-import { DevelopersDirectoryPage } from './pages/developers/DevelopersDirectoryPage.js';
+// Preserved Legacy Developer Profile & Project Showcase Routes
 import { DeveloperProfilePage } from './pages/developers/DeveloperProfilePage.js';
 import { DeveloperProfileEditPage } from './pages/developers/DeveloperProfileEditPage.js';
 import { ProjectsDirectoryPage } from './pages/developers/ProjectsDirectoryPage.js';
@@ -47,53 +85,98 @@ export const App: React.FC = () => {
     <ThemeProvider>
       <ToastProvider>
         <AuthProvider>
-          <BrowserRouter>
-            <ScrollToTop />
-            <Routes>
-              {/* Full-screen dedicated Design Studio Editor */}
-              <Route path="/design-studio/editor/:projectId" element={<DesignEditorPage />} />
+          <MaintenanceProvider>
+            <FavoritesProvider>
+            <BroadcastNotificationProvider>
+              <BrowserRouter>
+                <ScrollToTop />
+                <PageTitleUpdater />
+                <BroadcastToastContainer />
+                <Routes>
+                {/* Full-screen dedicated VexoraMods Studio Editor */}
+                <Route path="/studio/editor/:projectId" element={<DesignEditorPage />} />
+                <Route path="/design-studio/editor/:projectId" element={<DesignEditorPage />} />
 
-              <Route element={<AppLayout />}>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/design-studio" element={<DesignStudioPage />} />
-
-                {/* Smart Image & Document Tools */}
-                <Route path="/ai-tools" element={<AiToolsDashboardPage />} />
-                <Route path="/ai-tools/image-enhancer" element={<AiImageEnhancerPage />} />
-                <Route path="/ai-tools/background-remover" element={<AiBackgroundRemoverPage />} />
-                <Route path="/ai-tools/object-remover" element={<AiObjectRemoverPage />} />
-                <Route path="/ai-tools/photo-restoration" element={<AiPhotoRestorationPage />} />
-                <Route path="/ai-tools/ocr" element={<AiOcrPage />} />
-
-                {/* Support & Voluntary Donation */}
-                <Route path="/support" element={<SupportPage />} />
-                <Route path="/leaderboard" element={<LeaderboardPage />} />
-
-                {/* Developer Hub & Showcase */}
-                <Route path="/developers" element={<DevelopersDirectoryPage />} />
-                <Route path="/developers/profile/edit" element={<DeveloperProfileEditPage />} />
-                <Route path="/developers/profile/:username" element={<DeveloperProfilePage />} />
-                <Route path="/developers/projects" element={<ProjectsDirectoryPage />} />
-                <Route path="/developers/projects/manage" element={<ManageProjectsPage />} />
-                <Route path="/developers/projects/:slug" element={<ProjectDetailPage />} />
-
-                <Route path="/tools" element={<ToolsDirectoryPage />} />
-                <Route path="/category/:categorySlug" element={<CategoryPage />} />
-                <Route path="/tools/:toolSlug" element={<ToolDetailPage />} />
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/admin" element={<AdminDashboardPage />} />
+                {/* Standalone Auth Pages (No Navbar) */}
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/privacy" element={<PrivacyPage />} />
-                <Route path="/licenses" element={<LicensesPage />} />
-                <Route path="/contributing" element={<ContributingPage />} />
-                <Route path="/404" element={<NotFoundPage />} />
-                <Route path="*" element={<NotFoundPage />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </AuthProvider>
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password" element={<ForgotPasswordPage />} />
+
+                <Route element={<AppLayout />}>
+                  {/* 1. Home */}
+                  <Route path="/" element={<HomePage />} />
+
+                  {/* 2. All Tools (Unified Normal + AI Tools) */}
+                  <Route path="/tools" element={<ToolsDirectoryPage />} />
+                  <Route path="/tools/:toolSlug" element={<ToolDetailPage />} />
+                  <Route path="/category/:categorySlug" element={<CategoryPage />} />
+
+                  {/* AI Tools Redirect & Preserved Functional Tool Routes */}
+                  <Route path="/ai-tools" element={<Navigate to="/tools?type=ai" replace />} />
+                  <Route path="/ai-tools/image-enhancer" element={<AiImageEnhancerPage />} />
+                  <Route
+                    path="/ai-tools/background-remover"
+                    element={<AiBackgroundRemoverPage />}
+                  />
+                  <Route path="/ai-tools/object-remover" element={<AiObjectRemoverPage />} />
+                  <Route path="/ai-tools/photo-restoration" element={<AiPhotoRestorationPage />} />
+                  <Route path="/ai-tools/ocr" element={<AiOcrPage />} />
+                  <Route path="/ai-tools/code-explainer" element={<AiCodeExplainerPage />} />
+                  <Route
+                    path="/ai-tools/document-summarizer"
+                    element={<AiDocumentSummarizerPage />}
+                  />
+                  <Route path="/ai-tools/writing-assistant" element={<AiWritingAssistantPage />} />
+                  <Route path="/ai-tools/chat" element={<AiChatPage />} />
+                  <Route path="/ai-chat" element={<AiChatPage />} />
+                  <Route path="/chat" element={<Navigate to="/ai-tools/chat" replace />} />
+
+                  {/* 3. Studio */}
+                  <Route path="/studio" element={<DesignStudioPage />} />
+                  <Route path="/design-studio" element={<Navigate to="/studio" replace />} />
+
+                  {/* 4. Learning Hub */}
+                  <Route path="/learning" element={<LearningHubPage />} />
+                  <Route path="/learning/:slug" element={<LearningPostDetailPage />} />
+
+                  {/* 5. Study Space (Zero-Cost Education Suite) */}
+                  <Route path="/study" element={<StudySpacePage />} />
+                  <Route path="/study-space" element={<Navigate to="/study" replace />} />
+
+                  {/* Legacy Developer Hub Redirect + Preserved Profile/Project Routes */}
+                  <Route path="/developers" element={<Navigate to="/learning" replace />} />
+                  <Route path="/developers/profile/edit" element={<DeveloperProfileEditPage />} />
+                  <Route path="/developers/profile/:username" element={<DeveloperProfilePage />} />
+                  <Route path="/developers/projects" element={<ProjectsDirectoryPage />} />
+                  <Route path="/developers/projects/manage" element={<ManageProjectsPage />} />
+                  <Route path="/developers/projects/:slug" element={<ProjectDetailPage />} />
+
+                  {/* 5. Community (Donations + Leaderboard Combined) */}
+                  <Route path="/community" element={<CommunityPage />} />
+                  <Route path="/support" element={<Navigate to="/community" replace />} />
+                  <Route path="/leaderboard" element={<Navigate to="/community" replace />} />
+
+                  {/* 6. Public Ratings & Reviews */}
+                  <Route path="/reviews" element={<ReviewsPage />} />
+
+                  {/* Account, Admin & Legal */}
+                  <Route path="/dashboard" element={<DashboardPage />} />
+                  <Route path="/admin" element={<AdminDashboardPage />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/privacy" element={<PrivacyPage />} />
+                  <Route path="/licenses" element={<LicensesPage />} />
+                  <Route path="/terms" element={<TermsPage />} />
+                  <Route path="/contributing" element={<ContributingPage />} />
+                  <Route path="/404" element={<NotFoundPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </BroadcastNotificationProvider>
+        </FavoritesProvider>
+      </MaintenanceProvider>
+    </AuthProvider>
       </ToastProvider>
     </ThemeProvider>
   );

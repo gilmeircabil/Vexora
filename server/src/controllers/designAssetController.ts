@@ -41,7 +41,10 @@ export class DesignAssetController {
 
       const asset = await DesignAsset.create({
         userId: new Types.ObjectId(userId),
-        projectId: projectId && typeof projectId === 'string' && Types.ObjectId.isValid(projectId) ? new Types.ObjectId(projectId) : undefined,
+        projectId:
+          projectId && typeof projectId === 'string' && Types.ObjectId.isValid(projectId)
+            ? new Types.ObjectId(projectId)
+            : undefined,
         originalName: file.originalname,
         mimeType: file.mimetype,
         size: saved.size,

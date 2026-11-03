@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import { AuthService, type TokenPayload } from '../services/authService.js';
+import { User } from '../models/User.js';
 
 export interface AuthenticatedRequest extends Request {
   user?: TokenPayload;
@@ -36,7 +37,11 @@ export function authenticate(req: AuthenticatedRequest, res: Response, next: Nex
   next();
 }
 
-export function optionalAuthenticate(req: AuthenticatedRequest, _res: Response, next: NextFunction): void {
+export function optionalAuthenticate(
+  req: AuthenticatedRequest,
+  _res: Response,
+  next: NextFunction,
+): void {
   const authHeader = req.headers.authorization;
   let token: string | undefined;
 
@@ -65,4 +70,46 @@ export function requireAdmin(req: AuthenticatedRequest, res: Response, next: Nex
     return;
   }
   next();
+}
+
+export async function requireTeacher(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
+  if (!req.user) {
+    res.status(401).json({
+      success: false,
+      error: 'Authentication required. Please sign in to access this feature.',
+    });
+    return;
+  }
+
+  // Admins always have access
+  if (req.user.role === 'admin') {
+    next();
+    return;
+  }
+
+  try {
+    const user = await User.findById(req.user.userId).select('educationRole role');
+    if (
+      !user ||
+      (user.educationRole !== 'teacher' &&
+        user.educationRole !== 'educator' &&
+        user.role !== 'admin')
+    ) {
+      res.status(403).json({
+        success: false,
+        error: 'Teacher privileges required. Unauthorized student access is prohibited.',
+      });
+      return;
+    }
+    next();
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to verify teacher authorization.',
+    });
+  }
 }

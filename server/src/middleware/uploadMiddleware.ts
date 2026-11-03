@@ -105,16 +105,22 @@ export function validateDocMagicBytes(req: Request, res: Response, next: NextFun
     buf[0] === 0x25 && // %
     buf[1] === 0x50 && // P
     buf[2] === 0x44 && // D
-    buf[3] === 0x46;   // F
+    buf[3] === 0x46; // F
 
   const isJpeg = buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff;
-  const isPng =
-    buf[0] === 0x89 &&
-    buf[1] === 0x50 &&
-    buf[2] === 0x4e &&
-    buf[3] === 0x47;
+  const isPng = buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47;
+  const isWebp =
+    buf.length >= 12 &&
+    buf[0] === 0x52 &&
+    buf[1] === 0x49 &&
+    buf[2] === 0x46 &&
+    buf[3] === 0x46 &&
+    buf[8] === 0x57 &&
+    buf[9] === 0x45 &&
+    buf[10] === 0x42 &&
+    buf[11] === 0x50;
 
-  if (!isPdf && !isJpeg && !isPng) {
+  if (!isPdf && !isJpeg && !isPng && !isWebp) {
     res.status(400).json({
       success: false,
       error: 'The uploaded document does not match recognized PDF or image magic bytes.',

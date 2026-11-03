@@ -12,7 +12,9 @@ export const Base64Tool: React.FC = () => {
   const [mode, setMode] = useState<'text' | 'file'>('text');
 
   // Text mode state
-  const [plainText, setPlainText] = useState('VexoraMods — private, local-first tools for everyone.');
+  const [plainText, setPlainText] = useState(
+    'VexoraMods — private, local-first tools for everyone.',
+  );
   const [base64Text, setBase64Text] = useState(() =>
     encodeBase64Text('VexoraMods — private, local-first tools for everyone.'),
   );

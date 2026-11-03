@@ -102,11 +102,10 @@ export const AiImageEnhancerTool: React.FC = () => {
             <Sparkles className="w-5 h-5 stroke-[2.5]" />
           </div>
           <div>
-            <span className="font-black text-black text-sm block">
-              100% Free AI Image Enhancer
-            </span>
+            <span className="font-black text-black text-sm block">100% Free AI Image Enhancer</span>
             <p className="text-xs font-bold text-neutral-700">
-              Upscale, denoise, and sharpen images using Real-ESRGAN & Sharp. No external setup or AI models required.
+              Upscale, denoise, and sharpen images using Real-ESRGAN & Sharp. No external setup or
+              AI models required.
             </p>
           </div>
         </div>
@@ -262,9 +261,7 @@ export const AiImageEnhancerTool: React.FC = () => {
                       className="mt-0.5 accent-black"
                     />
                     <div>
-                      <span className="font-black text-black block">
-                        {opt.label}
-                      </span>
+                      <span className="font-black text-black block">{opt.label}</span>
                       <span className="text-[11px] font-bold text-neutral-600">{opt.desc}</span>
                     </div>
                   </label>

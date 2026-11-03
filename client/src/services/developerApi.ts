@@ -118,16 +118,13 @@ export const developerApi = {
     return res.json();
   },
 
-  async contactDeveloper(username: string, data: { senderName: string; senderEmail: string; subject: string; message: string }) {
-    const res = await fetch(`/api/developers/contact/${username}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    return res.json();
-  },
-
-  async submitReport(data: { targetType: 'profile' | 'project'; targetId: string; reason: string; description: string; reporterEmail?: string }) {
+  async submitReport(data: {
+    targetType: 'profile' | 'project';
+    targetId: string;
+    reason: string;
+    description: string;
+    reporterEmail?: string;
+  }) {
     const res = await fetch('/api/developers/reports', {
       method: 'POST',
       headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
@@ -152,7 +149,10 @@ export const developerApi = {
     return res.json();
   },
 
-  async toggleReaction(projectId: string, reaction: 'love' | 'rocket' | 'fire' | 'insightful' | 'like') {
+  async toggleReaction(
+    projectId: string,
+    reaction: 'love' | 'rocket' | 'fire' | 'insightful' | 'like',
+  ) {
     const res = await fetch(`/api/developers/projects/${projectId}/react`, {
       method: 'POST',
       headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
@@ -166,7 +166,12 @@ export const developerApi = {
     return res.json();
   },
 
-  async addProjectComment(projectId: string, content: string, authorName?: string, authorAvatar?: string) {
+  async addProjectComment(
+    projectId: string,
+    content: string,
+    authorName?: string,
+    authorAvatar?: string,
+  ) {
     const res = await fetch(`/api/developers/projects/${projectId}/comments`, {
       method: 'POST',
       headers: getAuthHeaders({ 'Content-Type': 'application/json' }),

@@ -9,7 +9,7 @@ import {
   Sparkles,
   ArrowRight,
   X,
-  Plus
+  Plus,
 } from 'lucide-react';
 import { developerApi } from '../../services/developerApi.js';
 import { useAuth } from '../../context/AuthContext.js';
@@ -78,7 +78,8 @@ export const ProjectsDirectoryPage: React.FC = () => {
                 Explore Community Projects
               </h1>
               <p className="text-sm sm:text-base font-bold text-neutral-700 max-w-2xl mt-2 leading-relaxed">
-                Discover applications, developer tools, machine learning experiments, and open-source software built by VexoraMods creators.
+                Discover applications, developer tools, machine learning experiments, and
+                open-source software built by VexoraMods creators.
               </p>
             </div>
 
@@ -185,7 +186,11 @@ export const ProjectsDirectoryPage: React.FC = () => {
                     {/* Cover Image */}
                     <div className="h-48 bg-[#FAF7F2] border-b-2 border-black relative overflow-hidden flex items-center justify-center">
                       {proj.coverImage ? (
-                        <img src={proj.coverImage} alt={proj.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                        <img
+                          src={proj.coverImage}
+                          alt={proj.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        />
                       ) : (
                         <div className="text-4xl font-mono font-black text-black/20">{'</>'}</div>
                       )}
@@ -196,7 +201,9 @@ export const ProjectsDirectoryPage: React.FC = () => {
 
                     <div className="p-5 space-y-2">
                       <Link to={`/developers/projects/${proj.slug}`}>
-                        <h3 className="font-black text-base text-black group-hover:underline">{proj.title}</h3>
+                        <h3 className="font-black text-base text-black group-hover:underline">
+                          {proj.title}
+                        </h3>
                       </Link>
                       <p className="text-xs font-semibold text-neutral-600 line-clamp-2 leading-relaxed">
                         {proj.description}
@@ -208,7 +215,10 @@ export const ProjectsDirectoryPage: React.FC = () => {
                     {/* Tech Badges */}
                     <div className="flex flex-wrap gap-1">
                       {(proj.technologies || []).slice(0, 4).map((tech: string) => (
-                        <span key={tech} className="text-[10px] font-mono font-bold px-2 py-0.5 bg-[#FAF7F2] border border-black rounded-md">
+                        <span
+                          key={tech}
+                          className="text-[10px] font-mono font-bold px-2 py-0.5 bg-[#FAF7F2] border border-black rounded-md"
+                        >
                           {tech}
                         </span>
                       ))}
@@ -223,7 +233,11 @@ export const ProjectsDirectoryPage: React.FC = () => {
                         >
                           <div className="w-6 h-6 rounded-md bg-[#FAF7F2] border border-black overflow-hidden flex items-center justify-center text-[10px] font-bold">
                             {proj.profileId.profileImage ? (
-                              <img src={proj.profileId.profileImage} alt="" className="w-full h-full object-cover" />
+                              <img
+                                src={proj.profileId.profileImage}
+                                alt=""
+                                className="w-full h-full object-cover"
+                              />
                             ) : (
                               <span>{proj.profileId.displayName?.slice(0, 2).toUpperCase()}</span>
                             )}
@@ -250,7 +264,9 @@ export const ProjectsDirectoryPage: React.FC = () => {
             </div>
           ) : (
             <div className="p-16 text-center bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000] space-y-4">
-              <p className="font-black text-base text-black">No projects found matching your query.</p>
+              <p className="font-black text-base text-black">
+                No projects found matching your query.
+              </p>
               <button
                 onClick={() => {
                   setSearchQuery('');

@@ -104,4 +104,5 @@ DesignProjectSchema.index({ userId: 1, isStarred: 1 });
 DesignProjectSchema.index({ userId: 1, category: 1 });
 
 export const DesignProject: mongoose.Model<IDesignProject> =
-  mongoose.models.DesignProject || mongoose.model<IDesignProject>('DesignProject', DesignProjectSchema);
+  mongoose.models.DesignProject ||
+  mongoose.model<IDesignProject>('DesignProject', DesignProjectSchema);

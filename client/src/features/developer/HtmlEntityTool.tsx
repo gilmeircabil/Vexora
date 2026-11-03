@@ -8,7 +8,9 @@ import { Trash2 } from 'lucide-react';
 export const HtmlEntityTool: React.FC = () => {
   const [plain, setPlain] = useState('<div class="hero">© 2026 VexoraMods & "Friends"</div>');
   const [encoded, setEncoded] = useState(() =>
-    encodeHtmlEntities('<div class="hero">© 2026 VexoraMods & "Friends"</div>', { mode: 'special' }),
+    encodeHtmlEntities('<div class="hero">© 2026 VexoraMods & "Friends"</div>', {
+      mode: 'special',
+    }),
   );
   const [mode, setMode] = useState<'special' | 'nonAscii' | 'extensive'>('special');
 

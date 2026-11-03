@@ -33,7 +33,8 @@ export const ExportModal: React.FC<ExportModalProps> = ({
     setError(null);
 
     try {
-      const cleanFileName = projectName.trim().replace(/[^a-zA-Z0-9_-]/g, '_') || 'vexoramods-design';
+      const cleanFileName =
+        projectName.trim().replace(/[^a-zA-Z0-9_-]/g, '_') || 'vexoramods-design';
       await exportCanvas(canvas, canvasBackground, {
         format,
         quality,
@@ -61,7 +62,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({
             </div>
             <div>
               <h3 className="text-lg font-black text-black">Export Design</h3>
-              <p className="text-xs font-semibold text-gray-600">Download your design in high resolution</p>
+              <p className="text-xs font-semibold text-gray-600">
+                Download your design in high resolution
+              </p>
             </div>
           </div>
           <button
@@ -82,7 +85,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({
 
           {/* Format Selection */}
           <div>
-            <label className="block text-xs font-black uppercase text-black mb-2">File Format</label>
+            <label className="block text-xs font-black uppercase text-black mb-2">
+              File Format
+            </label>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
@@ -97,7 +102,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({
                   <FileImage className="w-4 h-4 text-black" />
                   <div>
                     <div className="font-black text-sm text-black">PNG</div>
-                    <div className="text-[10px] text-gray-600 font-semibold">High quality, transparency</div>
+                    <div className="text-[10px] text-gray-600 font-semibold">
+                      High quality, transparency
+                    </div>
                   </div>
                 </div>
                 {format === 'png' && <Check className="w-4 h-4 text-black" />}
@@ -164,7 +171,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({
 
           {/* Multiplier / Scale */}
           <div>
-            <label className="block text-xs font-black uppercase text-black mb-1.5">Resolution Scale</label>
+            <label className="block text-xs font-black uppercase text-black mb-1.5">
+              Resolution Scale
+            </label>
             <div className="grid grid-cols-3 gap-2">
               {[1, 2, 3].map((m) => (
                 <button
@@ -188,7 +197,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-black uppercase text-black">Image Quality</label>
-                <span className="text-xs font-bold text-gray-700">{Math.round(quality * 100)}%</span>
+                <span className="text-xs font-bold text-gray-700">
+                  {Math.round(quality * 100)}%
+                </span>
               </div>
               <input
                 type="range"

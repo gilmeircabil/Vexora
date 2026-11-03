@@ -8,6 +8,11 @@ export interface ToolRegistryEntry {
 
 export const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   // Phase A: Image & AI Tools
+  'google-flow': lazy(() =>
+    import('../features/external/GoogleFlowTool.js').then((m) => ({
+      default: m.GoogleFlowTool,
+    })),
+  ),
   'smart-image-studio': lazy(() =>
     import('../features/images/SmartImageStudio.js').then((m) => ({
       default: m.SmartImageStudio,
@@ -17,6 +22,44 @@ export const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
     import('../features/images/AiImageEnhancerTool.js').then((m) => ({
       default: m.AiImageEnhancerTool,
     })),
+  ),
+  'ai-background-remover': lazy(() =>
+    import('../pages/ai/AiBackgroundRemoverPage.js').then((m) => ({
+      default: m.AiBackgroundRemoverPage,
+    })),
+  ),
+  'ai-object-remover': lazy(() =>
+    import('../pages/ai/AiObjectRemoverPage.js').then((m) => ({
+      default: m.AiObjectRemoverPage,
+    })),
+  ),
+  'ai-photo-restoration': lazy(() =>
+    import('../pages/ai/AiPhotoRestorationPage.js').then((m) => ({
+      default: m.AiPhotoRestorationPage,
+    })),
+  ),
+  'ai-ocr': lazy(() =>
+    import('../pages/ai/AiOcrPage.js').then((m) => ({
+      default: m.AiOcrPage,
+    })),
+  ),
+  'ai-code-explainer': lazy(() =>
+    import('../pages/ai/AiCodeExplainerPage.js').then((m) => ({
+      default: m.AiCodeExplainerPage,
+    })),
+  ),
+  'ai-document-summarizer': lazy(() =>
+    import('../pages/ai/AiDocumentSummarizerPage.js').then((m) => ({
+      default: m.AiDocumentSummarizerPage,
+    })),
+  ),
+  'ai-writing-assistant': lazy(() =>
+    import('../pages/ai/AiWritingAssistantPage.js').then((m) => ({
+      default: m.AiWritingAssistantPage,
+    })),
+  ),
+  'vexora-ai-chat': lazy(() =>
+    import('../pages/ai/AiChatPage.js').then((m) => ({ default: m.AiChatPage })),
   ),
   'image-compressor': lazy(() =>
     import('../features/images/ImageCompressorTool.js').then((m) => ({

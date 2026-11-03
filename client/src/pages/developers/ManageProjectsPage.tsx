@@ -10,7 +10,7 @@ import {
   Save,
   Layers,
   ArrowLeft,
-  AlertCircle
+  AlertCircle,
 } from 'lucide-react';
 import { developerApi } from '../../services/developerApi.js';
 import { useToast } from '../../context/ToastContext.js';
@@ -173,7 +173,8 @@ export const ManageProjectsPage: React.FC = () => {
             Manage My Projects
           </h1>
           <p className="text-xs sm:text-sm font-semibold text-neutral-600 mt-1">
-            Publish web applications, mobile apps, tools, and open-source packages to your developer portfolio.
+            Publish web applications, mobile apps, tools, and open-source packages to your developer
+            portfolio.
           </p>
         </div>
 
@@ -201,15 +202,19 @@ export const ManageProjectsPage: React.FC = () => {
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <h3 className="font-black text-base text-black truncate">{proj.title}</h3>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border ${
-                        proj.status === 'published'
-                          ? 'bg-green-100 border-green-800 text-green-900'
-                          : 'bg-neutral-100 border-neutral-400 text-neutral-600'
-                      }`}>
+                      <span
+                        className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border ${
+                          proj.status === 'published'
+                            ? 'bg-green-100 border-green-800 text-green-900'
+                            : 'bg-neutral-100 border-neutral-400 text-neutral-600'
+                        }`}
+                      >
                         {proj.status}
                       </span>
                     </div>
-                    <p className="text-xs text-neutral-600 font-medium line-clamp-1 mt-0.5">{proj.description}</p>
+                    <p className="text-xs text-neutral-600 font-medium line-clamp-1 mt-0.5">
+                      {proj.description}
+                    </p>
                     <div className="flex items-center gap-3 text-[11px] font-mono text-neutral-700 mt-1.5 flex-wrap">
                       <span className="capitalize font-bold bg-[#FAF7F2] border border-black/30 px-1.5 py-0.5 rounded text-[10px]">
                         {proj.category}
@@ -289,7 +294,9 @@ export const ManageProjectsPage: React.FC = () => {
 
               <form onSubmit={handleSubmit} className="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
                 <div>
-                  <label className="block text-xs font-black uppercase font-mono mb-1">Project Title *</label>
+                  <label className="block text-xs font-black uppercase font-mono mb-1">
+                    Project Title *
+                  </label>
                   <input
                     type="text"
                     required
@@ -302,7 +309,9 @@ export const ManageProjectsPage: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-black uppercase font-mono mb-1">Category</label>
+                    <label className="block text-xs font-black uppercase font-mono mb-1">
+                      Category
+                    </label>
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
@@ -321,7 +330,9 @@ export const ManageProjectsPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black uppercase font-mono mb-1">Status</label>
+                    <label className="block text-xs font-black uppercase font-mono mb-1">
+                      Status
+                    </label>
                     <select
                       value={status}
                       onChange={(e) => setStatus(e.target.value as any)}
@@ -334,7 +345,9 @@ export const ManageProjectsPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase font-mono mb-1">Cover Image URL</label>
+                  <label className="block text-xs font-black uppercase font-mono mb-1">
+                    Cover Image URL
+                  </label>
                   <input
                     type="url"
                     value={coverImage}
@@ -345,7 +358,9 @@ export const ManageProjectsPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase font-mono mb-1">Project Description *</label>
+                  <label className="block text-xs font-black uppercase font-mono mb-1">
+                    Project Description *
+                  </label>
                   <textarea
                     required
                     rows={4}
@@ -371,7 +386,9 @@ export const ManageProjectsPage: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-black uppercase font-mono mb-1">Your Role</label>
+                    <label className="block text-xs font-black uppercase font-mono mb-1">
+                      Your Role
+                    </label>
                     <input
                       type="text"
                       value={role}
@@ -382,7 +399,9 @@ export const ManageProjectsPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black uppercase font-mono mb-1">Live Demo URL</label>
+                    <label className="block text-xs font-black uppercase font-mono mb-1">
+                      Live Demo URL
+                    </label>
                     <input
                       type="url"
                       value={liveDemoUrl}
@@ -394,7 +413,9 @@ export const ManageProjectsPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase font-mono mb-1">GitHub / Source Repository URL</label>
+                  <label className="block text-xs font-black uppercase font-mono mb-1">
+                    GitHub / Source Repository URL
+                  </label>
                   <input
                     type="url"
                     value={repositoryUrl}
@@ -405,7 +426,9 @@ export const ManageProjectsPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase font-mono mb-1">Key Contributions & Architecture</label>
+                  <label className="block text-xs font-black uppercase font-mono mb-1">
+                    Key Contributions & Architecture
+                  </label>
                   <textarea
                     rows={2}
                     value={contributions}
@@ -422,7 +445,13 @@ export const ManageProjectsPage: React.FC = () => {
                     className="w-full py-3 bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[3px_3px_0px_#000] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
                     <Save className="w-4 h-4" />
-                    <span>{isSubmitting ? 'Saving Project...' : editingId ? 'Update Project' : 'Publish Project'}</span>
+                    <span>
+                      {isSubmitting
+                        ? 'Saving Project...'
+                        : editingId
+                          ? 'Update Project'
+                          : 'Publish Project'}
+                    </span>
                   </button>
                 </div>
               </form>

@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { UploadCloud, Sparkles, Download, ArrowLeft, RefreshCw, Layers, CheckCircle2 } from 'lucide-react';
+import {
+  UploadCloud,
+  Sparkles,
+  Download,
+  ArrowLeft,
+  RefreshCw,
+  Layers,
+  CheckCircle2,
+} from 'lucide-react';
 import { Link } from 'react-router';
 import { aiToolsApi } from '../../services/aiToolsApi.js';
 import { useToast } from '../../context/ToastContext.js';
@@ -37,8 +45,9 @@ export const AiImageEnhancerPage: React.FC = () => {
       formData.append('mode', mode);
 
       const res = await aiToolsApi.enhanceImage(formData);
-      if (res.success && res.data?.outputUrl) {
-        setResultUrl(res.data.outputUrl);
+      const outputUrl = res.data?.outputUrl || res.data?.data?.outputUrl;
+      if (res.success && outputUrl) {
+        setResultUrl(outputUrl);
         toast('Image enhancement successful!', 'success');
       } else {
         throw new Error(res.error || 'Enhancement failed');
@@ -53,16 +62,16 @@ export const AiImageEnhancerPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FAF7F2] py-8 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto">
-        <Link to="/ai-tools" className="inline-flex items-center gap-2 text-sm font-mono font-bold text-black hover:underline mb-6">
-          <ArrowLeft className="w-4 h-4" /> Back to AI Tools
+        <Link
+          to="/tools"
+          className="inline-flex items-center gap-2 text-sm font-mono font-bold text-black hover:underline mb-6"
+        >
+          <ArrowLeft className="w-4 h-4" /> Back to All Tools
         </Link>
 
         <div className="border-2 border-black bg-white p-6 sm:p-8 shadow-[4px_4px_0px_#000] mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-black pb-4 mb-6">
             <div>
-              <div className="inline-block bg-[#22C55E]/20 text-green-900 border border-green-800 font-mono text-xs font-bold px-2 py-0.5 mb-2">
-                100% FREE
-              </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-black">AI Image Enhancer</h1>
               <p className="text-sm text-gray-700 mt-1 font-medium">
                 Upscale images 2x or 4x with sharp edges, artifact reduction, and enhanced details.
@@ -74,17 +83,28 @@ export const AiImageEnhancerPage: React.FC = () => {
             {/* Settings & Upload */}
             <div className="space-y-6">
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">Upload Image</label>
+                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                  Upload Image
+                </label>
                 <label className="border-2 border-dashed border-black bg-[#FAF7F2] p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-yellow-50 transition-colors">
                   <UploadCloud className="w-8 h-8 text-black mb-2" />
                   <span className="text-xs font-bold text-black">Click or drag image here</span>
-                  <span className="text-[11px] text-gray-500 font-mono mt-1">JPG, PNG, WebP (Max 15MB)</span>
-                  <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleFileChange} className="hidden" />
+                  <span className="text-[11px] text-gray-500 font-mono mt-1">
+                    JPG, PNG, WebP (Max 15MB)
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
                 </label>
               </div>
 
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">Upscale Factor</label>
+                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                  Upscale Factor
+                </label>
                 <div className="grid grid-cols-2 gap-3">
                   {[2, 4].map((s) => (
                     <button
@@ -101,14 +121,18 @@ export const AiImageEnhancerPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">Enhancement Mode</label>
+                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                  Enhancement Mode
+                </label>
                 <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                   {(['enhance', 'denoise', 'restore_faces', 'sharpen'] as const).map((m) => (
                     <button
                       key={m}
                       onClick={() => setMode(m)}
                       className={`p-2 border border-black font-bold capitalize text-left ${
-                        mode === m ? 'bg-black text-white' : 'bg-gray-50 text-black hover:bg-gray-100'
+                        mode === m
+                          ? 'bg-black text-white'
+                          : 'bg-gray-50 text-black hover:bg-gray-100'
                       }`}
                     >
                       {m.replace('_', ' ')}
@@ -139,7 +163,9 @@ export const AiImageEnhancerPage: React.FC = () => {
             {/* Preview & Result */}
             <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="border-2 border-black bg-gray-50 p-4 flex flex-col justify-between">
-                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">Original Image</span>
+                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">
+                  Original Image
+                </span>
                 <div className="flex-1 flex items-center justify-center min-h-[260px] bg-white border border-gray-200 overflow-hidden">
                   {previewUrl ? (
                     <img src={previewUrl} alt="Original" className="max-h-[360px] object-contain" />
@@ -150,7 +176,9 @@ export const AiImageEnhancerPage: React.FC = () => {
               </div>
 
               <div className="border-2 border-black bg-gray-50 p-4 flex flex-col justify-between">
-                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">Enhanced Output</span>
+                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">
+                  Enhanced Output
+                </span>
                 <div className="flex-1 flex items-center justify-center min-h-[260px] bg-white border border-gray-200 overflow-hidden">
                   {resultUrl ? (
                     <img src={resultUrl} alt="Enhanced" className="max-h-[360px] object-contain" />

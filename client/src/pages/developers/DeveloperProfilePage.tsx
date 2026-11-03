@@ -4,8 +4,6 @@ import {
   MapPin,
   Briefcase,
   Globe,
-  Mail,
-  Send,
   Flag,
   Edit,
   ExternalLink,
@@ -13,21 +11,37 @@ import {
   AlertCircle,
   X,
   Code2,
-  FolderGit2
+  FolderGit2,
 } from 'lucide-react';
 import { developerApi } from '../../services/developerApi.js';
 import { useAuth } from '../../context/AuthContext.js';
 import { useToast } from '../../context/ToastContext.js';
 
 const GithubIcon: React.FC<{ className?: string }> = ({ className = 'w-3.5 h-3.5' }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
     <path d="M9 18c-4.51 2-5-2-7-2" />
   </svg>
 );
 
 const LinkedinIcon: React.FC<{ className?: string }> = ({ className = 'w-3.5 h-3.5' }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
     <rect x="2" y="9" width="4" height="12" />
     <circle cx="4" cy="4" r="2" />
@@ -42,14 +56,6 @@ export const DeveloperProfilePage: React.FC = () => {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-
-  // Contact Modal
-  const [isContactOpen, setIsContactOpen] = useState(false);
-  const [contactName, setContactName] = useState('');
-  const [contactEmail, setContactEmail] = useState('');
-  const [contactSubject, setContactSubject] = useState('');
-  const [contactMessage, setContactMessage] = useState('');
-  const [isSendingMessage, setIsSendingMessage] = useState(false);
 
   // Report Modal
   const [isReportOpen, setIsReportOpen] = useState(false);
@@ -77,34 +83,6 @@ export const DeveloperProfilePage: React.FC = () => {
       setError(err.message || 'Failed to load profile');
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleContactSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!username) return;
-
-    try {
-      setIsSendingMessage(true);
-      const res = await developerApi.contactDeveloper(username, {
-        senderName: contactName,
-        senderEmail: contactEmail,
-        subject: contactSubject,
-        message: contactMessage,
-      });
-
-      if (res.success) {
-        toast('Your inquiry was delivered to the developer.', 'success');
-        setIsContactOpen(false);
-        setContactSubject('');
-        setContactMessage('');
-      } else {
-        throw new Error(res.error || 'Failed to send inquiry');
-      }
-    } catch (err: any) {
-      toast(err.message || 'Failed to deliver message', 'error');
-    } finally {
-      setIsSendingMessage(false);
     }
   };
 
@@ -151,7 +129,9 @@ export const DeveloperProfilePage: React.FC = () => {
         <div className="max-w-xl mx-auto bg-white border-2 border-black rounded-2xl p-8 shadow-[6px_6px_0px_#000] text-center space-y-4">
           <AlertCircle className="w-10 h-10 text-red-600 mx-auto" />
           <h2 className="text-xl font-black text-black">Developer Profile Not Available</h2>
-          <p className="text-xs font-semibold text-neutral-600">{error || 'This developer profile does not exist or has been hidden.'}</p>
+          <p className="text-xs font-semibold text-neutral-600">
+            {error || 'This developer profile does not exist or has been hidden.'}
+          </p>
           <Link
             to="/developers"
             className="inline-flex px-4 py-2 bg-[#FACC15] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[2px_2px_0px_#000]"
@@ -195,7 +175,11 @@ export const DeveloperProfilePage: React.FC = () => {
               {/* Avatar */}
               <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl bg-[#FAF7F2] border-3 border-black overflow-hidden shadow-[4px_4px_0px_#000] flex items-center justify-center font-black text-3xl shrink-0">
                 {profile.profileImage ? (
-                  <img src={profile.profileImage} alt={profile.displayName} className="w-full h-full object-cover" />
+                  <img
+                    src={profile.profileImage}
+                    alt={profile.displayName}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <span>{profile.displayName.slice(0, 2).toUpperCase()}</span>
                 )}
@@ -203,19 +187,9 @@ export const DeveloperProfilePage: React.FC = () => {
 
               {/* Action Buttons */}
               <div className="flex items-center gap-2 flex-wrap">
-                {profile.contactPreferences?.allowContactForm && (
-                  <button
-                    onClick={() => setIsContactOpen(true)}
-                    className="px-4 py-2 bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[3px_3px_0px_#000] flex items-center gap-2 transition-all cursor-pointer"
-                  >
-                    <Mail className="w-4 h-4" />
-                    <span>Hire or Contact</span>
-                  </button>
-                )}
-
                 <button
                   onClick={() => setIsReportOpen(true)}
-                  className="p-2 bg-white hover:bg-neutral-100 border-2 border-black rounded-xl shadow-[2px_2px_0px_#000]"
+                  className="p-2 bg-white hover:bg-neutral-100 border-2 border-black rounded-xl shadow-[2px_2px_0px_#000] cursor-pointer"
                   title="Report Profile"
                 >
                   <Flag className="w-4 h-4 text-neutral-600" />
@@ -227,7 +201,9 @@ export const DeveloperProfilePage: React.FC = () => {
             <div className="space-y-4">
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="text-2xl sm:text-3xl font-black text-black">{profile.displayName}</h1>
+                  <h1 className="text-2xl sm:text-3xl font-black text-black">
+                    {profile.displayName}
+                  </h1>
                   <span className="text-sm font-mono text-neutral-500">@{profile.username}</span>
                   {profile.isFeatured && (
                     <span className="px-2 py-0.5 rounded-md bg-[#FACC15] border border-black font-mono text-[10px] font-bold">
@@ -256,12 +232,17 @@ export const DeveloperProfilePage: React.FC = () => {
                 <span className="px-3 py-1 rounded-xl bg-[#38BDF8]/20 border border-black text-neutral-900 capitalize">
                   {profile.remotePreference}
                 </span>
-                <span className={`px-3 py-1 rounded-xl border ${
-                  profile.availability === 'available'
-                    ? 'bg-[#4ADE80]/30 border-green-800 text-green-950'
-                    : 'bg-neutral-100 border-black text-neutral-800'
-                }`}>
-                  ● {profile.availability === 'available' ? 'Available for work' : profile.availability}
+                <span
+                  className={`px-3 py-1 rounded-xl border ${
+                    profile.availability === 'available'
+                      ? 'bg-[#4ADE80]/30 border-green-800 text-green-950'
+                      : 'bg-neutral-100 border-black text-neutral-800'
+                  }`}
+                >
+                  ●{' '}
+                  {profile.availability === 'available'
+                    ? 'Available for work'
+                    : profile.availability}
                 </span>
               </div>
 
@@ -364,7 +345,9 @@ export const DeveloperProfilePage: React.FC = () => {
 
               {profile.skills && profile.skills.length > 0 && (
                 <div className="space-y-2">
-                  <span className="text-[11px] font-mono font-bold text-neutral-500 uppercase">Core Skills:</span>
+                  <span className="text-[11px] font-mono font-bold text-neutral-500 uppercase">
+                    Core Skills:
+                  </span>
                   <div className="flex flex-wrap gap-1.5">
                     {profile.skills.map((s: string) => (
                       <span
@@ -380,7 +363,9 @@ export const DeveloperProfilePage: React.FC = () => {
 
               {profile.technologies && profile.technologies.length > 0 && (
                 <div className="space-y-2 pt-2 border-t border-black/10">
-                  <span className="text-[11px] font-mono font-bold text-neutral-500 uppercase">Technologies:</span>
+                  <span className="text-[11px] font-mono font-bold text-neutral-500 uppercase">
+                    Technologies:
+                  </span>
                   <div className="flex flex-wrap gap-1.5">
                     {profile.technologies.map((t: string) => (
                       <span
@@ -426,7 +411,11 @@ export const DeveloperProfilePage: React.FC = () => {
                   <div>
                     <div className="h-44 bg-[#FAF7F2] border-b-2 border-black relative overflow-hidden flex items-center justify-center">
                       {proj.coverImage ? (
-                        <img src={proj.coverImage} alt={proj.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                        <img
+                          src={proj.coverImage}
+                          alt={proj.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        />
                       ) : (
                         <div className="text-4xl font-mono font-black text-black/20">{'</>'}</div>
                       )}
@@ -436,7 +425,9 @@ export const DeveloperProfilePage: React.FC = () => {
                     </div>
 
                     <div className="p-5 space-y-2">
-                      <h3 className="font-black text-base text-black group-hover:underline">{proj.title}</h3>
+                      <h3 className="font-black text-base text-black group-hover:underline">
+                        {proj.title}
+                      </h3>
                       <p className="text-xs font-semibold text-neutral-600 line-clamp-2 leading-relaxed">
                         {proj.description}
                       </p>
@@ -446,7 +437,10 @@ export const DeveloperProfilePage: React.FC = () => {
                   <div className="p-5 pt-0">
                     <div className="flex flex-wrap gap-1 mb-3">
                       {(proj.technologies || []).slice(0, 3).map((t: string) => (
-                        <span key={t} className="text-[10px] font-mono font-bold px-2 py-0.5 bg-[#FAF7F2] border border-black rounded-md">
+                        <span
+                          key={t}
+                          className="text-[10px] font-mono font-bold px-2 py-0.5 bg-[#FAF7F2] border border-black rounded-md"
+                        >
                           {t}
                         </span>
                       ))}
@@ -477,82 +471,6 @@ export const DeveloperProfilePage: React.FC = () => {
           )}
         </div>
 
-        {/* Contact Modal */}
-        {isContactOpen && (
-          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white border-2 border-black rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-[8px_8px_0px_#000] space-y-5 animate-in fade-in zoom-in-95">
-              <div className="flex items-center justify-between border-b-2 border-black pb-3">
-                <div className="flex items-center gap-2">
-                  <Mail className="w-5 h-5 text-black" />
-                  <h3 className="font-black text-lg text-black">Contact {profile.displayName}</h3>
-                </div>
-                <button onClick={() => setIsContactOpen(false)} className="p-1 text-black hover:bg-neutral-100 rounded-lg">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <form onSubmit={handleContactSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-black uppercase font-mono mb-1">Your Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={contactName}
-                    onChange={(e) => setContactName(e.target.value)}
-                    placeholder="Recruiter or Business Name"
-                    className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-black uppercase font-mono mb-1">Your Email</label>
-                  <input
-                    type="email"
-                    required
-                    value={contactEmail}
-                    onChange={(e) => setContactEmail(e.target.value)}
-                    placeholder="contact@company.com"
-                    className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-black uppercase font-mono mb-1">Subject</label>
-                  <input
-                    type="text"
-                    required
-                    value={contactSubject}
-                    onChange={(e) => setContactSubject(e.target.value)}
-                    placeholder="Project opportunity / Contract work"
-                    className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-black uppercase font-mono mb-1">Message</label>
-                  <textarea
-                    required
-                    rows={4}
-                    value={contactMessage}
-                    onChange={(e) => setContactMessage(e.target.value)}
-                    placeholder="Briefly describe your project, timeline, and requirements..."
-                    className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSendingMessage}
-                  className="w-full py-3 bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[3px_3px_0px_#000] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>{isSendingMessage ? 'Delivering...' : 'Send Message Directly'}</span>
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
-
         {/* Report Modal */}
         {isReportOpen && (
           <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
@@ -569,7 +487,9 @@ export const DeveloperProfilePage: React.FC = () => {
 
               <form onSubmit={handleReportSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-black uppercase font-mono mb-1">Reason</label>
+                  <label className="block text-xs font-black uppercase font-mono mb-1">
+                    Reason
+                  </label>
                   <select
                     value={reportReason}
                     onChange={(e) => setReportReason(e.target.value)}
@@ -584,7 +504,9 @@ export const DeveloperProfilePage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase font-mono mb-1">Details</label>
+                  <label className="block text-xs font-black uppercase font-mono mb-1">
+                    Details
+                  </label>
                   <textarea
                     required
                     rows={3}

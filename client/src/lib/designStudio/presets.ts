@@ -11,10 +11,13 @@ export interface DesignPreset {
 export const DESIGN_CATEGORIES = [
   { id: 'all', name: 'All Categories' },
   { id: 'social-media', name: 'Social Media' },
-  { id: 'youtube', name: 'YouTube' },
+  { id: 'posters', name: 'Posters' },
   { id: 'presentations', name: 'Presentations' },
-  { id: 'marketing', name: 'Marketing & Flyers' },
+  { id: 'documents', name: 'Documents' },
   { id: 'business', name: 'Business' },
+  { id: 'thumbnails', name: 'Thumbnails' },
+  { id: 'marketing', name: 'Marketing' },
+  { id: 'youtube', name: 'YouTube' },
   { id: 'events', name: 'Events & Posters' },
   { id: 'custom', name: 'Custom' },
 ];
@@ -77,11 +80,20 @@ export const DESIGN_PRESETS: DesignPreset[] = [
   {
     id: 'poster',
     name: 'Event Poster',
-    category: 'events',
+    category: 'posters',
     width: 1200,
     height: 1600,
     aspectRatio: '3:4',
     description: '1200 × 1600 px (Portrait)',
+  },
+  {
+    id: 'a4-document',
+    name: 'A4 Document',
+    category: 'documents',
+    width: 1240,
+    height: 1754,
+    aspectRatio: 'A4',
+    description: '1240 × 1754 px (Print Document)',
   },
   {
     id: 'marketing-flyer',

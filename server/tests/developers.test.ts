@@ -5,9 +5,15 @@ import { DeveloperService } from '../src/services/developerService.js';
 describe('VexoraMods Developer Hub & Project Showcase System', () => {
   describe('Slug Generation & Normalization', () => {
     it('should generate clean URL-safe slugs for developer projects', () => {
-      expect(DeveloperService.slugify('VexoraMods AI Image Upscaler')).toBe('vexoramods-ai-image-upscaler');
-      expect(DeveloperService.slugify('React + Node.js Fullstack Portfolio 2026!')).toBe('react-nodejs-fullstack-portfolio-2026');
-      expect(DeveloperService.slugify('   ---Multiple---Hyphens & Spaces---   ')).toBe('multiple-hyphens-spaces');
+      expect(DeveloperService.slugify('VexoraMods AI Image Upscaler')).toBe(
+        'vexoramods-ai-image-upscaler',
+      );
+      expect(DeveloperService.slugify('React + Node.js Fullstack Portfolio 2026!')).toBe(
+        'react-nodejs-fullstack-portfolio-2026',
+      );
+      expect(DeveloperService.slugify('   ---Multiple---Hyphens & Spaces---   ')).toBe(
+        'multiple-hyphens-spaces',
+      );
       expect(DeveloperService.slugify('Clean-Slug-123')).toBe('clean-slug-123');
     });
 

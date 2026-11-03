@@ -1,6 +1,21 @@
 import React, { useEffect, useRef } from 'react';
 
-interface FloatingStar {
+export type BackgroundShapeType =
+  | 'star'
+  | 'wrench'
+  | 'gear'
+  | 'code'
+  | 'cursor'
+  | 'document'
+  | 'triangle'
+  | 'square'
+  | 'donut'
+  | 'plus'
+  | 'diamond'
+  | 'pencil'
+  | 'scissors';
+
+interface FloatingItem {
   x: number;
   y: number;
   size: number;
@@ -12,9 +27,10 @@ interface FloatingStar {
   opacity: number;
   twinkleSpeed: number;
   twinklePhase: number;
+  type: BackgroundShapeType;
 }
 
-interface ShootingStar {
+interface ShootingStreak {
   x: number;
   y: number;
   length: number;
@@ -24,15 +40,33 @@ interface ShootingStar {
   color: string;
   active: boolean;
   delay: number;
+  type: BackgroundShapeType;
 }
 
-const STAR_COLORS = [
+const SHAPE_COLORS = [
   '#FACC15', // Neo-Brutalist Sunshine Yellow
   '#F472B6', // Coral Pink
   '#4ADE80', // Vibrant Lime
   '#A78BFA', // Electric Violet
   '#38BDF8', // Sky Blue
-  '#FFFFFF', // White
+  '#FB923C', // Tangerine Orange
+  '#FFFFFF', // Clean White
+];
+
+const SHAPE_TYPES: BackgroundShapeType[] = [
+  'star',
+  'wrench',
+  'gear',
+  'code',
+  'cursor',
+  'document',
+  'triangle',
+  'square',
+  'donut',
+  'plus',
+  'diamond',
+  'pencil',
+  'scissors',
 ];
 
 export const FallingStarsBackground: React.FC = () => {
@@ -49,7 +83,10 @@ export const FallingStarsBackground: React.FC = () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion =
+      typeof window.matchMedia === 'function'
+        ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        : false;
 
     // Handle high DPI
     const dpr = window.devicePixelRatio || 1;
@@ -65,37 +102,46 @@ export const FallingStarsBackground: React.FC = () => {
     resize();
     window.addEventListener('resize', resize);
 
-    // Initialize floating falling stars
-    const starCount = Math.min(35, Math.floor(width / 38));
-    const floatingStars: FloatingStar[] = Array.from({ length: starCount }, () => ({
+    const getRandomType = (): BackgroundShapeType =>
+      SHAPE_TYPES[Math.floor(Math.random() * SHAPE_TYPES.length)]!;
+
+    const getRandomColor = (): string =>
+      SHAPE_COLORS[Math.floor(Math.random() * SHAPE_COLORS.length)]!;
+
+    // Initialize floating tools and shapes
+    const itemCount = Math.min(32, Math.floor(width / 44));
+    const floatingItems: FloatingItem[] = Array.from({ length: itemCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: 5 + Math.random() * 8, // 5px to 13px
-      speedY: 0.35 + Math.random() * 0.75, // gentle drift downwards
+      size: 7 + Math.random() * 8, // 7px to 15px
+      speedY: 0.25 + Math.random() * 0.55, // gentle drift downwards
       speedX: -0.15 + Math.random() * 0.3,
       rotation: Math.random() * Math.PI * 2,
-      rotSpeed: (Math.random() - 0.5) * 0.02,
-      color: STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)]!,
-      opacity: 0.45 + Math.random() * 0.45,
-      twinkleSpeed: 0.015 + Math.random() * 0.025,
+      rotSpeed: (Math.random() - 0.5) * 0.016,
+      color: getRandomColor(),
+      opacity: 0.35 + Math.random() * 0.35,
+      twinkleSpeed: 0.015 + Math.random() * 0.02,
       twinklePhase: Math.random() * Math.PI * 2,
+      type: getRandomType(),
     }));
 
-    // Initialize shooting / falling streak stars
-    const shootingStars: ShootingStar[] = Array.from({ length: 3 }, () => ({
+    // Initialize shooting streaks with tool/shape heads
+    const shootingStreaks: ShootingStreak[] = Array.from({ length: 2 }, () => ({
       x: Math.random() * width,
       y: -50,
-      length: 60 + Math.random() * 60,
-      speed: 6 + Math.random() * 4,
-      angle: Math.PI / 4 + (Math.random() - 0.5) * 0.2, // ~45 degree angle
+      length: 50 + Math.random() * 45,
+      speed: 5.0 + Math.random() * 3.0,
+      angle: Math.PI / 4 + (Math.random() - 0.5) * 0.2,
       opacity: 0,
-      color: STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)]!,
+      color: getRandomColor(),
       active: false,
-      delay: Math.floor(Math.random() * 240), // Staggered entry
+      delay: Math.floor(Math.random() * 240),
+      type: getRandomType(),
     }));
 
-    // Helper: Draw Neo-Brutalist 4-point star
-    const drawFourPointStar = (
+    // Draw individual tool or geometric shape with neo-brutalist styling
+    const drawShape = (
+      type: BackgroundShapeType,
       cx: number,
       cy: number,
       size: number,
@@ -106,22 +152,243 @@ export const FallingStarsBackground: React.FC = () => {
       ctx.save();
       ctx.translate(cx, cy);
       ctx.rotate(rotation);
-      ctx.globalAlpha = alpha;
-
-      const pinch = size * 0.22;
-      ctx.beginPath();
-      ctx.moveTo(0, -size);
-      ctx.quadraticCurveTo(0, -pinch, size, 0);
-      ctx.quadraticCurveTo(pinch, 0, 0, size);
-      ctx.quadraticCurveTo(0, pinch, -size, 0);
-      ctx.quadraticCurveTo(-pinch, 0, 0, -size);
-      ctx.closePath();
-
+      ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
       ctx.fillStyle = fillColor;
-      ctx.fill();
-      ctx.lineWidth = 1.4;
       ctx.strokeStyle = '#000000';
-      ctx.stroke();
+      ctx.lineWidth = 1.35;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+
+      switch (type) {
+        case 'star': {
+          // Neo-Brutalist 4-point pinched star
+          const pinch = size * 0.22;
+          ctx.beginPath();
+          ctx.moveTo(0, -size);
+          ctx.quadraticCurveTo(0, -pinch, size, 0);
+          ctx.quadraticCurveTo(pinch, 0, 0, size);
+          ctx.quadraticCurveTo(0, pinch, -size, 0);
+          ctx.quadraticCurveTo(-pinch, 0, 0, -size);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          break;
+        }
+
+        case 'wrench': {
+          // Tool: Mechanic / Settings Spanner Wrench
+          // Handle
+          const hw = size * 0.16;
+          ctx.beginPath();
+          ctx.rect(-hw, -size * 0.15, hw * 2, size * 0.95);
+          ctx.fill();
+          ctx.stroke();
+          // Head with open jaw
+          ctx.beginPath();
+          ctx.arc(0, -size * 0.45, size * 0.48, 0.25 * Math.PI, 0.75 * Math.PI, true);
+          ctx.lineTo(0, -size * 0.32);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          break;
+        }
+
+        case 'gear': {
+          // Tool: Cogwheel / Settings Gear
+          const teeth = 6;
+          const rOuter = size * 0.85;
+          const rInner = size * 0.62;
+          const rHole = size * 0.25;
+          ctx.beginPath();
+          for (let i = 0; i < teeth * 2; i++) {
+            const r = i % 2 === 0 ? rOuter : rInner;
+            const a = (i * Math.PI) / teeth;
+            if (i === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+            else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+          }
+          ctx.closePath();
+          // Inner hole
+          ctx.moveTo(rHole, 0);
+          ctx.arc(0, 0, rHole, 0, Math.PI * 2, true);
+          ctx.fill();
+          ctx.stroke();
+          break;
+        }
+
+        case 'code': {
+          // Tool: Code Chevrons < >
+          const w = size * 0.7;
+          const h = size * 0.6;
+          ctx.lineWidth = Math.max(1.8, size * 0.22);
+          // Left bracket <
+          ctx.beginPath();
+          ctx.moveTo(-w * 0.15, -h);
+          ctx.lineTo(-w, 0);
+          ctx.lineTo(-w * 0.15, h);
+          ctx.stroke();
+          // Right bracket >
+          ctx.beginPath();
+          ctx.moveTo(w * 0.15, -h);
+          ctx.lineTo(w, 0);
+          ctx.lineTo(w * 0.15, h);
+          ctx.stroke();
+          break;
+        }
+
+        case 'cursor': {
+          // Tool: Vector Arrow Cursor
+          ctx.beginPath();
+          ctx.moveTo(0, -size * 0.85);
+          ctx.lineTo(size * 0.65, size * 0.45);
+          ctx.lineTo(size * 0.15, size * 0.3);
+          ctx.lineTo(size * 0.35, size * 0.85);
+          ctx.lineTo(size * 0.08, size * 0.9);
+          ctx.lineTo(-size * 0.12, size * 0.4);
+          ctx.lineTo(-size * 0.5, size * 0.6);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          break;
+        }
+
+        case 'document': {
+          // Tool: Document Sheet with Folded Corner
+          const dw = size * 0.6;
+          const dh = size * 0.8;
+          const fold = size * 0.32;
+          ctx.beginPath();
+          ctx.moveTo(-dw, -dh);
+          ctx.lineTo(dw - fold, -dh);
+          ctx.lineTo(dw, -dh + fold);
+          ctx.lineTo(dw, dh);
+          ctx.lineTo(-dw, dh);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          // Fold triangle
+          ctx.beginPath();
+          ctx.moveTo(dw - fold, -dh);
+          ctx.lineTo(dw - fold, -dh + fold);
+          ctx.lineTo(dw, -dh + fold);
+          ctx.closePath();
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fill();
+          ctx.stroke();
+          break;
+        }
+
+        case 'pencil': {
+          // Tool: Drafting Pencil
+          const pw = size * 0.24;
+          const ph = size * 0.8;
+          ctx.beginPath();
+          ctx.moveTo(-pw, -ph * 0.6);
+          ctx.lineTo(pw, -ph * 0.6);
+          ctx.lineTo(pw, ph * 0.35);
+          ctx.lineTo(0, ph * 0.85); // Tip
+          ctx.lineTo(-pw, ph * 0.35);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          break;
+        }
+
+        case 'scissors': {
+          // Tool: Crossed Scissors
+          ctx.lineWidth = Math.max(1.8, size * 0.18);
+          ctx.beginPath();
+          ctx.moveTo(-size * 0.45, size * 0.65);
+          ctx.lineTo(size * 0.4, -size * 0.65);
+          ctx.moveTo(size * 0.45, size * 0.65);
+          ctx.lineTo(-size * 0.4, -size * 0.65);
+          ctx.stroke();
+          // Finger rings
+          ctx.beginPath();
+          ctx.arc(-size * 0.42, size * 0.65, size * 0.22, 0, Math.PI * 2);
+          ctx.arc(size * 0.42, size * 0.65, size * 0.22, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          break;
+        }
+
+        case 'triangle': {
+          // Shape: Delta / Equilateral Triangle
+          const th = size * 0.85;
+          const tw = size * 0.75;
+          ctx.beginPath();
+          ctx.moveTo(0, -th);
+          ctx.lineTo(tw, th * 0.7);
+          ctx.lineTo(-tw, th * 0.7);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          break;
+        }
+
+        case 'square': {
+          // Shape: Square with Neo-Brutalist Offset Drop Shadow
+          const sq = size * 0.65;
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(-sq + 2.2, -sq + 2.2, sq * 2, sq * 2);
+          ctx.fillStyle = fillColor;
+          ctx.fillRect(-sq, -sq, sq * 2, sq * 2);
+          ctx.strokeRect(-sq, -sq, sq * 2, sq * 2);
+          break;
+        }
+
+        case 'donut': {
+          // Shape: Bold Donut / Circle Ring
+          const rOut = size * 0.75;
+          const rIn = size * 0.35;
+          ctx.beginPath();
+          ctx.arc(0, 0, rOut, 0, Math.PI * 2, false);
+          ctx.arc(0, 0, rIn, 0, Math.PI * 2, true);
+          ctx.fill();
+          ctx.stroke();
+          break;
+        }
+
+        case 'plus': {
+          // Shape: Cross / Plus Sign +
+          const arm = size * 0.8;
+          const thk = size * 0.26;
+          ctx.beginPath();
+          ctx.moveTo(-thk, -arm);
+          ctx.lineTo(thk, -arm);
+          ctx.lineTo(thk, -thk);
+          ctx.lineTo(arm, -thk);
+          ctx.lineTo(arm, thk);
+          ctx.lineTo(thk, thk);
+          ctx.lineTo(thk, arm);
+          ctx.lineTo(-thk, arm);
+          ctx.lineTo(-thk, thk);
+          ctx.lineTo(-arm, thk);
+          ctx.lineTo(-arm, -thk);
+          ctx.lineTo(-thk, -thk);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          break;
+        }
+
+        case 'diamond': {
+          // Shape: Rhombus / Diamond
+          const dw = size * 0.7;
+          const dh = size * 0.9;
+          ctx.beginPath();
+          ctx.moveTo(0, -dh);
+          ctx.lineTo(dw, 0);
+          ctx.lineTo(0, dh);
+          ctx.lineTo(-dw, 0);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          break;
+        }
+
+        default:
+          break;
+      }
 
       ctx.restore();
     };
@@ -130,40 +397,43 @@ export const FallingStarsBackground: React.FC = () => {
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Render Floating Falling Stars
-      for (const s of floatingStars) {
+      // 1. Render Floating Tools and Shapes
+      for (const item of floatingItems) {
         if (!prefersReducedMotion) {
-          s.y += s.speedY;
-          s.x += s.speedX;
-          s.rotation += s.rotSpeed;
-          s.twinklePhase += s.twinkleSpeed;
+          item.y += item.speedY;
+          item.x += item.speedX;
+          item.rotation += item.rotSpeed;
+          item.twinklePhase += item.twinkleSpeed;
 
-          // Wrap around screen boundaries
-          if (s.y > height + 20) {
-            s.y = -20;
-            s.x = Math.random() * width;
+          // Wrap around screen boundaries and refresh type/color
+          if (item.y > height + 25) {
+            item.y = -25;
+            item.x = Math.random() * width;
+            item.type = getRandomType();
+            item.color = getRandomColor();
           }
-          if (s.x < -20) s.x = width + 20;
-          if (s.x > width + 20) s.x = -20;
+          if (item.x < -25) item.x = width + 25;
+          if (item.x > width + 25) item.x = -25;
         }
 
-        const currentOpacity = s.opacity * (0.75 + Math.sin(s.twinklePhase) * 0.25);
-        drawFourPointStar(s.x, s.y, s.size, s.color, s.rotation, currentOpacity);
+        const currentOpacity = item.opacity * (0.8 + Math.sin(item.twinklePhase) * 0.2);
+        drawShape(item.type, item.x, item.y, item.size, item.color, item.rotation, currentOpacity);
       }
 
-      // 2. Render Falling Streak Shooting Stars
+      // 2. Render Falling Streak Shooters
       if (!prefersReducedMotion) {
-        for (const ss of shootingStars) {
+        for (const ss of shootingStreaks) {
           if (!ss.active) {
             ss.delay--;
             if (ss.delay <= 0) {
               ss.active = true;
               ss.x = Math.random() * (width * 0.9);
               ss.y = -40;
-              ss.opacity = 0.85;
-              ss.color = STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)]!;
-              ss.speed = 6 + Math.random() * 4;
-              ss.length = 60 + Math.random() * 60;
+              ss.opacity = 0.65;
+              ss.color = getRandomColor();
+              ss.type = getRandomType();
+              ss.speed = 5.0 + Math.random() * 3.0;
+              ss.length = 50 + Math.random() * 45;
             }
             continue;
           }
@@ -174,7 +444,7 @@ export const FallingStarsBackground: React.FC = () => {
           ss.x += vx;
           ss.y += vy;
 
-          // Draw trail
+          // Draw streak trail
           ctx.save();
           ctx.translate(ss.x, ss.y);
           ctx.rotate(ss.angle);
@@ -194,13 +464,13 @@ export const FallingStarsBackground: React.FC = () => {
 
           ctx.restore();
 
-          // Star head
-          drawFourPointStar(ss.x, ss.y, 8, ss.color, ss.angle, ss.opacity);
+          // Head shape
+          drawShape(ss.type, ss.x, ss.y, 8, ss.color, ss.angle, ss.opacity);
 
           // Reset when out of view
           if (ss.y > height + 60 || ss.x > width + 60) {
             ss.active = false;
-            ss.delay = 180 + Math.floor(Math.random() * 300); // 3-8 seconds delay
+            ss.delay = 180 + Math.floor(Math.random() * 300);
           }
         }
       }
@@ -224,3 +494,5 @@ export const FallingStarsBackground: React.FC = () => {
     />
   );
 };
+
+export const FloatingToolsBackground = FallingStarsBackground;

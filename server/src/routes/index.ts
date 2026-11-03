@@ -7,6 +7,12 @@ import designAssetRoutes from './designAssetRoutes.js';
 import designTemplateRoutes from './designTemplateRoutes.js';
 import donationRoutes from './donationRoutes.js';
 import developerRoutes from './developerRoutes.js';
+import learningRoutes from './learningRoutes.js';
+import platformRoutes from './platformRoutes.js';
+import reviewRoutes from './reviewRoutes.js';
+import { educationRoutes } from './educationRoutes.js';
+import favoriteRoutes from './favoriteRoutes.js';
+import announcementRoutes from './announcementRoutes.js';
 
 const apiRouter = Router();
 
@@ -18,6 +24,12 @@ apiRouter.use('/design-assets', designAssetRoutes);
 apiRouter.use('/design-templates', designTemplateRoutes);
 apiRouter.use('/donations', donationRoutes);
 apiRouter.use('/developers', developerRoutes);
+apiRouter.use('/learning', learningRoutes);
+apiRouter.use('/platform', platformRoutes);
+apiRouter.use('/reviews', reviewRoutes);
+apiRouter.use('/education', educationRoutes);
+apiRouter.use('/favorites', favoriteRoutes);
+apiRouter.use('/announcements', announcementRoutes);
 
 // Health check endpoint
 apiRouter.get('/health', (_req, res) => {

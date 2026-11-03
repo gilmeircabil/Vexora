@@ -23,18 +23,17 @@ export interface UserCredits {
 
 export interface UserProfile {
   id: string;
+  username: string;
   name: string;
-  email: string;
+  email?: string;
   avatarUrl?: string;
   bio?: string;
   role: 'user' | 'admin';
-  oauthProviders?: {
-    google?: boolean;
-    github?: boolean;
-    facebook?: boolean;
-  };
-  subscription: UserSubscription;
-  credits: UserCredits;
+  educationRole?: 'student' | 'teacher' | 'educator';
+  emailVerified?: boolean;
+  accountStatus?: string;
+  subscription?: UserSubscription;
+  credits?: UserCredits;
 }
 
 interface AuthContextType {
@@ -45,6 +44,7 @@ interface AuthContextType {
   login: (token: string, user: UserProfile) => void;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  updateUser: (updated: Partial<UserProfile>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -96,13 +96,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      const activeToken = token || localStorage.getItem('tn_token');
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: activeToken ? { Authorization: `Bearer ${activeToken}` } : undefined,
+      });
     } catch {
       // Ignore network errors on logout
     }
     localStorage.removeItem('tn_token');
     setToken(null);
     setUser(null);
+
+    // Full page reload & redirect back to home page
+    if (typeof window !== 'undefined') {
+      try {
+        if (window.location.pathname === '/') {
+          window.location.reload();
+        } else {
+          window.location.href = '/';
+        }
+      } catch {
+        // Fallback for non-browser/test environments
+      }
+    }
   };
 
   const refreshUser = async () => {
@@ -110,6 +127,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await fetchCurrentUser(token);
     }
   };
+
+  const updateUser = useCallback((updated: Partial<UserProfile>) => {
+    setUser((prev) => (prev ? { ...prev, ...updated } : null));
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -121,6 +142,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         logout,
         refreshUser,
+        updateUser,
       }}
     >
       {children}

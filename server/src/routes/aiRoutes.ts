@@ -67,6 +67,19 @@ router.post(
   AIController.ocr,
 );
 
+// 6. AI Code Explainer & Error Debugger
+router.post('/code-assist', optionalAuthenticate, aiRateLimiter, AIController.explainCode);
+
+// 7. AI Document Summarizer & Q&A
+router.post('/document-assist', optionalAuthenticate, aiRateLimiter, AIController.summarizeDocument);
+
+// 8. AI Writing Assistant & ATS Resume Builder
+router.post('/writing-assist', optionalAuthenticate, aiRateLimiter, AIController.assistWriting);
+
+// 9. Vexora AI Chat & Real-Time Streaming
+router.post('/chat', optionalAuthenticate, aiRateLimiter, AIController.chat);
+router.post('/chat/stream', optionalAuthenticate, aiRateLimiter, AIController.streamChat);
+
 // Jobs, history & downloads
 router.get('/jobs/:jobId', optionalAuthenticate, AIController.getJob);
 router.get('/history', optionalAuthenticate, AIController.getHistory);

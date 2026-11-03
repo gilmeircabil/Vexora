@@ -39,7 +39,10 @@ export const CategoryPage: React.FC = () => {
     <div className="space-y-10">
       {/* Category Header */}
       <div className="border-b-2 border-black pb-8 space-y-4">
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs font-black text-black">
+        <nav
+          aria-label="Breadcrumb"
+          className="flex items-center gap-1.5 text-xs font-black text-black"
+        >
           <Link to="/" className="hover:underline">
             Home
           </Link>

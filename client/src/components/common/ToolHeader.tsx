@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { ChevronRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { type ToolDefinition, CATEGORIES } from '../../tools/catalog.js';
 import { Icon } from './Icon.js';
 
@@ -10,7 +10,6 @@ interface ToolHeaderProps {
 
 export const ToolHeader: React.FC<ToolHeaderProps> = ({ tool }) => {
   const categoryInfo = CATEGORIES.find((c) => c.id === tool.category);
-  const isServer = tool.processingLocation === 'server';
 
   const getCategoryColor = () => {
     switch (tool.category) {
@@ -48,10 +47,7 @@ export const ToolHeader: React.FC<ToolHeaderProps> = ({ tool }) => {
         {categoryInfo && (
           <>
             <ChevronRight className="w-3.5 h-3.5 stroke-[3]" />
-            <Link
-              to={`/category/${categoryInfo.slug}`}
-              className="hover:underline"
-            >
+            <Link to={`/category/${categoryInfo.slug}`} className="hover:underline">
               {categoryInfo.name}
             </Link>
           </>
@@ -79,26 +75,21 @@ export const ToolHeader: React.FC<ToolHeaderProps> = ({ tool }) => {
                   {categoryInfo.name}
                 </span>
               )}
+              {tool.isExternal && (
+                <span className="text-[11px] font-black px-2.5 py-0.5 rounded-lg border-2 border-black bg-[#38BDF8] text-black shadow-[2px_2px_0px_#000000]">
+                  External Tool
+                </span>
+              )}
+              {tool.toolType === 'ai-powered' && (
+                <span className="text-[11px] font-black px-2.5 py-0.5 rounded-lg border-2 border-black bg-[#F472B6] text-black shadow-[2px_2px_0px_#000000]">
+                  AI-Powered
+                </span>
+              )}
             </div>
             <p className="text-sm sm:text-base font-semibold text-neutral-700 mt-1 max-w-2xl leading-relaxed">
               {tool.tagline}
             </p>
           </div>
-        </div>
-
-        {/* Local-first or Neural Engine indicator */}
-        <div className="flex items-center gap-2">
-          {isServer ? (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F472B6] text-black text-xs font-black border-2 border-black shadow-[3px_3px_0px_#000000]">
-              <Sparkles className="w-4 h-4 stroke-[2.5]" />
-              <span>Neural AI Processing</span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#4ADE80] text-black text-xs font-black border-2 border-black shadow-[3px_3px_0px_#000000]">
-              <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
-              <span>100% In-Browser · Zero Upload</span>
-            </div>
-          )}
         </div>
       </div>
     </div>

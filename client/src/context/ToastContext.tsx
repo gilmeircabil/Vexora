@@ -86,7 +86,13 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
             <div className="flex-1">
               {t.title && <p className="font-black text-black">{t.title}</p>}
-              <p className={t.title ? 'text-xs font-bold mt-0.5 text-black' : 'text-xs font-black text-black'}>{t.message}</p>
+              <p
+                className={
+                  t.title ? 'text-xs font-bold mt-0.5 text-black' : 'text-xs font-black text-black'
+                }
+              >
+                {t.message}
+              </p>
             </div>
 
             <button

@@ -15,7 +15,9 @@ export const RelatedTools: React.FC<RelatedToolsProps> = ({ currentToolId }) => 
     <section className="mt-16 pt-8 border-t-2 border-black/10">
       <div className="mb-6">
         <h2 className="text-2xl font-black text-black">Related Tools</h2>
-        <p className="text-xs font-bold text-neutral-600 mt-0.5">Other utilities you might find useful</p>
+        <p className="text-xs font-bold text-neutral-600 mt-0.5">
+          Other utilities you might find useful
+        </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

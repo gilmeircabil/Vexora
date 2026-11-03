@@ -28,7 +28,11 @@ import {
   type DesignProjectDTO,
   type DesignTemplateDTO,
 } from '../lib/designStudio/api.js';
-import { DESIGN_PRESETS, DESIGN_CATEGORIES, type DesignPreset } from '../lib/designStudio/presets.js';
+import {
+  DESIGN_PRESETS,
+  DESIGN_CATEGORIES,
+  type DesignPreset,
+} from '../lib/designStudio/presets.js';
 
 export const DesignStudioPage: React.FC = () => {
   const navigate = useNavigate();
@@ -122,7 +126,7 @@ export const DesignStudioPage: React.FC = () => {
         localStorage.removeItem('toolnest_draft_project');
         setIsNewDesignModalOpen(false);
         showToast('Opening VexoraMods Studio in Guest Mode. Sign in anytime to sync.', 'info');
-        navigate(`/design-studio/editor/draft?w=${width}&h=${height}&title=${encodeURIComponent(title)}`);
+        navigate(`/studio/editor/draft?w=${width}&h=${height}&title=${encodeURIComponent(title)}`);
         return;
       }
 
@@ -135,7 +139,7 @@ export const DesignStudioPage: React.FC = () => {
 
       setIsNewDesignModalOpen(false);
       showToast('Created new design!', 'success');
-      navigate(`/design-studio/editor/${newProj._id}`);
+      navigate(`/studio/editor/${newProj._id}`);
     } catch (err: any) {
       showToast(err.message || 'Failed to create project', 'error');
     } finally {
@@ -159,13 +163,13 @@ export const DesignStudioPage: React.FC = () => {
           localStorage.setItem('vexoramods_draft_project', JSON.stringify(draftDoc));
         }
         showToast('Opening template in Guest Mode. Sign in to save to your account.', 'info');
-        navigate('/design-studio/editor/draft');
+        navigate('/studio/editor/draft');
         return;
       }
 
       const project = await designStudioApi.useTemplate(templateId);
       showToast('Template opened successfully!', 'success');
-      navigate(`/design-studio/editor/${project._id}`);
+      navigate(`/studio/editor/${project._id}`);
     } catch (err: any) {
       showToast(err.message || 'Failed to open template', 'error');
     }
@@ -177,7 +181,9 @@ export const DesignStudioPage: React.FC = () => {
       const updated = await designStudioApi.updateProject(project._id, {
         isStarred: !project.isStarred,
       });
-      setProjects((prev) => prev.map((p) => (p._id === project._id ? { ...p, isStarred: updated.isStarred } : p)));
+      setProjects((prev) =>
+        prev.map((p) => (p._id === project._id ? { ...p, isStarred: updated.isStarred } : p)),
+      );
     } catch (err: any) {
       showToast(err.message || 'Failed to update star', 'error');
     }
@@ -238,19 +244,16 @@ export const DesignStudioPage: React.FC = () => {
 
   return (
     <div className="space-y-8 pb-16 animate-fade-in">
-      {/* Neo-Brutalist Studio Banner */}
-      <div className="bg-[#FAF7F2] rounded-3xl border-4 border-black p-6 sm:p-8 shadow-[8px_8px_0px_#000000] relative overflow-hidden">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      {/* Open Editorial Studio Header */}
+      <div className="border-b-2 border-black pb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="max-w-xl space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FACC15] rounded-xl border-2 border-black font-black text-xs uppercase shadow-[2px_2px_0px_#000000]">
-              <Sparkles className="w-4 h-4 text-black" />
-              <span>Free Vector & Raster Design Suite</span>
-            </div>
             <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-black">
               VexoraMods Studio
             </h1>
             <p className="text-sm sm:text-base font-semibold text-gray-700">
-              Create, edit, layout, and export stunning graphics, social media posts, thumbnails, and presentations directly in your browser. 100% Free core editing.
+              Create, edit, layout, and export stunning graphics, social media posts, thumbnails,
+              and presentations directly in your browser. 100% Free core editing.
             </p>
           </div>
 
@@ -261,19 +264,21 @@ export const DesignStudioPage: React.FC = () => {
                 setCustomTitle('Untitled Design');
                 setIsNewDesignModalOpen(true);
               }}
-              className="flex items-center gap-2 px-6 py-3.5 bg-[#FACC15] hover:bg-amber-400 text-black font-black text-base rounded-2xl border-3 border-black shadow-[4px_4px_0px_#000000] hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer"
+              className="flex items-center gap-2 px-5 py-3 bg-[#FACC15] hover:bg-amber-400 text-black font-black text-sm rounded-xl border-2 border-black shadow-[3px_3px_0px_#000000] transition-colors cursor-pointer"
             >
-              <Plus className="w-5 h-5 stroke-[3]" />
+              <Plus className="w-4 h-4 stroke-[3]" />
               <span>Create New Design</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Preset Quick Starters Carousel */}
+      {/* Preset Quick Starters Strip */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-black text-black">Start from Canvas Presets</h2>
+          <h2 className="text-sm font-black uppercase tracking-wider text-black">
+            Start from Canvas Presets
+          </h2>
           <span className="text-xs font-bold text-gray-500">Popular formats</span>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
@@ -287,17 +292,51 @@ export const DesignStudioPage: React.FC = () => {
                 setCustomTitle(`${preset.name} Design`);
                 setIsNewDesignModalOpen(true);
               }}
-              className="p-4 bg-white rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000000] hover:-translate-y-1 hover:shadow-[5px_5px_0px_#000000] active:translate-y-0 text-left transition-all cursor-pointer group"
+              className="p-3.5 bg-white rounded-xl border-2 border-black hover:bg-[#FACC15]/20 text-left transition-colors cursor-pointer group"
             >
-              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border-2 border-black flex items-center justify-center font-black text-xs text-black group-hover:bg-[#FACC15] transition-colors mb-2.5">
+              <div className="text-xs font-mono font-black text-neutral-600 mb-1">
                 {preset.aspectRatio}
               </div>
-              <h3 className="font-black text-sm text-black truncate">{preset.name}</h3>
+              <h3 className="font-black text-sm text-black truncate group-hover:underline">
+                {preset.name}
+              </h3>
               <p className="text-[11px] font-semibold text-gray-500 mt-0.5">{preset.description}</p>
             </button>
           ))}
         </div>
       </div>
+
+      {/* Recent Editing History Strip */}
+      {projects.length > 0 && (
+        <div className="border-y-2 border-black/15 py-4 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-mono font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5" />
+              <span>Recent Editing History</span>
+            </h2>
+            <span className="text-[11px] font-bold text-neutral-500">
+              Jump back into your latest sessions
+            </span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {projects.slice(0, 4).map((recentProj) => (
+              <div
+                key={`recent-${recentProj._id}`}
+                onClick={() => navigate(`/studio/editor/${recentProj._id}`)}
+                className="py-2 px-3 rounded-lg hover:bg-black/5 flex items-center justify-between gap-2 cursor-pointer transition-colors"
+              >
+                <div className="min-w-0">
+                  <p className="text-xs font-black text-black truncate">{recentProj.title}</p>
+                  <p className="text-[10px] font-mono text-neutral-600">
+                    v{recentProj.currentVersion} • {recentProj.width}×{recentProj.height}
+                  </p>
+                </div>
+                <span className="text-[11px] font-black underline text-black shrink-0">Resume</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Dashboard Tabs & Controls */}
       <div className="space-y-4">
@@ -417,7 +456,7 @@ export const DesignStudioPage: React.FC = () => {
                 return (
                   <div
                     key={proj._id}
-                    onClick={() => navigate(`/design-studio/editor/${proj._id}`)}
+                    onClick={() => navigate(`/studio/editor/${proj._id}`)}
                     className="group bg-white rounded-2xl border-2 border-black overflow-hidden shadow-[4px_4px_0px_#000000] hover:-translate-y-1 hover:shadow-[6px_6px_0px_#000000] active:translate-y-0 transition-all cursor-pointer flex flex-col"
                   >
                     {/* Thumbnail Preview Area */}
@@ -544,7 +583,7 @@ export const DesignStudioPage: React.FC = () => {
                   {displayedProjects.map((proj) => (
                     <tr
                       key={proj._id}
-                      onClick={() => navigate(`/design-studio/editor/${proj._id}`)}
+                      onClick={() => navigate(`/studio/editor/${proj._id}`)}
                       className="hover:bg-amber-50/50 cursor-pointer transition-colors"
                     >
                       <td className="py-3 px-4">
@@ -574,7 +613,10 @@ export const DesignStudioPage: React.FC = () => {
                         {new Date(proj.updatedAt).toLocaleDateString()}
                       </td>
                       <td className="py-3 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
+                        <div
+                          className="flex items-center justify-end gap-1.5"
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           <button
                             onClick={() => {
                               setRenamingProject(proj);
@@ -610,6 +652,22 @@ export const DesignStudioPage: React.FC = () => {
         ) : (
           /* ===================== TAB CONTENT: TEMPLATES ===================== */
           <div className="space-y-4">
+            <div className="flex items-center gap-2 flex-wrap">
+              {DESIGN_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-3 py-1.5 rounded-xl border-2 border-black text-xs font-black transition-all ${
+                    selectedCategory === cat.id
+                      ? 'bg-[#FACC15] text-black shadow-[2px_2px_0px_#000000]'
+                      : 'bg-white text-neutral-700 hover:bg-neutral-100'
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {templates.map((tpl) => (
                 <div
@@ -704,7 +762,9 @@ export const DesignStudioPage: React.FC = () => {
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[10px] font-bold text-gray-600 block mb-0.5">WIDTH</label>
+                    <label className="text-[10px] font-bold text-gray-600 block mb-0.5">
+                      WIDTH
+                    </label>
                     <input
                       type="number"
                       min="50"
@@ -718,7 +778,9 @@ export const DesignStudioPage: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-gray-600 block mb-0.5">HEIGHT</label>
+                    <label className="text-[10px] font-bold text-gray-600 block mb-0.5">
+                      HEIGHT
+                    </label>
                     <input
                       type="number"
                       min="50"
@@ -746,7 +808,10 @@ export const DesignStudioPage: React.FC = () => {
                     <Info className="w-4 h-4 text-amber-700 shrink-0" />
                     <span>Guest Mode — Saved in your browser.</span>
                   </div>
-                  <Link to="/login?redirect=/design-studio" className="underline font-black text-black hover:text-amber-800 shrink-0">
+                  <Link
+                    to="/login?redirect=/studio"
+                    className="underline font-black text-black hover:text-amber-800 shrink-0"
+                  >
                     Sign In
                   </Link>
                 </div>

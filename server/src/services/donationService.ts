@@ -111,8 +111,8 @@ export class DonationService {
               },
             ],
             payment_method_types: ['gcash', 'paymaya', 'card', 'grab_pay'],
-            success_url: `${clientOrigin}/support?status=success&session_id={CHECKOUT_SESSION_ID}&donation_id=${donation._id}`,
-            cancel_url: `${clientOrigin}/support?status=canceled`,
+            success_url: `${clientOrigin}/community?status=success&session_id={CHECKOUT_SESSION_ID}&donation_id=${donation._id}`,
+            cancel_url: `${clientOrigin}/community?status=canceled`,
             metadata: {
               donationId: donation._id.toString(),
               providerTransactionId: providerTxId,
@@ -153,7 +153,7 @@ export class DonationService {
 
     // 2. Local sandbox / testing environment flow
     const sandboxSessionId = `sbx_sess_${providerTxId}`;
-    const sandboxCheckoutUrl = `${clientOrigin}/support?status=sandbox&session_id=${sandboxSessionId}&donation_id=${donation._id}`;
+    const sandboxCheckoutUrl = `${clientOrigin}/community?status=sandbox&session_id=${sandboxSessionId}&donation_id=${donation._id}`;
 
     donation.providerTransactionId = sandboxSessionId;
     donation.checkoutUrl = sandboxCheckoutUrl;
@@ -187,7 +187,10 @@ export class DonationService {
     }
 
     // If sandbox provider and status is pending, confirm in development
-    if (donation.paymentProvider === 'sandbox' && donation.providerTransactionId.startsWith('sbx_sess_')) {
+    if (
+      donation.paymentProvider === 'sandbox' &&
+      donation.providerTransactionId.startsWith('sbx_sess_')
+    ) {
       donation.paymentStatus = 'succeeded';
       donation.verifiedAt = new Date();
       await donation.save();
@@ -243,7 +246,11 @@ export class DonationService {
         return { status: 'ignored', error: 'Missing webhook signature header' };
       }
 
-      const isValid = this.verifyPayMongoSignature(rawBody, signatureHeader, env.PAYMONGO_WEBHOOK_SECRET);
+      const isValid = this.verifyPayMongoSignature(
+        rawBody,
+        signatureHeader,
+        env.PAYMONGO_WEBHOOK_SECRET,
+      );
       if (!isValid) {
         return { status: 'ignored', error: 'Invalid webhook signature' };
       }
@@ -341,7 +348,10 @@ export class DonationService {
       const payload = `${timestamp}.${raw}`;
       const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
 
-      return crypto.timingSafeEqual(Buffer.from(signature ?? '', 'hex'), Buffer.from(expected, 'hex'));
+      return crypto.timingSafeEqual(
+        Buffer.from(signature ?? '', 'hex'),
+        Buffer.from(expected, 'hex'),
+      );
     } catch {
       return false;
     }

@@ -23,9 +23,7 @@ export const PrivacyPage: React.FC = () => {
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
             <HardDrive className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
-              1. Where Your Files Are Processed
-            </h2>
+            <h2 className="text-base font-black text-black">1. Where Your Files Are Processed</h2>
           </div>
           <p>
             Every currently published tool on VexoraMods operates{' '}
@@ -56,9 +54,7 @@ export const PrivacyPage: React.FC = () => {
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
             <EyeOff className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
-              2. Analytics & Tracking
-            </h2>
+            <h2 className="text-base font-black text-black">2. Analytics & Tracking</h2>
           </div>
           <p>
             VexoraMods does not use Google Analytics, Facebook Pixels, user fingerprinting, or
@@ -74,30 +70,82 @@ export const PrivacyPage: React.FC = () => {
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
             <Lock className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
-              3. Passwords & Cryptographic Keys
-            </h2>
+            <h2 className="text-base font-black text-black">3. Passwords & Cryptographic Keys</h2>
           </div>
           <p>
             The Password Generator and UUID Generator use the standard{' '}
-            <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">crypto.getRandomValues()</code> and <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">crypto.randomUUID()</code> Web Crypto
-            APIs. Generated passwords are never stored in localStorage, sessionStorage, or URL
-            parameters. Once you refresh or close the page, all generated secrets are permanently
-            cleared from memory.
+            <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+              crypto.getRandomValues()
+            </code>{' '}
+            and{' '}
+            <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+              crypto.randomUUID()
+            </code>{' '}
+            Web Crypto APIs. Generated passwords are never stored in localStorage, sessionStorage,
+            or URL parameters. Once you refresh or close the page, all generated secrets are
+            permanently cleared from memory.
+          </p>
+        </Card>
+
+        <Card className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Lock className="w-5 h-5 text-black stroke-[2.5]" />
+            <h2 className="text-base font-black text-black">
+              4. Optional Accounts &amp; Cloud Studio Storage
+            </h2>
+          </div>
+          <p>
+            Account registration on VexoraMods is completely optional. If you choose to create an
+            account:
+          </p>
+          <ul className="list-disc list-inside space-y-1 text-xs font-semibold">
+            <li>
+              We store your name, email address, and a securely salted bcrypt password hash in our
+              database. Plaintext passwords are never stored or logged.
+            </li>
+            <li>
+              When using VexoraMods Studio, canvas object models and version history are saved to
+              your account so you can continue editing from any device.
+            </li>
+            <li>
+              Session continuity is maintained using a secure, HTTP-only cookie ({' '}
+              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+                refreshToken
+              </code>
+              ). We do not store tokens in unencrypted local storage.
+            </li>
+          </ul>
+        </Card>
+
+        <Card className="space-y-3">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-black stroke-[2.5]" />
+            <h2 className="text-base font-black text-black">
+              5. Bot Protection &amp; Spam Defense
+            </h2>
+          </div>
+          <p>
+            To prevent automated account enumeration, brute-force attacks, and denial-of-service,
+            our registration and authentication endpoints use Cloudflare Turnstile. Turnstile
+            evaluates visitor telemetry non-invasively to confirm human presence without cookies or
+            cross-site tracking.
           </p>
         </Card>
 
         <Card className="space-y-3 bg-[#FACC15]/20">
           <div className="flex items-center gap-2 text-black">
             <AlertTriangle className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black">4. Honest Security Boundaries</h2>
+            <h2 className="text-base font-black">
+              6. Honest Security Boundaries &amp; Data Rights
+            </h2>
           </div>
           <p className="text-xs text-neutral-800 font-semibold">
-            While VexoraMods does not upload or retain your files, local-first web applications still
-            run inside your browser environment. If your computer has malware, untrusted browser
-            extensions with permission to read web pages, or compromised memory, those extensions
-            could theoretically inspect DOM data. Always keep your browser updated and review
-            installed extensions.
+            You have full control over your data. You may export your Design Studio projects at any
+            time in PNG, SVG, or JSON format. If you wish to delete your account or any personal
+            data, you can do so directly from your dashboard or by contacting the maintainers. While
+            VexoraMods does not upload or retain your standard utility files, local-first web
+            applications run inside your browser environment. Always keep your browser updated and
+            review installed extensions.
           </p>
         </Card>
       </div>

@@ -19,9 +19,7 @@ export const ContributingPage: React.FC = () => {
         <Card className="space-y-3">
           <div className="flex items-center gap-2 pb-2 border-b-2 border-black/10">
             <Shield className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
-              Contribution Standards
-            </h2>
+            <h2 className="text-base font-black text-black">Contribution Standards</h2>
           </div>
           <ul className="list-disc list-inside space-y-1.5 text-xs font-semibold">
             <li>
@@ -50,32 +48,60 @@ export const ContributingPage: React.FC = () => {
         <Card className="space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b-2 border-black/10">
             <Code2 className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
-              Step-by-Step: Adding a New Tool
-            </h2>
+            <h2 className="text-base font-black text-black">Step-by-Step: Adding a New Tool</h2>
           </div>
 
           <ol className="list-decimal list-inside space-y-2 text-xs font-semibold">
             <li>
               <strong>Define the Tool in the Catalog:</strong> Add the metadata entry in{' '}
-              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">src/tools/catalog.ts</code> (id, slug, name, category, keywords, privacy
-              notice).
+              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+                src/tools/catalog.ts
+              </code>{' '}
+              (id, slug, name, category, keywords, privacy notice).
             </li>
             <li>
               <strong>Implement Pure Logic:</strong> Write the domain algorithms in{' '}
-              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">src/lib/&lt;domain&gt;/</code> and add unit tests under <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">src/test/</code>.
+              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+                src/lib/&lt;domain&gt;/
+              </code>{' '}
+              and add unit tests under{' '}
+              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+                src/test/
+              </code>
+              .
             </li>
             <li>
               <strong>Create the Tool Component:</strong> Build the accessible UI under{' '}
-              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">src/features/&lt;category&gt;/YourTool.tsx</code>.
+              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+                src/features/&lt;category&gt;/YourTool.tsx
+              </code>
+              .
             </li>
             <li>
               <strong>Register the Component:</strong> Connect the component in{' '}
-              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">src/tools/registry.ts</code> using <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">React.lazy</code>.
+              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+                src/tools/registry.ts
+              </code>{' '}
+              using{' '}
+              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+                React.lazy
+              </code>
+              .
             </li>
             <li>
-              <strong>Run Quality Checks:</strong> Verify that <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">npm run typecheck</code>,{' '}
-              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">npm run test</code>, and <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">npm run build</code> pass without errors.
+              <strong>Run Quality Checks:</strong> Verify that{' '}
+              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+                npm run typecheck
+              </code>
+              ,{' '}
+              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+                npm run test
+              </code>
+              , and{' '}
+              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+                npm run build
+              </code>{' '}
+              pass without errors.
             </li>
           </ol>
         </Card>
@@ -83,14 +109,15 @@ export const ContributingPage: React.FC = () => {
         <Card className="space-y-3">
           <div className="flex items-center gap-2 pb-2 border-b-2 border-black/10">
             <GitPullRequest className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
-              Submitting a Pull Request
-            </h2>
+            <h2 className="text-base font-black text-black">Submitting a Pull Request</h2>
           </div>
           <p className="text-xs font-semibold">
             Fork the repository, create a descriptive feature branch (e.g.{' '}
-            <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">feature/audio-trimmer</code>), commit your changes with clean messages, and open a
-            Pull Request. CI will run typechecks, linting, and automated tests.
+            <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+              feature/audio-trimmer
+            </code>
+            ), commit your changes with clean messages, and open a Pull Request. CI will run
+            typechecks, linting, and automated tests.
           </p>
         </Card>
       </div>

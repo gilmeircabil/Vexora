@@ -1,4 +1,5 @@
 import {
+  FabricObject,
   Rect,
   Circle,
   Triangle,
@@ -9,8 +10,71 @@ import {
   FabricImage,
   Point,
   type Canvas,
-  type FabricObject,
 } from 'fabric';
+
+// Ensure top-left coordinate origin so templates and element positions align accurately
+FabricObject.ownDefaults.originX = 'left';
+FabricObject.ownDefaults.originY = 'top';
+
+export function isTextObject(obj: FabricObject | null | undefined): boolean {
+  if (!obj) return false;
+  const t = (obj.type || '').toLowerCase();
+  return (
+    t === 'textbox' ||
+    t === 'i-text' ||
+    t === 'itext' ||
+    t === 'text' ||
+    obj instanceof Textbox ||
+    typeof (obj as any).text === 'string'
+  );
+}
+
+export function isImageObject(obj: FabricObject | null | undefined): obj is FabricImage {
+  if (!obj) return false;
+  const t = (obj.type || '').toLowerCase();
+  return t === 'image' || t === 'fabricimage' || obj instanceof FabricImage;
+}
+
+export function isRectObject(obj: FabricObject | null | undefined): obj is Rect {
+  if (!obj) return false;
+  const t = (obj.type || '').toLowerCase();
+  return t === 'rect' || obj instanceof Rect;
+}
+
+let sharedThumbCanvas: HTMLCanvasElement | null = null;
+
+/**
+ * Generates a lightweight thumbnail data URL from the live lower canvas bitmap
+ * without invoking Fabric's toCanvasElement(0.25), which mutates viewportTransform
+ * and invalidates/resizes every object's _cacheCanvas.
+ */
+export function createCanvasThumbnail(canvas: Canvas, multiplier = 0.25): string {
+  try {
+    const lowerEl = (canvas as any).lowerCanvasEl as HTMLCanvasElement | undefined;
+    if (lowerEl && typeof document !== 'undefined' && lowerEl.width > 0 && lowerEl.height > 0) {
+      const targetW = Math.max(1, Math.round((canvas.getWidth() || lowerEl.width) * multiplier));
+      const targetH = Math.max(1, Math.round((canvas.getHeight() || lowerEl.height) * multiplier));
+      if (!sharedThumbCanvas) {
+        sharedThumbCanvas = document.createElement('canvas');
+      }
+      sharedThumbCanvas.width = targetW;
+      sharedThumbCanvas.height = targetH;
+      const ctx = sharedThumbCanvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, targetW, targetH);
+        ctx.drawImage(lowerEl, 0, 0, targetW, targetH);
+        const dataUrl = sharedThumbCanvas.toDataURL('image/png');
+        if (dataUrl && dataUrl.startsWith('data:image/')) {
+          return dataUrl;
+        }
+      }
+    }
+  } catch {
+    // Fall back to Fabric's toDataURL in non-browser/test environments
+  }
+
+  return canvas.toDataURL({ format: 'png', multiplier });
+}
 
 /**
  * Creates standard editable shapes
@@ -214,6 +278,8 @@ export function addText(
     fontFamily = 'Inter';
   }
 
+  const wrapperEl = (canvas as any).wrapperEl as HTMLElement | undefined;
+
   const textbox = new Textbox(text, {
     left: center.x - 200,
     top: center.y - 50,
@@ -223,7 +289,8 @@ export function addText(
     fontFamily,
     fill: '#000000',
     textAlign: 'center',
-    splitByGrapheme: true,
+    splitByGrapheme: false,
+    ...(wrapperEl ? { hiddenTextareaContainer: wrapperEl } : {}),
     ...options,
   });
 
@@ -264,7 +331,7 @@ export async function addImageFromUrl(canvas: Canvas, url: string, options: Part
 }
 
 /**
- * Alignment snapping guidelines
+ * Alignment snapping guidelines (origin-agnostic and rotation-safe)
  */
 export function setupSnapping(canvas: Canvas) {
   const SNAP_THRESHOLD = 8;
@@ -275,18 +342,27 @@ export function setupSnapping(canvas: Canvas) {
 
     const canvasWidth = canvas.getWidth();
     const canvasHeight = canvas.getHeight();
-    const bound = obj.getBoundingRect();
+    const center = obj.getCenterPoint();
+
+    let nextCenterX = center.x;
+    let nextCenterY = center.y;
+    let snapped = false;
 
     // Horizontal center snap
-    const objCenterX = bound.left + bound.width / 2;
-    if (Math.abs(objCenterX - canvasWidth / 2) < SNAP_THRESHOLD) {
-      obj.set({ left: canvasWidth / 2 - bound.width / 2 });
+    if (Math.abs(center.x - canvasWidth / 2) < SNAP_THRESHOLD) {
+      nextCenterX = canvasWidth / 2;
+      snapped = true;
     }
 
     // Vertical center snap
-    const objCenterY = bound.top + bound.height / 2;
-    if (Math.abs(objCenterY - canvasHeight / 2) < SNAP_THRESHOLD) {
-      obj.set({ top: canvasHeight / 2 - bound.height / 2 });
+    if (Math.abs(center.y - canvasHeight / 2) < SNAP_THRESHOLD) {
+      nextCenterY = canvasHeight / 2;
+      snapped = true;
+    }
+
+    if (snapped) {
+      obj.setPositionByOrigin(new Point(nextCenterX, nextCenterY), 'center', 'center');
+      obj.setCoords();
     }
   });
 }

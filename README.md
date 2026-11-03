@@ -31,6 +31,7 @@ VexoraMods is a free and open-source all-in-one online tools platform that provi
 ## 🛠️ Workspaces & Capabilities
 
 ### 1. Image Utilities & Smart Image Studio
+
 - **Smart Image Studio:** Unified studio for upscaling, background removal, object erasing, vintage photo restoration, and color transforms.
 - **Image Compressor:** Compress PNG, JPEG, and WebP with custom compression levels.
 - **Image Resizer:** Exact dimension and percentage resizing with aspect ratio preservation.
@@ -39,12 +40,14 @@ VexoraMods is a free and open-source all-in-one online tools platform that provi
 - **Metadata Viewer & Color Picker:** Header parsing and canvas eyedropper.
 
 ### 2. PDF Utilities
+
 - **PDF Merger & Splitter:** Combine multiple documents or extract custom page ranges.
 - **PDF Rotator:** Rotate orientation of individual PDF pages.
 - **Image to PDF:** Convert multi-image collections into single structured PDF files.
 - **PDF Viewer:** In-browser sandboxed PDF inspector powered by PDF.js.
 
 ### 3. Developer Utilities
+
 - **JSON Formatter & Validator:** Pretty-print, syntax validate, and minify JSON with descriptive error markers.
 - **Base64 Encoder & Decoder:** Bidirectional UTF-8 text and binary data-URI converter.
 - **JWT Debugger:** Encode, decode, and verify JSON Web Tokens with HS256/384/512 algorithms.
@@ -54,6 +57,7 @@ VexoraMods is a free and open-source all-in-one online tools platform that provi
 - **CSS Formatter & Beautifier:** AST-based CSS beautification via Prettier.
 
 ### 4. Text & Calculation Utilities
+
 - **Word & Character Counter:** Real-time character, word, line, and paragraph counters.
 - **Case Converter:** Transform text to UPPERCASE, lowercase, Title Case, camelCase, kebab-case, snake_case.
 - **Text Diff Checker:** Visual diff highlighter comparing text versions.
@@ -61,12 +65,14 @@ VexoraMods is a free and open-source all-in-one online tools platform that provi
 - **Date Difference Calculator:** Calculate elapsed calendar and business days between UTC dates.
 
 ### 5. VexoraMods Studio (Online Design Editor)
+
 - **Interactive Fabric Canvas:** Drag-and-drop elements, shapes, vector graphics, typography, and uploads.
 - **Layer & Object Control:** Z-index reordering, opacity controls, group, clone, and lock objects.
 - **Export Options:** High-resolution PNG, JPG, and vector PDF exports directly from canvas.
 - **Templates & History:** Built-in social media presets and revision version history.
 
 ### 6. Developer Hub & Portfolio Showcase
+
 - **Public Profiles:** Showcase programming languages, experience levels, services, and social links.
 - **Project Directory:** Publish live demo links, source code repositories, screenshots, and tech stacks.
 - **Community Engagement:** Real-time view counts, 5-reaction emoji bars, and discussion comment threads.

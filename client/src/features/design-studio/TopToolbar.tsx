@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router';
 import {
   ChevronLeft,
@@ -6,7 +6,6 @@ import {
   Redo2,
   ZoomIn,
   ZoomOut,
-  Maximize2,
   Eye,
   Download,
   Sparkles,
@@ -15,6 +14,8 @@ import {
   CheckCircle2,
   Loader2,
   AlertCircle,
+  FileText,
+  Maximize2,
 } from 'lucide-react';
 import type { SaveStatus } from './types.js';
 
@@ -37,6 +38,9 @@ interface TopToolbarProps {
   onOpenVersions: () => void;
   onOpenAITools: () => void;
   currentVersion: number;
+  canvasWidth?: number;
+  canvasHeight?: number;
+  onResizeCanvas?: (newWidth: number, newHeight: number) => void;
 }
 
 export const TopToolbar: React.FC<TopToolbarProps> = ({
@@ -58,12 +62,35 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({
   onOpenVersions,
   onOpenAITools,
   currentVersion,
+  canvasWidth = 1080,
+  canvasHeight = 1080,
+  onResizeCanvas,
 }) => {
   const [localTitle, setLocalTitle] = useState(title);
+  const [isFileMenuOpen, setIsFileMenuOpen] = useState(false);
+  const [isResizeOpen, setIsResizeOpen] = useState(false);
+  const [resizeW, setResizeW] = useState(canvasWidth);
+  const [resizeH, setResizeH] = useState(canvasHeight);
+  const fileMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setLocalTitle(title);
   }, [title]);
+
+  useEffect(() => {
+    setResizeW(canvasWidth);
+    setResizeH(canvasHeight);
+  }, [canvasWidth, canvasHeight]);
+
+  useEffect(() => {
+    const handleOutside = (e: MouseEvent) => {
+      if (fileMenuRef.current && !fileMenuRef.current.contains(e.target as Node)) {
+        setIsFileMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, []);
 
   const handleTitleBlur = () => {
     if (localTitle.trim() && localTitle !== title) {
@@ -78,23 +105,165 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({
   };
 
   const formattedTime = lastSavedAt
-    ? lastSavedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    ? lastSavedAt.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      })
     : null;
 
   return (
-    <header className="h-14 bg-[#FAF7F2] border-b-2 border-black flex items-center justify-between px-3 sm:px-5 gap-3 shrink-0 z-30 select-none">
-      {/* Left: Back button + Title + Save indicator */}
-      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+    <header className="h-14 bg-[#FAF7F2] border-b-2 border-black flex items-center justify-between px-2.5 sm:px-5 gap-1.5 sm:gap-3 shrink-0 z-30 select-none">
+      {/* Left: Back button + VexoraMods Studio Logo + File Menu + Title + Save status */}
+      <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
         <Link
-          to="/design-studio"
+          to="/studio"
           className="p-1.5 rounded-xl border-2 border-black bg-white hover:bg-gray-100 shadow-[1.5px_1.5px_0px_#000000] hover:-translate-y-0.5 active:translate-y-0 transition-all text-black"
           title="Back to Design Studio Dashboard"
         >
           <ChevronLeft className="w-5 h-5" />
         </Link>
 
+        {/* VexoraMods Studio Logo Badge */}
+        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#FACC15] border-2 border-black font-black text-xs text-black shadow-[1.5px_1.5px_0px_#000000]">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>VexoraMods Studio</span>
+        </div>
+
+        {/* File Menu Dropdown */}
+        <div className="relative" ref={fileMenuRef}>
+          <button
+            type="button"
+            onClick={() => setIsFileMenuOpen((v) => !v)}
+            className="px-2.5 py-1 rounded-xl border-2 border-black bg-white hover:bg-gray-100 text-xs font-black text-black shadow-[1.5px_1.5px_0px_#000000] flex items-center gap-1"
+            title="File Menu"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>File</span>
+          </button>
+
+          {isFileMenuOpen && (
+            <div className="absolute left-0 mt-2 w-52 bg-white border-2 border-black rounded-2xl shadow-[5px_5px_0px_#000000] py-1.5 z-50 text-xs font-bold text-black">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsFileMenuOpen(false);
+                  onManualSave();
+                }}
+                className="w-full px-3.5 py-2 text-left hover:bg-[#FAF7F2] flex items-center justify-between"
+              >
+                <span>Save Project</span>
+                <span className="text-[10px] font-mono text-neutral-500">Ctrl+S</span>
+              </button>
+              {onResizeCanvas && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsFileMenuOpen(false);
+                    setIsResizeOpen(true);
+                  }}
+                  className="w-full px-3.5 py-2 text-left hover:bg-[#FAF7F2] flex items-center justify-between"
+                >
+                  <span>Resize Canvas...</span>
+                  <span className="text-[10px] font-mono text-neutral-500">
+                    {canvasWidth}×{canvasHeight}
+                  </span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsFileMenuOpen(false);
+                  onOpenVersions();
+                }}
+                className="w-full px-3.5 py-2 text-left hover:bg-[#FAF7F2]"
+              >
+                Version History (v{currentVersion})
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsFileMenuOpen(false);
+                  onOpenExport();
+                }}
+                className="w-full px-3.5 py-2 text-left hover:bg-[#FAF7F2]"
+              >
+                Export PNG / JPG / PDF
+              </button>
+              <div className="my-1 border-t border-black/10" />
+              <Link to="/studio" className="block px-3.5 py-2 hover:bg-[#FAF7F2] text-neutral-700">
+                Exit to Studio Dashboard
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Resize Button */}
+        {onResizeCanvas && (
+          <div className="relative hidden md:block">
+            <button
+              type="button"
+              onClick={() => setIsResizeOpen((v) => !v)}
+              className="px-2.5 py-1 rounded-xl border-2 border-black bg-white hover:bg-gray-100 text-xs font-black text-black shadow-[1.5px_1.5px_0px_#000000] flex items-center gap-1"
+              title="Resize Canvas Dimensions"
+            >
+              <Maximize2 className="w-3.5 h-3.5" />
+              <span>Resize</span>
+            </button>
+
+            {isResizeOpen && (
+              <div className="absolute left-0 mt-2 w-60 bg-white border-2 border-black rounded-2xl shadow-[5px_5px_0px_#000000] p-3.5 z-50 space-y-3">
+                <div className="text-xs font-black uppercase text-black">Resize Canvas (px)</div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-[10px] font-bold text-neutral-500 block">Width</label>
+                    <input
+                      type="number"
+                      min={100}
+                      max={6000}
+                      value={resizeW}
+                      onChange={(e) => setResizeW(Number(e.target.value) || 1080)}
+                      className="w-full px-2 py-1 text-xs font-bold border-2 border-black rounded-lg bg-[#FAF7F2]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-neutral-500 block">Height</label>
+                    <input
+                      type="number"
+                      min={100}
+                      max={6000}
+                      value={resizeH}
+                      onChange={(e) => setResizeH(Number(e.target.value) || 1080)}
+                      className="w-full px-2 py-1 text-xs font-bold border-2 border-black rounded-lg bg-[#FAF7F2]"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setIsResizeOpen(false)}
+                    className="px-2.5 py-1 text-xs font-bold border border-black rounded-lg"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onResizeCanvas(resizeW, resizeH);
+                      setIsResizeOpen(false);
+                    }}
+                    className="px-3 py-1 text-xs font-black bg-[#FACC15] border border-black rounded-lg"
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Project Title Input */}
-        <div className="relative group max-w-[140px] sm:max-w-[240px] md:max-w-[320px]">
+        <div className="relative group max-w-[140px] sm:max-w-[220px] md:max-w-[280px]">
           <input
             type="text"
             value={localTitle}
@@ -190,7 +359,7 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({
         </div>
       </div>
 
-      {/* Right: Actions (Preview, AI Tools, Version History, Export) */}
+      {/* Right: Actions (AI Tools, Preview, Version History, Share/Export) */}
       <div className="flex items-center gap-1.5 sm:gap-2">
         {/* AI Magic Tools */}
         <button

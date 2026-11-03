@@ -3,6 +3,7 @@ import { UploadCloud, Scissors, Download, ArrowLeft, RefreshCw, Pipette } from '
 import { Link } from 'react-router';
 import { aiToolsApi } from '../../services/aiToolsApi.js';
 import { useToast } from '../../context/ToastContext.js';
+import { removeImageBackground } from '../../lib/ai/backgroundRemovalHelper.js';
 
 export const AiBackgroundRemoverPage: React.FC = () => {
   const { toast } = useToast();
@@ -13,6 +14,7 @@ export const AiBackgroundRemoverPage: React.FC = () => {
   const [bgColor, setBgColor] = useState<string>('transparent');
   const [customHex, setCustomHex] = useState<string>('#FFFFFF');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [progressStatus, setProgressStatus] = useState<string>('');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -31,6 +33,25 @@ export const AiBackgroundRemoverPage: React.FC = () => {
 
     try {
       setIsProcessing(true);
+      setProgressStatus('Initializing AI cutout...');
+
+      const effectiveBgColor = bgColor === 'custom' ? customHex : bgColor;
+
+      // 1. In-browser neural segmentation (Zero server dependencies)
+      try {
+        const result = await removeImageBackground(selectedFile, {
+          bgColor: effectiveBgColor,
+          onProgress: (status) => setProgressStatus(status),
+        });
+        setResultUrl(result.url);
+        toast('Background removed cleanly!', 'success');
+        return;
+      } catch (clientErr) {
+        console.warn('In-browser background removal failed, falling back to server:', clientErr);
+      }
+
+      // 2. Server fallback if needed
+      setProgressStatus('Processing via server fallback...');
       const formData = new FormData();
       formData.append('image', selectedFile);
       if (bgColor === 'custom') {
@@ -40,8 +61,9 @@ export const AiBackgroundRemoverPage: React.FC = () => {
       }
 
       const res = await aiToolsApi.removeBackground(formData);
-      if (res.success && res.data?.outputUrl) {
-        setResultUrl(res.data.outputUrl);
+      const outputUrl = res.data?.outputUrl || res.data?.data?.outputUrl;
+      if (res.success && outputUrl) {
+        setResultUrl(outputUrl);
         toast('Background removed successfully!', 'success');
       } else {
         throw new Error(res.error || 'Background removal failed');
@@ -50,25 +72,29 @@ export const AiBackgroundRemoverPage: React.FC = () => {
       toast(err.message || 'Background removal failed.', 'error');
     } finally {
       setIsProcessing(false);
+      setProgressStatus('');
     }
   };
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] py-8 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto">
-        <Link to="/ai-tools" className="inline-flex items-center gap-2 text-sm font-mono font-bold text-black hover:underline mb-6">
-          <ArrowLeft className="w-4 h-4" /> Back to AI Tools
+        <Link
+          to="/tools"
+          className="inline-flex items-center gap-2 text-sm font-mono font-bold text-black hover:underline mb-6"
+        >
+          <ArrowLeft className="w-4 h-4" /> Back to All Tools
         </Link>
 
         <div className="border-2 border-black bg-white p-6 sm:p-8 shadow-[4px_4px_0px_#000] mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-black pb-4 mb-6">
             <div>
-              <div className="inline-block bg-[#22C55E]/20 text-green-900 border border-green-800 font-mono text-xs font-bold px-2 py-0.5 mb-2">
-                100% FREE
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-black">AI Background Remover</h1>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-black">
+                AI Background Remover
+              </h1>
               <p className="text-sm text-gray-700 mt-1 font-medium">
-                Automatically isolate foreground subjects and export crisp transparent PNGs or custom color backgrounds.
+                Automatically isolate foreground subjects and export crisp transparent PNGs or
+                custom color backgrounds.
               </p>
             </div>
           </div>
@@ -76,22 +102,33 @@ export const AiBackgroundRemoverPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="space-y-6">
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">Upload Image</label>
+                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                  Upload Image
+                </label>
                 <label className="border-2 border-dashed border-black bg-[#FAF7F2] p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-yellow-50 transition-colors">
                   <UploadCloud className="w-8 h-8 text-black mb-2" />
                   <span className="text-xs font-bold text-black">Upload photo</span>
                   <span className="text-[11px] text-gray-500 font-mono mt-1">PNG, JPG, WebP</span>
-                  <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleFileChange} className="hidden" />
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
                 </label>
               </div>
 
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">Background Finish</label>
+                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                  Background Finish
+                </label>
                 <div className="grid grid-cols-3 gap-2">
                   <button
                     onClick={() => setBgColor('transparent')}
                     className={`py-2 px-1 text-xs font-mono font-bold border-2 border-black ${
-                      bgColor === 'transparent' ? 'bg-[#FACC15] shadow-[2px_2px_0px_#000]' : 'bg-white'
+                      bgColor === 'transparent'
+                        ? 'bg-[#FACC15] shadow-[2px_2px_0px_#000]'
+                        : 'bg-white'
                     }`}
                   >
                     Transparent
@@ -139,7 +176,7 @@ export const AiBackgroundRemoverPage: React.FC = () => {
                 {isProcessing ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin" />
-                    <span>Removing Background...</span>
+                    <span>{progressStatus || 'Removing Background...'}</span>
                   </>
                 ) : (
                   <>
@@ -152,7 +189,9 @@ export const AiBackgroundRemoverPage: React.FC = () => {
 
             <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="border-2 border-black bg-gray-50 p-4 flex flex-col justify-between">
-                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">Original</span>
+                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">
+                  Original
+                </span>
                 <div className="flex-1 flex items-center justify-center min-h-[260px] bg-white border border-gray-200 overflow-hidden">
                   {previewUrl ? (
                     <img src={previewUrl} alt="Original" className="max-h-[360px] object-contain" />
@@ -163,7 +202,9 @@ export const AiBackgroundRemoverPage: React.FC = () => {
               </div>
 
               <div className="border-2 border-black bg-gray-50 p-4 flex flex-col justify-between">
-                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">Background Removed</span>
+                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">
+                  Background Removed
+                </span>
                 <div
                   className="flex-1 flex items-center justify-center min-h-[260px] border border-gray-200 overflow-hidden"
                   style={{
@@ -172,7 +213,12 @@ export const AiBackgroundRemoverPage: React.FC = () => {
                         ? 'linear-gradient(45deg, #e5e7eb 25%, transparent 25%), linear-gradient(-45deg, #e5e7eb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e7eb 75%), linear-gradient(-45deg, transparent 75%, #e5e7eb 75%)'
                         : 'none',
                     backgroundSize: '20px 20px',
-                    backgroundColor: bgColor === 'transparent' ? '#FFFFFF' : bgColor === 'custom' ? customHex : bgColor,
+                    backgroundColor:
+                      bgColor === 'transparent'
+                        ? '#FFFFFF'
+                        : bgColor === 'custom'
+                          ? customHex
+                          : bgColor,
                   }}
                 >
                   {resultUrl ? (

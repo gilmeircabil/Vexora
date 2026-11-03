@@ -74,7 +74,11 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
   };
 
   const handleRestore = async (version: DesignVersionDTO) => {
-    if (!confirm(`Restore to "${version.versionName}" (v${version.versionNumber})? A new version snapshot will be created.`)) {
+    if (
+      !confirm(
+        `Restore to "${version.versionName}" (v${version.versionNumber})? A new version snapshot will be created.`,
+      )
+    ) {
       return;
     }
 
@@ -135,7 +139,10 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
         )}
 
         {/* Snapshot Creation Form */}
-        <form onSubmit={handleCreateSnapshot} className="pt-3 pb-4 border-b-2 border-black/10 shrink-0">
+        <form
+          onSubmit={handleCreateSnapshot}
+          className="pt-3 pb-4 border-b-2 border-black/10 shrink-0"
+        >
           <label className="block text-xs font-black uppercase text-black mb-1.5">
             Save Named Snapshot
           </label>
@@ -206,7 +213,9 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
                         <span className="px-2 py-0.5 bg-black text-[#FACC15] font-black text-xs rounded-md">
                           v{ver.versionNumber}
                         </span>
-                        <h4 className="font-black text-sm text-black truncate">{ver.versionName}</h4>
+                        <h4 className="font-black text-sm text-black truncate">
+                          {ver.versionName}
+                        </h4>
                         {isCurrent && (
                           <span className="px-2 py-0.5 bg-green-100 border border-green-500 text-green-800 text-[10px] font-black rounded-md">
                             Current

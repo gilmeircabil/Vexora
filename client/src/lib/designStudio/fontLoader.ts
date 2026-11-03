@@ -1,3 +1,5 @@
+import { cache } from 'fabric';
+
 export interface FontOption {
   family: string;
   category: 'sans-serif' | 'serif' | 'display' | 'handwriting' | 'monospace';
@@ -25,51 +27,74 @@ export const AVAILABLE_FONTS: FontOption[] = [
 ];
 
 const loadedFonts = new Set<string>();
+const inFlightFonts = new Map<string, Promise<boolean>>();
 
 /**
  * Dynamically loads a Google font into the document if not already loaded
  */
 export async function loadFont(fontFamily: string): Promise<boolean> {
-  if (loadedFonts.has(fontFamily)) {
+  const normalizedKey = fontFamily.trim().toLowerCase();
+  if (loadedFonts.has(normalizedKey)) {
     return true;
   }
 
-  const fontConfig = AVAILABLE_FONTS.find((f) => f.family.toLowerCase() === fontFamily.toLowerCase());
+  const existingPromise = inFlightFonts.get(normalizedKey);
+  if (existingPromise) {
+    return existingPromise;
+  }
+
+  const fontConfig = AVAILABLE_FONTS.find((f) => f.family.toLowerCase() === normalizedKey);
   if (!fontConfig || !fontConfig.googleFont) {
-    loadedFonts.add(fontFamily);
+    loadedFonts.add(normalizedKey);
     return true;
   }
 
   const fontId = `google-font-${fontFamily.replace(/\s+/g, '-').toLowerCase()}`;
   if (document.getElementById(fontId)) {
-    loadedFonts.add(fontFamily);
+    loadedFonts.add(normalizedKey);
+    cache.clearFontCache(fontFamily);
     return true;
   }
 
-  return new Promise((resolve) => {
+  const loadPromise = new Promise<boolean>((resolve) => {
     const link = document.createElement('link');
     link.id = fontId;
     link.rel = 'stylesheet';
     const formattedName = fontFamily.replace(/\s+/g, '+');
     link.href = `https://fonts.googleapis.com/css2?family=${formattedName}:wght@400;600;700;900&display=swap`;
 
+    const finalize = (ok: boolean) => {
+      inFlightFonts.delete(normalizedKey);
+      if (ok) {
+        loadedFonts.add(normalizedKey);
+        cache.clearFontCache(fontFamily);
+      }
+      resolve(ok);
+    };
+
     link.onload = () => {
-      loadedFonts.add(fontFamily);
-      // Wait for font faces to be ready
-      if ('fonts' in document) {
-        document.fonts.ready.then(() => resolve(true));
+      if ('fonts' in document && typeof document.fonts.load === 'function') {
+        Promise.allSettled([
+          document.fonts.load(`400 16px "${fontFamily}"`),
+          document.fonts.load(`700 16px "${fontFamily}"`),
+        ]).then(() => finalize(true));
+      } else if ('fonts' in document && document.fonts.ready) {
+        document.fonts.ready.then(() => finalize(true));
       } else {
-        resolve(true);
+        finalize(true);
       }
     };
 
     link.onerror = () => {
       console.warn(`Could not load font: ${fontFamily}. Falling back to system default.`);
-      resolve(false);
+      finalize(false);
     };
 
     document.head.appendChild(link);
   });
+
+  inFlightFonts.set(normalizedKey, loadPromise);
+  return loadPromise;
 }
 
 /**

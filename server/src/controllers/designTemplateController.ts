@@ -13,7 +13,8 @@ function getParam(val: string | string[] | undefined): string {
 export const INITIAL_SEED_TEMPLATES = [
   {
     title: 'Modern Product Launch Post',
-    description: 'Vibrant Neo-Brutalist product announcement template for Instagram and social media.',
+    description:
+      'Vibrant Neo-Brutalist product announcement template for Instagram and social media.',
     category: 'social-media',
     width: 1080,
     height: 1080,

@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { DeveloperService } from '../services/developerService.js';
 import { StorageService } from '../services/storageService.js';
+import { User } from '../models/User.js';
 import type { AuthenticatedRequest } from '../middleware/authMiddleware.js';
 
 export class DeveloperController {
@@ -10,9 +11,11 @@ export class DeveloperController {
 
   static async searchDevelopers(req: Request, res: Response): Promise<void> {
     try {
-      const { q, experienceLevel, remotePreference, availability, skills, page, limit, featured } = req.query;
+      const { q, experienceLevel, remotePreference, availability, skills, page, limit, featured } =
+        req.query;
 
-      const skillList = typeof skills === 'string' ? skills.split(',').map((s) => s.trim()) : undefined;
+      const skillList =
+        typeof skills === 'string' ? skills.split(',').map((s) => s.trim()) : undefined;
 
       const result = await DeveloperService.searchDevelopers({
         q: q as string,
@@ -37,7 +40,9 @@ export class DeveloperController {
       const featured = await DeveloperService.getFeaturedDevelopers(limit);
       res.status(200).json({ success: true, data: featured });
     } catch (err: any) {
-      res.status(500).json({ success: false, error: err.message || 'Failed to load featured developers' });
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to load featured developers' });
     }
   }
 
@@ -71,7 +76,9 @@ export class DeveloperController {
       const profile = await DeveloperService.getProfileByUserId(req.user.userId);
       res.status(200).json({ success: true, data: profile });
     } catch (err: any) {
-      res.status(500).json({ success: false, error: err.message || 'Failed to fetch your profile' });
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to fetch your profile' });
     }
   }
 
@@ -85,7 +92,9 @@ export class DeveloperController {
       const profile = await DeveloperService.createOrUpdateProfile(req.user.userId, req.body);
       res.status(200).json({ success: true, data: profile });
     } catch (err: any) {
-      res.status(400).json({ success: false, error: err.message || 'Failed to save developer profile' });
+      res
+        .status(400)
+        .json({ success: false, error: err.message || 'Failed to save developer profile' });
     }
   }
 
@@ -112,6 +121,9 @@ export class DeveloperController {
       const profile = await DeveloperService.createOrUpdateProfile(req.user.userId, {
         profileImage: saved.url,
       });
+
+      // Synchronize with User account avatar
+      await User.findByIdAndUpdate(req.user.userId, { avatarUrl: saved.url });
 
       res.status(200).json({
         success: true,
@@ -207,7 +219,7 @@ export class DeveloperController {
         return;
       }
 
-      const project = await DeveloperService.getProjectBySlug(slug, true);
+      const project = await DeveloperService.getProjectBySlug(slug, false);
       if (!project) {
         res.status(404).json({ success: false, error: 'Project not found.' });
         return;
@@ -215,7 +227,9 @@ export class DeveloperController {
 
       res.status(200).json({ success: true, data: project });
     } catch (err: any) {
-      res.status(500).json({ success: false, error: err.message || 'Failed to load project details' });
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to load project details' });
     }
   }
 
@@ -260,40 +274,6 @@ export class DeveloperController {
       res.status(200).json(result);
     } catch (err: any) {
       res.status(400).json({ success: false, error: err.message || 'Failed to delete project' });
-    }
-  }
-
-  // --------------------------------------------------------------------------
-  // Contact & Inquiries
-  // --------------------------------------------------------------------------
-
-  static async contactDeveloper(req: Request, res: Response): Promise<void> {
-    try {
-      const username = req.params.username as string;
-      const { senderName, senderEmail, subject, message } = req.body;
-
-      if (!senderName || !senderEmail || !subject || !message) {
-        res.status(400).json({ success: false, error: 'All fields are required to contact developer.' });
-        return;
-      }
-
-      const clientIp = req.ip || req.socket.remoteAddress || '127.0.0.1';
-
-      await DeveloperService.sendMessageToDeveloper({
-        recipientUsername: username,
-        senderName,
-        senderEmail,
-        subject,
-        message,
-        clientIp,
-      });
-
-      res.status(200).json({
-        success: true,
-        message: 'Your inquiry has been delivered directly to the developer.',
-      });
-    } catch (err: any) {
-      res.status(400).json({ success: false, error: err.message || 'Failed to send message' });
     }
   }
 
@@ -346,7 +326,8 @@ export class DeveloperController {
   static async getProjectReactions(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
       const projectId = String(req.params.projectId || '');
-      const clientIp = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
+      const clientIp =
+        (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
       const identifier = req.user?.userId || clientIp;
 
       const reactions = await DeveloperService.getProjectReactions(projectId, identifier);
@@ -360,7 +341,8 @@ export class DeveloperController {
     try {
       const projectId = String(req.params.projectId || '');
       const { reaction } = req.body;
-      const clientIp = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
+      const clientIp =
+        (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
       const identifier = req.user?.userId || clientIp;
 
       if (!['love', 'rocket', 'fire', 'insightful', 'like'].includes(reaction)) {
@@ -401,7 +383,9 @@ export class DeveloperController {
         return;
       }
 
-      const resolvedName = req.user ? req.user.email.split('@')[0] : authorName || 'Guest Viewer';
+      const resolvedName = req.user
+        ? req.user.username || req.user.email?.split('@')[0] || 'User'
+        : authorName || 'Guest Viewer';
 
       const comment = await DeveloperService.addProjectComment({
         projectId,

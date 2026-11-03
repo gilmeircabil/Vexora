@@ -33,9 +33,7 @@ export const LicensesPage: React.FC = () => {
         <Card className="space-y-3">
           <div className="flex items-center gap-2 pb-2 border-b-2 border-black/10">
             <Shield className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
-              VexoraMods License (MIT)
-            </h2>
+            <h2 className="text-base font-black text-black">VexoraMods License (MIT)</h2>
           </div>
           <pre className="p-4 rounded-xl bg-[#FAF7F2] border-2 border-black text-black font-mono text-xs overflow-x-auto whitespace-pre-wrap leading-relaxed shadow-[2px_2px_0px_#000]">
             {`MIT License

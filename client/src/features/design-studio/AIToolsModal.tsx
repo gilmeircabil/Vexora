@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { X, Sparkles, Wand2, Image as ImageIcon, Loader2, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
+import {
+  X,
+  Sparkles,
+  Wand2,
+  Image as ImageIcon,
+  Loader2,
+  CheckCircle2,
+  AlertTriangle,
+  ShieldCheck,
+} from 'lucide-react';
 import type { Canvas, FabricImage } from 'fabric';
 import { useAuth } from '../../context/AuthContext.js';
 import { addImageFromUrl } from './canvasUtils.js';
@@ -156,16 +165,16 @@ export const AIToolsModal: React.FC<AIToolsModalProps> = ({
           <div className="p-3 bg-white rounded-xl border-2 border-black flex items-center gap-2.5">
             <ImageIcon className="w-4 h-4 text-[#EA580C]" />
             <span className="text-xs font-bold text-black">
-              {selectedImage
-                ? 'Selected image element on canvas'
-                : 'Current canvas frame snapshot'}
+              {selectedImage ? 'Selected image element on canvas' : 'Current canvas frame snapshot'}
             </span>
           </div>
         </div>
 
         {/* Enhancement Mode Picker */}
         <div className="py-2">
-          <label className="block text-xs font-black uppercase text-black mb-1.5">Enhancement Mode</label>
+          <label className="block text-xs font-black uppercase text-black mb-1.5">
+            Enhancement Mode
+          </label>
           <div className="grid grid-cols-2 gap-2">
             {[
               { id: 'enhance', name: 'Smart Enhance', desc: 'Auto color & dynamic range' },
@@ -194,15 +203,11 @@ export const AIToolsModal: React.FC<AIToolsModalProps> = ({
         <div className="mt-3 p-3 rounded-xl border-2 border-black bg-white flex items-center justify-between">
           <div>
             <div className="text-xs font-bold text-gray-600">Platform Edition</div>
-            <div className="text-sm font-black text-black">
-              100% Free & Unlimited
-            </div>
+            <div className="text-sm font-black text-black">100% Free & Unlimited</div>
           </div>
           <div className="text-right">
-            <div className="text-xs font-bold text-gray-600">Cost</div>
-            <div className="text-sm font-black text-emerald-600">
-              0 Credits (Free)
-            </div>
+            <div className="text-xs font-bold text-gray-600">Access</div>
+            <div className="text-sm font-black text-emerald-600">Free / Uncapped</div>
           </div>
         </div>
 

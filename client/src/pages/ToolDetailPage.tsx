@@ -32,8 +32,15 @@ export const ToolDetailPage: React.FC = () => {
       <div className="min-h-[360px]">
         <Suspense
           fallback={
-            <div className="flex items-center justify-center p-16">
-              <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+            <div
+              role="status"
+              aria-live="polite"
+              className="flex flex-col items-center justify-center p-16 gap-3"
+            >
+              <div className="w-9 h-9 border-4 border-black border-t-[#FACC15] rounded-full animate-spin" />
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-600">
+                Loading tool workspace...
+              </span>
             </div>
           }
         >
@@ -46,9 +53,7 @@ export const ToolDetailPage: React.FC = () => {
         <Card className="space-y-3 bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000000]">
           <div className="flex items-center gap-2">
             <HelpCircle className="w-5 h-5 text-black stroke-[2.5]" />
-            <h3 className="font-black text-black text-sm">
-              How to use this tool
-            </h3>
+            <h3 className="font-black text-black text-sm">How to use this tool</h3>
           </div>
           <p className="text-xs font-semibold text-neutral-700 leading-relaxed">
             {definition.description}
@@ -75,9 +80,7 @@ export const ToolDetailPage: React.FC = () => {
         <Card className="space-y-3 bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000000]">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-black stroke-[2.5]" />
-            <h3 className="font-black text-black text-sm">
-              Privacy & Local Processing
-            </h3>
+            <h3 className="font-black text-black text-sm">Privacy & Local Processing</h3>
           </div>
           <p className="text-xs font-semibold text-neutral-700 leading-relaxed">
             {definition.privacyNotice}

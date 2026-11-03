@@ -71,4 +71,5 @@ const DesignTemplateSchema = new Schema<IDesignTemplate>(
 DesignTemplateSchema.index({ category: 1, isPublic: 1 });
 
 export const DesignTemplate: mongoose.Model<IDesignTemplate> =
-  mongoose.models.DesignTemplate || mongoose.model<IDesignTemplate>('DesignTemplate', DesignTemplateSchema);
+  mongoose.models.DesignTemplate ||
+  mongoose.model<IDesignTemplate>('DesignTemplate', DesignTemplateSchema);

@@ -42,7 +42,9 @@ export class DesignProjectController {
       const project = await DesignProject.create({
         userId: new Types.ObjectId(userId),
         title: String(title).trim().slice(0, 150) || 'Untitled Design',
-        description: String(description || '').trim().slice(0, 1000),
+        description: String(description || '')
+          .trim()
+          .slice(0, 1000),
         width: numWidth,
         height: numHeight,
         background: String(background || '#ffffff'),
@@ -73,7 +75,9 @@ export class DesignProjectController {
       });
     } catch (err: any) {
       console.error('Create design error:', err);
-      res.status(500).json({ success: false, error: err.message || 'Failed to create design project' });
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to create design project' });
     }
   }
 
@@ -89,7 +93,14 @@ export class DesignProjectController {
         return;
       }
 
-      const { search, category, starred, sort = 'updatedAt_desc', limit = 50, page = 1 } = req.query;
+      const {
+        search,
+        category,
+        starred,
+        sort = 'updatedAt_desc',
+        limit = 50,
+        page = 1,
+      } = req.query;
 
       const query: Record<string, any> = {
         userId: new Types.ObjectId(userId),
@@ -228,9 +239,12 @@ export class DesignProjectController {
       }
 
       if (title !== undefined) project.title = String(title).trim().slice(0, 150) || project.title;
-      if (description !== undefined) project.description = String(description).trim().slice(0, 1000);
-      if (width !== undefined) project.width = Math.min(Math.max(Number(width) || project.width, 50), 8000);
-      if (height !== undefined) project.height = Math.min(Math.max(Number(height) || project.height, 50), 8000);
+      if (description !== undefined)
+        project.description = String(description).trim().slice(0, 1000);
+      if (width !== undefined)
+        project.width = Math.min(Math.max(Number(width) || project.width, 50), 8000);
+      if (height !== undefined)
+        project.height = Math.min(Math.max(Number(height) || project.height, 50), 8000);
       if (background !== undefined) project.background = String(background);
       if (category !== undefined) project.category = String(category);
       if (documentData !== undefined) project.documentData = documentData;
@@ -247,7 +261,9 @@ export class DesignProjectController {
       });
     } catch (err: any) {
       console.error('Update design error:', err);
-      res.status(500).json({ success: false, error: err.message || 'Failed to update design project' });
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to update design project' });
     }
   }
 
