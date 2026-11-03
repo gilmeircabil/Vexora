@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import {
   GraduationCap,
@@ -21,8 +21,10 @@ import {
   School,
   BookOpen,
   Lock,
+  CheckCircle2,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
+import { useToast } from '../../context/ToastContext.js';
 import { educationApi } from '../../services/educationApi.js';
 import { useFullscreenMode } from '../../features/education/shared/useFullscreenMode.js';
 import { StudySpaceHeader } from '../../features/education/shared/StudySpaceHeader.js';
@@ -56,7 +58,9 @@ import { CertificateGenerator } from '../../features/education/teacher/Certifica
 
 export const StudySpacePage: React.FC = () => {
   const { user, refreshUser } = useAuth();
+  const { showToast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams();
+  const hasNotifiedRef = useRef(false);
 
   // Determine initial workspace from URL param or user's role
   const urlWorkspace = searchParams.get('workspace');
@@ -98,6 +102,13 @@ export const StudySpacePage: React.FC = () => {
     newParams.set('workspace', newWorkspace);
     setSearchParams(newParams, { replace: true });
 
+    showToast(
+      newWorkspace === 'teacher'
+        ? '👨‍🏫 Switched to Teacher Workspace'
+        : '🎓 Switched to Student Workspace',
+      'info',
+    );
+
     // Sync role change to user profile on server if logged in
     if (user && user.educationRole !== newWorkspace) {
       try {
@@ -134,8 +145,12 @@ export const StudySpacePage: React.FC = () => {
         newParams.set('workspace', 'teacher');
         setSearchParams(newParams, { replace: true });
       }
+      if (!hasNotifiedRef.current) {
+        hasNotifiedRef.current = true;
+        showToast('👨‍🏫 Teacher Workspace activated', 'success');
+      }
     }
-  }, [user, searchParams, setSearchParams]);
+  }, [user, searchParams, setSearchParams, showToast]);
 
   const handleSelectTool = (toolId: string) => {
     setActiveTab(toolId);
@@ -246,6 +261,19 @@ export const StudySpacePage: React.FC = () => {
             </span>
           </div>
 
+          {/* Active Workspace Notification Pill */}
+          {workspace === 'teacher' && isTeacherAuthorized && (
+            <div className="mx-2.5 mt-2 px-2.5 py-1.5 rounded-lg bg-emerald-50 border border-emerald-400 text-[11px] font-bold text-emerald-950 flex items-center justify-between shadow-[1px_1px_0px_#000]">
+              <div className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5] shrink-0" />
+                <span>{user?.name ? `Teacher: ${user.name.split(' ')[0]}` : 'Teacher Mode Active'}</span>
+              </div>
+              <span className="text-[9px] font-mono font-bold uppercase bg-emerald-200 px-1 py-0.5 rounded text-emerald-800">
+                Authorized
+              </span>
+            </div>
+          )}
+
           {/* Navigation Items List */}
           <div className="flex-1 overflow-y-auto p-2.5 space-y-1">
             {currentNavItems.map((item) => {
@@ -303,6 +331,7 @@ export const StudySpacePage: React.FC = () => {
                   type="button"
                   onClick={async () => {
                     setEducationRole('teacher');
+                    showToast('👨‍🏫 Teacher Mode activated successfully!', 'success');
                     if (user) {
                       try {
                         await educationApi.updateEducationRole('teacher');

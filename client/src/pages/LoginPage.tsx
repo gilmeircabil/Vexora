@@ -70,7 +70,6 @@ export const LoginPage: React.FC = () => {
       const data = await res.json();
       if (res.ok && data.success) {
         login(data.data.accessToken, data.data.user);
-        showToast(`Welcome back, ${data.data.user.name || data.data.user.username}!`, 'success');
         
         const isTeacher =
           data.data.user?.educationRole === 'teacher' ||
@@ -78,6 +77,12 @@ export const LoginPage: React.FC = () => {
         let targetRedirect = redirect;
         if (isTeacher && (redirect === '/study' || redirect === '/study-space')) {
           targetRedirect = '/study?workspace=teacher';
+          showToast(
+            `Welcome back, ${data.data.user.name || data.data.user.username}! Teacher Workspace activated.`,
+            'success',
+          );
+        } else {
+          showToast(`Welcome back, ${data.data.user.name || data.data.user.username}!`, 'success');
         }
         navigate(targetRedirect);
       } else {
