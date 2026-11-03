@@ -3,7 +3,6 @@ import { AuthController } from '../controllers/authController.js';
 import { authenticate } from '../middleware/authMiddleware.js';
 import { uploadImage, validateImageMagicBytes } from '../middleware/uploadMiddleware.js';
 import {
-  authRateLimiter,
   registrationRateLimiter,
   loginRateLimiter,
   passwordResetRateLimiter,
@@ -11,8 +10,14 @@ import {
 
 const router = Router();
 
-// Security / CAPTCHA configuration
+// Security & OAuth configuration
 router.get('/security-config', AuthController.securityConfig);
+router.get('/oauth-config', AuthController.oauthConfig);
+
+// Social OAuth Login (Google)
+router.post('/google', loginRateLimiter, AuthController.googleLogin);
+router.get('/oauth/google/url', AuthController.getGoogleAuthUrl);
+router.post('/oauth/google/callback', loginRateLimiter, AuthController.googleLogin);
 
 // Username & Password Authentication
 router.post('/register', registrationRateLimiter, AuthController.register);

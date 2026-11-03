@@ -11,14 +11,7 @@ import {
   type JwtClaims,
   type DecodedJwt,
 } from '../../lib/dev/jwt.js';
-import {
-  KeyRound,
-  ShieldCheck,
-  ShieldAlert,
-  RefreshCw,
-  AlertCircle,
-  CheckCircle2,
-} from 'lucide-react';
+import { KeyRound, ShieldCheck, ShieldAlert, RefreshCw, AlertCircle } from 'lucide-react';
 
 export const JwtGeneratorTool: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'generate' | 'decode'>('generate');

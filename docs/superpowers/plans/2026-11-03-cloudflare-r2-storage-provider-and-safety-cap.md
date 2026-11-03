@@ -35,56 +35,61 @@
 ### Task 1: Add `@aws-sdk/client-s3` Dependency & Environment Schema
 
 **Files:**
+
 - Modify: `package.json`
 - Modify: `server/package.json`
 - Modify: `server/src/config/env.ts`
 - Modify: `.env.example`
 
 **Interfaces:**
+
 - Produces: `env.STORAGE_MAX_GB` (number, default 9.5), `env.S3_PUBLIC_URL` (optional string), `S3Client` import availability.
 
 - [x] **Step 1: Install `@aws-sdk/client-s3` in dependencies**
-Run: `npm install @aws-sdk/client-s3`
-Verify: `@aws-sdk/client-s3` appears in `package.json` and `server/package.json`.
+      Run: `npm install @aws-sdk/client-s3`
+      Verify: `@aws-sdk/client-s3` appears in `package.json` and `server/package.json`.
 
 - [x] **Step 2: Add `S3_PUBLIC_URL` and `STORAGE_MAX_GB` to `server/src/config/env.ts`**
-Add:
+      Add:
+
 ```ts
 S3_PUBLIC_URL: z.string().optional().default(''),
 STORAGE_MAX_GB: z.coerce.number().default(9.5),
 ```
 
 - [x] **Step 3: Update `.env.example`**
-Add comments and examples for `STORAGE_MAX_GB=9.5` and `S3_PUBLIC_URL=`.
+      Add comments and examples for `STORAGE_MAX_GB=9.5` and `S3_PUBLIC_URL=`.
 
 - [x] **Step 4: Verify typecheck passes**
-Run: `npm run typecheck`
-Expected: PASS
+      Run: `npm run typecheck`
+      Expected: PASS
 
 ---
 
 ### Task 2: Implement Storage Quota Guard & S3 Client in `StorageService`
 
 **Files:**
+
 - Modify: `server/src/services/storageService.ts`
 - Test: `server/tests/storage_service.test.ts`
 
 **Interfaces:**
+
 - Consumes: `env.STORAGE_PROVIDER`, `env.S3_BUCKET`, `env.S3_ENDPOINT`, `env.S3_REGION`, `env.S3_ACCESS_KEY`, `env.S3_SECRET_KEY`, `env.STORAGE_MAX_GB`, `DesignAsset` model.
 - Produces: `StorageService.checkQuota(incomingBytes: number): Promise<void>`, `StorageService.saveAsset(...)`, `StorageService.deleteAsset(...)`, `StorageService.getAssetStream(...)`.
 
 - [x] **Step 1: Write unit test in `server/tests/storage_service.test.ts` for quota calculation and S3 operations**
-Test:
+      Test:
 - Quota check passes when total size < 9.5 GB.
 - Quota check throws `Storage limit reached (9.5 GB safety cap)` when total size + incoming > 9.5 GB.
 - S3 upload calls S3 client PutObjectCommand with proper bucket and content type.
 
 - [x] **Step 2: Run test to verify it fails**
-Run: `npx vitest run server/tests/storage_service.test.ts`
-Expected: FAIL (quota guard and S3 methods not yet implemented).
+      Run: `npx vitest run server/tests/storage_service.test.ts`
+      Expected: FAIL (quota guard and S3 methods not yet implemented).
 
 - [x] **Step 3: Implement S3 integration and quota guard in `StorageService`**
-In `server/src/services/storageService.ts`:
+      In `server/src/services/storageService.ts`:
 - Lazy-instantiate `S3Client` using `env.S3_ENDPOINT`, `env.S3_REGION`, `credentials: { accessKeyId, secretAccessKey }`.
 - In `checkQuota(incomingBytes: number)`:
   Sum total size using `DesignAsset.aggregate([{ $group: { _id: null, total: { $sum: '$size' } } }])`.
@@ -103,47 +108,50 @@ In `server/src/services/storageService.ts`:
   - Return `{ stream: Readable, contentType: string } | null` for S3 or local disk.
 
 - [x] **Step 4: Run test to verify it passes**
-Run: `npx vitest run server/tests/storage_service.test.ts`
-Expected: PASS
+      Run: `npx vitest run server/tests/storage_service.test.ts`
+      Expected: PASS
 
 ---
 
 ### Task 3: Update `designAssetController.ts` for Dual S3/Local File Streaming & Errors
 
 **Files:**
+
 - Modify: `server/src/controllers/designAssetController.ts`
 
 **Interfaces:**
+
 - Consumes: `StorageService.getAssetStream`, `StorageService.saveAsset` error handling.
 
 - [x] **Step 1: Update `serveFile` in `designAssetController.ts`**
-Handle `StorageService.getAssetStream`:
+      Handle `StorageService.getAssetStream`:
 - If S3 public URL is configured (`env.S3_PUBLIC_URL`), redirect `res.redirect(302, `${env.S3_PUBLIC_URL}/${key}`)`.
 - Otherwise, stream S3 object or local file with appropriate `Content-Type` and `Cache-Control` headers.
 
 - [x] **Step 2: Ensure quota errors return 413 Payload Too Large / 400 Bad Request**
-Catch `Storage limit reached` in upload endpoint and return `res.status(413).json({ success: false, error: err.message })`.
+      Catch `Storage limit reached` in upload endpoint and return `res.status(413).json({ success: false, error: err.message })`.
 
 - [x] **Step 3: Run existing server test suite**
-Run: `npm run test:server`
-Expected: All existing server tests PASS.
+      Run: `npm run test:server`
+      Expected: All existing server tests PASS.
 
 ---
 
 ### Task 4: End-to-End Build & Verification
 
 **Files:**
+
 - None (verification)
 
 - [x] **Step 1: Run typecheck**
-Run: `npm run typecheck`
-Expected: PASS with 0 errors.
+      Run: `npm run typecheck`
+      Expected: PASS with 0 errors.
 
 - [x] **Step 2: Build server and client**
-Run: `npm run build:server`
-Run: `npm run build:client`
-Expected: Both build cleanly.
+      Run: `npm run build:server`
+      Run: `npm run build:client`
+      Expected: Both build cleanly.
 
 - [x] **Step 3: Run full test suite**
-Run: `npm test`
-Expected: PASS.
+      Run: `npm test`
+      Expected: PASS.

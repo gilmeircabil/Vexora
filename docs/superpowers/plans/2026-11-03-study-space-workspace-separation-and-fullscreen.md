@@ -4,7 +4,8 @@
 
 **Goal:** Separate the Study Space into two independent, dedicated workspaces (Student Workspace and Teacher Workspace) and implement full-screen immersive layouts for both the Study Space and the AI Chat page, including a toggleable distraction-free full-screen mode.
 
-**Architecture:** 
+**Architecture:**
+
 1. **Workspace Separation:** Refactor `StudySpacePage.tsx` and `EducationDashboard.tsx` to support a dedicated top-level Workspace Switcher (`student` vs `teacher`). When in Student Workspace, only student-specific tools and metrics are presented in the sidebar and launchpad. When in Teacher Workspace, only teacher-specific tools and metrics are presented in the sidebar and launchpad. Active workspace state is synchronized with the URL query (`?workspace=student` or `?workspace=teacher`) and user role preferences.
 2. **Full-Bleed Viewport Layout:** Update `AppLayout.tsx` so `/study` joins the AI Chat routes as a full-bleed viewport route (no `max-w-7xl` container box, `p-0`, and footer hidden), allowing Study Space to occupy `h-[calc(100vh-4rem)]` with a responsive collapsible sidebar and dedicated scrollable workspace canvas.
 3. **Immersive Full-Screen / Focus Mode:** Implement a unified Fullscreen / Focus Mode toggle (`Maximize2` / `Minimize2`) in both `StudySpacePage.tsx` and `AiChatPage.tsx`. When activated, it triggers the HTML5 Fullscreen API (`requestFullscreen()`), hides the global top header (`h-screen`), and renders a quick floating exit control (or `Esc` key listener) for zero-distraction focus.
@@ -62,11 +63,13 @@ client/
 ## Task 1: Reusable Full-Screen / Focus Mode Hook & AppLayout Integration
 
 **Files:**
+
 - Create: `client/src/features/education/shared/useFullscreenMode.ts`
 - Modify: `client/src/components/layout/AppLayout.tsx`
 - Test: `client/src/test/components.test.tsx`
 
 **Interfaces:**
+
 - Produces: `useFullscreenMode(): { isFullscreen: boolean; toggleFullscreen: () => void; exitFullscreen: () => void; isSupported: boolean }`
 - Consumes in `AppLayout.tsx`: Detect full-bleed routes (`isAiChatRoute` or `isStudySpaceRoute`), conditionally hide Header when in app focus mode, and hide Footer.
 
@@ -87,6 +90,7 @@ Expected: FAIL (hook does not exist yet)
 - [ ] **Step 3: Implement `useFullscreenMode.ts`**
 
 Implement `useFullscreenMode` with:
+
 - Check for `document.fullscreenEnabled`
 - Listener for `fullscreenchange` event to update `isFullscreen` boolean
 - `toggleFullscreen` that calls `document.documentElement.requestFullscreen()` or `document.exitFullscreen()` with try/catch fallbacks
@@ -95,6 +99,7 @@ Implement `useFullscreenMode` with:
 - [ ] **Step 4: Update `AppLayout.tsx` for full-bleed Study Space layout**
 
 Update `AppLayout.tsx`:
+
 - Update `isAiChatRoute` to `isFullBleedRoute = isAiChatRoute || location.pathname.startsWith('/study') || location.pathname.startsWith('/study-space')`
 - When `isFullBleedRoute`, render `<main>` with `className="flex-1 w-full p-0 relative z-10 focus:outline-none flex flex-col min-h-0"` and omit `<Footer />`.
 - Add listener for distraction-free focus mode to hide `<Header />` when full-screen focus is engaged.
@@ -116,11 +121,13 @@ git commit -m "feat: add useFullscreenMode hook and enable full-bleed layout for
 ## Task 2: Study Space Header with Workspace Switcher & Full-Screen Toggle
 
 **Files:**
+
 - Create: `client/src/features/education/shared/StudySpaceHeader.tsx`
 - Modify: `client/src/features/education/shared/EducationDashboard.tsx`
 - Test: `client/src/test/education_suite.test.tsx`
 
 **Interfaces:**
+
 - Produces: `StudySpaceHeader` component props:
   ```ts
   interface StudySpaceHeaderProps {
@@ -186,11 +193,13 @@ git commit -m "feat: add StudySpaceHeader with workspace switcher and full-scree
 ## Task 3: StudySpacePage Workspace Separation & Full-Bleed Viewport Layout
 
 **Files:**
+
 - Modify: `client/src/pages/education/StudySpacePage.tsx`
 - Test: `client/src/test/education_suite.test.tsx`
 - Test: `client/src/test/document_quiz_generator.test.tsx`
 
 **Interfaces:**
+
 - Produces: Complete separated workspaces on `/study`:
   - `workspace = 'student'`: Only Student navigation tabs (Dashboard, Study Planner, Flashcards, Quizzes, Doc-to-Quiz, GPA Calc, Smart Notes, Pomodoro, Citations, Timetable, Goals, Data Backup).
   - `workspace = 'teacher'`: Only Teacher navigation tabs (Dashboard, Lesson Plans, Worksheets, Exam Builder, Attendance, Gradebook, Rubrics, Certificates, Data Backup).
@@ -250,10 +259,12 @@ git commit -m "feat: separate student and teacher workspaces and implement full-
 ## Task 4: AI Chat Page Full-Screen / Focus Mode Enhancement
 
 **Files:**
+
 - Modify: `client/src/pages/ai/AiChatPage.tsx`
 - Test: `client/src/test/ai_tools.test.tsx`
 
 **Interfaces:**
+
 - Produces: Interactive Fullscreen / Focus Mode in `AiChatPage`:
   - Fullscreen button with `Maximize2` / `Minimize2` in top action bar of AI Chat.
   - Expand AI Chat from `h-[calc(100vh-4rem)]` to `h-screen` when fullscreen / distraction-free mode is toggled.
@@ -301,6 +312,7 @@ git commit -m "feat: add full-screen focus mode toggle to AI Chat page"
 ## Task 5: Full Integration Verification & Platform Suite Test
 
 **Files:**
+
 - Verify: Full workspace separation on `/study`, full-bleed view, and AI Chat full-screen mode.
 - Run: Complete vitest test suite across client and server.
 
@@ -312,6 +324,7 @@ Expected: All 25+ test suites and 216+ tests PASS.
 - [ ] **Step 2: Final visual and code audit**
 
 Verify:
+
 1. Student workspace has zero teacher tools polluting its sidebar.
 2. Teacher workspace has clean teacher tools + dedicated launchpad.
 3. Full-screen toggle works on both Study Space and AI Chat.

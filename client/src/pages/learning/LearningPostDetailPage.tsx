@@ -14,7 +14,6 @@ import {
   Send,
   Star,
   Lock,
-  Unlock,
   CheckCircle2,
   Download,
   PlayCircle,

@@ -54,42 +54,87 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('tn_token'));
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const fetchCurrentUser = useCallback(async (authToken: string) => {
+  const tryRefreshToken = useCallback(async (): Promise<boolean> => {
     try {
-      const res = await fetch('/api/auth/me', {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
+      const res = await fetch('/api/auth/refresh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
       });
-
       if (res.ok) {
         const data = await res.json();
-        if (data.success) {
-          setUser(data.data);
-          return;
+        if (data.success && data.data?.accessToken) {
+          localStorage.setItem('tn_token', data.data.accessToken);
+          localStorage.setItem('tn_has_session', 'true');
+          setToken(data.data.accessToken);
+          setUser(data.data.user);
+          return true;
+        } else {
+          localStorage.removeItem('tn_has_session');
         }
+      } else {
+        localStorage.removeItem('tn_has_session');
       }
-      // If token invalid, clear local storage
-      localStorage.removeItem('tn_token');
-      setToken(null);
-      setUser(null);
     } catch {
-      // Offline or network error - keep token if available
-    } finally {
-      setIsLoading(false);
+      // Refresh failed or network offline
     }
+    return false;
   }, []);
+
+  const fetchCurrentUser = useCallback(
+    async (authToken: string) => {
+      try {
+        const res = await fetch('/api/auth/me', {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          credentials: 'include',
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            setUser(data.data);
+            return;
+          }
+        }
+
+        // Access token might be expired; attempt silent refresh via 7-day cookie
+        const refreshed = await tryRefreshToken();
+        if (!refreshed) {
+          localStorage.removeItem('tn_token');
+          localStorage.removeItem('tn_has_session');
+          setToken(null);
+          setUser(null);
+        }
+      } catch {
+        // Offline or network error - keep token if available
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [tryRefreshToken],
+  );
 
   useEffect(() => {
     if (token) {
       fetchCurrentUser(token);
     } else {
-      setIsLoading(false);
+      // Only probe for refresh if a session was previously active in this browser
+      const hasSession = localStorage.getItem('tn_has_session') === 'true';
+      if (hasSession) {
+        tryRefreshToken().finally(() => {
+          setIsLoading(false);
+        });
+      } else {
+        setIsLoading(false);
+      }
     }
-  }, [token, fetchCurrentUser]);
+  }, [token, fetchCurrentUser, tryRefreshToken]);
 
   const login = (newToken: string, newUser: UserProfile) => {
     localStorage.setItem('tn_token', newToken);
+    localStorage.setItem('tn_has_session', 'true');
     setToken(newToken);
     setUser(newUser);
   };
@@ -105,6 +150,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Ignore network errors on logout
     }
     localStorage.removeItem('tn_token');
+    localStorage.removeItem('tn_has_session');
     setToken(null);
     setUser(null);
 

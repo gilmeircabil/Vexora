@@ -314,12 +314,20 @@ export const TOOL_CATALOG: readonly ToolDefinition[] = [
     toolType: 'ai-powered',
     aiRequired: true,
     requiredModel: 'Google Gemini & NVIDIA Cloud Models',
-    keywords: ['code explainer', 'debugger', 'ai code', 'explain code', 'fix bugs', 'syntax review'],
+    keywords: [
+      'code explainer',
+      'debugger',
+      'ai code',
+      'explain code',
+      'fix bugs',
+      'syntax review',
+    ],
     iconName: 'Code2',
     supportedInputTypes: ['text/plain'],
     processingLocation: 'server',
     status: 'available',
-    privacyNotice: 'Code snippets are processed transiently via secure cloud AI API and are never stored.',
+    privacyNotice:
+      'Code snippets are processed transiently via secure cloud AI API and are never stored.',
   },
   {
     id: 'ai-document-summarizer',
@@ -379,7 +387,8 @@ export const TOOL_CATALOG: readonly ToolDefinition[] = [
     supportedInputTypes: ['text/plain'],
     processingLocation: 'server',
     status: 'available',
-    privacyNotice: 'Your chat messages are processed transiently in memory and stored locally in your browser only.',
+    privacyNotice:
+      'Your chat messages are processed transiently in memory and stored locally in your browser only.',
   },
   {
     id: 'image-compressor',

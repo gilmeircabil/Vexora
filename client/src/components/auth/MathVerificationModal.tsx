@@ -50,7 +50,8 @@ export const MathVerificationModal: React.FC<MathVerificationModalProps> = ({
             Verify You&apos;re Human
           </h3>
           <p className="text-xs font-bold text-neutral-600">
-            Before creating your account, solve these 3 quick math problems to prove you are a human!
+            Before creating your account, solve these 3 quick math problems to prove you are a
+            human!
           </p>
         </div>
 

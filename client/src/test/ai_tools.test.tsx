@@ -2,8 +2,6 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
-import { AI_TOOLS_REGISTRY } from '../lib/ai/aiToolsRegistry.js';
-import { AiToolsDashboardPage } from '../pages/AiToolsDashboardPage.js';
 import { AiImageEnhancerPage } from '../pages/ai/AiImageEnhancerPage.js';
 import { AiCodeExplainerPage } from '../pages/ai/AiCodeExplainerPage.js';
 import { AiDocumentSummarizerPage } from '../pages/ai/AiDocumentSummarizerPage.js';
@@ -33,44 +31,6 @@ describe('AI Tools Frontend Registry & Pages Suite', () => {
         }),
       }),
     );
-  });
-
-  it('validates AI_TOOLS_REGISTRY contains all 8 tools across image, document, developer, and writing categories', () => {
-    expect(AI_TOOLS_REGISTRY.length).toBe(8);
-
-    const categories = new Set(AI_TOOLS_REGISTRY.map((t) => t.category));
-    expect(categories.has('image')).toBe(true);
-    expect(categories.has('document')).toBe(true);
-    expect(categories.has('developer')).toBe(true);
-    expect(categories.has('writing')).toBe(true);
-
-    for (const tool of AI_TOOLS_REGISTRY) {
-      expect(tool.id).toBeDefined();
-      expect(tool.name).toBeDefined();
-      expect(tool.route).toMatch(/^\/ai-tools\//);
-      expect(tool.creditCost).toBe(0);
-      expect(tool.isFree).toBe(true);
-      expect(tool.requiredModel).toBeDefined();
-    }
-  });
-
-  it('renders AiToolsDashboardPage with header, search, and tool cards', async () => {
-    render(
-      <ToastProvider>
-        <AuthProvider>
-          <BrowserRouter>
-            <AiToolsDashboardPage />
-          </BrowserRouter>
-        </AuthProvider>
-      </ToastProvider>,
-    );
-
-    expect(screen.getByText(/Free & Built-in AI Tools/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Search AI tools/i)).toBeInTheDocument();
-    expect(screen.getByText('AI Image Enhancer')).toBeInTheDocument();
-    expect(screen.getByText('AI Background Remover')).toBeInTheDocument();
-    expect(screen.getByText('AI Document OCR')).toBeInTheDocument();
-    expect(screen.getByText('AI Code Explainer & Debugger')).toBeInTheDocument();
   });
 
   it('renders dedicated tool page AiImageEnhancerPage', () => {

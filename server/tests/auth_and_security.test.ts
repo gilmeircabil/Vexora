@@ -7,11 +7,7 @@ import { AuthController } from '../src/controllers/authController.js';
 import { TurnstileService } from '../src/services/turnstileService.js';
 import { User, validateUsername } from '../src/models/User.js';
 import { authenticate, requireAdmin } from '../src/middleware/authMiddleware.js';
-import {
-  registrationRateLimiter,
-  loginRateLimiter,
-  resetAllRateLimiters,
-} from '../src/middleware/rateLimitMiddleware.js';
+import { resetAllRateLimiters } from '../src/middleware/rateLimitMiddleware.js';
 import { DEFAULT_TOOL_COSTS } from '../src/config/plans.js';
 
 function createMockRes() {
@@ -33,6 +29,9 @@ function createMockRes() {
       this.headers[key] = val;
       return this;
     },
+    getHeader(key: string) {
+      return this.headers[key];
+    },
     cookie(name: string, val: any, opts?: any) {
       this.cookies[name] = { val, opts };
       return this;
@@ -40,6 +39,16 @@ function createMockRes() {
     clearCookie(name: string) {
       this.clearedCookies.push(name);
       delete this.cookies[name];
+      return this;
+    },
+    redirect(statusOrUrl: any, url?: string) {
+      if (typeof statusOrUrl === 'number') {
+        this.statusCode = statusOrUrl;
+        this.redirectUrl = url;
+      } else {
+        this.statusCode = 302;
+        this.redirectUrl = statusOrUrl;
+      }
       return this;
     },
   };
@@ -150,6 +159,16 @@ describe('VexoraMods Username & Password Auth Suite', () => {
     vi.restoreAllMocks();
 
     vi.spyOn(User, 'findOne').mockImplementation((async (query: any) => {
+      if (query?.['oauthProviders.google.id']) {
+        for (const u of usersDb.values()) {
+          if (u.oauthProviders?.google?.id === query['oauthProviders.google.id']) return u;
+        }
+      }
+      if (query?.['oauthProviders.facebook.id']) {
+        for (const u of usersDb.values()) {
+          if (u.oauthProviders?.facebook?.id === query['oauthProviders.facebook.id']) return u;
+        }
+      }
       if (query?.username) {
         return usersDb.get(query.username.toLowerCase()) || null;
       }
@@ -170,6 +189,12 @@ describe('VexoraMods Username & Password Auth Suite', () => {
           }
         }
       }
+      return null;
+    }) as any);
+
+    vi.spyOn(User, 'exists').mockImplementation((async (q: any) => {
+      if (q?.username && usersDb.has(q.username.toLowerCase()))
+        return { _id: new Types.ObjectId() };
       return null;
     }) as any);
 
@@ -196,6 +221,8 @@ describe('VexoraMods Username & Password Auth Suite', () => {
         email: doc.email?.toLowerCase(),
         passwordHash: doc.passwordHash,
         recoveryCodeHash: doc.recoveryCodeHash,
+        avatarUrl: doc.avatarUrl || '',
+        oauthProviders: doc.oauthProviders || {},
         role: doc.role || 'user',
         emailVerified: true,
         accountStatus: doc.accountStatus || 'active',
@@ -312,6 +339,17 @@ describe('VexoraMods Username & Password Auth Suite', () => {
     await AuthController.login(loginReq, loginRes);
     expect(loginRes.statusCode).toBe(400);
     expect(loginRes.body.code).toBe('MISSING_TOKEN');
+  });
+
+  it('4b. Turnstile verification accepts local tokens in non-production environments and prevents replay', async () => {
+    const localDevToken = `cf-turnstile-${Date.now()}-mocktoken123`;
+    const result = await TurnstileService.verifyToken(localDevToken, '127.0.0.1');
+    expect(result.success).toBe(true);
+
+    // Replay of same token is rejected
+    const replayResult = await TurnstileService.verifyToken(localDevToken, '127.0.0.1');
+    expect(replayResult.success).toBe(false);
+    expect(replayResult.errorCode).toBe('TOKEN_REUSED');
   });
 
   it('5. Login with valid username and password succeeds and issues tokens', async () => {
@@ -544,5 +582,161 @@ describe('VexoraMods Username & Password Auth Suite', () => {
       });
     });
     expect(adminPassed).toBe(true);
+  });
+
+  it('11. Google OAuth creates new user with unique username and single-use recovery code', async () => {
+    const result = await AuthService.loginWithGoogle({
+      googleId: 'google_user_12345',
+      email: 'creator@example.com',
+      name: 'Creative Builder',
+      picture: 'https://lh3.googleusercontent.com/avatar123',
+    });
+
+    expect(result.user.username).toBe('creator');
+    expect(result.user.name).toBe('Creative Builder');
+    expect(result.user.email).toBe('creator@example.com');
+    expect(result.user.avatarUrl).toBe('https://lh3.googleusercontent.com/avatar123');
+    expect(result.accessToken).toBeDefined();
+    expect(result.refreshToken).toBeDefined();
+    expect(result.recoveryCode).toMatch(/^VEX(-[A-Z0-9]{4}){3,4}$/);
+
+    const savedUser = usersDb.get('creator');
+    expect(savedUser).toBeDefined();
+    expect(savedUser.oauthProviders?.google?.id).toBe('google_user_12345');
+  });
+
+  it('12. Google OAuth links to existing user account by verified email', async () => {
+    // Existing user registered with username and password
+    const passwordHash = await AuthService.hashPassword('OriginalPass123!');
+    usersDb.set('maya_art', {
+      _id: new Types.ObjectId(),
+      username: 'maya_art',
+      name: 'Maya Artist',
+      email: 'maya@example.com',
+      passwordHash,
+      role: 'user',
+      accountStatus: 'active',
+      failedLoginAttempts: 0,
+      tokenVersion: 0,
+      oauthProviders: {},
+      async save() {
+        usersDb.set(this.username, this);
+        return this;
+      },
+    });
+
+    const result = await AuthService.loginWithGoogle({
+      googleId: 'google_sub_99999',
+      email: 'maya@example.com',
+      name: 'Maya G',
+      picture: 'https://lh3.googleusercontent.com/maya_pic',
+    });
+
+    expect(result.user.username).toBe('maya_art');
+    expect(result.user.email).toBe('maya@example.com');
+    const updatedUser = usersDb.get('maya_art');
+    expect(updatedUser.oauthProviders?.google?.id).toBe('google_sub_99999');
+    expect(updatedUser.avatarUrl).toBe('https://lh3.googleusercontent.com/maya_pic');
+  });
+
+  it('13. Google OAuth login endpoint authenticates and issues session cookies', async () => {
+    const req: any = {
+      body: {
+        mockProfile: {
+          googleId: 'google_101010101',
+          name: 'Social Creator',
+          email: 'social@example.com',
+          picture: 'https://lh3.googleusercontent.com/pic',
+        },
+      },
+    };
+    const res = createMockRes();
+
+    await AuthController.googleLogin(req, res);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.user.email).toBe('social@example.com');
+    expect(res.cookies.refreshToken).toBeDefined();
+
+    const configReq: any = {};
+    const configRes = createMockRes();
+    await AuthController.oauthConfig(configReq, configRes);
+    expect(configRes.statusCode).toBe(200);
+    expect(configRes.body.success).toBe(true);
+    expect(configRes.body.data.google).toBeDefined();
+  });
+
+  it('14. Express application emits Content-Security-Policy, HSTS, and standard security headers', async () => {
+    const { createApp } = await import('../src/app.js');
+    const app = createApp();
+
+    const mockReq: any = {
+      method: 'GET',
+      url: '/api/health',
+      headers: { host: 'localhost' },
+    };
+    const mockRes = createMockRes();
+
+    (app as any).handle(mockReq, mockRes, () => {});
+
+    expect(mockRes.headers['Content-Security-Policy']).toBeDefined();
+    expect(mockRes.headers['Content-Security-Policy']).toContain("default-src 'self'");
+    expect(mockRes.headers['Content-Security-Policy']).toContain("frame-ancestors 'none'");
+    expect(mockRes.headers['Content-Security-Policy']).toContain('upgrade-insecure-requests');
+    expect(mockRes.headers['Strict-Transport-Security']).toBe(
+      'max-age=31536000; includeSubDomains; preload',
+    );
+    expect(mockRes.headers['X-Content-Type-Options']).toBe('nosniff');
+    expect(mockRes.headers['X-Frame-Options']).toBe('DENY');
+    expect(mockRes.headers['Referrer-Policy']).toBe('strict-origin-when-cross-origin');
+  });
+
+  it('15. Production environment enforces HTTPS Transport Encryption by redirecting HTTP to HTTPS', async () => {
+    const originalEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'production';
+    try {
+      const { createApp } = await import('../src/app.js');
+      const app = createApp();
+
+      // Insecure HTTP request behind reverse proxy
+      const insecureReq: any = {
+        method: 'GET',
+        url: '/api/health',
+        originalUrl: '/api/health',
+        headers: { host: 'vexora.dev' },
+        secure: false,
+      };
+      const insecureRes = createMockRes();
+      let nextCalled = false;
+
+      (app as any).handle(insecureReq, insecureRes, () => {
+        nextCalled = true;
+      });
+
+      expect(insecureRes.statusCode).toBe(301);
+      expect(insecureRes.redirectUrl).toBe('https://vexora.dev/api/health');
+      expect(nextCalled).toBe(false);
+
+      // Secure HTTPS request with x-forwarded-proto
+      const secureReq: any = {
+        method: 'GET',
+        url: '/api/health',
+        originalUrl: '/api/health',
+        headers: { host: 'vexora.dev', 'x-forwarded-proto': 'https' },
+        secure: true,
+      };
+      const secureRes = createMockRes();
+
+      (app as any).handle(secureReq, secureRes, () => {});
+
+      expect(secureRes.statusCode).toBe(200);
+      expect(secureRes.redirectUrl).toBeUndefined();
+      expect(secureRes.body).toEqual(
+        expect.objectContaining({ status: 'ok', service: 'VexoraMods API' }),
+      );
+    } finally {
+      process.env.NODE_ENV = originalEnv;
+    }
   });
 });

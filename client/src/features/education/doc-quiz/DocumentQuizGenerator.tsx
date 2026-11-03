@@ -1,24 +1,15 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
-  FileText,
   Upload,
   Sparkles,
   CheckCircle2,
   XCircle,
-  HelpCircle,
   Clock,
-  RotateCcw,
   BookOpen,
-  Layers,
   ChevronRight,
-  ChevronLeft,
-  ChevronDown,
-  ChevronUp,
   Check,
-  X,
   AlertTriangle,
   FileQuestion,
-  FileCode,
   Download,
   BookmarkPlus,
   Eye,
@@ -28,8 +19,6 @@ import {
   Trash2,
   Play,
   ArrowLeft,
-  FileCheck,
-  Filter,
 } from 'lucide-react';
 import { DocumentParser } from './documentParser.js';
 import { QuizEngine } from './quizEngine.js';
@@ -155,7 +144,6 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
   const [parseError, setParseError] = useState<string | null>(null);
   const [extractedDoc, setExtractedDoc] = useState<ExtractedDocument | null>(null);
   const [selectedSectionIds, setSelectedSectionIds] = useState<string[]>([]);
-  const [showRawText, setShowRawText] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Quiz config state
@@ -180,7 +168,6 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [isPracticeMode, setIsPracticeMode] = useState(false);
   const [timeSpentSeconds, setTimeSpentSeconds] = useState(0);
-  const [quizStartTime, setQuizStartTime] = useState<number | null>(null);
   const [isConfirmingSubmit, setIsConfirmingSubmit] = useState(false);
 
   // Results state
@@ -368,7 +355,6 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
     setUserAnswers({});
     setCurrentQuestionIndex(0);
     setTimeSpentSeconds(0);
-    setQuizStartTime(Date.now());
     setIsConfirmingSubmit(false);
     setStep('take');
   };
@@ -627,7 +613,6 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
   };
 
   // Active step index calculation for progress indicator
-  const stepOrder = ['upload', 'review', 'configure', 'inspect'] as const;
   const currentStepNumber =
     step === 'upload'
       ? 1

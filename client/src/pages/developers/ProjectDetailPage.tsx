@@ -2,23 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router';
 import {
   ExternalLink,
-  Calendar,
-  Layers,
-  User,
   Eye,
   Flag,
   ArrowLeft,
   X,
-  Code2,
   AlertCircle,
   MessageSquare,
   Send,
   Trash2,
-  Heart,
-  Flame,
-  Rocket,
-  Lightbulb,
-  ThumbsUp,
 } from 'lucide-react';
 import { developerApi } from '../../services/developerApi.js';
 import { useAuth } from '../../context/AuthContext.js';

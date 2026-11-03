@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import {
   Sparkles,
@@ -17,15 +17,22 @@ import {
 import { useAuth } from '../context/AuthContext.js';
 import { useToast } from '../context/ToastContext.js';
 import { TurnstileWidget } from '../components/auth/TurnstileWidget.js';
+import { SocialAuthButtons } from '../components/auth/SocialAuthButtons.js';
 import { FallingStarsBackground } from '../components/common/FallingStarsBackground.js';
 import { BrandLogo } from '../components/common/BrandLogo.js';
 
 export const LoginPage: React.FC = () => {
-  const { login } = useAuth();
+  const { user, login, isLoading: authLoading } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get('redirect') || '/dashboard';
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate(redirect, { replace: true });
+    }
+  }, [user, authLoading, redirect, navigate]);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -43,6 +50,11 @@ export const LoginPage: React.FC = () => {
     const trimmedUsername = username.trim();
     if (!trimmedUsername) {
       setFormError('Please enter your username.');
+      return;
+    }
+
+    if (!password) {
+      setFormError('Please enter your password.');
       return;
     }
 
@@ -70,7 +82,7 @@ export const LoginPage: React.FC = () => {
       const data = await res.json();
       if (res.ok && data.success) {
         login(data.data.accessToken, data.data.user);
-        
+
         const isTeacher =
           data.data.user?.educationRole === 'teacher' ||
           data.data.user?.educationRole === 'educator';
@@ -140,7 +152,9 @@ export const LoginPage: React.FC = () => {
                   <Wrench className="w-4 h-4 text-black stroke-[2.5]" />
                 </div>
                 <div>
-                  <h2 className="font-black text-sm text-black">All Tools &amp; Built-In AI Utilities</h2>
+                  <h2 className="font-black text-sm text-black">
+                    All Tools &amp; Built-In AI Utilities
+                  </h2>
                   <p className="text-xs font-semibold text-neutral-600">
                     Image, PDF, developer, and text utilities with zero paywalls.
                   </p>
@@ -176,9 +190,11 @@ export const LoginPage: React.FC = () => {
                   <ShieldCheck className="w-4 h-4 text-black stroke-[2.5]" />
                 </div>
                 <div>
-                  <h2 className="font-black text-sm text-black">Secure Simple Authentication</h2>
+                  <h2 className="font-black text-sm text-black">
+                    Fast &amp; Secure Authentication
+                  </h2>
                   <p className="text-xs font-semibold text-neutral-600">
-                    Username and password only. No tracking, spam emails, or third-party OAuth.
+                    Log in with your username or continue seamlessly with your Google account.
                   </p>
                 </div>
               </div>
@@ -303,6 +319,8 @@ export const LoginPage: React.FC = () => {
                   )}
                 </button>
               </form>
+
+              <SocialAuthButtons mode="login" />
 
               <div className="mt-6 pt-5 border-t-2 border-black/10 text-center text-xs font-bold text-neutral-600">
                 Don't have an account yet?{' '}

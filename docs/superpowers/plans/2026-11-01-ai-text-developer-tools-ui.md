@@ -4,7 +4,8 @@
 
 **Goal:** Implement the missing frontend UI pages and Express backend routes for the 3 core AI text & developer utilities: AI Code Explainer & Debugger, AI Document Summarizer & Q&A, and AI Writing & ATS Resume Assistant, powered directly by Google Gemini and NVIDIA NIM.
 
-**Architecture:** 
+**Architecture:**
+
 - Express backend (`server/src/services/ai/geminiTextService.ts`) provides clean REST endpoints (`/api/ai/code-assist`, `/api/ai/document-assist`, `/api/ai/writing-assist`) connecting directly to Google Gemini (or NVIDIA NIM) using the verified API key in `.env`.
 - Frontend React pages follow Vexora's neo-brutalist UI pattern with full responsiveness, copy-to-clipboard, markdown formatting, sample prompts, and error boundaries.
 - Registered in `TOOL_CATALOG` and `AI_TOOLS_REGISTRY` so they appear on `/tools`, `/ai`, and in search.
@@ -16,6 +17,7 @@
 ### Task 1: Express Backend Text AI Service & Routes
 
 **Files:**
+
 - Create: `server/src/services/ai/geminiTextService.ts`
 - Modify: `server/src/controllers/aiController.ts`
 - Modify: `server/src/routes/aiRoutes.ts`
@@ -30,6 +32,7 @@
 ### Task 2: Frontend API Service & Registry Catalog Updates
 
 **Files:**
+
 - Modify: `client/src/services/aiToolsApi.ts`
 - Modify: `client/src/lib/ai/aiToolsRegistry.ts`
 - Modify: `client/src/tools/catalog.ts`
@@ -43,6 +46,7 @@
 ### Task 3: Build Frontend Pages & Routes
 
 **Files:**
+
 - Create: `client/src/pages/ai/AiCodeExplainerPage.tsx`
 - Create: `client/src/pages/ai/AiDocumentSummarizerPage.tsx`
 - Create: `client/src/pages/ai/AiWritingAssistantPage.tsx`
@@ -58,6 +62,7 @@
 ### Task 4: Verification & Automated Tests
 
 **Files:**
+
 - Modify: `client/src/test/ai_tools.test.tsx`
 - Run: `npm run typecheck`
 - Run: `npm run build:client`

@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import {
-  Search,
-  Layers,
-  FolderGit2,
-  ExternalLink,
-  Code2,
-  Sparkles,
-  ArrowRight,
-  X,
-  Plus,
-} from 'lucide-react';
+import { Search, FolderGit2, ArrowRight, X, Plus } from 'lucide-react';
 import { developerApi } from '../../services/developerApi.js';
 import { useAuth } from '../../context/AuthContext.js';
 

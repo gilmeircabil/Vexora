@@ -42,7 +42,11 @@ export const PageTitleUpdater: React.FC = () => {
     }
 
     // 5. Studio
-    if (pathname === '/studio' || pathname.startsWith('/studio') || pathname.startsWith('/design-studio')) {
+    if (
+      pathname === '/studio' ||
+      pathname.startsWith('/studio') ||
+      pathname.startsWith('/design-studio')
+    ) {
       document.title = 'Design Studio — VexoraMods';
       return;
     }

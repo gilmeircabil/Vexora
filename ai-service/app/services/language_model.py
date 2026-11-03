@@ -18,6 +18,10 @@ class LanguageModelService:
             return bool(settings.GEMINI_API_KEY)
         if provider == "nvidia" or (provider == "auto" and settings.NVIDIA_API_KEY):
             return bool(settings.NVIDIA_API_KEY)
+        if provider == "openrouter" or (provider == "auto" and settings.OPENROUTER_API_KEY):
+            return bool(settings.OPENROUTER_API_KEY)
+        if provider == "groq" or (provider == "auto" and settings.GROQ_API_KEY):
+            return bool(settings.GROQ_API_KEY)
         
         # Check local Ollama
         try:
@@ -34,6 +38,10 @@ class LanguageModelService:
         if settings.NVIDIA_API_KEY:
             models.append(f"nvidia:{settings.NVIDIA_MODEL}")
             models.append(f"nvidia:{settings.NVIDIA_CODE_MODEL}")
+        if settings.OPENROUTER_API_KEY:
+            models.append(f"openrouter:{settings.OPENROUTER_MODEL}")
+        if settings.GROQ_API_KEY:
+            models.append(f"groq:{settings.GROQ_MODEL}")
         try:
             async with httpx.AsyncClient(timeout=2.0) as client:
                 res = await client.get(f"{self.ollama_url}/api/tags")

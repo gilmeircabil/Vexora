@@ -103,7 +103,10 @@ describe('VexoraMods Admin Broadcast Announcement System Suite', () => {
       return chain;
     }) as any);
 
-    vi.spyOn(AnnouncementDismissal, 'updateOne').mockImplementation((async (filter: any, update: any) => {
+    vi.spyOn(AnnouncementDismissal, 'updateOne').mockImplementation((async (
+      filter: any,
+      update: any,
+    ) => {
       const key = `${filter.announcementId.toString()}_${filter.userId.toString()}`;
       if (!dismissalsDb.has(key)) {
         dismissalsDb.set(key, {
@@ -183,7 +186,10 @@ describe('VexoraMods Admin Broadcast Announcement System Suite', () => {
     expect(initialList).toHaveLength(1);
 
     // Dismiss announcement
-    const dismissed = await AnnouncementService.dismissAnnouncement(announcement._id.toString(), userId);
+    const dismissed = await AnnouncementService.dismissAnnouncement(
+      announcement._id.toString(),
+      userId,
+    );
     expect(dismissed).toBe(true);
 
     const updatedDoc = await Announcement.findById(announcement._id);
@@ -194,7 +200,9 @@ describe('VexoraMods Admin Broadcast Announcement System Suite', () => {
     expect(subsequentList).toHaveLength(0);
 
     // Different user still sees the announcement
-    const otherUserList = await AnnouncementService.getActiveAnnouncements(new Types.ObjectId().toString());
+    const otherUserList = await AnnouncementService.getActiveAnnouncements(
+      new Types.ObjectId().toString(),
+    );
     expect(otherUserList).toHaveLength(1);
   });
 

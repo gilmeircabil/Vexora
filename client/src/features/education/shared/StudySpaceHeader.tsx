@@ -123,9 +123,7 @@ export const StudySpaceHeader: React.FC<StudySpaceHeaderProps> = ({
           type="button"
           onClick={onToggleFullscreen}
           className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border-2 border-black text-xs font-black transition-all shadow-[2px_2px_0px_#000] cursor-pointer active:translate-y-0.5 ${
-            isFullscreen
-              ? 'bg-[#FACC15] text-black'
-              : 'bg-white hover:bg-[#FAF7F2] text-black'
+            isFullscreen ? 'bg-[#FACC15] text-black' : 'bg-white hover:bg-[#FAF7F2] text-black'
           }`}
           aria-label={isFullscreen ? 'Exit Full Screen' : 'Full Screen (Focus Mode)'}
           title={isFullscreen ? 'Exit Full Screen (Esc)' : 'Enter Full Screen Focus Mode'}

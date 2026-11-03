@@ -13,3 +13,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 .system_generated
+.superpowers
+server/uploads/*
+!server/uploads/**/.gitkeep
+uploads/

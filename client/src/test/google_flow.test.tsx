@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
-import { TOOL_CATALOG, searchTools, isAiPoweredTool, TOOL_BY_ID } from '../tools/catalog.js';
+import { searchTools, isAiPoweredTool, TOOL_BY_ID } from '../tools/catalog.js';
 import { GoogleFlowTool } from '../features/external/GoogleFlowTool.js';
 import { ToolCard } from '../components/common/ToolCard.js';
 import { ToolsDirectoryPage } from '../pages/ToolsDirectoryPage.js';

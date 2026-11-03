@@ -83,7 +83,8 @@ export function validateUsername(username: string): { valid: boolean; error?: st
   if (!/^[a-zA-Z0-9_]+$/.test(clean)) {
     return {
       valid: false,
-      error: 'Username can only contain letters, numbers, and underscores (no spaces or special symbols).',
+      error:
+        'Username can only contain letters, numbers, and underscores (no spaces or special symbols).',
     };
   }
   if (RESERVED_USERNAMES.has(clean.toLowerCase())) {

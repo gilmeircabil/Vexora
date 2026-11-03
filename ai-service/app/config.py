@@ -7,7 +7,7 @@ class Settings(BaseModel):
     PORT: int = int(os.getenv("PORT", "8000"))
     AI_SERVICE_SECRET: str = os.getenv("AI_SERVICE_SECRET", "toolnest_internal_ai_secret_key_8899")
     
-    # Provider Selection: 'auto' | 'gemini' | 'nvidia' | 'ollama'
+    # Provider Selection: 'auto' | 'gemini' | 'nvidia' | 'openrouter' | 'ollama'
     AI_PROVIDER: str = os.getenv("AI_PROVIDER", "auto")
     
     # Google Gemini Configuration (Free via Google AI Studio)
@@ -19,6 +19,16 @@ class Settings(BaseModel):
     NVIDIA_BASE_URL: str = os.getenv("NVIDIA_BASE_URL", "https://integrate.api.nvidia.com/v1")
     NVIDIA_MODEL: str = os.getenv("NVIDIA_MODEL", "meta/llama-3.3-70b-instruct")
     NVIDIA_CODE_MODEL: str = os.getenv("NVIDIA_CODE_MODEL", "qwen/qwen2.5-coder-32b-instruct")
+
+    # OpenRouter Configuration (Free & Multi-Provider via openrouter.ai)
+    OPENROUTER_API_KEY: Optional[str] = os.getenv("OPENROUTER_API_KEY", None)
+    OPENROUTER_BASE_URL: str = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+    OPENROUTER_MODEL: str = os.getenv("OPENROUTER_MODEL", "openrouter/free")
+
+    # Groq LPU Ultra-Fast Inference Configuration (via console.groq.com)
+    GROQ_API_KEY: Optional[str] = os.getenv("GROQ_API_KEY", None)
+    GROQ_BASE_URL: str = os.getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1")
+    GROQ_MODEL: str = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
     
     # Local Ollama Fallback Configuration
     OLLAMA_URL: str = os.getenv("OLLAMA_URL", "http://127.0.0.1:11434")

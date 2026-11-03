@@ -126,7 +126,11 @@ export const Header: React.FC = () => {
             </Link>
 
             <Link
-              to={user?.educationRole === 'teacher' || user?.educationRole === 'educator' ? '/study?workspace=teacher' : '/study'}
+              to={
+                user?.educationRole === 'teacher' || user?.educationRole === 'educator'
+                  ? '/study?workspace=teacher'
+                  : '/study'
+              }
               className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
                 isNavActive('/study')
                   ? 'bg-[#FFD21A] border-black shadow-[2px_2px_0px_#000000]'
@@ -134,7 +138,11 @@ export const Header: React.FC = () => {
               }`}
             >
               <GraduationCap className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>{user?.educationRole === 'teacher' || user?.educationRole === 'educator' ? 'Teacher Workspace' : 'Study Space'}</span>
+              <span>
+                {user?.educationRole === 'teacher' || user?.educationRole === 'educator'
+                  ? 'Teacher Workspace'
+                  : 'Study Space'}
+              </span>
             </Link>
 
             <Link
@@ -213,11 +221,19 @@ export const Header: React.FC = () => {
                     </Link>
 
                     <Link
-                      to={user?.educationRole === 'teacher' || user?.educationRole === 'educator' ? '/study?workspace=teacher' : '/study'}
+                      to={
+                        user?.educationRole === 'teacher' || user?.educationRole === 'educator'
+                          ? '/study?workspace=teacher'
+                          : '/study'
+                      }
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-black rounded-lg text-black hover:bg-neutral-100 transition-colors"
                     >
                       <GraduationCap className="w-4 h-4 text-indigo-700" />
-                      <span>{user?.educationRole === 'teacher' || user?.educationRole === 'educator' ? 'Teacher Workspace' : 'Study Space'}</span>
+                      <span>
+                        {user?.educationRole === 'teacher' || user?.educationRole === 'educator'
+                          ? 'Teacher Workspace'
+                          : 'Study Space'}
+                      </span>
                     </Link>
 
                     <Link
@@ -328,11 +344,19 @@ export const Header: React.FC = () => {
             </Link>
 
             <Link
-              to={user?.educationRole === 'teacher' || user?.educationRole === 'educator' ? '/study?workspace=teacher' : '/study'}
+              to={
+                user?.educationRole === 'teacher' || user?.educationRole === 'educator'
+                  ? '/study?workspace=teacher'
+                  : '/study'
+              }
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#FFD21A] border-2 border-black shadow-[2px_2px_0px_#000000] text-sm font-black text-black"
             >
               <GraduationCap className="w-4 h-4" />
-              <span>{user?.educationRole === 'teacher' || user?.educationRole === 'educator' ? 'Teacher Workspace' : 'Study Space'}</span>
+              <span>
+                {user?.educationRole === 'teacher' || user?.educationRole === 'educator'
+                  ? 'Teacher Workspace'
+                  : 'Study Space'}
+              </span>
             </Link>
 
             <Link
@@ -358,8 +382,12 @@ export const Header: React.FC = () => {
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-black text-black truncate">{user.name || user.username}</p>
-                    <p className="text-[10px] font-mono text-neutral-600 truncate">@{user.username || user.email}</p>
+                    <p className="text-xs font-black text-black truncate">
+                      {user.name || user.username}
+                    </p>
+                    <p className="text-[10px] font-mono text-neutral-600 truncate">
+                      @{user.username || user.email}
+                    </p>
                   </div>
                 </div>
                 <Link

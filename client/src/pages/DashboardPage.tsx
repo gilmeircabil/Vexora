@@ -184,7 +184,8 @@ export const DashboardPage: React.FC = () => {
               @{user.username} {user.email ? `• ${user.email}` : ''}
             </p>
             <p className="text-xs text-neutral-500 font-medium">
-              Personalize your account. Your profile picture appears across the site and header menu.
+              Personalize your account. Your profile picture appears across the site and header
+              menu.
             </p>
           </div>
         </div>
@@ -317,11 +318,11 @@ export const DashboardPage: React.FC = () => {
         ) : jobs.length === 0 ? (
           <div className="py-12 text-center text-sm font-bold text-neutral-500">
             No tools executed yet. Try out one of the{' '}
-            <Link to="/ai-tools" className="text-blue-700 underline">
+            <Link to="/tools?type=ai" className="text-blue-700 underline">
               AI Tools
             </Link>{' '}
             or design on{' '}
-            <Link to="/design-studio" className="text-blue-700 underline">
+            <Link to="/studio" className="text-blue-700 underline">
               Design Studio
             </Link>
             .

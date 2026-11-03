@@ -756,7 +756,8 @@ export const AdminDashboardPage: React.FC = () => {
                 </div>
                 <h3 className="text-2xl font-black text-black">Compose New Announcement</h3>
                 <p className="text-xs font-bold text-neutral-600 mt-1">
-                  Send a real-time toast notification to every active visitor across all pages on Vexora.
+                  Send a real-time toast notification to every active visitor across all pages on
+                  Vexora.
                 </p>
               </div>
 
@@ -820,9 +821,24 @@ export const AdminDashboardPage: React.FC = () => {
                     {(
                       [
                         { id: 'info', label: 'Information', color: 'bg-[#38BDF8]', icon: Info },
-                        { id: 'success', label: 'Success', color: 'bg-[#4ADE80]', icon: CheckCircle2 },
-                        { id: 'warning', label: 'Warning', color: 'bg-[#FACC15]', icon: AlertTriangle },
-                        { id: 'important', label: 'Important', color: 'bg-[#F43F5E] text-white', icon: Megaphone },
+                        {
+                          id: 'success',
+                          label: 'Success',
+                          color: 'bg-[#4ADE80]',
+                          icon: CheckCircle2,
+                        },
+                        {
+                          id: 'warning',
+                          label: 'Warning',
+                          color: 'bg-[#FACC15]',
+                          icon: AlertTriangle,
+                        },
+                        {
+                          id: 'important',
+                          label: 'Important',
+                          color: 'bg-[#F43F5E] text-white',
+                          icon: Megaphone,
+                        },
                       ] as const
                     ).map((t) => {
                       const IconComp = t.icon;
@@ -889,7 +905,8 @@ export const AdminDashboardPage: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-xs font-bold text-neutral-600 mb-4 leading-relaxed">
-                  This is exactly how connected users on any page (Tools, Studio, Learning, Dashboard, etc.) will see this toast in the upper-right corner:
+                  This is exactly how connected users on any page (Tools, Studio, Learning,
+                  Dashboard, etc.) will see this toast in the upper-right corner:
                 </p>
 
                 {/* Render Simulated Toast Card */}
@@ -1021,7 +1038,9 @@ export const AdminDashboardPage: React.FC = () => {
                         </td>
                         <td className="py-3.5 px-4 align-top whitespace-nowrap font-mono text-[11px]">
                           <div>Views: {ann.viewCount || 0}</div>
-                          <div className="text-neutral-500">Dismissed: {ann.dismissedCount || 0}</div>
+                          <div className="text-neutral-500">
+                            Dismissed: {ann.dismissedCount || 0}
+                          </div>
                         </td>
                         <td className="py-3.5 px-4 align-top whitespace-nowrap">
                           <span
@@ -1088,7 +1107,8 @@ export const AdminDashboardPage: React.FC = () => {
                 </div>
 
                 <p className="text-xs font-bold text-neutral-700 leading-relaxed">
-                  This will immediately push this notification to all connected sessions and any users who visit while it remains active.
+                  This will immediately push this notification to all connected sessions and any
+                  users who visit while it remains active.
                 </p>
 
                 <div className="flex items-center justify-end gap-3 pt-2 border-t-2 border-black/10">
@@ -1154,7 +1174,8 @@ export const AdminDashboardPage: React.FC = () => {
                 Workspaces in Maintenance
               </span>
               <div className="text-3xl font-black font-mono mt-1 text-black">
-                {Object.values(maintenanceForm.pages).filter(Boolean).length} / {PAGE_LOCK_ITEMS.length}
+                {Object.values(maintenanceForm.pages).filter(Boolean).length} /{' '}
+                {PAGE_LOCK_ITEMS.length}
               </div>
               <p className="text-[11px] font-bold text-neutral-500 mt-1">
                 Individual sections locked
@@ -1204,7 +1225,9 @@ export const AdminDashboardPage: React.FC = () => {
                   </h3>
                 </div>
                 <p className="text-xs sm:text-sm font-semibold text-neutral-800 leading-relaxed">
-                  When enabled, <strong>every single page</strong> on VexoraMods is locked with your customized maintenance notice. Visitors cannot interact with any workspaces or tools. Administrators remain able to navigate and test via Admin Bypass.
+                  When enabled, <strong>every single page</strong> on VexoraMods is locked with your
+                  customized maintenance notice. Visitors cannot interact with any workspaces or
+                  tools. Administrators remain able to navigate and test via Admin Bypass.
                 </p>
               </div>
 
@@ -1249,7 +1272,9 @@ export const AdminDashboardPage: React.FC = () => {
 
               {/* Quick Presets */}
               <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span className="text-[11px] font-black uppercase text-neutral-500 mr-1">Presets:</span>
+                <span className="text-[11px] font-black uppercase text-neutral-500 mr-1">
+                  Presets:
+                </span>
                 <button
                   type="button"
                   onClick={() =>
@@ -1306,9 +1331,7 @@ export const AdminDashboardPage: React.FC = () => {
                   type="text"
                   maxLength={120}
                   value={maintenanceForm.title}
-                  onChange={(e) =>
-                    setMaintenanceForm((p) => ({ ...p, title: e.target.value }))
-                  }
+                  onChange={(e) => setMaintenanceForm((p) => ({ ...p, title: e.target.value }))}
                   placeholder="e.g. Scheduled Maintenance"
                   className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#FFD21A] shadow-[2px_2px_0px_#000]"
                 />
@@ -1323,9 +1346,7 @@ export const AdminDashboardPage: React.FC = () => {
                   rows={3}
                   maxLength={1000}
                   value={maintenanceForm.message}
-                  onChange={(e) =>
-                    setMaintenanceForm((p) => ({ ...p, message: e.target.value }))
-                  }
+                  onChange={(e) => setMaintenanceForm((p) => ({ ...p, message: e.target.value }))}
                   placeholder="Explain what is happening and when the feature will return..."
                   className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-semibold text-black focus:outline-none focus:ring-2 focus:ring-[#FFD21A] shadow-[2px_2px_0px_#000]"
                 />
@@ -1414,7 +1435,8 @@ export const AdminDashboardPage: React.FC = () => {
                   <span>Individual Workspace & Page Locks</span>
                 </h3>
                 <p className="text-xs text-neutral-600 font-medium mt-0.5">
-                  Toggle individual workspaces into maintenance without taking the rest of the site offline.
+                  Toggle individual workspaces into maintenance without taking the rest of the site
+                  offline.
                 </p>
               </div>
 
@@ -1479,11 +1501,7 @@ export const AdminDashboardPage: React.FC = () => {
                                 : 'bg-emerald-200 text-emerald-900'
                           }`}
                         >
-                          {isUnderGlobal
-                            ? 'Global Lock'
-                            : isPageLocked
-                              ? 'Maintenance'
-                              : 'Online'}
+                          {isUnderGlobal ? 'Global Lock' : isPageLocked ? 'Maintenance' : 'Online'}
                         </span>
                       </div>
                       <p className="text-xs font-semibold text-neutral-600 leading-snug">
@@ -1526,9 +1544,7 @@ export const AdminDashboardPage: React.FC = () => {
                 <CheckCircle2 className="w-5 h-5 text-black stroke-[2.5]" />
               </span>
               <div>
-                <p className="text-xs sm:text-sm font-black text-black">
-                  Ready to apply changes?
-                </p>
+                <p className="text-xs sm:text-sm font-black text-black">Ready to apply changes?</p>
                 <p className="text-[11px] font-bold text-neutral-600">
                   Settings are saved to the database and sync instantly with all visitor sessions.
                 </p>
@@ -2177,9 +2193,7 @@ export const AdminDashboardPage: React.FC = () => {
                   <tr key={t.toolId} className="hover:bg-neutral-50">
                     <td className="py-3 px-4 font-black text-black">{t.name}</td>
                     <td className="py-3 px-4 font-mono text-[11px] text-neutral-600">{t.toolId}</td>
-                    <td className="py-3 px-4 font-mono font-black text-green-700">
-                      100% Free
-                    </td>
+                    <td className="py-3 px-4 font-mono font-black text-green-700">100% Free</td>
                     <td className="py-3 px-4">
                       <span
                         className={`inline-block px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase border border-black ${

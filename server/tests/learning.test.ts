@@ -7,17 +7,14 @@ import {
   OPEN_LEARNING_TOPICS,
   LEARNING_CONTENT_TYPES,
 } from '../src/models/LearningPost.js';
-import { LearningComment } from '../src/models/LearningComment.js';
 import { LearningLike } from '../src/models/LearningLike.js';
 import { LearningBookmark } from '../src/models/LearningBookmark.js';
-import { LearningReport } from '../src/models/LearningReport.js';
 import {
   LearningPurchase,
   LearningEntitlement,
   LearningProgress,
   LearningReview,
   CreatorProfile,
-  CreatorFollow,
   CreatorPayout,
 } from '../src/models/LearningMarketplace.js';
 import { User } from '../src/models/User.js';

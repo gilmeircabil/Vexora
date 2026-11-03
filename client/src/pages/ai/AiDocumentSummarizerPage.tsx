@@ -104,7 +104,8 @@ export const AiDocumentSummarizerPage: React.FC = () => {
                 AI Document Summarizer & Q&A
               </h1>
               <p className="text-sm text-gray-700 mt-1 font-medium">
-                Condense articles, PDFs, and meeting notes into clear bullet points or ask specific questions with cited answers.
+                Condense articles, PDFs, and meeting notes into clear bullet points or ask specific
+                questions with cited answers.
               </p>
             </div>
           </div>
@@ -194,7 +195,9 @@ export const AiDocumentSummarizerPage: React.FC = () => {
                 ) : (
                   <>
                     <Zap className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                    <span>{mode === 'summary' ? 'Generate Summary (Free)' : 'Find Answer (Free)'}</span>
+                    <span>
+                      {mode === 'summary' ? 'Generate Summary (Free)' : 'Find Answer (Free)'}
+                    </span>
                   </>
                 )}
               </button>
@@ -216,7 +219,11 @@ export const AiDocumentSummarizerPage: React.FC = () => {
                       onClick={handleCopy}
                       className="inline-flex items-center gap-1 px-2.5 py-1 font-mono text-xs font-bold border border-black bg-yellow-200 hover:bg-yellow-300 transition-colors"
                     >
-                      {copied ? <Check className="w-3.5 h-3.5 text-green-800" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copied ? (
+                        <Check className="w-3.5 h-3.5 text-green-800" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
                       {copied ? 'Copied' : 'Copy'}
                     </button>
                   )}
@@ -229,7 +236,9 @@ export const AiDocumentSummarizerPage: React.FC = () => {
                 ) : (
                   <div className="min-h-[300px] flex flex-col items-center justify-center text-center p-8 text-gray-400 font-mono text-xs">
                     <FileText className="w-10 h-10 mb-2 stroke-1 text-gray-300" />
-                    <span>Paste or upload your text on the left to generate an executive summary.</span>
+                    <span>
+                      Paste or upload your text on the left to generate an executive summary.
+                    </span>
                   </div>
                 )}
               </div>

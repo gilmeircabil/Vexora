@@ -29,12 +29,7 @@ describe('Broadcast Notification System', () => {
 
   it('renders a broadcast toast card with correct Neo-Brutalist badge, title and message', () => {
     const handleDismiss = vi.fn();
-    render(
-      <BroadcastToastCard
-        announcement={mockAnnouncement}
-        onDismiss={handleDismiss}
-      />,
-    );
+    render(<BroadcastToastCard announcement={mockAnnouncement} onDismiss={handleDismiss} />);
 
     expect(screen.getByText('Notice')).toBeInTheDocument();
     expect(screen.getByText('Platform Maintenance Notice')).toBeInTheDocument();
@@ -69,7 +64,8 @@ describe('Broadcast Notification System', () => {
       capturedHeaders = options?.headers;
       return Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({ success: true, data: { announcements: [], connectedLiveClients: 0 } }),
+        json: () =>
+          Promise.resolve({ success: true, data: { announcements: [], connectedLiveClients: 0 } }),
       });
     });
 

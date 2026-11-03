@@ -157,7 +157,8 @@ export const ForgotPasswordPage: React.FC = () => {
 
               <div className="p-4 rounded-2xl bg-amber-50 border-2 border-black space-y-2">
                 <p className="text-xs font-bold text-black leading-relaxed">
-                  Your old recovery code has been rotated and expired. Please save your <strong>New Recovery Code</strong> below for future recovery.
+                  Your old recovery code has been rotated and expired. Please save your{' '}
+                  <strong>New Recovery Code</strong> below for future recovery.
                 </p>
               </div>
 

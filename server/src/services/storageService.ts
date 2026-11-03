@@ -254,7 +254,8 @@ export class StorageService {
 
         return {
           stream: response.Body as Readable,
-          contentType: response.ContentType || (isThumb ? 'image/webp' : 'application/octet-stream'),
+          contentType:
+            response.ContentType || (isThumb ? 'image/webp' : 'application/octet-stream'),
           contentLength: response.ContentLength,
         };
       } catch (err: any) {

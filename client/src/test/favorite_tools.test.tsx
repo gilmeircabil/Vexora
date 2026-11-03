@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 import { AuthProvider } from '../context/AuthContext.js';
 import { ToastProvider } from '../context/ToastContext.js';
@@ -199,7 +199,9 @@ describe('VexoraMods Favorite Tools System Suite', () => {
 
       // Click Favorites filter pill
       const favFilterBtn = screen.getByRole('button', { name: /Favorites \(0\)/i });
-      fireEvent.click(favFilterBtn);
+      act(() => {
+        fireEvent.click(favFilterBtn);
+      });
 
       expect(screen.getByRole('heading', { name: /Your Favorite Tools/i })).toBeInTheDocument();
       expect(screen.getByText(/Your favorite tools will appear here/i)).toBeInTheDocument();
@@ -281,7 +283,9 @@ describe('VexoraMods Favorite Tools System Suite', () => {
 
       // Click Favorites category filter button
       const favFilterBtn = screen.getByRole('button', { name: /Favorites \(2\)/i });
-      fireEvent.click(favFilterBtn);
+      act(() => {
+        fireEvent.click(favFilterBtn);
+      });
 
       // View switches to dedicated Favorites view showing both favorited tools
       expect(screen.getByText('Word & Character Counter')).toBeInTheDocument();

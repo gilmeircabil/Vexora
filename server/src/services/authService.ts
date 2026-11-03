@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Types } from 'mongoose';
 import { env } from '../config/env.js';
-import { User, validateUsername } from '../models/User.js';
+import { User, validateUsername, RESERVED_USERNAMES } from '../models/User.js';
 import { TurnstileService } from './turnstileService.js';
 
 export class AuthSecurityError extends Error {
@@ -563,7 +563,8 @@ export class AuthService {
       );
     }
 
-    const uid = typeof params.userId === 'string' ? new Types.ObjectId(params.userId) : params.userId;
+    const uid =
+      typeof params.userId === 'string' ? new Types.ObjectId(params.userId) : params.userId;
     const user = await User.findById(uid);
     if (!user || !user.passwordHash) {
       throw new AuthSecurityError('User not found.', 404, 'USER_NOT_FOUND');
@@ -683,5 +684,261 @@ export class AuthService {
 
     await user.save();
     return this.getCurrentUser(user._id as Types.ObjectId);
+  }
+
+  /**
+   * Generates a unique, valid username from a name or email seed.
+   */
+  static async generateUniqueUsername(seed: string): Promise<string> {
+    let base = (seed || 'user')
+      .toLowerCase()
+      .replace(/[^a-z0-9_]/g, '')
+      .slice(0, 15);
+
+    if (base.length < 3) base = `user_${base}`;
+    if (base.length < 3) base = 'vex_user';
+
+    let candidate = base.slice(0, 20);
+    let suffix = 1;
+
+    while (
+      RESERVED_USERNAMES.has(candidate.toLowerCase()) ||
+      (await User.exists({ username: candidate }))
+    ) {
+      const suffixStr = `_${suffix}`;
+      const prefixLength = Math.max(3, 20 - suffixStr.length);
+      candidate = `${base.slice(0, prefixLength)}${suffixStr}`;
+      suffix++;
+    }
+
+    return candidate;
+  }
+
+  /**
+   * Authenticates or registers a user via Google OAuth profile.
+   */
+  static async loginWithGoogle(profile: {
+    googleId: string;
+    email?: string;
+    name?: string;
+    picture?: string;
+  }): Promise<AuthResult> {
+    if (!profile.googleId) {
+      throw new AuthSecurityError('Google user ID is required.', 400, 'INVALID_GOOGLE_PROFILE');
+    }
+
+    // 1. Try to find user by linked Google ID
+    let user = await User.findOne({ 'oauthProviders.google.id': profile.googleId });
+
+    // 2. Fallback: find by email and link
+    if (!user && profile.email) {
+      user = await User.findOne({ email: profile.email.toLowerCase().trim() });
+    }
+
+    let rawRecoveryCode: string | undefined;
+
+    if (user) {
+      if (user.isSuspended || user.accountStatus === 'suspended') {
+        throw new AuthSecurityError(
+          user.suspensionReason || 'Your account has been suspended.',
+          403,
+          'ACCOUNT_SUSPENDED',
+        );
+      }
+
+      if (!user.oauthProviders) user.oauthProviders = {};
+      user.oauthProviders.google = {
+        id: profile.googleId,
+        email: profile.email,
+        picture: profile.picture,
+        linkedAt: user.oauthProviders.google?.linkedAt || new Date(),
+      };
+      if (!user.avatarUrl && profile.picture) {
+        user.avatarUrl = profile.picture;
+      }
+      user.emailVerified = true;
+      user.lastLoginAt = new Date();
+      user.failedLoginAttempts = 0;
+      user.lockoutUntil = null;
+      await user.save();
+    } else {
+      // Create new user via Google
+      const seed = (profile.email ? profile.email.split('@')[0] : '') || profile.name || 'user';
+      const username = await this.generateUniqueUsername(seed);
+      const generatedCode = this.generateRecoveryCode();
+      rawRecoveryCode = generatedCode;
+      const recoveryCodeHash = this.hashRecoveryCode(generatedCode);
+
+      user = await User.create({
+        username,
+        name: profile.name || username,
+        email: profile.email ? profile.email.toLowerCase().trim() : undefined,
+        avatarUrl: profile.picture || '',
+        recoveryCodeHash,
+        oauthProviders: {
+          google: {
+            id: profile.googleId,
+            email: profile.email,
+            picture: profile.picture,
+            linkedAt: new Date(),
+          },
+        },
+        role: 'user',
+        educationRole: 'student',
+        emailVerified: true,
+        accountStatus: 'active',
+        failedLoginAttempts: 0,
+        tokenVersion: 0,
+        lastLoginAt: new Date(),
+      });
+    }
+
+    const tokens = this.generateTokens({
+      userId: (user._id as Types.ObjectId).toString(),
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      tokenVersion: user.tokenVersion,
+    });
+
+    return {
+      user: {
+        id: (user._id as Types.ObjectId).toString(),
+        username: user.username,
+        name: user.name,
+        email: user.email,
+        avatarUrl: user.avatarUrl,
+        bio: user.bio,
+        role: user.role,
+        educationRole: user.educationRole || 'student',
+        emailVerified: true,
+        accountStatus: user.accountStatus || 'active',
+        subscription: {
+          plan: 'free',
+          status: 'active',
+        },
+        credits: {
+          dailyRemaining: 999999,
+          monthlyRemaining: 999999,
+          totalAvailable: 999999,
+        },
+      },
+      ...tokens,
+      recoveryCode: rawRecoveryCode,
+    };
+  }
+
+  /**
+   * Authenticates or registers a user via Facebook OAuth profile.
+   */
+  static async loginWithFacebook(profile: {
+    facebookId: string;
+    email?: string;
+    name?: string;
+    picture?: string;
+  }): Promise<AuthResult> {
+    if (!profile.facebookId) {
+      throw new AuthSecurityError('Facebook user ID is required.', 400, 'INVALID_FACEBOOK_PROFILE');
+    }
+
+    // 1. Try to find user by linked Facebook ID
+    let user = await User.findOne({ 'oauthProviders.facebook.id': profile.facebookId });
+
+    // 2. Fallback: find by email and link
+    if (!user && profile.email) {
+      user = await User.findOne({ email: profile.email.toLowerCase().trim() });
+    }
+
+    let rawRecoveryCode: string | undefined;
+
+    if (user) {
+      if (user.isSuspended || user.accountStatus === 'suspended') {
+        throw new AuthSecurityError(
+          user.suspensionReason || 'Your account has been suspended.',
+          403,
+          'ACCOUNT_SUSPENDED',
+        );
+      }
+
+      if (!user.oauthProviders) user.oauthProviders = {};
+      user.oauthProviders.facebook = {
+        id: profile.facebookId,
+        email: profile.email,
+        picture: profile.picture,
+        linkedAt: user.oauthProviders.facebook?.linkedAt || new Date(),
+      };
+      if (!user.avatarUrl && profile.picture) {
+        user.avatarUrl = profile.picture;
+      }
+      user.emailVerified = true;
+      user.lastLoginAt = new Date();
+      user.failedLoginAttempts = 0;
+      user.lockoutUntil = null;
+      await user.save();
+    } else {
+      // Create new user via Facebook
+      const seed = (profile.email ? profile.email.split('@')[0] : '') || profile.name || 'fb_user';
+      const username = await this.generateUniqueUsername(seed);
+      const generatedCode = this.generateRecoveryCode();
+      rawRecoveryCode = generatedCode;
+      const recoveryCodeHash = this.hashRecoveryCode(generatedCode);
+
+      user = await User.create({
+        username,
+        name: profile.name || username,
+        email: profile.email ? profile.email.toLowerCase().trim() : undefined,
+        avatarUrl: profile.picture || '',
+        recoveryCodeHash,
+        oauthProviders: {
+          facebook: {
+            id: profile.facebookId,
+            email: profile.email,
+            name: profile.name,
+            linkedAt: new Date(),
+          },
+        },
+        role: 'user',
+        educationRole: 'student',
+        emailVerified: true,
+        accountStatus: 'active',
+        failedLoginAttempts: 0,
+        tokenVersion: 0,
+        lastLoginAt: new Date(),
+      });
+    }
+
+    const tokens = this.generateTokens({
+      userId: (user._id as Types.ObjectId).toString(),
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      tokenVersion: user.tokenVersion,
+    });
+
+    return {
+      user: {
+        id: (user._id as Types.ObjectId).toString(),
+        username: user.username,
+        name: user.name,
+        email: user.email,
+        avatarUrl: user.avatarUrl,
+        bio: user.bio,
+        role: user.role,
+        educationRole: user.educationRole || 'student',
+        emailVerified: true,
+        accountStatus: user.accountStatus || 'active',
+        subscription: {
+          plan: 'free',
+          status: 'active',
+        },
+        credits: {
+          dailyRemaining: 999999,
+          monthlyRemaining: 999999,
+          totalAvailable: 999999,
+        },
+      },
+      ...tokens,
+      recoveryCode: rawRecoveryCode,
+    };
   }
 }

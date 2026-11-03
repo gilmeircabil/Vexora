@@ -84,7 +84,8 @@ export const AiWritingAssistantPage: React.FC = () => {
                 AI Writing & ATS Resume Assistant
               </h1>
               <p className="text-sm text-gray-700 mt-1 font-medium">
-                Transform rough notes into persuasive professional copy or create quantifiable, high-impact resume achievement bullets for ATS scanners.
+                Transform rough notes into persuasive professional copy or create quantifiable,
+                high-impact resume achievement bullets for ATS scanners.
               </p>
             </div>
           </div>
@@ -187,7 +188,9 @@ export const AiWritingAssistantPage: React.FC = () => {
                   <>
                     <Zap className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                     <span>
-                      {mode === 'resume' ? 'Generate ATS Resume Bullets (Free)' : 'Polish Text (Free)'}
+                      {mode === 'resume'
+                        ? 'Generate ATS Resume Bullets (Free)'
+                        : 'Polish Text (Free)'}
                     </span>
                   </>
                 )}
@@ -201,7 +204,9 @@ export const AiWritingAssistantPage: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
                     <span className="font-mono text-xs font-bold uppercase text-black">
-                      {mode === 'resume' ? 'ATS-Optimized Resume Bullets' : 'Polished Copy & Variants'}
+                      {mode === 'resume'
+                        ? 'ATS-Optimized Resume Bullets'
+                        : 'Polished Copy & Variants'}
                     </span>
                   </div>
                   {result && (
@@ -210,7 +215,11 @@ export const AiWritingAssistantPage: React.FC = () => {
                       onClick={handleCopy}
                       className="inline-flex items-center gap-1 px-2.5 py-1 font-mono text-xs font-bold border border-black bg-yellow-200 hover:bg-yellow-300 transition-colors"
                     >
-                      {copied ? <Check className="w-3.5 h-3.5 text-green-800" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copied ? (
+                        <Check className="w-3.5 h-3.5 text-green-800" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
                       {copied ? 'Copied' : 'Copy'}
                     </button>
                   )}
@@ -223,7 +232,9 @@ export const AiWritingAssistantPage: React.FC = () => {
                 ) : (
                   <div className="min-h-[300px] flex flex-col items-center justify-center text-center p-8 text-gray-400 font-mono text-xs">
                     <FileBadge2 className="w-10 h-10 mb-2 stroke-1 text-gray-300" />
-                    <span>Enter your text on the left and click Generate to see AI-optimized results.</span>
+                    <span>
+                      Enter your text on the left and click Generate to see AI-optimized results.
+                    </span>
                   </div>
                 )}
               </div>

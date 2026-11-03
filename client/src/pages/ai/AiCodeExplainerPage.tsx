@@ -96,7 +96,8 @@ export const AiCodeExplainerPage: React.FC = () => {
                 AI Code Explainer & Bug Debugger
               </h1>
               <p className="text-sm text-gray-700 mt-1 font-medium">
-                Step-by-step logic breakdown, algorithmic time/space complexity analysis, and automated bug fixing.
+                Step-by-step logic breakdown, algorithmic time/space complexity analysis, and
+                automated bug fixing.
               </p>
             </div>
           </div>
@@ -179,7 +180,9 @@ export const AiCodeExplainerPage: React.FC = () => {
               {/* Optional Error/Context */}
               <div>
                 <label className="block font-mono text-xs font-bold text-black uppercase mb-1.5">
-                  {mode === 'debug' ? 'Error Message or Stack Trace' : 'Additional Context (Optional)'}
+                  {mode === 'debug'
+                    ? 'Error Message or Stack Trace'
+                    : 'Additional Context (Optional)'}
                 </label>
                 <input
                   type="text"
@@ -209,7 +212,9 @@ export const AiCodeExplainerPage: React.FC = () => {
                 ) : (
                   <>
                     <Zap className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                    <span>{mode === 'explain' ? 'Explain Code (Free)' : 'Find & Fix Bugs (Free)'}</span>
+                    <span>
+                      {mode === 'explain' ? 'Explain Code (Free)' : 'Find & Fix Bugs (Free)'}
+                    </span>
                   </>
                 )}
               </button>
@@ -231,7 +236,11 @@ export const AiCodeExplainerPage: React.FC = () => {
                       onClick={handleCopy}
                       className="inline-flex items-center gap-1 px-2.5 py-1 font-mono text-xs font-bold border border-black bg-yellow-200 hover:bg-yellow-300 transition-colors"
                     >
-                      {copied ? <Check className="w-3.5 h-3.5 text-green-800" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copied ? (
+                        <Check className="w-3.5 h-3.5 text-green-800" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
                       {copied ? 'Copied' : 'Copy'}
                     </button>
                   )}
@@ -244,7 +253,10 @@ export const AiCodeExplainerPage: React.FC = () => {
                 ) : (
                   <div className="min-h-[300px] flex flex-col items-center justify-center text-center p-8 text-gray-400 font-mono text-xs">
                     <Code2 className="w-10 h-10 mb-2 stroke-1 text-gray-300" />
-                    <span>Enter your code on the left and click Analyze to receive a step-by-step walkthrough.</span>
+                    <span>
+                      Enter your code on the left and click Analyze to receive a step-by-step
+                      walkthrough.
+                    </span>
                   </div>
                 )}
               </div>

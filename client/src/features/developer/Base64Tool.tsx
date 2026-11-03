@@ -6,7 +6,7 @@ import { FileDropZone } from '../../components/common/FileDropZone.js';
 import { encodeBase64Text, decodeBase64Text, encodeBase64Bytes } from '../../lib/dev/base64.js';
 import { type ValidatedFile } from '../../lib/files/validator.js';
 import { formatBytes } from '../../lib/format.js';
-import { AlertCircle, FileCode } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 export const Base64Tool: React.FC = () => {
   const [mode, setMode] = useState<'text' | 'file'>('text');

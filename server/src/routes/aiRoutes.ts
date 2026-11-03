@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { AIController } from '../controllers/aiController.js';
-import { optionalAuthenticate } from '../middleware/authMiddleware.js';
+import { optionalAuthenticate, authenticate } from '../middleware/authMiddleware.js';
 import { aiRateLimiter } from '../middleware/rateLimitMiddleware.js';
 import {
   uploadImage,
@@ -71,7 +71,12 @@ router.post(
 router.post('/code-assist', optionalAuthenticate, aiRateLimiter, AIController.explainCode);
 
 // 7. AI Document Summarizer & Q&A
-router.post('/document-assist', optionalAuthenticate, aiRateLimiter, AIController.summarizeDocument);
+router.post(
+  '/document-assist',
+  optionalAuthenticate,
+  aiRateLimiter,
+  AIController.summarizeDocument,
+);
 
 // 8. AI Writing Assistant & ATS Resume Builder
 router.post('/writing-assist', optionalAuthenticate, aiRateLimiter, AIController.assistWriting);
@@ -79,6 +84,14 @@ router.post('/writing-assist', optionalAuthenticate, aiRateLimiter, AIController
 // 9. Vexora AI Chat & Real-Time Streaming
 router.post('/chat', optionalAuthenticate, aiRateLimiter, AIController.chat);
 router.post('/chat/stream', optionalAuthenticate, aiRateLimiter, AIController.streamChat);
+
+// 10. AI Chat Cloud Sessions (Per User Account)
+router.get('/chat/sessions', authenticate, AIController.listChatSessions);
+router.get('/chat/sessions/:sessionId', authenticate, AIController.getChatSession);
+router.post('/chat/sessions', authenticate, AIController.createChatSession);
+router.put('/chat/sessions/:sessionId', authenticate, AIController.updateChatSession);
+router.delete('/chat/sessions/:sessionId', authenticate, AIController.deleteChatSession);
+router.delete('/chat/sessions', authenticate, AIController.clearChatSessions);
 
 // Jobs, history & downloads
 router.get('/jobs/:jobId', optionalAuthenticate, AIController.getJob);

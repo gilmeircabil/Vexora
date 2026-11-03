@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, History, Plus, RotateCcw, Clock, Check, Loader2, AlertCircle } from 'lucide-react';
+import { X, History, Plus, RotateCcw, Clock, Loader2 } from 'lucide-react';
 import type { Canvas } from 'fabric';
 import { designStudioApi, type DesignVersionDTO } from '../../lib/designStudio/api.js';
 
@@ -25,7 +25,6 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
   const [isCreatingSnapshot, setIsCreatingSnapshot] = useState<boolean>(false);
   const [snapshotName, setSnapshotName] = useState<string>('');
   const [restoringVersionId, setRestoringVersionId] = useState<string | null>(null);
-  const [previewVersion, setPreviewVersion] = useState<DesignVersionDTO | null>(null);
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
@@ -102,36 +101,36 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-2xl bg-[#FAF7F2] rounded-2xl border-4 border-black p-6 shadow-[8px_8px_0px_#000000] flex flex-col max-h-[85vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
+      <div className="relative w-full max-w-2xl bg-white rounded-2xl border border-slate-200 p-6 shadow-2xl flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b-2 border-black shrink-0">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100 shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-[#FACC15] rounded-xl border-2 border-black">
-              <History className="w-5 h-5 text-black" />
+            <div className="p-2.5 bg-purple-100 text-[#7d2ae8] rounded-xl">
+              <History className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-black">Version History</h3>
-              <p className="text-xs font-semibold text-gray-600">
+              <h3 className="text-base font-bold text-slate-900">Version History</h3>
+              <p className="text-xs text-slate-500">
                 Browse previous revisions or create a named snapshot
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl border-2 border-black bg-white hover:bg-gray-100 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5 text-black" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Feedback Alert */}
         {message && (
           <div
-            className={`my-3 p-3 rounded-xl border-2 text-xs font-bold shrink-0 ${
+            className={`my-3 p-3 rounded-xl border text-xs font-semibold shrink-0 ${
               message.type === 'success'
-                ? 'bg-green-100 border-green-600 text-green-800'
-                : 'bg-red-100 border-red-500 text-red-800'
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                : 'bg-rose-50 border-rose-200 text-rose-800'
             }`}
           >
             {message.text}
@@ -141,9 +140,9 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
         {/* Snapshot Creation Form */}
         <form
           onSubmit={handleCreateSnapshot}
-          className="pt-3 pb-4 border-b-2 border-black/10 shrink-0"
+          className="pt-3 pb-4 border-b border-slate-100 shrink-0"
         >
-          <label className="block text-xs font-black uppercase text-black mb-1.5">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
             Save Named Snapshot
           </label>
           <div className="flex gap-2">
@@ -153,12 +152,12 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
               value={snapshotName}
               onChange={(e) => setSnapshotName(e.target.value)}
               maxLength={100}
-              className="flex-1 px-3 py-2 bg-white rounded-xl border-2 border-black text-sm font-semibold text-black focus:outline-none focus:ring-2 focus:ring-[#FACC15]"
+              className="flex-1 px-3 py-2 bg-slate-50 hover:bg-white focus:bg-white rounded-xl border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:border-[#7d2ae8] focus:ring-1 focus:ring-[#7d2ae8] transition-colors"
             />
             <button
               type="submit"
               disabled={isCreatingSnapshot || !snapshotName.trim()}
-              className="flex items-center gap-1.5 px-4 py-2 bg-[#FACC15] rounded-xl border-2 border-black font-black text-xs text-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50"
+              className="flex items-center gap-1.5 px-4 py-2 bg-[#7d2ae8] hover:bg-[#6c22cf] rounded-xl font-semibold text-xs text-white shadow-xs transition-all disabled:opacity-50 cursor-pointer"
             >
               {isCreatingSnapshot ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -173,12 +172,12 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
         {/* Version List */}
         <div className="flex-1 overflow-y-auto py-3 space-y-2.5 pr-1">
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-12 text-gray-500 gap-2">
-              <Loader2 className="w-6 h-6 animate-spin text-black" />
-              <span className="text-xs font-bold">Loading version history...</span>
+            <div className="flex flex-col items-center justify-center py-12 text-slate-400 gap-2">
+              <Loader2 className="w-6 h-6 animate-spin text-[#7d2ae8]" />
+              <span className="text-xs font-medium">Loading version history...</span>
             </div>
           ) : versions.length === 0 ? (
-            <div className="text-center py-8 text-gray-500 font-semibold text-sm">
+            <div className="text-center py-8 text-slate-400 font-medium text-sm">
               No previous version snapshots found.
             </div>
           ) : (
@@ -192,8 +191,10 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
               return (
                 <div
                   key={ver._id}
-                  className={`p-3.5 rounded-xl border-2 border-black flex items-center justify-between gap-4 transition-all ${
-                    isCurrent ? 'bg-amber-50/80 border-amber-500' : 'bg-white hover:bg-gray-50'
+                  className={`p-3.5 rounded-xl border flex items-center justify-between gap-4 transition-all ${
+                    isCurrent
+                      ? 'bg-purple-50/70 border-purple-200'
+                      : 'bg-white border-slate-200 hover:bg-slate-50'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
@@ -201,28 +202,28 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
                       <img
                         src={ver.thumbnailUrl}
                         alt={`v${ver.versionNumber}`}
-                        className="w-12 h-12 object-contain bg-gray-100 rounded-lg border border-black shrink-0"
+                        className="w-12 h-12 object-contain bg-slate-50 rounded-lg border border-slate-200 shrink-0"
                       />
                     ) : (
-                      <div className="w-12 h-12 bg-gray-100 rounded-lg border border-black flex items-center justify-center shrink-0">
-                        <History className="w-5 h-5 text-gray-400" />
+                      <div className="w-12 h-12 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center shrink-0">
+                        <History className="w-5 h-5 text-slate-400" />
                       </div>
                     )}
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 bg-black text-[#FACC15] font-black text-xs rounded-md">
+                        <span className="px-2 py-0.5 bg-slate-900 text-white font-semibold text-xs rounded-md">
                           v{ver.versionNumber}
                         </span>
-                        <h4 className="font-black text-sm text-black truncate">
+                        <h4 className="font-bold text-sm text-slate-800 truncate">
                           {ver.versionName}
                         </h4>
                         {isCurrent && (
-                          <span className="px-2 py-0.5 bg-green-100 border border-green-500 text-green-800 text-[10px] font-black rounded-md">
+                          <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-semibold rounded-md">
                             Current
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-1.5 text-xs text-gray-500 mt-1 font-semibold">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1 font-medium">
                         <Clock className="w-3.5 h-3.5" />
                         <span>{dateStr}</span>
                       </div>
@@ -235,7 +236,7 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
                         type="button"
                         onClick={() => handleRestore(ver)}
                         disabled={restoringVersionId === ver._id}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-black bg-white hover:bg-gray-100 font-black text-xs text-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 font-semibold text-xs text-slate-700 shadow-xs transition-all disabled:opacity-50 cursor-pointer"
                       >
                         {restoringVersionId === ver._id ? (
                           <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -253,11 +254,11 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="pt-3 border-t-2 border-black flex items-center justify-between text-xs text-gray-600 font-semibold shrink-0">
+        <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-medium shrink-0">
           <span>* Restoring creates a new revision without deleting older versions</span>
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl border-2 border-black font-bold text-sm bg-white hover:bg-gray-100 text-black transition-colors"
+            className="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-semibold text-sm transition-colors cursor-pointer"
           >
             Close
           </button>

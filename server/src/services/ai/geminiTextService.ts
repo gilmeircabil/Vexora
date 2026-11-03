@@ -5,11 +5,12 @@ export interface GenerateTextParams {
   systemPrompt?: string;
   temperature?: number;
   maxTokens?: number;
+  model?: string;
 }
 
 export interface GenerateTextResult {
   text: string;
-  provider: 'gemini' | 'nvidia';
+  provider: 'gemini' | 'nvidia' | 'openrouter' | 'groq';
   model: string;
   tokensUsed?: number;
 }
@@ -32,9 +33,17 @@ export interface ChatParams {
   temperature?: number;
   maxTokens?: number;
   model?: string;
-  provider?: 'auto' | 'gemini' | 'nvidia';
+  provider?: 'auto' | 'gemini' | 'nvidia' | 'openrouter' | 'groq';
   attachments?: ChatAttachment[];
 }
+
+export const DEFAULT_SYSTEM_PROMPT =
+  'You are Vexora AI, an advanced, helpful, and friendly AI companion built into VexoraMods. ' +
+  'CRITICAL FORMATTING GUIDELINES:\n' +
+  '1. Always structure your responses with clean, readable GitHub-flavored markdown.\n' +
+  '2. When listing items, features, components, or steps, ALWAYS put each bullet item on its OWN SEPARATE NEW LINE starting with "* ". NEVER combine or squish multiple bullet points into a single paragraph or run-on line.\n' +
+  '3. Use bold formatting (**Term:**) at the beginning of each bullet item.\n' +
+  '4. Use descriptive markdown headings (##, ###) and blank lines between distinct topics so the text is spacious, scannable, and beautifully organized.';
 
 export class GeminiTextService {
   /**
@@ -172,18 +181,148 @@ export class GeminiTextService {
   }
 
   /**
-   * Unified generator with auto-failover between Gemini and NVIDIA.
+   * Generates text via OpenRouter REST API.
    */
-  static async generate(params: GenerateTextParams): Promise<GenerateTextResult> {
+  private static async callOpenRouter(
+    params: GenerateTextParams & { model?: string },
+  ): Promise<GenerateTextResult> {
+    const apiKey = env.OPENROUTER_API_KEY;
+    if (!apiKey) {
+      throw new Error('OPENROUTER_API_KEY is not configured in .env');
+    }
+
+    const baseUrl = env.OPENROUTER_BASE_URL.replace(/\/+$/, '');
+    const model = params.model || env.OPENROUTER_MODEL || 'openrouter/free';
+    const url = `${baseUrl}/chat/completions`;
+
+    const messages = [];
+    if (params.systemPrompt) {
+      messages.push({ role: 'system', content: params.systemPrompt });
+    }
+    messages.push({ role: 'user', content: params.prompt });
+
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://vexoramods.com',
+        'X-Title': 'VexoraMods AI',
+      },
+      body: JSON.stringify({
+        model,
+        messages,
+        temperature: params.temperature ?? 0.7,
+        max_tokens: params.maxTokens ?? 2048,
+      }),
+    });
+
+    if (!resp.ok) {
+      const errText = await resp.text();
+      throw new Error(`OpenRouter API error (${resp.status}): ${errText}`);
+    }
+
+    const data = (await resp.json()) as any;
+    const text = data.choices?.[0]?.message?.content || '';
+    const tokensUsed = data.usage?.total_tokens || 0;
+
+    return {
+      text,
+      provider: 'openrouter',
+      model: data.model || model,
+      tokensUsed,
+    };
+  }
+
+  /**
+   * Generates text via Groq LPU REST API.
+   */
+  private static async callGroq(
+    params: GenerateTextParams & { model?: string },
+  ): Promise<GenerateTextResult> {
+    const apiKey = env.GROQ_API_KEY;
+    if (!apiKey) {
+      throw new Error('GROQ_API_KEY is not configured in .env');
+    }
+
+    const baseUrl = env.GROQ_BASE_URL.replace(/\/+$/, '');
+    const model = params.model || env.GROQ_MODEL || 'openai/gpt-oss-120b';
+    const url = `${baseUrl}/chat/completions`;
+
+    const messages = [];
+    if (params.systemPrompt) {
+      messages.push({ role: 'system', content: params.systemPrompt });
+    }
+    messages.push({ role: 'user', content: params.prompt });
+
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model,
+        messages,
+        temperature: params.temperature ?? 0.7,
+        max_tokens: params.maxTokens ?? 2048,
+      }),
+    });
+
+    if (!resp.ok) {
+      const errText = await resp.text();
+      throw new Error(`Groq API error (${resp.status}): ${errText}`);
+    }
+
+    const data = (await resp.json()) as any;
+    const text = data.choices?.[0]?.message?.content || '';
+    const tokensUsed = data.usage?.total_tokens || 0;
+
+    return {
+      text,
+      provider: 'groq',
+      model: data.model || model,
+      tokensUsed,
+    };
+  }
+
+  /**
+   * Unified generator with auto-failover between Gemini, NVIDIA, OpenRouter, and Groq.
+   */
+  static async generate(
+    params: GenerateTextParams & { model?: string },
+  ): Promise<GenerateTextResult> {
     const preferredProvider = env.AI_PROVIDER;
+
+    if (preferredProvider === 'groq' && env.GROQ_API_KEY) {
+      try {
+        return await this.callGroq(params);
+      } catch (err) {
+        if (env.GEMINI_API_KEY) return await this.callGemini(params);
+        if (env.OPENROUTER_API_KEY) return await this.callOpenRouter(params);
+        if (env.NVIDIA_API_KEY) return await this.callNvidia(params);
+        throw err;
+      }
+    }
+
+    if (preferredProvider === 'openrouter' && env.OPENROUTER_API_KEY) {
+      try {
+        return await this.callOpenRouter(params);
+      } catch (err) {
+        if (env.GROQ_API_KEY) return await this.callGroq(params);
+        if (env.GEMINI_API_KEY) return await this.callGemini(params);
+        if (env.NVIDIA_API_KEY) return await this.callNvidia(params);
+        throw err;
+      }
+    }
 
     if (preferredProvider === 'nvidia' && env.NVIDIA_API_KEY) {
       try {
         return await this.callNvidia(params);
       } catch (err) {
-        if (env.GEMINI_API_KEY) {
-          return await this.callGemini(params);
-        }
+        if (env.GROQ_API_KEY) return await this.callGroq(params);
+        if (env.GEMINI_API_KEY) return await this.callGemini(params);
+        if (env.OPENROUTER_API_KEY) return await this.callOpenRouter(params);
         throw err;
       }
     }
@@ -193,9 +332,38 @@ export class GeminiTextService {
       try {
         return await this.callGemini(params);
       } catch (err) {
+        if (env.GROQ_API_KEY) {
+          try {
+            return await this.callGroq(params);
+          } catch {}
+        }
+        if (env.OPENROUTER_API_KEY) {
+          try {
+            return await this.callOpenRouter(params);
+          } catch {}
+        }
         if (env.NVIDIA_API_KEY) {
           return await this.callNvidia(params);
         }
+        throw err;
+      }
+    }
+
+    if (env.GROQ_API_KEY) {
+      try {
+        return await this.callGroq(params);
+      } catch (err) {
+        if (env.OPENROUTER_API_KEY) return await this.callOpenRouter(params);
+        if (env.NVIDIA_API_KEY) return await this.callNvidia(params);
+        throw err;
+      }
+    }
+
+    if (env.OPENROUTER_API_KEY) {
+      try {
+        return await this.callOpenRouter(params);
+      } catch (err) {
+        if (env.NVIDIA_API_KEY) return await this.callNvidia(params);
         throw err;
       }
     }
@@ -205,7 +373,7 @@ export class GeminiTextService {
     }
 
     throw new Error(
-      'No AI provider is configured. Please provide GEMINI_API_KEY in your .env file from https://aistudio.google.com.',
+      'No AI provider is configured. Please provide GEMINI_API_KEY, GROQ_API_KEY, OPENROUTER_API_KEY, or NVIDIA_API_KEY in your .env file.',
     );
   }
 
@@ -216,6 +384,7 @@ export class GeminiTextService {
     fileBuffer: Buffer;
     mimeType: string;
     originalName: string;
+    model?: string;
   }): Promise<{ text: string; model: string; tokensUsed: number }> {
     const apiKey = env.GEMINI_API_KEY;
     if (!apiKey) {
@@ -355,7 +524,7 @@ export class GeminiTextService {
     const systemText =
       params.systemPrompt ||
       params.messages.find((m) => m.role === 'system')?.content ||
-      'You are Vexora AI, a friendly, helpful, and highly intelligent AI assistant built into VexoraMods. Always provide clear, well-structured answers in GitHub-flavored markdown with code blocks, headings, and lists where appropriate.';
+      DEFAULT_SYSTEM_PROMPT;
 
     const body: Record<string, any> = {
       contents,
@@ -463,7 +632,7 @@ export class GeminiTextService {
     const systemText =
       params.systemPrompt ||
       params.messages.find((m) => m.role === 'system')?.content ||
-      'You are Vexora AI, a friendly, helpful, and highly intelligent AI assistant built into VexoraMods. Always provide clear, well-structured answers in GitHub-flavored markdown with code blocks, headings, and lists where appropriate.';
+      DEFAULT_SYSTEM_PROMPT;
 
     const body: Record<string, any> = {
       contents,
@@ -547,12 +716,12 @@ export class GeminiTextService {
     const systemText =
       params.systemPrompt ||
       params.messages.find((m) => m.role === 'system')?.content ||
-      'You are Vexora AI, a friendly, helpful, and highly intelligent AI assistant built into VexoraMods. Always provide clear, well-structured answers in GitHub-flavored markdown with code blocks, headings, and lists where appropriate.';
+      DEFAULT_SYSTEM_PROMPT;
 
     messages.push({ role: 'system', content: systemText });
     for (let i = 0; i < params.messages.length; i++) {
       const m = params.messages[i];
-      if (m.role !== 'system') {
+      if (m && m.role !== 'system') {
         let content: any = m.content;
         const isLastUser = m.role === 'user' && i === params.messages.length - 1;
 
@@ -647,12 +816,12 @@ export class GeminiTextService {
     const systemText =
       params.systemPrompt ||
       params.messages.find((m) => m.role === 'system')?.content ||
-      'You are Vexora AI, a friendly, helpful, and highly intelligent AI assistant built into VexoraMods. Always provide clear, well-structured answers in GitHub-flavored markdown with code blocks, headings, and lists where appropriate.';
+      DEFAULT_SYSTEM_PROMPT;
 
     messages.push({ role: 'system', content: systemText });
     for (let i = 0; i < params.messages.length; i++) {
       const m = params.messages[i];
-      if (m.role !== 'system') {
+      if (m && m.role !== 'system') {
         let content: any = m.content;
         const isLastUser = m.role === 'user' && i === params.messages.length - 1;
 
@@ -744,22 +913,469 @@ export class GeminiTextService {
   }
 
   /**
+   * Multi-turn chat via OpenRouter REST API.
+   */
+  private static async callOpenRouterChat(params: ChatParams): Promise<GenerateTextResult> {
+    const apiKey = env.OPENROUTER_API_KEY;
+    if (!apiKey) {
+      throw new Error('OPENROUTER_API_KEY is not configured in .env');
+    }
+
+    const baseUrl = env.OPENROUTER_BASE_URL.replace(/\/+$/, '');
+    const model = params.model || env.OPENROUTER_MODEL || 'openrouter/free';
+    const url = `${baseUrl}/chat/completions`;
+
+    const messages = [];
+    const systemText =
+      params.systemPrompt ||
+      params.messages.find((m) => m.role === 'system')?.content ||
+      DEFAULT_SYSTEM_PROMPT;
+
+    messages.push({ role: 'system', content: systemText });
+    for (let i = 0; i < params.messages.length; i++) {
+      const m = params.messages[i];
+      if (m && m.role !== 'system') {
+        let content: any = m.content;
+        const isLastUser = m.role === 'user' && i === params.messages.length - 1;
+
+        if (isLastUser && params.attachments && params.attachments.length > 0) {
+          const contentParts: any[] = [];
+          for (const att of params.attachments) {
+            if (att.mimeType.startsWith('image/')) {
+              contentParts.push({
+                type: 'image_url',
+                image_url: { url: `data:${att.mimeType};base64,${att.data}` },
+              });
+            } else if (att.data) {
+              const textContent = att.isText
+                ? att.data
+                : Buffer.from(att.data, 'base64').toString('utf-8');
+              contentParts.push({
+                type: 'text',
+                text: `[Attached File: ${att.name}]\n\`\`\`\n${textContent}\n\`\`\`\n`,
+              });
+            }
+          }
+          contentParts.push({
+            type: 'text',
+            text: m.content || 'Please analyze the attached file.',
+          });
+          content = contentParts;
+        }
+
+        messages.push({
+          role: m.role === 'model' ? 'assistant' : 'user',
+          content,
+        });
+      }
+    }
+
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://vexoramods.com',
+        'X-Title': 'VexoraMods AI',
+      },
+      body: JSON.stringify({
+        model,
+        messages,
+        temperature: params.temperature ?? 0.7,
+        max_tokens: params.maxTokens ?? 4096,
+      }),
+    });
+
+    if (!resp.ok) {
+      const errText = await resp.text();
+      throw new Error(`OpenRouter API error (${resp.status}): ${errText}`);
+    }
+
+    const data = (await resp.json()) as any;
+    const text = data.choices?.[0]?.message?.content || '';
+    const tokensUsed = data.usage?.total_tokens || 0;
+
+    return {
+      text,
+      provider: 'openrouter',
+      model: data.model || model,
+      tokensUsed,
+    };
+  }
+
+  /**
+   * Streams multi-turn chat via OpenRouter REST API using SSE.
+   */
+  private static async streamOpenRouterChat(
+    params: ChatParams,
+    onChunk: (text: string) => void,
+  ): Promise<{ provider: 'openrouter'; model: string }> {
+    const apiKey = env.OPENROUTER_API_KEY;
+    if (!apiKey) {
+      throw new Error('OPENROUTER_API_KEY is not configured in .env');
+    }
+
+    const baseUrl = env.OPENROUTER_BASE_URL.replace(/\/+$/, '');
+    const model = params.model || env.OPENROUTER_MODEL || 'openrouter/free';
+    const url = `${baseUrl}/chat/completions`;
+
+    const messages = [];
+    const systemText =
+      params.systemPrompt ||
+      params.messages.find((m) => m.role === 'system')?.content ||
+      DEFAULT_SYSTEM_PROMPT;
+
+    messages.push({ role: 'system', content: systemText });
+    for (let i = 0; i < params.messages.length; i++) {
+      const m = params.messages[i];
+      if (m && m.role !== 'system') {
+        let content: any = m.content;
+        const isLastUser = m.role === 'user' && i === params.messages.length - 1;
+
+        if (isLastUser && params.attachments && params.attachments.length > 0) {
+          const contentParts: any[] = [];
+          for (const att of params.attachments) {
+            if (att.mimeType.startsWith('image/')) {
+              contentParts.push({
+                type: 'image_url',
+                image_url: { url: `data:${att.mimeType};base64,${att.data}` },
+              });
+            } else if (att.data) {
+              const textContent = att.isText
+                ? att.data
+                : Buffer.from(att.data, 'base64').toString('utf-8');
+              contentParts.push({
+                type: 'text',
+                text: `[Attached File: ${att.name}]\n\`\`\`\n${textContent}\n\`\`\`\n`,
+              });
+            }
+          }
+          contentParts.push({
+            type: 'text',
+            text: m.content || 'Please analyze the attached file.',
+          });
+          content = contentParts;
+        }
+
+        messages.push({
+          role: m.role === 'model' ? 'assistant' : 'user',
+          content,
+        });
+      }
+    }
+
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://vexoramods.com',
+        'X-Title': 'VexoraMods AI',
+      },
+      body: JSON.stringify({
+        model,
+        messages,
+        temperature: params.temperature ?? 0.7,
+        max_tokens: params.maxTokens ?? 4096,
+        stream: true,
+      }),
+    });
+
+    if (!resp.ok) {
+      const errText = await resp.text();
+      throw new Error(`OpenRouter stream error (${resp.status}): ${errText}`);
+    }
+
+    if (!resp.body) {
+      throw new Error('No stream body returned by OpenRouter');
+    }
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('data: ')) {
+          const jsonStr = trimmed.slice(6);
+          if (jsonStr === '[DONE]') continue;
+          try {
+            const data = JSON.parse(jsonStr);
+            const chunkText = data.choices?.[0]?.delta?.content;
+            if (chunkText) {
+              onChunk(chunkText);
+            }
+          } catch {
+            // ignore partial JSON parse error
+          }
+        }
+      }
+    }
+
+    return { provider: 'openrouter', model };
+  }
+
+  /**
+   * Multi-turn chat via Groq LPU REST API.
+   */
+  private static async callGroqChat(params: ChatParams): Promise<GenerateTextResult> {
+    const apiKey = env.GROQ_API_KEY;
+    if (!apiKey) {
+      throw new Error('GROQ_API_KEY is not configured in .env');
+    }
+
+    const baseUrl = env.GROQ_BASE_URL.replace(/\/+$/, '');
+    const model = params.model || env.GROQ_MODEL || 'openai/gpt-oss-120b';
+    const url = `${baseUrl}/chat/completions`;
+
+    const messages = [];
+    const systemText =
+      params.systemPrompt ||
+      params.messages.find((m) => m.role === 'system')?.content ||
+      DEFAULT_SYSTEM_PROMPT;
+
+    messages.push({ role: 'system', content: systemText });
+    for (let i = 0; i < params.messages.length; i++) {
+      const m = params.messages[i];
+      if (m && m.role !== 'system') {
+        let content: any = m.content;
+        const isLastUser = m.role === 'user' && i === params.messages.length - 1;
+
+        if (isLastUser && params.attachments && params.attachments.length > 0) {
+          const contentParts: any[] = [];
+          for (const att of params.attachments) {
+            if (att.mimeType.startsWith('image/')) {
+              contentParts.push({
+                type: 'image_url',
+                image_url: { url: `data:${att.mimeType};base64,${att.data}` },
+              });
+            } else if (att.data) {
+              const textContent = att.isText
+                ? att.data
+                : Buffer.from(att.data, 'base64').toString('utf-8');
+              contentParts.push({
+                type: 'text',
+                text: `[Attached File: ${att.name}]\n\`\`\`\n${textContent}\n\`\`\`\n`,
+              });
+            }
+          }
+          contentParts.push({
+            type: 'text',
+            text: m.content || 'Please analyze the attached file.',
+          });
+          content = contentParts;
+        }
+
+        messages.push({
+          role: m.role === 'model' ? 'assistant' : 'user',
+          content,
+        });
+      }
+    }
+
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model,
+        messages,
+        temperature: params.temperature ?? 0.7,
+        max_tokens: params.maxTokens ?? 4096,
+      }),
+    });
+
+    if (!resp.ok) {
+      const errText = await resp.text();
+      throw new Error(`Groq API error (${resp.status}): ${errText}`);
+    }
+
+    const data = (await resp.json()) as any;
+    const text = data.choices?.[0]?.message?.content || '';
+    const tokensUsed = data.usage?.total_tokens || 0;
+
+    return {
+      text,
+      provider: 'groq',
+      model: data.model || model,
+      tokensUsed,
+    };
+  }
+
+  /**
+   * Streams multi-turn chat via Groq LPU REST API using SSE.
+   */
+  private static async streamGroqChat(
+    params: ChatParams,
+    onChunk: (text: string) => void,
+  ): Promise<{ provider: 'groq'; model: string }> {
+    const apiKey = env.GROQ_API_KEY;
+    if (!apiKey) {
+      throw new Error('GROQ_API_KEY is not configured in .env');
+    }
+
+    const baseUrl = env.GROQ_BASE_URL.replace(/\/+$/, '');
+    const model = params.model || env.GROQ_MODEL || 'openai/gpt-oss-120b';
+    const url = `${baseUrl}/chat/completions`;
+
+    const messages = [];
+    const systemText =
+      params.systemPrompt ||
+      params.messages.find((m) => m.role === 'system')?.content ||
+      DEFAULT_SYSTEM_PROMPT;
+
+    messages.push({ role: 'system', content: systemText });
+    for (let i = 0; i < params.messages.length; i++) {
+      const m = params.messages[i];
+      if (m && m.role !== 'system') {
+        let content: any = m.content;
+        const isLastUser = m.role === 'user' && i === params.messages.length - 1;
+
+        if (isLastUser && params.attachments && params.attachments.length > 0) {
+          const contentParts: any[] = [];
+          for (const att of params.attachments) {
+            if (att.mimeType.startsWith('image/')) {
+              contentParts.push({
+                type: 'image_url',
+                image_url: { url: `data:${att.mimeType};base64,${att.data}` },
+              });
+            } else if (att.data) {
+              const textContent = att.isText
+                ? att.data
+                : Buffer.from(att.data, 'base64').toString('utf-8');
+              contentParts.push({
+                type: 'text',
+                text: `[Attached File: ${att.name}]\n\`\`\`\n${textContent}\n\`\`\`\n`,
+              });
+            }
+          }
+          contentParts.push({
+            type: 'text',
+            text: m.content || 'Please analyze the attached file.',
+          });
+          content = contentParts;
+        }
+
+        messages.push({
+          role: m.role === 'model' ? 'assistant' : 'user',
+          content,
+        });
+      }
+    }
+
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model,
+        messages,
+        temperature: params.temperature ?? 0.7,
+        max_tokens: params.maxTokens ?? 4096,
+        stream: true,
+      }),
+    });
+
+    if (!resp.ok) {
+      const errText = await resp.text();
+      throw new Error(`Groq stream error (${resp.status}): ${errText}`);
+    }
+
+    if (!resp.body) {
+      throw new Error('No stream body returned by Groq');
+    }
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('data: ')) {
+          const jsonStr = trimmed.slice(6);
+          if (jsonStr === '[DONE]') continue;
+          try {
+            const data = JSON.parse(jsonStr);
+            const chunkText = data.choices?.[0]?.delta?.content;
+            if (chunkText) {
+              onChunk(chunkText);
+            }
+          } catch {
+            // ignore partial JSON parse error
+          }
+        }
+      }
+    }
+
+    return { provider: 'groq', model };
+  }
+
+  /**
    * Unified multi-turn chat with automatic failover and model selection.
    */
   static async chat(params: ChatParams): Promise<GenerateTextResult> {
+    const isGroq =
+      params.provider === 'groq' ||
+      params.model?.includes('groq') ||
+      params.model?.startsWith('openai/gpt-oss') ||
+      params.model?.startsWith('qwen/qwen3.8');
+    const isOpenRouter =
+      params.provider === 'openrouter' ||
+      params.model?.startsWith('openrouter/') ||
+      params.model?.endsWith(':free');
     const isNvidia =
       params.provider === 'nvidia' ||
       params.model?.includes('llama') ||
       params.model?.includes('meta/');
     const isGemini = params.provider === 'gemini' || params.model?.startsWith('gemini');
 
+    if (isGroq && env.GROQ_API_KEY) {
+      try {
+        return await this.callGroqChat(params);
+      } catch (err) {
+        if (env.GEMINI_API_KEY) return await this.callGeminiChat({ ...params, model: undefined });
+        if (env.OPENROUTER_API_KEY)
+          return await this.callOpenRouterChat({ ...params, model: undefined });
+        if (env.NVIDIA_API_KEY) return await this.callNvidiaChat({ ...params, model: undefined });
+        throw err;
+      }
+    }
+
+    if (isOpenRouter && env.OPENROUTER_API_KEY) {
+      try {
+        return await this.callOpenRouterChat(params);
+      } catch (err) {
+        if (env.GROQ_API_KEY) return await this.callGroqChat({ ...params, model: undefined });
+        if (env.GEMINI_API_KEY) return await this.callGeminiChat({ ...params, model: undefined });
+        if (env.NVIDIA_API_KEY) return await this.callNvidiaChat({ ...params, model: undefined });
+        throw err;
+      }
+    }
+
     if (isNvidia && env.NVIDIA_API_KEY) {
       try {
         return await this.callNvidiaChat(params);
       } catch (err) {
-        if (env.GEMINI_API_KEY) {
-          return await this.callGeminiChat({ ...params, model: undefined });
-        }
+        if (env.GROQ_API_KEY) return await this.callGroqChat({ ...params, model: undefined });
+        if (env.GEMINI_API_KEY) return await this.callGeminiChat({ ...params, model: undefined });
+        if (env.OPENROUTER_API_KEY)
+          return await this.callOpenRouterChat({ ...params, model: undefined });
         throw err;
       }
     }
@@ -768,9 +1384,32 @@ export class GeminiTextService {
       try {
         return await this.callGeminiChat(params);
       } catch (err) {
-        if (env.NVIDIA_API_KEY) {
-          return await this.callNvidiaChat({ ...params, model: undefined });
-        }
+        if (env.GROQ_API_KEY) return await this.callGroqChat({ ...params, model: undefined });
+        if (env.NVIDIA_API_KEY) return await this.callNvidiaChat({ ...params, model: undefined });
+        if (env.OPENROUTER_API_KEY)
+          return await this.callOpenRouterChat({ ...params, model: undefined });
+        throw err;
+      }
+    }
+
+    if (env.AI_PROVIDER === 'groq' && env.GROQ_API_KEY) {
+      try {
+        return await this.callGroqChat(params);
+      } catch (err) {
+        if (env.GEMINI_API_KEY) return await this.callGeminiChat(params);
+        if (env.OPENROUTER_API_KEY) return await this.callOpenRouterChat(params);
+        if (env.NVIDIA_API_KEY) return await this.callNvidiaChat(params);
+        throw err;
+      }
+    }
+
+    if (env.AI_PROVIDER === 'openrouter' && env.OPENROUTER_API_KEY) {
+      try {
+        return await this.callOpenRouterChat(params);
+      } catch (err) {
+        if (env.GROQ_API_KEY) return await this.callGroqChat(params);
+        if (env.GEMINI_API_KEY) return await this.callGeminiChat(params);
+        if (env.NVIDIA_API_KEY) return await this.callNvidiaChat(params);
         throw err;
       }
     }
@@ -779,9 +1418,9 @@ export class GeminiTextService {
       try {
         return await this.callNvidiaChat(params);
       } catch (err) {
-        if (env.GEMINI_API_KEY) {
-          return await this.callGeminiChat(params);
-        }
+        if (env.GROQ_API_KEY) return await this.callGroqChat(params);
+        if (env.GEMINI_API_KEY) return await this.callGeminiChat(params);
+        if (env.OPENROUTER_API_KEY) return await this.callOpenRouterChat(params);
         throw err;
       }
     }
@@ -790,9 +1429,38 @@ export class GeminiTextService {
       try {
         return await this.callGeminiChat(params);
       } catch (err) {
+        if (env.GROQ_API_KEY) {
+          try {
+            return await this.callGroqChat(params);
+          } catch {}
+        }
+        if (env.OPENROUTER_API_KEY) {
+          try {
+            return await this.callOpenRouterChat(params);
+          } catch {}
+        }
         if (env.NVIDIA_API_KEY) {
           return await this.callNvidiaChat(params);
         }
+        throw err;
+      }
+    }
+
+    if (env.GROQ_API_KEY) {
+      try {
+        return await this.callGroqChat(params);
+      } catch (err) {
+        if (env.OPENROUTER_API_KEY) return await this.callOpenRouterChat(params);
+        if (env.NVIDIA_API_KEY) return await this.callNvidiaChat(params);
+        throw err;
+      }
+    }
+
+    if (env.OPENROUTER_API_KEY) {
+      try {
+        return await this.callOpenRouterChat(params);
+      } catch (err) {
+        if (env.NVIDIA_API_KEY) return await this.callNvidiaChat(params);
         throw err;
       }
     }
@@ -802,7 +1470,7 @@ export class GeminiTextService {
     }
 
     throw new Error(
-      'No AI provider is configured. Please provide GEMINI_API_KEY in your .env file from https://aistudio.google.com.',
+      'No AI provider is configured. Please provide GEMINI_API_KEY, GROQ_API_KEY, NVIDIA_API_KEY, or OPENROUTER_API_KEY in your .env file.',
     );
   }
 
@@ -812,19 +1480,61 @@ export class GeminiTextService {
   static async streamChat(
     params: ChatParams,
     onChunk: (text: string) => void,
-  ): Promise<{ provider: 'gemini' | 'nvidia'; model: string }> {
+  ): Promise<{ provider: 'gemini' | 'nvidia' | 'openrouter' | 'groq'; model: string }> {
+    const isGroq =
+      params.provider === 'groq' ||
+      params.model?.includes('groq') ||
+      params.model?.startsWith('openai/gpt-oss') ||
+      params.model?.startsWith('qwen/qwen3.8');
+    const isOpenRouter =
+      params.provider === 'openrouter' ||
+      params.model?.startsWith('openrouter/') ||
+      params.model?.endsWith(':free');
     const isNvidia =
       params.provider === 'nvidia' ||
       params.model?.includes('llama') ||
       params.model?.includes('meta/');
     const isGemini = params.provider === 'gemini' || params.model?.startsWith('gemini');
 
+    if (isGroq && env.GROQ_API_KEY) {
+      try {
+        return await this.streamGroqChat(params, onChunk);
+      } catch (err) {
+        if (env.GEMINI_API_KEY)
+          return await this.streamGeminiChat({ ...params, model: undefined }, onChunk);
+        if (env.OPENROUTER_API_KEY)
+          return await this.streamOpenRouterChat({ ...params, model: undefined }, onChunk);
+        if (env.NVIDIA_API_KEY)
+          return await this.streamNvidiaChat({ ...params, model: undefined }, onChunk);
+        throw err;
+      }
+    }
+
+    if (isOpenRouter && env.OPENROUTER_API_KEY) {
+      try {
+        return await this.streamOpenRouterChat(params, onChunk);
+      } catch (err) {
+        if (env.GROQ_API_KEY)
+          return await this.streamGroqChat({ ...params, model: undefined }, onChunk);
+        if (env.GEMINI_API_KEY)
+          return await this.streamGeminiChat({ ...params, model: undefined }, onChunk);
+        if (env.NVIDIA_API_KEY)
+          return await this.streamNvidiaChat({ ...params, model: undefined }, onChunk);
+        throw err;
+      }
+    }
+
     if (isNvidia && env.NVIDIA_API_KEY) {
       try {
         return await this.streamNvidiaChat(params, onChunk);
       } catch (err) {
+        if (env.GROQ_API_KEY)
+          return await this.streamGroqChat({ ...params, model: undefined }, onChunk);
         if (env.GEMINI_API_KEY) {
           return await this.streamGeminiChat({ ...params, model: undefined }, onChunk);
+        }
+        if (env.OPENROUTER_API_KEY) {
+          return await this.streamOpenRouterChat({ ...params, model: undefined }, onChunk);
         }
         throw err;
       }
@@ -834,9 +1544,36 @@ export class GeminiTextService {
       try {
         return await this.streamGeminiChat(params, onChunk);
       } catch (err) {
+        if (env.GROQ_API_KEY)
+          return await this.streamGroqChat({ ...params, model: undefined }, onChunk);
         if (env.NVIDIA_API_KEY) {
           return await this.streamNvidiaChat({ ...params, model: undefined }, onChunk);
         }
+        if (env.OPENROUTER_API_KEY) {
+          return await this.streamOpenRouterChat({ ...params, model: undefined }, onChunk);
+        }
+        throw err;
+      }
+    }
+
+    if (env.AI_PROVIDER === 'groq' && env.GROQ_API_KEY) {
+      try {
+        return await this.streamGroqChat(params, onChunk);
+      } catch (err) {
+        if (env.GEMINI_API_KEY) return await this.streamGeminiChat(params, onChunk);
+        if (env.OPENROUTER_API_KEY) return await this.streamOpenRouterChat(params, onChunk);
+        if (env.NVIDIA_API_KEY) return await this.streamNvidiaChat(params, onChunk);
+        throw err;
+      }
+    }
+
+    if (env.AI_PROVIDER === 'openrouter' && env.OPENROUTER_API_KEY) {
+      try {
+        return await this.streamOpenRouterChat(params, onChunk);
+      } catch (err) {
+        if (env.GROQ_API_KEY) return await this.streamGroqChat(params, onChunk);
+        if (env.GEMINI_API_KEY) return await this.streamGeminiChat(params, onChunk);
+        if (env.NVIDIA_API_KEY) return await this.streamNvidiaChat(params, onChunk);
         throw err;
       }
     }
@@ -845,9 +1582,9 @@ export class GeminiTextService {
       try {
         return await this.streamNvidiaChat(params, onChunk);
       } catch (err) {
-        if (env.GEMINI_API_KEY) {
-          return await this.streamGeminiChat(params, onChunk);
-        }
+        if (env.GROQ_API_KEY) return await this.streamGroqChat(params, onChunk);
+        if (env.GEMINI_API_KEY) return await this.streamGeminiChat(params, onChunk);
+        if (env.OPENROUTER_API_KEY) return await this.streamOpenRouterChat(params, onChunk);
         throw err;
       }
     }
@@ -856,9 +1593,38 @@ export class GeminiTextService {
       try {
         return await this.streamGeminiChat(params, onChunk);
       } catch (err) {
+        if (env.GROQ_API_KEY) {
+          try {
+            return await this.streamGroqChat(params, onChunk);
+          } catch {}
+        }
+        if (env.OPENROUTER_API_KEY) {
+          try {
+            return await this.streamOpenRouterChat(params, onChunk);
+          } catch {}
+        }
         if (env.NVIDIA_API_KEY) {
           return await this.streamNvidiaChat(params, onChunk);
         }
+        throw err;
+      }
+    }
+
+    if (env.GROQ_API_KEY) {
+      try {
+        return await this.streamGroqChat(params, onChunk);
+      } catch (err) {
+        if (env.OPENROUTER_API_KEY) return await this.streamOpenRouterChat(params, onChunk);
+        if (env.NVIDIA_API_KEY) return await this.streamNvidiaChat(params, onChunk);
+        throw err;
+      }
+    }
+
+    if (env.OPENROUTER_API_KEY) {
+      try {
+        return await this.streamOpenRouterChat(params, onChunk);
+      } catch (err) {
+        if (env.NVIDIA_API_KEY) return await this.streamNvidiaChat(params, onChunk);
         throw err;
       }
     }
@@ -868,7 +1634,7 @@ export class GeminiTextService {
     }
 
     throw new Error(
-      'No AI provider is configured. Please provide GEMINI_API_KEY in your .env file from https://aistudio.google.com.',
+      'No AI provider is configured. Please provide GEMINI_API_KEY, GROQ_API_KEY, NVIDIA_API_KEY, or OPENROUTER_API_KEY in your .env file.',
     );
   }
 }

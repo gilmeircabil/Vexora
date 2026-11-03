@@ -65,7 +65,9 @@ export const MaintenanceModal: React.FC<MaintenanceModalProps> = ({
         {estimatedReturn && (
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000] text-xs font-bold text-neutral-800">
             <Clock className="w-4 h-4 text-amber-600 stroke-[2.5]" />
-            <span>Estimated completion: <strong>{estimatedReturn}</strong></span>
+            <span>
+              Estimated completion: <strong>{estimatedReturn}</strong>
+            </span>
           </div>
         )}
 

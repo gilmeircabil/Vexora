@@ -6,6 +6,54 @@ import type { AuthenticatedRequest } from '../middleware/authMiddleware.js';
 import { AIService } from '../services/ai/aiService.js';
 import { GeminiTextService } from '../services/ai/geminiTextService.js';
 import { AIJob } from '../models/AIJob.js';
+import {
+  AIChatSession,
+  type IChatMessageItem,
+  type IChatAttachmentMeta,
+} from '../models/AIChatSession.js';
+
+const MAX_SESSIONS_PER_USER = 25;
+const MAX_MESSAGES_PER_SESSION = 50;
+const MAX_MESSAGE_CONTENT_LENGTH = 15000;
+
+function sanitizeChatMessage(msg: any): IChatMessageItem {
+  const id = typeof msg?.id === 'string' && msg.id.trim() ? msg.id.trim() : 'msg-' + Date.now();
+  const role: 'user' | 'model' = msg?.role === 'user' ? 'user' : 'model';
+  const content =
+    typeof msg?.content === 'string' ? msg.content.slice(0, MAX_MESSAGE_CONTENT_LENGTH) : '';
+  const timestamp = typeof msg?.timestamp === 'number' ? msg.timestamp : Date.now();
+
+  let attachment: IChatAttachmentMeta | undefined = undefined;
+  if (msg?.attachment && typeof msg.attachment === 'object') {
+    const name =
+      typeof msg.attachment.name === 'string' ? msg.attachment.name.slice(0, 255) : 'file';
+    const mimeType =
+      typeof msg.attachment.mimeType === 'string'
+        ? msg.attachment.mimeType.slice(0, 100)
+        : 'application/octet-stream';
+    const size = typeof msg.attachment.size === 'number' ? msg.attachment.size : 0;
+    // Raw base64 data and image previews are stripped to protect MongoDB free-tier storage
+    attachment = { name, mimeType, size };
+  }
+
+  return { id, role, content, timestamp, attachment };
+}
+
+async function enforceUserSessionQuota(userId: Types.ObjectId): Promise<void> {
+  const count = await AIChatSession.countDocuments({ userId });
+  if (count >= MAX_SESSIONS_PER_USER) {
+    const excess = count - MAX_SESSIONS_PER_USER + 1;
+    const oldestSessions = await AIChatSession.find({ userId })
+      .sort({ updatedAt: 1 })
+      .limit(excess)
+      .select('_id')
+      .lean();
+    if (oldestSessions.length > 0) {
+      const idsToDelete = oldestSessions.map((s) => s._id);
+      await AIChatSession.deleteMany({ _id: { $in: idsToDelete } });
+    }
+  }
+}
 
 export class AIController {
   // ---------------------------------------------
@@ -455,5 +503,256 @@ export class AIController {
     }
 
     res.sendFile(filepath);
+  }
+
+  // ---------------------------------------------
+  // 10. AI Chat Cloud Sessions (Per User Account)
+  // ---------------------------------------------
+  static async listChatSessions(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user?.userId) {
+        res.status(401).json({ success: false, error: 'Authentication required' });
+        return;
+      }
+      const userId = new Types.ObjectId(req.user.userId);
+      const rawSessions = await AIChatSession.find({ userId })
+        .select('_id title selectedModel messages createdAt updatedAt')
+        .sort({ updatedAt: -1 })
+        .lean();
+
+      const sessions = rawSessions.map((s) => ({
+        id: s._id.toString(),
+        title: s.title,
+        selectedModel: s.selectedModel,
+        messageCount: s.messages?.length || 0,
+        lastMessagePreview: s.messages?.[s.messages.length - 1]?.content?.slice(0, 80) || '',
+        createdAt: s.createdAt ? new Date(s.createdAt).getTime() : Date.now(),
+        updatedAt: s.updatedAt ? new Date(s.updatedAt).getTime() : Date.now(),
+      }));
+
+      res.status(200).json({ success: true, data: { sessions } });
+    } catch (err: any) {
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to list chat sessions' });
+    }
+  }
+
+  static async getChatSession(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user?.userId) {
+        res.status(401).json({ success: false, error: 'Authentication required' });
+        return;
+      }
+      const rawId = req.params.sessionId;
+      const cleanId = Array.isArray(rawId) ? rawId[0] : rawId;
+      const sessionId = cleanId || '';
+
+      if (!sessionId || !Types.ObjectId.isValid(sessionId)) {
+        res.status(400).json({ success: false, error: 'Invalid Session ID' });
+        return;
+      }
+
+      const userId = new Types.ObjectId(req.user.userId);
+      const session = await AIChatSession.findOne({
+        _id: new Types.ObjectId(sessionId),
+        userId,
+      }).lean();
+
+      if (!session) {
+        res.status(404).json({ success: false, error: 'Chat conversation not found' });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        data: {
+          session: {
+            id: session._id.toString(),
+            title: session.title,
+            selectedModel: session.selectedModel,
+            messages: session.messages || [],
+            createdAt: session.createdAt ? new Date(session.createdAt).getTime() : Date.now(),
+            updatedAt: session.updatedAt ? new Date(session.updatedAt).getTime() : Date.now(),
+          },
+        },
+      });
+    } catch (err: any) {
+      res.status(500).json({ success: false, error: err.message || 'Failed to get chat session' });
+    }
+  }
+
+  static async createChatSession(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user?.userId) {
+        res.status(401).json({ success: false, error: 'Authentication required' });
+        return;
+      }
+      const userId = new Types.ObjectId(req.user.userId);
+      await enforceUserSessionQuota(userId);
+
+      const { title, selectedModel, messages } = req.body;
+      const rawMsgs = Array.isArray(messages) ? messages : [];
+      const sanitizedMsgs = rawMsgs.slice(-MAX_MESSAGES_PER_SESSION).map(sanitizeChatMessage);
+
+      let sessionTitle =
+        typeof title === 'string' && title.trim() ? title.trim().slice(0, 120) : 'New Conversation';
+
+      if (sessionTitle === 'New Conversation' && sanitizedMsgs.length > 0) {
+        const firstUserMsg = sanitizedMsgs.find((m) => m.role === 'user');
+        if (firstUserMsg && firstUserMsg.content.trim()) {
+          sessionTitle =
+            firstUserMsg.content.trim().slice(0, 36) +
+            (firstUserMsg.content.length > 36 ? '...' : '');
+        }
+      }
+
+      const session = await AIChatSession.create({
+        userId,
+        title: sessionTitle,
+        selectedModel:
+          typeof selectedModel === 'string' && selectedModel.trim()
+            ? selectedModel.trim().slice(0, 100)
+            : 'gemini-3.5-flash-lite',
+        messages: sanitizedMsgs,
+      });
+
+      res.status(201).json({
+        success: true,
+        data: {
+          session: {
+            id: session._id.toString(),
+            title: session.title,
+            selectedModel: session.selectedModel,
+            messages: session.messages,
+            createdAt: session.createdAt.getTime(),
+            updatedAt: session.updatedAt.getTime(),
+          },
+        },
+      });
+    } catch (err: any) {
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to create chat session' });
+    }
+  }
+
+  static async updateChatSession(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user?.userId) {
+        res.status(401).json({ success: false, error: 'Authentication required' });
+        return;
+      }
+      const rawId = req.params.sessionId;
+      const cleanId = Array.isArray(rawId) ? rawId[0] : rawId;
+      const sessionId = cleanId || '';
+
+      if (!sessionId || !Types.ObjectId.isValid(sessionId)) {
+        res.status(400).json({ success: false, error: 'Invalid Session ID' });
+        return;
+      }
+
+      const userId = new Types.ObjectId(req.user.userId);
+      const session = await AIChatSession.findOne({
+        _id: new Types.ObjectId(sessionId),
+        userId,
+      });
+
+      if (!session) {
+        res.status(404).json({ success: false, error: 'Chat conversation not found' });
+        return;
+      }
+
+      const { title, selectedModel, messages } = req.body;
+
+      if (typeof title === 'string' && title.trim()) {
+        session.title = title.trim().slice(0, 120);
+      }
+      if (typeof selectedModel === 'string' && selectedModel.trim()) {
+        session.selectedModel = selectedModel.trim().slice(0, 100);
+      }
+      if (Array.isArray(messages)) {
+        session.messages = messages.slice(-MAX_MESSAGES_PER_SESSION).map(sanitizeChatMessage);
+        if (session.title === 'New Conversation' && session.messages.length > 0) {
+          const firstUserMsg = session.messages.find((m) => m.role === 'user');
+          if (firstUserMsg && firstUserMsg.content.trim()) {
+            session.title =
+              firstUserMsg.content.trim().slice(0, 36) +
+              (firstUserMsg.content.length > 36 ? '...' : '');
+          }
+        }
+      }
+
+      session.updatedAt = new Date();
+      await session.save();
+
+      res.status(200).json({
+        success: true,
+        data: {
+          session: {
+            id: session._id.toString(),
+            title: session.title,
+            selectedModel: session.selectedModel,
+            messages: session.messages,
+            createdAt: session.createdAt.getTime(),
+            updatedAt: session.updatedAt.getTime(),
+          },
+        },
+      });
+    } catch (err: any) {
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to update chat session' });
+    }
+  }
+
+  static async deleteChatSession(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user?.userId) {
+        res.status(401).json({ success: false, error: 'Authentication required' });
+        return;
+      }
+      const rawId = req.params.sessionId;
+      const cleanId = Array.isArray(rawId) ? rawId[0] : rawId;
+      const sessionId = cleanId || '';
+
+      if (!sessionId || !Types.ObjectId.isValid(sessionId)) {
+        res.status(400).json({ success: false, error: 'Invalid Session ID' });
+        return;
+      }
+
+      const userId = new Types.ObjectId(req.user.userId);
+      const result = await AIChatSession.findOneAndDelete({
+        _id: new Types.ObjectId(sessionId),
+        userId,
+      });
+
+      if (!result) {
+        res.status(404).json({ success: false, error: 'Chat conversation not found' });
+        return;
+      }
+
+      res.status(200).json({ success: true, message: 'Chat conversation deleted' });
+    } catch (err: any) {
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to delete chat session' });
+    }
+  }
+
+  static async clearChatSessions(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      if (!req.user?.userId) {
+        res.status(401).json({ success: false, error: 'Authentication required' });
+        return;
+      }
+      const userId = new Types.ObjectId(req.user.userId);
+      await AIChatSession.deleteMany({ userId });
+      res.status(200).json({ success: true, message: 'All chat conversations cleared' });
+    } catch (err: any) {
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to clear chat sessions' });
+    }
   }
 }

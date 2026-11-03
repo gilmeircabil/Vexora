@@ -7,7 +7,11 @@ import { AIJob } from '../models/AIJob.js';
 import { AIToolConfig } from '../models/AIToolConfig.js';
 import { Donation } from '../models/Donation.js';
 import { WebhookEvent } from '../models/WebhookEvent.js';
-import { PlatformConfig, ContactInquiry, DEFAULT_MAINTENANCE_CONFIG } from '../models/PlatformConfig.js';
+import {
+  PlatformConfig,
+  ContactInquiry,
+  DEFAULT_MAINTENANCE_CONFIG,
+} from '../models/PlatformConfig.js';
 import { DeveloperService } from '../services/developerService.js';
 import { LearningService } from '../services/learningService.js';
 import { PlatformController } from './platformController.js';
@@ -638,7 +642,8 @@ export class AdminController {
         res.status(400).json({
           success: false,
           error:
-            parsed.error.issues.map((i) => i.message).join(', ') || 'Invalid maintenance configuration',
+            parsed.error.issues.map((i) => i.message).join(', ') ||
+            'Invalid maintenance configuration',
         });
         return;
       }
@@ -656,7 +661,8 @@ export class AdminController {
         updateFields['maintenance.message'] = LearningService.sanitizePlain(message);
       }
       if (estimatedReturn !== undefined) {
-        updateFields['maintenance.estimatedReturn'] = LearningService.sanitizePlain(estimatedReturn);
+        updateFields['maintenance.estimatedReturn'] =
+          LearningService.sanitizePlain(estimatedReturn);
       }
       if (pages && typeof pages === 'object') {
         for (const [key, value] of Object.entries(pages)) {

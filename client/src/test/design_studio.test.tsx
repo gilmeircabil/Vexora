@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router';
-import { Canvas, Rect, Textbox, FabricImage, ActiveSelection, cache } from 'fabric';
+import { Canvas, Textbox, FabricImage, ActiveSelection, cache } from 'fabric';
 import { DESIGN_PRESETS, DESIGN_CATEGORIES } from '../lib/designStudio/presets.js';
 import { AVAILABLE_FONTS, loadFont } from '../lib/designStudio/fontLoader.js';
 import { exportCanvas } from '../lib/designStudio/exportCanvas.js';
@@ -16,7 +16,6 @@ import {
   addRectangle,
   addCircle,
   addText,
-  setupSnapping,
   createCanvasThumbnail,
   isTextObject,
   isImageObject,

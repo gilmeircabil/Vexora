@@ -63,6 +63,7 @@ client/
 ### Task 1: Backend Database Model & Endpoints for Maintenance Mode
 
 **Files:**
+
 - Modify: `server/src/models/PlatformConfig.ts`
 - Modify: `server/src/controllers/platformController.ts`
 - Modify: `server/src/controllers/adminController.ts`
@@ -91,6 +92,7 @@ client/
 ### Task 2: Client API Services & Context Provider
 
 **Files:**
+
 - Modify: `client/src/services/platformApi.ts`
 - Modify: `client/src/services/adminDonationApi.ts`
 - Modify: `client/src/config/pageLocks.ts`
@@ -112,6 +114,7 @@ client/
 ### Task 3: Neo-Brutalist Maintenance Modal & Admin Bypass Banner
 
 **Files:**
+
 - Modify: `client/src/components/common/LockedPageModal.tsx`
 - Modify: `client/src/components/layout/AppLayout.tsx`
 - Modify: `client/src/pages/DesignEditorPage.tsx`
@@ -124,7 +127,7 @@ client/
 - [ ] **Step 3.2**: In `AppLayout.tsx`:
   - Consume `useMaintenance()`.
   - If page is under maintenance:
-    - If `user?.role === 'admin'`: Render a fixed top pill banner (*"⚠️ Admin Preview: This page is currently set to Maintenance for regular visitors. [Admin Settings]"*) and allow admin to view/edit the page normally.
+    - If `user?.role === 'admin'`: Render a fixed top pill banner (_"⚠️ Admin Preview: This page is currently set to Maintenance for regular visitors. [Admin Settings]"_) and allow admin to view/edit the page normally.
     - If regular user / guest: Render the `MaintenanceModal` blocking page interaction.
 - [ ] **Step 3.3**: In `DesignEditorPage.tsx`:
   - Check `isPageUnderMaintenance('/studio')` instead of hardcoded static config, respecting admin bypass.
@@ -134,15 +137,16 @@ client/
 ### Task 4: Admin Dashboard "Maintenance & Page Locks" Management Tab
 
 **Files:**
+
 - Modify: `client/src/pages/AdminDashboardPage.tsx`
 
 - [ ] **Step 4.1**: Add `'maintenance'` to `AdminTab` with `Wrench` icon in the navigation bar.
 - [ ] **Step 4.2**: Build the Maintenance Management UI:
   - **Global Master Switch**: Prominent alert card with toggle to take the entire website down for maintenance with 1 click.
   - **Notice Customization Form**:
-    - Maintenance Header Title (e.g. *"Scheduled Maintenance"* or *"System Upgrade in Progress"*).
-    - Custom Message Textarea (e.g. *"We are updating our AI tools and will be back in 30 minutes."*).
-    - Estimated Return Time input (optional, e.g. *"10:30 PM EST"*).
+    - Maintenance Header Title (e.g. _"Scheduled Maintenance"_ or _"System Upgrade in Progress"_).
+    - Custom Message Textarea (e.g. _"We are updating our AI tools and will be back in 30 minutes."_).
+    - Estimated Return Time input (optional, e.g. _"10:30 PM EST"_).
   - **Per-Page Interactive Toggles**:
     - Visual grid of all core workspaces with status badges (Online vs Under Maintenance):
       - 🏠 Homepage (`/`)
@@ -162,6 +166,7 @@ client/
 ### Task 5: Testing & Verification
 
 **Files:**
+
 - Modify: `client/src/test/page_locks.test.tsx`
 - Run: `server/tests/maintenance.test.ts`
 

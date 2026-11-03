@@ -310,9 +310,7 @@ describe('VexoraMods Unified Platform Restructuring Suite', () => {
     expect(screen.getByText('Cooking')).toBeInTheDocument();
   });
 
-  it(
-    'renders RegisterPage with Confirm Password, show/hide controls, password requirements, and Turnstile widget',
-    () => {
+  it('renders RegisterPage with Confirm Password, show/hide controls, password requirements, and Turnstile widget', () => {
     render(
       <ToastProvider>
         <AuthProvider>

@@ -111,7 +111,7 @@ export const aiToolsApi = {
     systemPrompt?: string;
     temperature?: number;
     model?: string;
-    provider?: 'auto' | 'gemini' | 'nvidia';
+    provider?: 'auto' | 'gemini' | 'nvidia' | 'openrouter' | 'groq';
     attachments?: Array<{ name: string; mimeType: string; data: string; isText?: boolean }>;
   }) {
     const res = await fetch('/api/ai/chat', {
@@ -129,7 +129,7 @@ export const aiToolsApi = {
       systemPrompt?: string;
       temperature?: number;
       model?: string;
-      provider?: 'auto' | 'gemini' | 'nvidia';
+      provider?: 'auto' | 'gemini' | 'nvidia' | 'openrouter' | 'groq';
       attachments?: Array<{ name: string; mimeType: string; data: string; isText?: boolean }>;
     },
     onChunk: (text: string) => void,
@@ -206,6 +206,68 @@ export const aiToolsApi = {
 
   async getHistory() {
     const res = await fetch('/api/ai/history', {
+      headers: getAuthHeaders(),
+      credentials: 'include',
+    });
+    return res.json();
+  },
+
+  // AI Chat Cloud Sessions (Per User Account)
+  async listChatSessions() {
+    const res = await fetch('/api/ai/chat/sessions', {
+      headers: getAuthHeaders(),
+      credentials: 'include',
+    });
+    return res.json();
+  },
+
+  async getChatSession(sessionId: string) {
+    const res = await fetch(`/api/ai/chat/sessions/${sessionId}`, {
+      headers: getAuthHeaders(),
+      credentials: 'include',
+    });
+    return res.json();
+  },
+
+  async createChatSession(payload: { title?: string; selectedModel?: string; messages?: any[] }) {
+    const res = await fetch('/api/ai/chat/sessions', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  },
+
+  async updateChatSession(
+    sessionId: string,
+    payload: {
+      title?: string;
+      selectedModel?: string;
+      messages?: any[];
+    },
+  ) {
+    const res = await fetch(`/api/ai/chat/sessions/${sessionId}`, {
+      method: 'PUT',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  },
+
+  async deleteChatSession(sessionId: string) {
+    const res = await fetch(`/api/ai/chat/sessions/${sessionId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+      credentials: 'include',
+    });
+    return res.json();
+  },
+
+  async clearChatSessions() {
+    const res = await fetch('/api/ai/chat/sessions', {
+      method: 'DELETE',
       headers: getAuthHeaders(),
       credentials: 'include',
     });

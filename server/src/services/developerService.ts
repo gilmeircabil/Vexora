@@ -1,11 +1,6 @@
-import crypto from 'node:crypto';
 import { Types } from 'mongoose';
 import { DeveloperProfile, type IDeveloperProfile } from '../models/DeveloperProfile.js';
-import {
-  DeveloperProject,
-  type IDeveloperProject,
-  type ProjectCategory,
-} from '../models/DeveloperProject.js';
+import { DeveloperProject, type ProjectCategory } from '../models/DeveloperProject.js';
 import { DeveloperReport } from '../models/DeveloperReport.js';
 import { ProjectReaction, type ReactionType } from '../models/ProjectReaction.js';
 import { ProjectComment } from '../models/ProjectComment.js';

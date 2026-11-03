@@ -613,14 +613,14 @@ export const DesignEditorPage: React.FC = () => {
       />
 
       {lockStatus.isLocked && isAdmin && (
-        <div className="bg-amber-300 border-b-2 border-black px-4 py-1 flex items-center justify-between text-xs font-black text-black z-30">
+        <div className="bg-amber-50 border-b border-amber-200 px-4 py-1.5 flex items-center justify-between text-xs font-medium text-amber-900 z-30">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-amber-600 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
             <span>Admin Preview: Studio is currently in Maintenance Mode for visitors.</span>
           </div>
           <button
             onClick={() => navigate('/admin')}
-            className="underline hover:text-neutral-800 text-[11px] font-bold cursor-pointer"
+            className="underline hover:text-amber-950 text-[11px] font-semibold cursor-pointer"
           >
             Manage Maintenance
           </button>
@@ -655,10 +655,10 @@ export const DesignEditorPage: React.FC = () => {
           />
 
           {/* Bottom Workspace: Multi-Page Navigation & Page Management Bar */}
-          <div className="h-12 bg-[#FAF7F2] border-t-2 border-black px-4 flex items-center justify-between gap-4 shrink-0 z-20">
+          <div className="h-12 bg-white border-t border-slate-200 px-4 flex items-center justify-between gap-4 shrink-0 z-20 shadow-xs">
             <div className="flex items-center gap-2 overflow-x-auto py-1">
-              <span className="inline-flex items-center gap-1 text-[11px] font-mono font-black uppercase text-neutral-600 mr-1">
-                <Layers className="w-3.5 h-3.5 text-black" />
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 mr-1">
+                <Layers className="w-3.5 h-3.5 text-slate-700" />
                 <span>Pages ({pages.length}):</span>
               </span>
 
@@ -669,10 +669,10 @@ export const DesignEditorPage: React.FC = () => {
                     key={pg.id}
                     type="button"
                     onClick={() => handleSelectPage(idx)}
-                    className={`px-3 py-1 rounded-lg border-2 border-black text-xs font-black transition-all shrink-0 ${
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 cursor-pointer ${
                       isActive
-                        ? 'bg-[#FACC15] text-black shadow-[2px_2px_0px_#000000]'
-                        : 'bg-white text-neutral-700 hover:bg-neutral-100'
+                        ? 'bg-purple-100 text-[#7d2ae8] border border-purple-200 shadow-xs'
+                        : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
                     }`}
                   >
                     Page {idx + 1}
@@ -683,7 +683,7 @@ export const DesignEditorPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleAddPage}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border-2 border-black bg-[#4ADE80] hover:bg-emerald-400 text-black text-xs font-black shadow-[1.5px_1.5px_0px_#000000] shrink-0"
+                className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-[#7d2ae8] border border-purple-200 text-xs font-semibold shadow-xs transition-colors shrink-0 cursor-pointer"
                 title="Add new page"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -698,7 +698,7 @@ export const DesignEditorPage: React.FC = () => {
                 disabled={activePageIndex === 0}
                 onClick={() => handleReorderPage(-1)}
                 aria-label="Move page earlier"
-                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-lg border-2 border-black bg-white hover:bg-gray-100 disabled:opacity-40 text-black cursor-pointer"
+                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 text-slate-600 cursor-pointer transition-colors"
                 title="Move page earlier"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
@@ -708,7 +708,7 @@ export const DesignEditorPage: React.FC = () => {
                 disabled={activePageIndex >= pages.length - 1}
                 onClick={() => handleReorderPage(1)}
                 aria-label="Move page later"
-                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-lg border-2 border-black bg-white hover:bg-gray-100 disabled:opacity-40 text-black cursor-pointer"
+                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 text-slate-600 cursor-pointer transition-colors"
                 title="Move page later"
               >
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -716,7 +716,7 @@ export const DesignEditorPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleDuplicatePage}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border-2 border-black bg-white hover:bg-gray-100 text-xs font-bold text-black"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
                 title="Duplicate current page"
               >
                 <Copy className="w-3.5 h-3.5" />
@@ -726,7 +726,7 @@ export const DesignEditorPage: React.FC = () => {
                 type="button"
                 disabled={pages.length <= 1}
                 onClick={handleDeletePage}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border-2 border-black bg-white hover:bg-red-100 disabled:opacity-40 text-xs font-bold text-red-700"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 disabled:opacity-40 text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
                 title="Delete current page"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -736,20 +736,20 @@ export const DesignEditorPage: React.FC = () => {
           </div>
 
           {/* Mobile Bottom Quick Action Strip (< 1024px) */}
-          <div className="lg:hidden flex items-center justify-between gap-2 px-3 py-2 bg-white border-t-2 border-black shrink-0 z-20 shadow-[0px_-2px_0px_#000000]">
+          <div className="lg:hidden flex items-center justify-between gap-2 px-3 py-2 bg-white/95 backdrop-blur border-t border-slate-200 shrink-0 z-20 shadow-xs">
             <button
               type="button"
               onClick={() => {
                 setIsMobileLeftOpen(true);
                 setIsMobileRightOpen(false);
               }}
-              className={`flex-1 py-2 px-3 rounded-xl border-2 border-black font-black text-xs flex items-center justify-center gap-1.5 transition-all shadow-[2px_2px_0px_#000000] active:translate-y-0.5 cursor-pointer ${
+              className={`flex-1 py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs active:translate-y-0.5 cursor-pointer ${
                 isMobileLeftOpen
-                  ? 'bg-black text-[#FACC15]'
-                  : 'bg-[#FACC15] text-black hover:bg-[#EAB308]'
+                  ? 'bg-slate-900 text-white'
+                  : 'bg-[#7d2ae8] text-white hover:bg-[#6c22cf]'
               }`}
             >
-              <Plus className="w-4 h-4 stroke-[3]" />
+              <Plus className="w-4 h-4 stroke-[2.5]" />
               <span>+ Elements</span>
             </button>
 
@@ -759,12 +759,12 @@ export const DesignEditorPage: React.FC = () => {
                 setIsMobileRightOpen(true);
                 setIsMobileLeftOpen(false);
               }}
-              className={`flex-1 py-2 px-3 rounded-xl border-2 border-black font-black text-xs flex items-center justify-center gap-1.5 transition-all shadow-[2px_2px_0px_#000000] active:translate-y-0.5 cursor-pointer ${
+              className={`flex-1 py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs active:translate-y-0.5 cursor-pointer ${
                 isMobileRightOpen
-                  ? 'bg-black text-[#FACC15]'
+                  ? 'bg-slate-900 text-white'
                   : activeObject
-                    ? 'bg-[#38BDF8] text-black'
-                    : 'bg-white text-black hover:bg-neutral-100'
+                    ? 'bg-purple-100 text-[#7d2ae8] border border-purple-200'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
               <Sliders className="w-4 h-4" />
@@ -774,7 +774,7 @@ export const DesignEditorPage: React.FC = () => {
             <button
               type="button"
               onClick={handleZoomReset}
-              className="py-2 px-3 rounded-xl border-2 border-black bg-white hover:bg-neutral-100 font-black text-xs text-black shadow-[2px_2px_0px_#000000] active:translate-y-0.5 flex items-center gap-1 cursor-pointer shrink-0"
+              className="py-2 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 font-semibold text-xs text-slate-700 shadow-xs active:translate-y-0.5 flex items-center gap-1 cursor-pointer shrink-0"
               title="Fit canvas to screen"
             >
               <Maximize2 className="w-3.5 h-3.5" />

@@ -59,12 +59,7 @@ export class LearningController {
       const slug = req.params.slug as string;
       const isAdmin = req.user?.role === 'admin';
       const skipView = req.query.skipView === 'true' || req.headers['x-skip-view'] === 'true';
-      const post = await LearningService.getPostBySlug(
-        slug,
-        req.user?.userId,
-        isAdmin,
-        skipView,
-      );
+      const post = await LearningService.getPostBySlug(slug, req.user?.userId, isAdmin, skipView);
       res.status(200).json({ success: true, data: post });
     } catch (err: any) {
       res.status(404).json({ success: false, error: err.message });

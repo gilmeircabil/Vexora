@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router';
-import {
-  User,
-  Upload,
-  Save,
-  Eye,
-  CheckCircle2,
-  AlertCircle,
-  Sparkles,
-  ArrowLeft,
-} from 'lucide-react';
+import { User, Upload, Save, Eye, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
 import { developerApi } from '../../services/developerApi.js';
 import { useAuth } from '../../context/AuthContext.js';
 import { useToast } from '../../context/ToastContext.js';
@@ -17,7 +8,7 @@ import { useToast } from '../../context/ToastContext.js';
 export const DeveloperProfileEditPage: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, updateUser } = useAuth();
+  const { updateUser } = useAuth();
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);

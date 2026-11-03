@@ -85,7 +85,11 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({
     setIsVerifying(false);
     onVerify('');
 
-    const isTestSiteKey = siteKey === DEFAULT_TEST_SITE_KEY;
+    const isTestSiteKey =
+      siteKey === DEFAULT_TEST_SITE_KEY ||
+      siteKey.startsWith('1x') ||
+      siteKey.startsWith('2x') ||
+      siteKey.startsWith('3x');
 
     // If Cloudflare Turnstile SDK is loaded in browser and a custom site key is active, render native widget
     if (
@@ -155,11 +159,7 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({
               ) : null}
             </div>
             <span className="text-xs font-black text-black">
-              {isVerifying
-                ? 'Verifying...'
-                : verified
-                  ? 'Verified human'
-                  : 'Verify you are human'}
+              {isVerifying ? 'Verifying...' : verified ? 'Verified human' : 'Verify you are human'}
             </span>
           </button>
 

@@ -1,11 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  detectKind,
-  KIND_INFO,
-  baseName,
-  extensionOf,
-  outputFileName,
-} from '../lib/files/signatures.js';
+import { detectKind, baseName, extensionOf, outputFileName } from '../lib/files/signatures.js';
 import { parseImageDimensions } from '../lib/files/dimensions.js';
 import { validateUploadedFile } from '../lib/files/validator.js';
 

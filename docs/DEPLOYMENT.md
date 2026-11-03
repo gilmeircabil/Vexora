@@ -1,4 +1,5 @@
 # Vexora Production Deployment Guide
+
 **Cloudflare Pages (Frontend) + Render (Backend) + Cloudflare R2 (Storage) + MongoDB Atlas**
 
 This guide provides the complete, production-tested walkthrough to deploy Vexora for **$0/month** using modern cloud architecture.
@@ -51,6 +52,7 @@ This guide provides the complete, production-tested walkthrough to deploy Vexora
 Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/):
 
 ### A. Cloudflare R2 (10 GB Free Storage)
+
 1. In the sidebar, go to **R2 Object Storage** → **Create bucket**.
 2. Name your bucket: `vexora-assets` (Location: **Automatic**) → Click **Create Bucket**.
 3. Under Account Details, copy your **Account ID**. Your endpoint is:
@@ -61,6 +63,7 @@ Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/):
    - Copy **Access Key ID** (`S3_ACCESS_KEY`) and **Secret Access Key** (`S3_SECRET_KEY`).
 
 ### B. Cloudflare Turnstile (Free Bot Protection)
+
 1. In the sidebar, go to **Turnstile** → **Add widget manually**.
 2. Widget Name: `Vexora`
 3. Domains:
@@ -78,10 +81,10 @@ Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/):
 1. Go to [dashboard.render.com](https://dashboard.render.com) and click **New +** → **Web Service**.
 2. Connect your GitHub repository (`Vexora`).
 3. Fill in the settings:
-   - **Name:** `vexora-backend` *(or your preferred name)*
+   - **Name:** `vexora-backend` _(or your preferred name)_
    - **Region:** Choose closest to your users (e.g., Singapore, Frankfurt, Oregon)
    - **Branch:** `main`
-   - **Root Directory:** *(leave blank)*
+   - **Root Directory:** _(leave blank)_
    - **Runtime:** `Node`
    - **Build Command:**
      ```bash
@@ -94,26 +97,27 @@ Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/):
    - **Instance Type:** `Free`
 
 4. Add **Environment Variables**:
-   | Variable | Value | Notes |
-   | :--- | :--- | :--- |
-   | `NODE_ENV` | `production` | Enables production hardening |
-   | `PORT` | `10000` | Render standard port |
-   | `MONGODB_URI` | `mongodb+srv://...` | From Atlas Phase 1 |
-   | `JWT_SECRET` | *(Random 32+ character string)* | Sign access tokens |
-   | `JWT_REFRESH_SECRET` | *(Random 32+ character string)* | Sign refresh tokens |
-   | `CLIENT_URL` | `https://vexora.pages.dev` | Your Cloudflare Pages URL (from Phase 4) |
-   | `APP_URL` | `https://vexora.pages.dev` | App URL |
-   | `STORAGE_PROVIDER` | `s3` | Uses Cloudflare R2 |
-   | `STORAGE_MAX_GB` | `9.5` | Safety stop below 10 GB limit |
-   | `S3_BUCKET` | `vexora-assets` | R2 bucket name |
-   | `S3_ENDPOINT` | `https://<account_id>.r2.cloudflarestorage.com` | R2 endpoint URL |
-   | `S3_REGION` | `auto` | Cloudflare auto region |
-   | `S3_ACCESS_KEY` | *(Your R2 Access Key)* | From Phase 2A |
-   | `S3_SECRET_KEY` | *(Your R2 Secret Key)* | From Phase 2A |
-   | `TURNSTILE_SITE_KEY` | *(Your Turnstile Site Key)* | From Phase 2B |
-   | `TURNSTILE_SECRET_KEY`| *(Your Turnstile Secret Key)*| From Phase 2B |
-   | `GEMINI_API_KEY` | *(Optional free AI key)* | From Google AI Studio |
-   | `GROQ_API_KEY` | *(Optional free AI key)* | From Groq Console |
+
+   | Variable               | Value                                           | Notes                                    |
+   | :--------------------- | :---------------------------------------------- | :--------------------------------------- |
+   | `NODE_ENV`             | `production`                                    | Enables production hardening             |
+   | `PORT`                 | `10000`                                         | Render standard port                     |
+   | `MONGODB_URI`          | `mongodb+srv://...`                             | From Atlas Phase 1                       |
+   | `JWT_SECRET`           | _(Random 32+ character string)_                 | Sign access tokens                       |
+   | `JWT_REFRESH_SECRET`   | _(Random 32+ character string)_                 | Sign refresh tokens                      |
+   | `CLIENT_URL`           | `https://vexora.pages.dev`                      | Your Cloudflare Pages URL (from Phase 4) |
+   | `APP_URL`              | `https://vexora.pages.dev`                      | App URL                                  |
+   | `STORAGE_PROVIDER`     | `s3`                                            | Uses Cloudflare R2                       |
+   | `STORAGE_MAX_GB`       | `9.5`                                           | Safety stop below 10 GB limit            |
+   | `S3_BUCKET`            | `vexora-assets`                                 | R2 bucket name                           |
+   | `S3_ENDPOINT`          | `https://<account_id>.r2.cloudflarestorage.com` | R2 endpoint URL                          |
+   | `S3_REGION`            | `auto`                                          | Cloudflare auto region                   |
+   | `S3_ACCESS_KEY`        | _(Your R2 Access Key)_                          | From Phase 2A                            |
+   | `S3_SECRET_KEY`        | _(Your R2 Secret Key)_                          | From Phase 2A                            |
+   | `TURNSTILE_SITE_KEY`   | _(Your Turnstile Site Key)_                     | From Phase 2B                            |
+   | `TURNSTILE_SECRET_KEY` | _(Your Turnstile Secret Key)_                   | From Phase 2B                            |
+   | `GEMINI_API_KEY`       | _(Optional free AI key)_                        | From Google AI Studio                    |
+   | `GROQ_API_KEY`         | _(Optional free AI key)_                        | From Groq Console                        |
 
 5. Click **Create Web Service**. Wait 2–3 minutes for deployment to finish.
 6. Copy your assigned Render backend URL (e.g., `https://vexora-backend.onrender.com`).
@@ -123,11 +127,14 @@ Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/):
 ## Phase 4: Frontend Deployment (Cloudflare Pages)
 
 1. Open your local `client/public/_redirects` file and add the proxy rule pointing to your Render backend URL:
+
    ```
    /api/* https://vexora-backend.onrender.com/api/:splat 200
    /* /index.html 200
    ```
-   *(Commit and push this change to GitHub)*:
+
+   _(Commit and push this change to GitHub)_:
+
    ```bash
    git add client/public/_redirects
    git commit -m "chore: configure cloudflare pages api proxy and spa routing"
@@ -138,7 +145,7 @@ Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/):
 3. Click **Create Application** → Select **Pages** tab → Click **Connect to Git**.
 4. Select your GitHub repository (`Vexora`).
 5. Fill in the build settings:
-   - **Project Name:** `vexora` *(assigns `vexora.pages.dev`)*
+   - **Project Name:** `vexora` _(assigns `vexora.pages.dev`)_
    - **Production branch:** `main`
    - **Framework preset:** `None` (or `Vite`)
    - **Build command:**
@@ -146,7 +153,7 @@ Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/):
      npm install && npm run build:client
      ```
    - **Build output directory:** `client/dist`
-   - **Root directory:** *(leave blank)*
+   - **Root directory:** _(leave blank)_
 
 6. Click **Save and Deploy**. Cloudflare will build and publish your frontend to a global edge URL (e.g. `https://vexora.pages.dev`).
 

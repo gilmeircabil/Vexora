@@ -26,7 +26,8 @@ export interface IMaintenanceConfig {
 export const DEFAULT_MAINTENANCE_CONFIG: IMaintenanceConfig = {
   global: false,
   title: 'Scheduled Maintenance',
-  message: 'This section is currently undergoing maintenance and improvements. Please check back shortly.',
+  message:
+    'This section is currently undergoing maintenance and improvements. Please check back shortly.',
   estimatedReturn: '',
   pages: {
     HOME: false,

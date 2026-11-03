@@ -21,7 +21,9 @@ describe('StorageService & Cloudflare R2 Safety Cap', () => {
     it('should reject upload with a clear safety cap error when incoming file exceeds 9.5 GB limit', async () => {
       // Mock DesignAsset.aggregate to return 9.49 GB
       const nearLimit = 9.49 * 1024 * 1024 * 1024;
-      vi.spyOn(DesignAsset, 'aggregate').mockResolvedValue([{ _id: null, total: nearLimit }] as any);
+      vi.spyOn(DesignAsset, 'aggregate').mockResolvedValue([
+        { _id: null, total: nearLimit },
+      ] as any);
 
       // Incoming 20MB file will push it past 9.5GB
       const incomingBytes = 20 * 1024 * 1024;

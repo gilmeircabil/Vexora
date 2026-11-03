@@ -322,13 +322,22 @@ export class AIService {
               const ab = await resp.arrayBuffer();
               outputBuffer = Buffer.from(ab);
             } else {
-              outputBuffer = await this.sharpObjectRemoveFallback(params.imageBuffer, params.maskBuffer);
+              outputBuffer = await this.sharpObjectRemoveFallback(
+                params.imageBuffer,
+                params.maskBuffer,
+              );
             }
           } catch {
-            outputBuffer = await this.sharpObjectRemoveFallback(params.imageBuffer, params.maskBuffer);
+            outputBuffer = await this.sharpObjectRemoveFallback(
+              params.imageBuffer,
+              params.maskBuffer,
+            );
           }
         } else {
-          outputBuffer = await this.sharpObjectRemoveFallback(params.imageBuffer, params.maskBuffer);
+          outputBuffer = await this.sharpObjectRemoveFallback(
+            params.imageBuffer,
+            params.maskBuffer,
+          );
         }
 
         const filename = `inpaint_${Date.now()}_${crypto.randomBytes(6).toString('hex')}.png`;
@@ -600,7 +609,7 @@ export class AIService {
     denoiseStrength = 1.0,
     colorize = false,
   ): Promise<Buffer> {
-    const medianSize = Math.max(1, Math.min(5, (Math.round(denoiseStrength * 2) | 1)));
+    const medianSize = Math.max(1, Math.min(5, Math.round(denoiseStrength * 2) | 1));
     let pipeline = sharp(buffer)
       .normalize()
       .median(medianSize)

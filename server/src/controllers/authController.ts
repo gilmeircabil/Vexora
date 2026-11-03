@@ -387,7 +387,7 @@ export class AuthController {
     try {
       const token = req.cookies?.refreshToken || req.body?.refreshToken;
       if (!token) {
-        res.status(401).json({ success: false, error: 'Refresh token required' });
+        res.status(200).json({ success: false, code: 'NO_SESSION', error: 'No active session' });
         return;
       }
 
@@ -424,12 +424,303 @@ export class AuthController {
     }
   }
 
+  /**
+   * Returns current social OAuth client configuration for the frontend.
+   */
+  static async oauthConfig(_req: Request, res: Response): Promise<void> {
+    res.status(200).json({
+      success: true,
+      data: {
+        google: {
+          enabled: Boolean(env.GOOGLE_CLIENT_ID),
+          clientId: env.GOOGLE_CLIENT_ID || '',
+        },
+        facebook: {
+          enabled: Boolean(env.FACEBOOK_APP_ID),
+          appId: env.FACEBOOK_APP_ID || '',
+        },
+      },
+    });
+  }
+
+  /**
+   * Generates Google OAuth redirect URL.
+   */
+  static async getGoogleAuthUrl(req: Request, res: Response): Promise<void> {
+    const clientId = env.GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      res.status(503).json({
+        success: false,
+        error:
+          'Google OAuth is not configured on this server. Please set GOOGLE_CLIENT_ID in .env.',
+      });
+      return;
+    }
+    const redirectUri = (req.query.redirect_uri as string) || env.GOOGLE_CALLBACK_URL;
+    const state = (req.query.state as string) || '';
+    const params = new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: 'code',
+      scope: 'openid email profile',
+      access_type: 'offline',
+      prompt: 'select_account',
+      ...(state ? { state } : {}),
+    });
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+    res.status(200).json({ success: true, data: { url } });
+  }
+
+  /**
+   * Generates Facebook OAuth redirect URL.
+   */
+  static async getFacebookAuthUrl(req: Request, res: Response): Promise<void> {
+    const appId = env.FACEBOOK_APP_ID;
+    if (!appId) {
+      res.status(503).json({
+        success: false,
+        error:
+          'Facebook OAuth is not configured on this server. Please set FACEBOOK_APP_ID in .env.',
+      });
+      return;
+    }
+    const redirectUri = (req.query.redirect_uri as string) || env.FACEBOOK_CALLBACK_URL;
+    const state = (req.query.state as string) || '';
+    const params = new URLSearchParams({
+      client_id: appId,
+      redirect_uri: redirectUri,
+      response_type: 'code',
+      scope: 'email,public_profile',
+      ...(state ? { state } : {}),
+    });
+    const url = `https://www.facebook.com/v19.0/dialog/oauth?${params.toString()}`;
+    res.status(200).json({ success: true, data: { url } });
+  }
+
+  /**
+   * Handles Google Login via Google Identity Services token or OAuth code.
+   */
+  static async googleLogin(req: Request, res: Response): Promise<void> {
+    try {
+      const { credential, code, redirectUri, mockProfile } = req.body || {};
+
+      let profile: { googleId: string; email?: string; name?: string; picture?: string };
+
+      if (mockProfile && env.NODE_ENV !== 'production') {
+        profile = mockProfile;
+      } else if (credential) {
+        if (!env.GOOGLE_CLIENT_ID) {
+          res.status(503).json({
+            success: false,
+            error: 'Google OAuth is not configured on this server.',
+          });
+          return;
+        }
+        const verifyUrl = `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`;
+        const gRes = await fetch(verifyUrl);
+        if (!gRes.ok) {
+          const errData = await gRes.json().catch(() => ({}));
+          res.status(401).json({
+            success: false,
+            error: (errData as any).error_description || 'Invalid Google credential token.',
+          });
+          return;
+        }
+        const gData = (await gRes.json()) as any;
+        if (gData.aud !== env.GOOGLE_CLIENT_ID) {
+          res.status(401).json({
+            success: false,
+            error: 'Google token audience mismatch.',
+          });
+          return;
+        }
+        profile = {
+          googleId: gData.sub,
+          email: gData.email,
+          name: gData.name,
+          picture: gData.picture,
+        };
+      } else if (code) {
+        if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {
+          res.status(503).json({
+            success: false,
+            error: 'Google OAuth client secret not configured.',
+          });
+          return;
+        }
+        const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            code,
+            client_id: env.GOOGLE_CLIENT_ID,
+            client_secret: env.GOOGLE_CLIENT_SECRET,
+            redirect_uri: redirectUri || env.GOOGLE_CALLBACK_URL,
+            grant_type: 'authorization_code',
+          }),
+        });
+        if (!tokenRes.ok) {
+          res.status(401).json({ success: false, error: 'Failed to exchange Google auth code.' });
+          return;
+        }
+        const tokenData = (await tokenRes.json()) as any;
+        const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenData.access_token}` },
+        });
+        if (!userRes.ok) {
+          res.status(401).json({ success: false, error: 'Failed to fetch Google user profile.' });
+          return;
+        }
+        const uData = (await userRes.json()) as any;
+        profile = {
+          googleId: uData.sub,
+          email: uData.email,
+          name: uData.name,
+          picture: uData.picture,
+        };
+      } else {
+        res.status(400).json({
+          success: false,
+          error: 'Google credential or authorization code is required.',
+        });
+        return;
+      }
+
+      const result = await AuthService.loginWithGoogle(profile);
+
+      if (result.refreshToken) {
+        res.cookie('refreshToken', result.refreshToken, {
+          httpOnly: true,
+          secure: env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: 'Google login successful.',
+        data: {
+          user: result.user,
+          accessToken: result.accessToken,
+          recoveryCode: result.recoveryCode,
+        },
+      });
+    } catch (err: any) {
+      const statusCode = err instanceof AuthSecurityError ? err.statusCode : 400;
+      res.status(statusCode).json({
+        success: false,
+        error: err.message || 'Google authentication failed.',
+      });
+    }
+  }
+
+  /**
+   * Handles Facebook Login via Facebook Access Token or OAuth code.
+   */
+  static async facebookLogin(req: Request, res: Response): Promise<void> {
+    try {
+      const { accessToken, code, redirectUri, mockProfile } = req.body || {};
+
+      let profile: { facebookId: string; email?: string; name?: string; picture?: string };
+
+      if (mockProfile && env.NODE_ENV !== 'production') {
+        profile = mockProfile;
+      } else if (accessToken) {
+        if (!env.FACEBOOK_APP_ID) {
+          res.status(503).json({
+            success: false,
+            error: 'Facebook OAuth is not configured on this server.',
+          });
+          return;
+        }
+        const fbUrl = `https://graph.facebook.com/v19.0/me?fields=id,name,email,picture.type(large)&access_token=${encodeURIComponent(accessToken)}`;
+        const fbRes = await fetch(fbUrl);
+        if (!fbRes.ok) {
+          res.status(401).json({
+            success: false,
+            error: 'Invalid Facebook access token.',
+          });
+          return;
+        }
+        const fbData = (await fbRes.json()) as any;
+        profile = {
+          facebookId: fbData.id,
+          name: fbData.name,
+          email: fbData.email,
+          picture: fbData.picture?.data?.url,
+        };
+      } else if (code) {
+        if (!env.FACEBOOK_APP_ID || !env.FACEBOOK_APP_SECRET) {
+          res.status(503).json({
+            success: false,
+            error: 'Facebook App Secret not configured.',
+          });
+          return;
+        }
+        const tokenUrl = `https://graph.facebook.com/v19.0/oauth/access_token?client_id=${env.FACEBOOK_APP_ID}&client_secret=${env.FACEBOOK_APP_SECRET}&redirect_uri=${encodeURIComponent(redirectUri || env.FACEBOOK_CALLBACK_URL)}&code=${encodeURIComponent(code)}`;
+        const tokenRes = await fetch(tokenUrl);
+        if (!tokenRes.ok) {
+          res.status(401).json({ success: false, error: 'Failed to exchange Facebook auth code.' });
+          return;
+        }
+        const tokenData = (await tokenRes.json()) as any;
+        const fbUrl = `https://graph.facebook.com/v19.0/me?fields=id,name,email,picture.type(large)&access_token=${encodeURIComponent(tokenData.access_token)}`;
+        const fbRes = await fetch(fbUrl);
+        if (!fbRes.ok) {
+          res.status(401).json({ success: false, error: 'Failed to fetch Facebook user profile.' });
+          return;
+        }
+        const fbData = (await fbRes.json()) as any;
+        profile = {
+          facebookId: fbData.id,
+          name: fbData.name,
+          email: fbData.email,
+          picture: fbData.picture?.data?.url,
+        };
+      } else {
+        res.status(400).json({
+          success: false,
+          error: 'Facebook access token or authorization code is required.',
+        });
+        return;
+      }
+
+      const result = await AuthService.loginWithFacebook(profile);
+
+      if (result.refreshToken) {
+        res.cookie('refreshToken', result.refreshToken, {
+          httpOnly: true,
+          secure: env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: 'Facebook login successful.',
+        data: {
+          user: result.user,
+          accessToken: result.accessToken,
+          recoveryCode: result.recoveryCode,
+        },
+      });
+    } catch (err: any) {
+      const statusCode = err instanceof AuthSecurityError ? err.statusCode : 400;
+      res.status(statusCode).json({
+        success: false,
+        error: err.message || 'Facebook authentication failed.',
+      });
+    }
+  }
+
   // Safe fallback for retired OAuth endpoints
   static async retiredOAuthNotice(_req: Request, res: Response): Promise<void> {
     res.status(410).json({
       success: false,
       error:
-        'Social authentication has been retired. VexoraMods now uses username and password authentication exclusively.',
+        'This legacy OAuth route has been updated. Use /api/auth/google or /api/auth/facebook.',
     });
   }
 
@@ -489,10 +780,7 @@ export class AuthController {
       });
 
       try {
-        await DeveloperProfile.findOneAndUpdate(
-          { userId: req.user.userId },
-          { profileImage: '' },
-        );
+        await DeveloperProfile.findOneAndUpdate({ userId: req.user.userId }, { profileImage: '' });
       } catch {
         // Ignore
       }

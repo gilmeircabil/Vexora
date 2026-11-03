@@ -38,7 +38,8 @@ export const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
             id="auth-modal-desc"
             className="text-xs sm:text-sm font-semibold text-neutral-700 leading-relaxed"
           >
-            Access to {pageTitle} is reserved for members. Please sign in or create a 100% free account to continue.
+            Access to {pageTitle} is reserved for members. Please sign in or create a 100% free
+            account to continue.
           </p>
         </div>
 

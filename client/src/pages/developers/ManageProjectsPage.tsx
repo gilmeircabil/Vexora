@@ -1,17 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import {
-  Plus,
-  Edit,
-  Trash2,
-  ExternalLink,
-  Eye,
-  X,
-  Save,
-  Layers,
-  ArrowLeft,
-  AlertCircle,
-} from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, X, Save, Layers, ArrowLeft } from 'lucide-react';
 import { developerApi } from '../../services/developerApi.js';
 import { useToast } from '../../context/ToastContext.js';
 

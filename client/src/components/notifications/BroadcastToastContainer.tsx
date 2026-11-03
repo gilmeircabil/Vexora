@@ -1,11 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  Info,
-  CheckCircle2,
-  AlertTriangle,
-  Megaphone,
-  X,
-} from 'lucide-react';
+import { Info, CheckCircle2, AlertTriangle, Megaphone, X } from 'lucide-react';
 import { useBroadcastNotifications } from '../../context/BroadcastNotificationContext.js';
 import type { BroadcastAnnouncement } from '../../services/announcementApi.js';
 

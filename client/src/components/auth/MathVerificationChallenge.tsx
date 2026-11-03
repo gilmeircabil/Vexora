@@ -24,7 +24,7 @@ function generateProblems(): MathProblem[] {
 
   // Problem 3: 2-digit easy Multiplication (e.g. 12 × 4, 15 × 3)
   const mul1 = Math.floor(Math.random() * 12) + 11; // 11 to 22
-  const mul2 = Math.floor(Math.random() * 5) + 2;   // 2 to 6
+  const mul2 = Math.floor(Math.random() * 5) + 2; // 2 to 6
 
   const rawList: MathProblem[] = [
     { id: 1, num1: add1, num2: add2, operator: '+', answer: add1 + add2 },

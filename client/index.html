@@ -31,10 +31,10 @@
       // Enforce clean Neo-Brutalist light canvas
       document.documentElement.classList.remove('dark');
     </script>
-    <!-- Content Security Policy: strictly authorized sources for local app, Design Studio Google Fonts, Cloudflare Turnstile, and client-side AI models -->
+    <!-- Content Security Policy: strictly authorized sources for local app, Design Studio Google Fonts, Cloudflare Turnstile, Google OAuth, and client-side AI models -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' blob: data: https://challenges.cloudflare.com https://staticimgly.com https://cdn.jsdelivr.net https://unpkg.com; worker-src 'self' blob:; object-src 'none'; frame-src 'self' blob: https://challenges.cloudflare.com;"
+      content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' 'wasm-unsafe-eval' blob: https://challenges.cloudflare.com https://accounts.google.com https://apis.google.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com; img-src 'self' data: blob: https://* http://*; font-src 'self' data: https://fonts.gstatic.com; media-src 'self' data: blob:; connect-src 'self' blob: data: ws: wss: https://challenges.cloudflare.com https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://staticimgly.com https://cdn.jsdelivr.net https://unpkg.com https://huggingface.co https://*.r2.cloudflarestorage.com; worker-src 'self' blob:; object-src 'none'; frame-src 'self' blob: https://challenges.cloudflare.com https://accounts.google.com https://www.facebook.com; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"
     />
   </head>
   <body class="antialiased min-h-screen selection:bg-[#FACC15] selection:text-black">

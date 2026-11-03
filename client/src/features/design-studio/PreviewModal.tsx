@@ -31,37 +31,37 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fade-in">
-      <div className="relative max-w-4xl max-h-[90vh] bg-[#FAF7F2] rounded-2xl border-4 border-black p-5 shadow-[10px_10px_0px_#000000] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xs animate-fade-in">
+      <div className="relative max-w-4xl max-h-[90vh] bg-white rounded-2xl border border-slate-200 p-5 shadow-2xl flex flex-col animate-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b-2 border-black shrink-0">
+        <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 shrink-0">
           <div>
-            <h3 className="text-base font-black text-black">{projectName}</h3>
-            <p className="text-xs font-semibold text-gray-600">Design Preview</p>
+            <h3 className="text-base font-bold text-slate-900">{projectName}</h3>
+            <p className="text-xs text-slate-500">Design Preview</p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={handleDownload}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-black bg-[#FACC15] font-black text-xs text-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#7d2ae8] hover:bg-[#6c22cf] font-semibold text-xs text-white shadow-xs transition-all cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               Download PNG
             </button>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-xl border-2 border-black bg-white hover:bg-gray-100 transition-colors"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
             >
-              <X className="w-5 h-5 text-black" />
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
 
         {/* Canvas Display */}
-        <div className="flex-1 overflow-auto flex items-center justify-center p-4 bg-pattern min-h-0">
+        <div className="flex-1 overflow-auto flex items-center justify-center p-6 bg-slate-100/70 rounded-xl min-h-0 mt-3">
           <img
             src={previewDataUrl}
             alt="Preview"
-            className="max-w-full max-h-[70vh] object-contain rounded-lg border-2 border-black shadow-[4px_4px_0px_#000000]"
+            className="max-w-full max-h-[70vh] object-contain rounded-md border border-slate-200 shadow-xl"
           />
         </div>
       </div>

@@ -54,6 +54,14 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
+                  to="/ai-chat"
+                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
+                >
+                  AI Chat
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/studio"
                   className="text-neutral-700 hover:text-black hover:underline transition-colors"
                 >
@@ -66,6 +74,14 @@ export const Footer: React.FC = () => {
                   className="text-neutral-700 hover:text-black hover:underline transition-colors"
                 >
                   Learning Hub
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/study"
+                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
+                >
+                  Study Space
                 </Link>
               </li>
               <li>

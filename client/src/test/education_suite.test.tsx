@@ -335,7 +335,9 @@ describe('VexoraMods Zero-Cost Education Suite Tests', () => {
       fireEvent.click(teacherWorkspaceBtn);
 
       // Now Teacher items must exist in the sidebar
-      expect(screen.getAllByRole('button', { name: /lesson plan creator/i }).length).toBeGreaterThan(0);
+      expect(
+        screen.getAllByRole('button', { name: /lesson plan creator/i }).length,
+      ).toBeGreaterThan(0);
       expect(screen.getAllByRole('button', { name: /rubric builder/i }).length).toBeGreaterThan(0);
 
       // And Student items must NOT exist in the teacher sidebar
@@ -392,7 +394,9 @@ describe('VexoraMods Zero-Cost Education Suite Tests', () => {
       );
 
       // Teacher tools should automatically appear in the active sidebar
-      expect(await screen.findByRole('button', { name: /lesson plan creator/i })).toBeInTheDocument();
+      expect(
+        await screen.findByRole('button', { name: /lesson plan creator/i }),
+      ).toBeInTheDocument();
       expect(screen.queryByRole('button', { name: /study planner/i })).toBeNull();
       expect(screen.getByText(/curriculum milestones/i)).toBeInTheDocument();
       expect(screen.queryByText(/enable teacher mode/i)).toBeNull();

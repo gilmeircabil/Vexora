@@ -36,7 +36,8 @@ export interface MaintenanceConfigData {
 export const DEFAULT_MAINTENANCE_DATA: MaintenanceConfigData = {
   global: false,
   title: 'Scheduled Maintenance',
-  message: 'This section is currently undergoing maintenance and improvements. Please check back shortly.',
+  message:
+    'This section is currently undergoing maintenance and improvements. Please check back shortly.',
   estimatedReturn: '',
   pages: {
     HOME: false,
@@ -82,19 +83,97 @@ export interface PageLockMetadata {
 }
 
 export const PAGE_LOCK_ITEMS: PageLockMetadata[] = [
-  { key: 'HOME', label: 'Homepage', description: 'Main landing page (/)', paths: ['/'], accentColor: '#4ADE80' },
-  { key: 'TOOLS', label: 'Tools Directory', description: 'All Tools & AI Workspaces (/tools, /category/*, /ai-tools/*)', paths: ['/tools', '/category', '/ai-tools'], accentColor: '#4ADE80' },
-  { key: 'STUDIO', label: 'Design Studio', description: 'Design Editor (/studio, /design-studio/*)', paths: ['/studio', '/design-studio'], accentColor: '#38BDF8' },
-  { key: 'LEARNING', label: 'Learning Hub', description: 'Articles & Tutorials (/learning)', paths: ['/learning'], accentColor: '#A78BFA' },
-  { key: 'STUDY_SPACE', label: 'Study Space', description: 'Interactive Flashcards & Pomodoro (/study, /study-space)', paths: ['/study', '/study-space'], accentColor: '#FFD21A' },
-  { key: 'COMMUNITY', label: 'Community & Donations', description: 'Supporters & Leaderboard (/community, /support, /leaderboard)', paths: ['/community', '/support', '/leaderboard'], accentColor: '#F472B6' },
-  { key: 'REVIEWS', label: 'Ratings & Reviews', description: 'User Feedback & Reviews (/reviews)', paths: ['/reviews'], accentColor: '#FACC15' },
-  { key: 'DASHBOARD', label: 'User Dashboard', description: 'Personal Profile & Settings (/dashboard)', paths: ['/dashboard'], accentColor: '#38BDF8' },
-  { key: 'ABOUT', label: 'About Us', description: 'Platform information (/about)', paths: ['/about'], accentColor: '#4ADE80' },
-  { key: 'PRIVACY', label: 'Privacy Policy', description: 'Privacy details (/privacy)', paths: ['/privacy'], accentColor: '#A78BFA' },
-  { key: 'TERMS', label: 'Terms of Service', description: 'Usage terms (/terms)', paths: ['/terms'], accentColor: '#FFD21A' },
-  { key: 'LICENSES', label: 'Licenses', description: 'Open Source Licenses (/licenses)', paths: ['/licenses'], accentColor: '#38BDF8' },
-  { key: 'CONTRIBUTING', label: 'Contributing', description: 'Contributing Guidelines (/contributing)', paths: ['/contributing'], accentColor: '#4ADE80' },
+  {
+    key: 'HOME',
+    label: 'Homepage',
+    description: 'Main landing page (/)',
+    paths: ['/'],
+    accentColor: '#4ADE80',
+  },
+  {
+    key: 'TOOLS',
+    label: 'Tools Directory',
+    description: 'All Tools & AI Workspaces (/tools, /category/*, /ai-tools/*)',
+    paths: ['/tools', '/category', '/ai-tools'],
+    accentColor: '#4ADE80',
+  },
+  {
+    key: 'STUDIO',
+    label: 'Design Studio',
+    description: 'Design Editor (/studio, /design-studio/*)',
+    paths: ['/studio', '/design-studio'],
+    accentColor: '#38BDF8',
+  },
+  {
+    key: 'LEARNING',
+    label: 'Learning Hub',
+    description: 'Articles & Tutorials (/learning)',
+    paths: ['/learning'],
+    accentColor: '#A78BFA',
+  },
+  {
+    key: 'STUDY_SPACE',
+    label: 'Study Space',
+    description: 'Interactive Flashcards & Pomodoro (/study, /study-space)',
+    paths: ['/study', '/study-space'],
+    accentColor: '#FFD21A',
+  },
+  {
+    key: 'COMMUNITY',
+    label: 'Community & Donations',
+    description: 'Supporters & Leaderboard (/community, /support, /leaderboard)',
+    paths: ['/community', '/support', '/leaderboard'],
+    accentColor: '#F472B6',
+  },
+  {
+    key: 'REVIEWS',
+    label: 'Ratings & Reviews',
+    description: 'User Feedback & Reviews (/reviews)',
+    paths: ['/reviews'],
+    accentColor: '#FACC15',
+  },
+  {
+    key: 'DASHBOARD',
+    label: 'User Dashboard',
+    description: 'Personal Profile & Settings (/dashboard)',
+    paths: ['/dashboard'],
+    accentColor: '#38BDF8',
+  },
+  {
+    key: 'ABOUT',
+    label: 'About Us',
+    description: 'Platform information (/about)',
+    paths: ['/about'],
+    accentColor: '#4ADE80',
+  },
+  {
+    key: 'PRIVACY',
+    label: 'Privacy Policy',
+    description: 'Privacy details (/privacy)',
+    paths: ['/privacy'],
+    accentColor: '#A78BFA',
+  },
+  {
+    key: 'TERMS',
+    label: 'Terms of Service',
+    description: 'Usage terms (/terms)',
+    paths: ['/terms'],
+    accentColor: '#FFD21A',
+  },
+  {
+    key: 'LICENSES',
+    label: 'Licenses',
+    description: 'Open Source Licenses (/licenses)',
+    paths: ['/licenses'],
+    accentColor: '#38BDF8',
+  },
+  {
+    key: 'CONTRIBUTING',
+    label: 'Contributing',
+    description: 'Contributing Guidelines (/contributing)',
+    paths: ['/contributing'],
+    accentColor: '#4ADE80',
+  },
 ];
 
 export interface RouteLockStatus {
@@ -176,7 +255,11 @@ export function getRouteLockStatus(
   }
 
   // Community
-  if (path.startsWith('/community') || path.startsWith('/support') || path.startsWith('/leaderboard')) {
+  if (
+    path.startsWith('/community') ||
+    path.startsWith('/support') ||
+    path.startsWith('/leaderboard')
+  ) {
     return {
       isLocked: Boolean(pagesMap.COMMUNITY),
       pageTitle: 'Community Hub',

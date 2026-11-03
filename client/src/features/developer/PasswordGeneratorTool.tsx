@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Card } from '../../components/common/Card.js';
 import { Button } from '../../components/common/Button.js';
 import { CopyButton } from '../../components/common/CopyButton.js';
-import { generatePassword, type PasswordOptions } from '../../lib/dev/password.js';
-import { RefreshCw, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { generatePassword } from '../../lib/dev/password.js';
+import { RefreshCw, ShieldCheck } from 'lucide-react';
 
 export const PasswordGeneratorTool: React.FC = () => {
   const [length, setLength] = useState<number>(18);

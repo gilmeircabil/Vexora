@@ -81,39 +81,36 @@ export const BroadcastNotificationProvider: React.FC<{ children: React.ReactNode
   );
 
   // Enqueue a new announcement
-  const enqueueAnnouncement = useCallback(
-    (announcement: BroadcastAnnouncement) => {
-      const dismissed = getLocalDismissedIds();
-      if (dismissed.has(announcement._id) || seenIdsRef.current.has(announcement._id)) {
-        return;
-      }
+  const enqueueAnnouncement = useCallback((announcement: BroadcastAnnouncement) => {
+    const dismissed = getLocalDismissedIds();
+    if (dismissed.has(announcement._id) || seenIdsRef.current.has(announcement._id)) {
+      return;
+    }
 
-      // Check if expired
-      if (announcement.expiresAt && new Date(announcement.expiresAt) <= new Date()) {
-        return;
-      }
+    // Check if expired
+    if (announcement.expiresAt && new Date(announcement.expiresAt) <= new Date()) {
+      return;
+    }
 
-      seenIdsRef.current.add(announcement._id);
+    seenIdsRef.current.add(announcement._id);
 
-      // Record view
-      announcementApi.recordView(announcement._id).catch(() => {});
+    // Record view
+    announcementApi.recordView(announcement._id).catch(() => {});
 
-      setVisibleAnnouncements((prev) => {
-        if (prev.some((a) => a._id === announcement._id)) {
-          return prev;
-        }
-        if (prev.length < MAX_VISIBLE_TOASTS) {
-          return [...prev, announcement];
-        }
-        // Exceeds visible limit; queue it
-        if (!queueRef.current.some((a) => a._id === announcement._id)) {
-          queueRef.current.push(announcement);
-        }
+    setVisibleAnnouncements((prev) => {
+      if (prev.some((a) => a._id === announcement._id)) {
         return prev;
-      });
-    },
-    [],
-  );
+      }
+      if (prev.length < MAX_VISIBLE_TOASTS) {
+        return [...prev, announcement];
+      }
+      // Exceeds visible limit; queue it
+      if (!queueRef.current.some((a) => a._id === announcement._id)) {
+        queueRef.current.push(announcement);
+      }
+      return prev;
+    });
+  }, []);
 
   // Fetch active eligible announcements on mount & auth change
   const fetchActiveAnnouncements = useCallback(async () => {

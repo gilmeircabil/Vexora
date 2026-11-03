@@ -1,5 +1,5 @@
 import type { Canvas, FabricObject } from 'fabric';
-import type { DesignProjectDTO, DesignVersionDTO } from '../../lib/designStudio/api.js';
+import type { DesignProjectDTO } from '../../lib/designStudio/api.js';
 
 export type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error';
 

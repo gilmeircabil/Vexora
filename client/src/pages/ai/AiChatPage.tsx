@@ -33,6 +33,7 @@ import {
   Search,
   Maximize2,
   Minimize2,
+  Clock,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 import { useToast } from '../../context/ToastContext.js';
@@ -60,8 +61,6 @@ export function formatBytes(bytes: number) {
 
 const SIDEBAR_COLLAPSED_KEY = 'vexora_ai_sidebar_collapsed';
 const INSPECTOR_OPEN_KEY = 'vexora_ai_inspector_open';
-const STORAGE_KEY = 'vexora_ai_chat_sessions';
-const ACTIVE_SESSION_KEY = 'vexora_ai_active_session_id';
 const MODEL_STORAGE_KEY = 'vexora_ai_selected_model';
 
 const SYSTEM_PERSONAS = [
@@ -105,44 +104,177 @@ interface ChatMessageItem {
 export interface AIModelOption {
   id: string;
   name: string;
-  provider: 'gemini' | 'nvidia' | 'auto';
+  provider: 'gemini' | 'nvidia' | 'openrouter' | 'groq' | 'auto';
   badge: string;
   description: string;
   speed: string;
 }
 
 export const FREE_AI_MODELS: AIModelOption[] = [
-  {
-    id: 'gemini-3.5-flash-lite',
-    name: 'Gemini 3.5 Flash',
-    provider: 'gemini',
-    badge: 'Ultra-Fast',
-    description: 'Instant ~700ms token streaming with sharp coding & Q&A',
-    speed: 'Ultra-Fast',
-  },
-  {
-    id: 'gemini-flash-lite-latest',
-    name: 'Gemini Flash Lite',
-    provider: 'gemini',
-    badge: 'Fast',
-    description: 'High-speed, stable Google model for rapid answers',
-    speed: 'Ultra-Fast',
-  },
-  {
-    id: 'meta/llama-3.2-90b-vision-instruct',
-    name: 'Llama 3.2 90B Vision',
-    provider: 'nvidia',
-    badge: '90B NIM',
-    description: 'NVIDIA NIM high-capacity multimodal reasoning & coding',
-    speed: 'High-IQ',
-  },
+  // 1. Smart Auto Router
   {
     id: 'auto',
     name: 'Auto Fast Router',
     provider: 'auto',
     badge: 'Smart Auto',
-    description: 'Selects the fastest available free model automatically',
+    description: 'Dynamic auto-routing & instant failover across all 4 providers',
     speed: 'Dynamic',
+  },
+  // 2. Groq LPU Ultra-Fast Hardware
+  {
+    id: 'openai/gpt-oss-120b',
+    name: 'GPT-OSS 120B (Groq LPU)',
+    provider: 'groq',
+    badge: '⚡ 800 tps',
+    description: 'High-throughput 120B flagship reasoning on Groq LPUs',
+    speed: 'Instant',
+  },
+  {
+    id: 'qwen/qwen3.8-27b',
+    name: 'Qwen 3.8 27B (Groq LPU)',
+    provider: 'groq',
+    badge: '⚡ 15ms',
+    description: 'Sub-20ms instant TTFT coding and conversation on Groq',
+    speed: 'Ultra-Fast',
+  },
+  {
+    id: 'openai/gpt-oss-20b',
+    name: 'GPT-OSS 20B (Groq LPU)',
+    provider: 'groq',
+    badge: '⚡ Light LPU',
+    description: 'Instant lightweight conversational LPU model for rapid Q&A',
+    speed: 'Instant',
+  },
+  {
+    id: 'allam-2-7b',
+    name: 'Allam 2 7B (Groq LPU)',
+    provider: 'groq',
+    badge: '⚡ Specialized',
+    description: 'Fast analytical reasoning and bilingual support on Groq',
+    speed: 'Ultra-Fast',
+  },
+  // 3. Google Gemini
+  {
+    id: 'gemini-3.5-flash-lite',
+    name: 'Gemini 3.5 Flash',
+    provider: 'gemini',
+    badge: 'Google Fast',
+    description: 'Google flagship multimodal model with instant ~700ms streaming',
+    speed: 'Ultra-Fast',
+  },
+  {
+    id: 'gemini-flash-lite-latest',
+    name: 'Gemini Flash Lite (Latest)',
+    provider: 'gemini',
+    badge: 'Google Stable',
+    description: 'High-speed, stable Google engine for technical answers & files',
+    speed: 'Ultra-Fast',
+  },
+  {
+    id: 'gemini-2.0-flash',
+    name: 'Gemini 2.0 Flash',
+    provider: 'gemini',
+    badge: 'Google 2.0',
+    description: 'Next-gen Gemini engine with rich multimodal vision & reasoning',
+    speed: 'Fast',
+  },
+  // 4. OpenRouter Free Network
+  {
+    id: 'openrouter/free',
+    name: 'OpenRouter Free Router',
+    provider: 'openrouter',
+    badge: 'Free Router',
+    description: 'Auto-routes to the best available free model across providers',
+    speed: 'Multi-AI',
+  },
+  {
+    id: 'google/gemma-4-31b-it:free',
+    name: 'Gemma 4 31B (OpenRouter)',
+    provider: 'openrouter',
+    badge: '31B Free',
+    description: 'Google next-generation open-weights model via OpenRouter',
+    speed: 'High-IQ',
+  },
+  {
+    id: 'google/gemma-4-26b-a4b-it:free',
+    name: 'Gemma 4 26B (OpenRouter)',
+    provider: 'openrouter',
+    badge: '26B Free',
+    description: 'Google high-speed balanced reasoning model via OpenRouter',
+    speed: 'Fast',
+  },
+  {
+    id: 'nvidia/nemotron-3-ultra-550b-a55b:free',
+    name: 'Nemotron 3 Ultra 550B (OpenRouter)',
+    provider: 'openrouter',
+    badge: '550B Free',
+    description: 'NVIDIA 550B massive reasoning powerhouse on OpenRouter',
+    speed: 'Deep-Think',
+  },
+  {
+    id: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+    name: 'Nemotron 3 Nano Omni (OpenRouter)',
+    provider: 'openrouter',
+    badge: 'Omni Free',
+    description: 'NVIDIA reasoning & conversational model via OpenRouter',
+    speed: 'Fast',
+  },
+  {
+    id: 'nvidia/nemotron-3.5-lightning:free',
+    name: 'Nemotron 3.5 Lightning (OpenRouter)',
+    provider: 'openrouter',
+    badge: 'Lightning',
+    description: 'NVIDIA low-latency NIM model on OpenRouter network',
+    speed: 'Ultra-Fast',
+  },
+  {
+    id: 'liquid/lfm-2.5-2.6b:free',
+    name: 'LiquidAI LFM 2.5 (OpenRouter)',
+    provider: 'openrouter',
+    badge: 'Liquid AI',
+    description: 'Liquid neural network architecture for dynamic context',
+    speed: 'Ultra-Fast',
+  },
+  {
+    id: 'cohere/north-mini-code:free',
+    name: 'North Mini Code (OpenRouter)',
+    provider: 'openrouter',
+    badge: 'Code Free',
+    description: 'Cohere code-generation and debugging specialist model',
+    speed: 'Fast',
+  },
+  {
+    id: 'dots-studio/dots-3-note-preview:free',
+    name: 'Dots-3 Note (OpenRouter)',
+    provider: 'openrouter',
+    badge: 'Notes Free',
+    description: 'Document summarization, note-taking, and synthesis',
+    speed: 'Fast',
+  },
+  {
+    id: 'thinkingmachines/inkling:free',
+    name: 'Inkling (OpenRouter)',
+    provider: 'openrouter',
+    badge: 'Creative',
+    description: 'Thinking Machines creative writing & explanatory assistant',
+    speed: 'Fast',
+  },
+  {
+    id: 'recursive/flint-v1.0:free',
+    name: 'Recursive Flint (OpenRouter)',
+    provider: 'openrouter',
+    badge: 'Flint Free',
+    description: 'Recursive Flint multi-step reasoning and analytical thinking',
+    speed: 'Deep-Think',
+  },
+  // 5. NVIDIA NIM (Official)
+  {
+    id: 'meta/llama-3.2-90b-vision-instruct',
+    name: 'Llama 3.2 90B Vision (NVIDIA NIM)',
+    provider: 'nvidia',
+    badge: '90B NIM',
+    description: 'Official NVIDIA NIM high-capacity vision, reasoning & coding',
+    speed: 'High-IQ',
   },
 ];
 
@@ -162,19 +294,145 @@ const STARTER_PROMPTS = [
   {
     icon: Zap,
     label: 'Debug TypeError',
-    prompt: 'Help me debug this common error: "TypeError: Cannot read properties of undefined". Why does it happen and how do I prevent it?',
+    prompt:
+      'Help me debug this common error: "TypeError: Cannot read properties of undefined". Why does it happen and how do I prevent it?',
   },
   {
     icon: PenTool,
     label: 'Resume bullet points',
-    prompt: 'Draft 4 high-impact, quantifiable resume bullet points for a modern React and Node.js developer.',
+    prompt:
+      'Draft 4 high-impact, quantifiable resume bullet points for a modern React and Node.js developer.',
   },
   {
     icon: Brain,
     label: 'How LLMs work',
-    prompt: 'Explain how Large Language Models (LLMs) and neural networks work using simple real-world analogies.',
+    prompt:
+      'Explain how Large Language Models (LLMs) and neural networks work using simple real-world analogies.',
   },
 ];
+
+// Intelligent Neo-Brutalist Markdown Normalizer & Formatter
+function normalizeMarkdown(text: string): string {
+  // If the model squished multiple bullets onto one line (e.g. "Game Elements * **Avatar:** ... * **Environment:**")
+  let normalized = text.replace(/([^\n])\s+([*•-])\s+(\*\*[^*]+\*\*)/g, '$1\n$2 $3');
+  // Handle numbered lists squished onto one line
+  normalized = normalized.replace(/([^\n])\s+(\d+\.)\s+(\*\*[^*]+\*\*)/g, '$1\n$2 $3');
+  // Handle inline emoji headers followed immediately by bullets
+  normalized = normalized.replace(/([^\n])\s+([*•-])\s+/g, (match, prefix, bullet) => {
+    // If preceded by punctuation or emoji, ensure newline
+    if (/[:.!?]/.test(prefix) || /\p{Extended_Pictographic}/u.test(prefix)) {
+      return `${prefix}\n${bullet} `;
+    }
+    return match;
+  });
+  return normalized;
+}
+
+interface MarkdownBlock {
+  type: 'heading' | 'list' | 'quote' | 'paragraph';
+  level?: number;
+  ordered?: boolean;
+  items?: string[];
+  text?: string;
+}
+
+function parseMarkdownBlocks(rawText: string): MarkdownBlock[] {
+  const normalized = normalizeMarkdown(rawText);
+  const lines = normalized.split('\n');
+  const blocks: MarkdownBlock[] = [];
+
+  let currentList: { ordered: boolean; items: string[] } | null = null;
+  let currentParagraph: string[] = [];
+
+  const flushParagraph = () => {
+    if (currentParagraph.length > 0) {
+      blocks.push({ type: 'paragraph', text: currentParagraph.join(' ') });
+      currentParagraph = [];
+    }
+  };
+
+  const flushList = () => {
+    if (currentList && currentList.items.length > 0) {
+      blocks.push({ type: 'list', ordered: currentList.ordered, items: currentList.items });
+      currentList = null;
+    }
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const rawLine = lines[i] || '';
+    const trimmed = rawLine.trim();
+
+    if (!trimmed) {
+      flushParagraph();
+      flushList();
+      continue;
+    }
+
+    // Heading: #, ##, ###, ####
+    const headingMatch = trimmed.match(/^(#{1,4})\s+(.*)$/);
+    if (headingMatch && headingMatch[1] && headingMatch[2]) {
+      flushParagraph();
+      flushList();
+      blocks.push({
+        type: 'heading',
+        level: headingMatch[1].length,
+        text: headingMatch[2],
+      });
+      continue;
+    }
+
+    // Blockquote: >
+    if (trimmed.startsWith('>')) {
+      flushParagraph();
+      flushList();
+      blocks.push({
+        type: 'quote',
+        text: trimmed.replace(/^>\s*/, ''),
+      });
+      continue;
+    }
+
+    // Unordered list item: * or - or •
+    const bulletMatch = trimmed.match(/^([*•-]|\*\*)\s+(.*)$/);
+    if (bulletMatch && bulletMatch[2]) {
+      flushParagraph();
+      if (!currentList || currentList.ordered) {
+        flushList();
+        currentList = { ordered: false, items: [] };
+      }
+      currentList.items.push(bulletMatch[2]);
+      continue;
+    }
+
+    // Ordered list item: 1. or 2.
+    const orderedMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+    if (orderedMatch && orderedMatch[2]) {
+      flushParagraph();
+      if (!currentList || !currentList.ordered) {
+        flushList();
+        currentList = { ordered: true, items: [] };
+      }
+      currentList.items.push(orderedMatch[2]);
+      continue;
+    }
+
+    // Indented continuation of list item
+    if (currentList && (rawLine.startsWith('   ') || rawLine.startsWith('\t'))) {
+      const lastIdx = currentList.items.length - 1;
+      currentList.items[lastIdx] += ' ' + trimmed;
+      continue;
+    }
+
+    // Regular paragraph line
+    flushList();
+    currentParagraph.push(trimmed);
+  }
+
+  flushParagraph();
+  flushList();
+
+  return blocks;
+}
 
 // Neo-Brutalist Markdown Formatter with Copy Code Buttons
 const MarkdownRenderer: React.FC<{ content: string; isStreaming?: boolean }> = ({
@@ -197,12 +455,8 @@ const MarkdownRenderer: React.FC<{ content: string; isStreaming?: boolean }> = (
       if (part.startsWith('```') && part.endsWith('```')) {
         const codeIndex = codeBlockCount++;
         const firstLineBreak = part.indexOf('\n');
-        const language =
-          firstLineBreak !== -1 ? part.slice(3, firstLineBreak).trim() : '';
-        const code =
-          firstLineBreak !== -1
-            ? part.slice(firstLineBreak + 1, -3)
-            : part.slice(3, -3);
+        const language = firstLineBreak !== -1 ? part.slice(3, firstLineBreak).trim() : '';
+        const code = firstLineBreak !== -1 ? part.slice(firstLineBreak + 1, -3) : part.slice(3, -3);
 
         return (
           <div
@@ -238,57 +492,78 @@ const MarkdownRenderer: React.FC<{ content: string; isStreaming?: boolean }> = (
         );
       }
 
-      const paragraphs = part.split('\n\n');
+      const blocks = parseMarkdownBlocks(part);
       return (
         <div key={index} className="space-y-3">
-          {paragraphs.map((p, pIdx) => {
-            if (!p.trim()) return null;
-
-            if (p.startsWith('### ')) {
+          {blocks.map((block, bIdx) => {
+            if (block.type === 'heading') {
+              if (block.level === 1) {
+                return (
+                  <h2
+                    key={bIdx}
+                    className="text-lg font-black text-black pt-3 pb-1 border-b border-black/10"
+                  >
+                    {renderInlineFormatting(block.text || '')}
+                  </h2>
+                );
+              }
+              if (block.level === 2) {
+                return (
+                  <h3 key={bIdx} className="text-base font-black text-black pt-2.5 pb-0.5">
+                    {renderInlineFormatting(block.text || '')}
+                  </h3>
+                );
+              }
               return (
-                <h4 key={pIdx} className="text-sm font-black text-black pt-2 pb-0.5">
-                  {p.slice(4)}
+                <h4 key={bIdx} className="text-sm font-black text-black pt-2 pb-0.5">
+                  {renderInlineFormatting(block.text || '')}
                 </h4>
               );
             }
-            if (p.startsWith('## ')) {
+
+            if (block.type === 'quote') {
               return (
-                <h3 key={pIdx} className="text-base font-black text-black pt-2.5 pb-0.5">
-                  {p.slice(3)}
-                </h3>
-              );
-            }
-            if (p.startsWith('# ')) {
-              return (
-                <h2 key={pIdx} className="text-lg font-black text-black pt-3 pb-1">
-                  {p.slice(2)}
-                </h2>
+                <blockquote
+                  key={bIdx}
+                  className="my-2 pl-3 py-1.5 border-l-4 border-[#FACC15] bg-amber-50/70 rounded-r-xl text-neutral-800 font-medium italic text-xs leading-relaxed"
+                >
+                  {renderInlineFormatting(block.text || '')}
+                </blockquote>
               );
             }
 
-            const lines = p.split('\n');
-            const isList = lines.every(
-              (l) => l.trim().startsWith('* ') || l.trim().startsWith('- ') || /^\d+\.\s/.test(l.trim()),
-            );
-
-            if (isList) {
-              return (
-                <ul key={pIdx} className="space-y-1.5 my-1 pl-5 list-disc text-neutral-900 font-medium">
-                  {lines.map((l, lIdx) => {
-                    const clean = l.replace(/^(\*|-|\d+\.)\s+/, '');
-                    return (
-                      <li key={lIdx} className="leading-relaxed">
-                        {renderInlineFormatting(clean)}
+            if (block.type === 'list' && block.items) {
+              if (block.ordered) {
+                return (
+                  <ol
+                    key={bIdx}
+                    className="space-y-1.5 my-2 pl-5 list-decimal text-neutral-900 font-medium"
+                  >
+                    {block.items.map((item, iIdx) => (
+                      <li key={iIdx} className="leading-relaxed">
+                        {renderInlineFormatting(item)}
                       </li>
-                    );
-                  })}
+                    ))}
+                  </ol>
+                );
+              }
+              return (
+                <ul
+                  key={bIdx}
+                  className="space-y-1.5 my-2 pl-5 list-disc text-neutral-900 font-medium"
+                >
+                  {block.items.map((item, iIdx) => (
+                    <li key={iIdx} className="leading-relaxed">
+                      {renderInlineFormatting(item)}
+                    </li>
+                  ))}
                 </ul>
               );
             }
 
             return (
-              <p key={pIdx} className="leading-relaxed whitespace-pre-wrap text-black font-medium">
-                {renderInlineFormatting(p)}
+              <p key={bIdx} className="leading-relaxed text-black font-medium">
+                {renderInlineFormatting(block.text || '')}
               </p>
             );
           })}
@@ -308,9 +583,9 @@ const MarkdownRenderer: React.FC<{ content: string; isStreaming?: boolean }> = (
 };
 
 function renderInlineFormatting(text: string) {
-  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
+  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g);
   return parts.map((seg, i) => {
-    if (seg.startsWith('`') && seg.endsWith('`')) {
+    if (seg.startsWith('`') && seg.endsWith('`') && seg.length > 2) {
       return (
         <code
           key={i}
@@ -320,11 +595,18 @@ function renderInlineFormatting(text: string) {
         </code>
       );
     }
-    if (seg.startsWith('**') && seg.endsWith('**')) {
+    if (seg.startsWith('**') && seg.endsWith('**') && seg.length > 4) {
       return (
         <strong key={i} className="font-black text-black">
           {seg.slice(2, -2)}
         </strong>
+      );
+    }
+    if (seg.startsWith('*') && seg.endsWith('*') && seg.length > 2 && !seg.startsWith('**')) {
+      return (
+        <em key={i} className="italic text-neutral-800">
+          {seg.slice(1, -1)}
+        </em>
       );
     }
     return seg;
@@ -336,17 +618,8 @@ export const AiChatPage: React.FC = () => {
   const { showToast } = useToast();
 
   const [sessions, setSessions] = useState<ChatSession[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {
-      // fallback
-    }
     const initialSession: ChatSession = {
-      id: 'session-' + Date.now(),
+      id: 'draft-' + Date.now(),
       title: 'New Conversation',
       createdAt: Date.now(),
       messages: [],
@@ -354,15 +627,10 @@ export const AiChatPage: React.FC = () => {
     return [initialSession];
   });
 
-  const [activeSessionId, setActiveSessionId] = useState<string>(() => {
-    try {
-      const savedId = localStorage.getItem(ACTIVE_SESSION_KEY);
-      if (savedId) return savedId;
-    } catch {
-      // fallback
-    }
-    return sessions[0]?.id || 'default';
-  });
+  const [activeSessionId, setActiveSessionId] = useState<string>(
+    () => sessions[0]?.id || 'default',
+  );
+  const [isLoadingSessions, setIsLoadingSessions] = useState(false);
 
   const [inputMessage, setInputMessage] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -477,22 +745,142 @@ export const AiChatPage: React.FC = () => {
     );
   }, [sessions, searchQuery]);
 
-  // Persist sessions
+  // Cloud session synchronization (MongoDB is sole source of truth - zero localStorage for user chats)
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
-    } catch {
-      // ignore
-    }
-  }, [sessions]);
+    if (!isAuthenticated) return;
 
-  useEffect(() => {
-    try {
-      localStorage.setItem(ACTIVE_SESSION_KEY, activeSessionId);
-    } catch {
-      // ignore
+    let isMounted = true;
+    const syncCloudSessions = async () => {
+      setIsLoadingSessions(true);
+      try {
+        const res = await aiToolsApi.listChatSessions();
+        if (!isMounted) return;
+
+        if (res?.success && Array.isArray(res.data?.sessions)) {
+          if (res.data.sessions.length > 0) {
+            const serverSessions: ChatSession[] = res.data.sessions.map((s: any) => ({
+              id: s.id,
+              title: s.title,
+              createdAt: s.createdAt,
+              messages: [],
+            }));
+            setSessions(serverSessions);
+            const firstId = serverSessions[0]?.id;
+            if (firstId) {
+              setActiveSessionId(firstId);
+
+              // Fetch messages for the first active session
+              const detailRes = await aiToolsApi.getChatSession(firstId);
+              if (detailRes?.success && detailRes.data?.session && isMounted) {
+                setSessions((prev) =>
+                  prev.map((item) =>
+                    item.id === firstId
+                      ? { ...item, messages: (detailRes.data!.session.messages as any) || [] }
+                      : item,
+                  ),
+                );
+              }
+            }
+          } else {
+            // One-time migration for legacy localStorage chats if any exist
+            try {
+              const legacySaved = localStorage.getItem('vexora_ai_chat_sessions');
+              if (legacySaved) {
+                const parsed = JSON.parse(legacySaved);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                  for (const legacy of parsed.slice(0, 10)) {
+                    if (legacy.messages && legacy.messages.length > 0) {
+                      await aiToolsApi.createChatSession({
+                        title: legacy.title,
+                        selectedModel: selectedModelId,
+                        messages: legacy.messages,
+                      });
+                    }
+                  }
+                  localStorage.removeItem('vexora_ai_chat_sessions');
+                  const reRes = await aiToolsApi.listChatSessions();
+                  if (
+                    reRes?.success &&
+                    Array.isArray(reRes.data?.sessions) &&
+                    reRes.data.sessions.length > 0
+                  ) {
+                    const migratedList: ChatSession[] = reRes.data.sessions.map((s: any) => ({
+                      id: s.id,
+                      title: s.title,
+                      createdAt: s.createdAt,
+                      messages: [],
+                    }));
+                    setSessions(migratedList);
+                    const firstMigratedId = migratedList[0]?.id;
+                    if (firstMigratedId) {
+                      setActiveSessionId(firstMigratedId);
+                      const det = await aiToolsApi.getChatSession(firstMigratedId);
+                      if (det?.success && det.data?.session && isMounted) {
+                        setSessions((prev) =>
+                          prev.map((item) =>
+                            item.id === firstMigratedId
+                              ? { ...item, messages: (det.data!.session.messages as any) || [] }
+                              : item,
+                          ),
+                        );
+                      }
+                    }
+                    return;
+                  }
+                }
+              }
+            } catch {
+              // Ignore migration error
+            }
+
+            const fresh: ChatSession = {
+              id: 'draft-' + Date.now(),
+              title: 'New Conversation',
+              createdAt: Date.now(),
+              messages: [],
+            };
+            setSessions([fresh]);
+            setActiveSessionId(fresh.id);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to sync cloud sessions', err);
+      } finally {
+        if (isMounted) setIsLoadingSessions(false);
+      }
+    };
+
+    syncCloudSessions();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isAuthenticated]);
+
+  const handleSelectSession = async (sessionId: string) => {
+    setActiveSessionId(sessionId);
+    setIsSidebarOpen(false);
+
+    if (isAuthenticated && !sessionId.startsWith('draft-')) {
+      const found = sessions.find((s) => s.id === sessionId);
+      if (!found || found.messages.length === 0) {
+        try {
+          const res = await aiToolsApi.getChatSession(sessionId);
+          if (res?.success && res.data?.session) {
+            setSessions((prev) =>
+              prev.map((item) =>
+                item.id === sessionId
+                  ? { ...item, messages: (res.data!.session.messages as any) || [] }
+                  : item,
+              ),
+            );
+          }
+        } catch (err) {
+          console.error('Failed to load session messages', err);
+        }
+      }
     }
-  }, [activeSessionId]);
+  };
 
   const scrollToBottom = (smooth = true) => {
     if (chatContainerRef.current) {
@@ -528,22 +916,31 @@ export const AiChatPage: React.FC = () => {
       abortControllerRef.current?.abort();
       setIsGenerating(false);
     }
+    const draftId = 'draft-' + Date.now();
     const newSession: ChatSession = {
-      id: 'session-' + Date.now(),
+      id: draftId,
       title: 'New Conversation',
       createdAt: Date.now(),
       messages: [],
     };
     setSessions((prev) => [newSession, ...prev]);
-    setActiveSessionId(newSession.id);
+    setActiveSessionId(draftId);
     setIsSidebarOpen(false);
   };
 
-  const handleDeleteSession = (id: string, e: React.MouseEvent) => {
+  const handleDeleteSession = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    if (isAuthenticated && !id.startsWith('draft-')) {
+      try {
+        await aiToolsApi.deleteChatSession(id);
+      } catch (err) {
+        showToast('Failed to delete cloud conversation', 'error');
+      }
+    }
+
     if (sessions.length <= 1) {
       const fresh: ChatSession = {
-        id: 'session-' + Date.now(),
+        id: 'draft-' + Date.now(),
         title: 'New Conversation',
         createdAt: Date.now(),
         messages: [],
@@ -554,8 +951,9 @@ export const AiChatPage: React.FC = () => {
     }
     const updated = sessions.filter((s) => s.id !== id);
     setSessions(updated);
-    if (activeSessionId === id && updated[0]) {
-      setActiveSessionId(updated[0].id);
+    const firstUpdated = updated[0];
+    if (activeSessionId === id && firstUpdated) {
+      handleSelectSession(firstUpdated.id);
     }
   };
 
@@ -616,7 +1014,8 @@ export const AiChatPage: React.FC = () => {
     setAttachedFile(null);
 
     const userPromptText =
-      text || (currentAttachment ? `Please analyze this attached file: ${currentAttachment.name}` : '');
+      text ||
+      (currentAttachment ? `Please analyze this attached file: ${currentAttachment.name}` : '');
 
     const userMsg: ChatMessageItem = {
       id: 'msg-' + Date.now(),
@@ -720,6 +1119,44 @@ export const AiChatPage: React.FC = () => {
           const match = FREE_AI_MODELS.find((m) => m.id === meta.model);
           setActiveModel(match ? match.name : meta.model);
         }
+
+        // Persist to MongoDB cloud if authenticated (pure cloud storage - zero localStorage for user chats)
+        if (isAuthenticated) {
+          const completedMsgs = [
+            ...currentSession.messages,
+            userMsg,
+            { ...initialBotMsg, content: fullAnswer },
+          ];
+
+          if (targetSessionId.startsWith('draft-') || targetSessionId.startsWith('session-')) {
+            aiToolsApi
+              .createChatSession({
+                title: newTitle,
+                selectedModel: selectedModelId,
+                messages: completedMsgs,
+              })
+              .then((res) => {
+                if (res?.success && res.data?.session?.id) {
+                  const dbId = res.data.session.id;
+                  setSessions((prev) =>
+                    prev.map((s) => (s.id === targetSessionId ? { ...s, id: dbId } : s)),
+                  );
+                  setActiveSessionId((prevActive) =>
+                    prevActive === targetSessionId ? dbId : prevActive,
+                  );
+                }
+              })
+              .catch((e) => console.error('Cloud chat save failed', e));
+          } else {
+            aiToolsApi
+              .updateChatSession(targetSessionId, {
+                title: newTitle,
+                selectedModel: selectedModelId,
+                messages: completedMsgs,
+              })
+              .catch((e) => console.error('Cloud chat update failed', e));
+          }
+        }
       },
       (err) => {
         setIsGenerating(false);
@@ -742,6 +1179,43 @@ export const AiChatPage: React.FC = () => {
           }),
         );
         showToast(err.message || 'AI generation failed', 'error');
+
+        // Persist partial/error response to cloud as well so conversation isn't lost
+        if (isAuthenticated) {
+          const completedMsgs = [
+            ...currentSession.messages,
+            userMsg,
+            { ...initialBotMsg, content: errorText },
+          ];
+          if (targetSessionId.startsWith('draft-') || targetSessionId.startsWith('session-')) {
+            aiToolsApi
+              .createChatSession({
+                title: newTitle,
+                selectedModel: selectedModelId,
+                messages: completedMsgs,
+              })
+              .then((res) => {
+                if (res?.success && res.data?.session?.id) {
+                  const dbId = res.data.session.id;
+                  setSessions((prev) =>
+                    prev.map((s) => (s.id === targetSessionId ? { ...s, id: dbId } : s)),
+                  );
+                  setActiveSessionId((prevActive) =>
+                    prevActive === targetSessionId ? dbId : prevActive,
+                  );
+                }
+              })
+              .catch((e) => console.error('Cloud chat save failed', e));
+          } else {
+            aiToolsApi
+              .updateChatSession(targetSessionId, {
+                title: newTitle,
+                selectedModel: selectedModelId,
+                messages: completedMsgs,
+              })
+              .catch((e) => console.error('Cloud chat update failed', e));
+          }
+        }
       },
       controller.signal,
     );
@@ -794,13 +1268,22 @@ export const AiChatPage: React.FC = () => {
     if (!name) return 'GU';
     const parts = name.split(/\s+/);
     if (parts.length >= 2 && parts[0] && parts[1]) {
-      return (parts[0][0] + parts[1][0]).toUpperCase();
+      const p0 = parts[0];
+      const p1 = parts[1];
+      if (p0 && p1) {
+        return ((p0[0] || '') + (p1[0] || '')).toUpperCase();
+      }
     }
     return name.slice(0, 2).toUpperCase();
   }, [user, isAuthenticated]);
 
-  const userName = isAuthenticated && user ? (user.name || user.username || 'User') : 'Guest User';
-  const userSubtext = isAuthenticated && user ? (user.role === 'admin' ? 'Admin Access' : 'Free Forever') : 'Sign in to sync';
+  const userName = isAuthenticated && user ? user.name || user.username || 'User' : 'Guest User';
+  const userSubtext =
+    isAuthenticated && user
+      ? user.role === 'admin'
+        ? 'Admin Access'
+        : 'Free Forever'
+      : 'Sign in to sync';
   const userBadge = isAuthenticated && user ? (user.role === 'admin' ? 'Admin' : 'Free') : 'Guest';
 
   return (
@@ -899,10 +1382,7 @@ export const AiChatPage: React.FC = () => {
             return (
               <div
                 key={s.id}
-                onClick={() => {
-                  setActiveSessionId(s.id);
-                  setIsSidebarOpen(false);
-                }}
+                onClick={() => handleSelectSession(s.id)}
                 className={`group px-3 py-2 rounded-xl border-2 flex items-center justify-between gap-2 cursor-pointer transition-all ${
                   isActive
                     ? 'bg-white border-black text-black font-black shadow-[2px_2px_0px_#000]'
@@ -930,6 +1410,33 @@ export const AiChatPage: React.FC = () => {
           })}
         </div>
 
+        {/* Notice Banners */}
+        <div className="px-3 py-2 space-y-2 border-t-2 border-black bg-[#FAF7F2]">
+          {!isAuthenticated && (
+            <div className="p-2.5 rounded-xl bg-blue-50 border-2 border-black text-xs text-blue-950 shadow-[1px_1px_0px_#000]">
+              <span className="font-black block text-[10px] uppercase font-mono tracking-wide text-blue-900">
+                Cross-Device Sync
+              </span>
+              <span className="text-[11px] leading-tight text-neutral-700 block mt-0.5">
+                Sign in to save and access your conversations across your phone, tablet, and
+                computer.
+              </span>
+            </div>
+          )}
+
+          <div className="p-2.5 rounded-xl bg-amber-50 border-2 border-black text-xs text-amber-950 flex items-start gap-2 shadow-[1px_1px_0px_#000]">
+            <Clock className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+            <div>
+              <span className="font-black block text-[10px] uppercase font-mono tracking-wide text-amber-900">
+                12-Day Cloud Storage
+              </span>
+              <span className="text-[11px] leading-tight text-neutral-700 block mt-0.5">
+                Inactive conversations are automatically cleared after 12 days to optimize storage.
+              </span>
+            </div>
+          </div>
+        </div>
+
         {/* Sidebar Footer: User Profile Card */}
         <div className="p-3 border-t-2 border-black bg-white/60 backdrop-blur-xs">
           <Link
@@ -940,17 +1447,16 @@ export const AiChatPage: React.FC = () => {
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="w-8 h-8 rounded-lg bg-[#FACC15] border-2 border-black text-black flex items-center justify-center font-black text-xs uppercase shrink-0 shadow-[1px_1px_0px_#000] overflow-hidden">
                 {isAuthenticated && user?.avatarUrl ? (
-                  <img
-                    src={user.avatarUrl}
-                    alt={userName}
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={user.avatarUrl} alt={userName} className="w-full h-full object-cover" />
                 ) : (
                   userInitials
                 )}
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-black text-black truncate leading-tight" title={userName}>
+                <p
+                  className="text-xs font-black text-black truncate leading-tight"
+                  title={userName}
+                >
                   {userName}
                 </p>
                 <p className="text-[10px] font-mono font-bold text-neutral-500 leading-tight">
@@ -963,8 +1469,8 @@ export const AiChatPage: React.FC = () => {
                 isAuthenticated && user?.role === 'admin'
                   ? 'bg-[#F472B6] text-black'
                   : isAuthenticated
-                  ? 'bg-[#4ADE80] text-black'
-                  : 'bg-neutral-200 text-neutral-700'
+                    ? 'bg-[#4ADE80] text-black'
+                    : 'bg-neutral-200 text-neutral-700'
               }`}
             >
               {userBadge}
@@ -1007,48 +1513,72 @@ export const AiChatPage: React.FC = () => {
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FAF7F2] hover:bg-neutral-100 border-2 border-black text-xs font-black text-black shadow-[1.5px_1.5px_0px_#000] transition-all cursor-pointer active:translate-y-0.5"
               >
                 <Bot className="w-3.5 h-3.5 text-neutral-700" />
-                <span className="font-bold">{FREE_AI_MODELS.find((m) => m.id === selectedModelId)?.name || 'Gemini 3.5 Flash'}</span>
+                <span className="font-bold">
+                  {FREE_AI_MODELS.find((m) => m.id === selectedModelId)?.name || 'Gemini 3.5 Flash'}
+                </span>
                 <ChevronDown className="w-3.5 h-3.5 text-neutral-500" />
               </button>
 
               {isModelDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-72 bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000] p-1.5 z-50 space-y-1 animate-in fade-in zoom-in-95 duration-100">
-                  <div className="px-2.5 py-1.5 border-b border-black/10 flex items-center justify-between text-[10px] font-mono font-black uppercase text-neutral-500">
-                    <span>Select Free Model</span>
+                <div className="absolute left-0 mt-2 w-80 sm:w-88 max-h-[28rem] overflow-y-auto bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000] p-1.5 z-50 space-y-1 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="sticky top-0 bg-white/95 backdrop-blur-xs px-2.5 py-1.5 border-b border-black/10 flex items-center justify-between text-[10px] font-mono font-black uppercase text-neutral-500 z-10">
+                    <span>Select Free Model ({FREE_AI_MODELS.length} Available)</span>
                     <span className="text-green-700 bg-green-100 px-1.5 py-0.2 rounded border border-green-300 font-bold">
-                      100% Free
+                      All 100% Free
                     </span>
                   </div>
-                  {FREE_AI_MODELS.map((m) => {
+                  {FREE_AI_MODELS.map((m, idx) => {
                     const isSelected = selectedModelId === m.id;
+                    const prevModel = idx > 0 ? FREE_AI_MODELS[idx - 1] : null;
+                    const isNewProvider = !prevModel || prevModel.provider !== m.provider;
+                    const providerLabel =
+                      m.provider === 'auto'
+                        ? '🔀 Smart Router'
+                        : m.provider === 'groq'
+                          ? '⚡ Groq LPU (Ultra-Fast Hardware)'
+                          : m.provider === 'gemini'
+                            ? '✨ Google Gemini'
+                            : m.provider === 'openrouter'
+                              ? '🌐 OpenRouter Free Network'
+                              : '🧠 NVIDIA NIM (Official)';
+
                     return (
-                      <button
-                        key={m.id}
-                        type="button"
-                        onClick={() => {
-                          setSelectedModelId(m.id);
-                          setIsModelDropdownOpen(false);
-                          setActiveModel(m.name);
-                        }}
-                        className={`w-full text-left p-2 rounded-xl transition-all flex items-start justify-between gap-2 cursor-pointer ${
-                          isSelected
-                            ? 'bg-[#FACC15] border-2 border-black shadow-[1.5px_1.5px_0px_#000]'
-                            : 'hover:bg-neutral-100 border-2 border-transparent'
-                        }`}
-                      >
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-1.5">
-                            <span className="font-black text-xs text-black">{m.name}</span>
-                            <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full border border-black/30 bg-black/5 font-bold">
-                              {m.badge}
-                            </span>
+                      <React.Fragment key={m.id}>
+                        {isNewProvider && (
+                          <div className="pt-2 pb-0.5 px-2 text-[10px] font-mono font-black uppercase tracking-wider text-neutral-500 flex items-center gap-1.5">
+                            <span>{providerLabel}</span>
+                            <div className="flex-1 h-[1px] bg-neutral-200" />
                           </div>
-                          <p className="text-[10px] text-neutral-600 font-medium truncate mt-0.5">
-                            {m.description}
-                          </p>
-                        </div>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-black stroke-[3] shrink-0 mt-0.5" />}
-                      </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedModelId(m.id);
+                            setIsModelDropdownOpen(false);
+                            setActiveModel(m.name);
+                          }}
+                          className={`w-full text-left p-2 rounded-xl transition-all flex items-start justify-between gap-2 cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#FACC15] border-2 border-black shadow-[1.5px_1.5px_0px_#000]'
+                              : 'hover:bg-neutral-100 border-2 border-transparent'
+                          }`}
+                        >
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-black text-xs text-black">{m.name}</span>
+                              <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full border border-black/30 bg-black/5 font-bold">
+                                {m.badge}
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-neutral-600 font-medium truncate mt-0.5">
+                              {m.description}
+                            </p>
+                          </div>
+                          {isSelected && (
+                            <Check className="w-3.5 h-3.5 text-black stroke-[3] shrink-0 mt-0.5" />
+                          )}
+                        </button>
+                      </React.Fragment>
                     );
                   })}
                 </div>
@@ -1127,7 +1657,8 @@ export const AiChatPage: React.FC = () => {
                       What can I help you build or learn today?
                     </h2>
                     <p className="text-xs sm:text-sm text-neutral-600 max-w-md mx-auto font-medium">
-                      Powered by high-throughput multimodal AI models with zero paywalls or subscriptions.
+                      Powered by high-throughput multimodal AI models with zero paywalls or
+                      subscriptions.
                     </p>
                   </div>
 
@@ -1170,13 +1701,17 @@ export const AiChatPage: React.FC = () => {
                                   <img
                                     src={msg.attachment.previewUrl}
                                     alt={msg.attachment.name}
-                                    onClick={() => setPreviewModalImage(msg.attachment?.previewUrl || null)}
+                                    onClick={() =>
+                                      setPreviewModalImage(msg.attachment?.previewUrl || null)
+                                    }
                                     className="max-h-60 max-w-full rounded-2xl border-2 border-black object-cover cursor-zoom-in hover:opacity-95 shadow-[1.5px_1.5px_0px_#000] transition-opacity"
                                   />
                                 ) : (
                                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/10 border border-black text-xs font-mono font-bold text-black">
                                     <FileText className="w-4 h-4 text-black shrink-0" />
-                                    <span className="truncate max-w-[200px]">{msg.attachment.name}</span>
+                                    <span className="truncate max-w-[200px]">
+                                      {msg.attachment.name}
+                                    </span>
                                     <span className="text-[10px] text-neutral-700 shrink-0">
                                       ({formatBytes(msg.attachment.size)})
                                     </span>
@@ -1240,14 +1775,20 @@ export const AiChatPage: React.FC = () => {
                             <div className="px-4 pb-3.5 pt-2 border-t-2 border-black/10 flex flex-wrap gap-2 text-xs">
                               <button
                                 type="button"
-                                onClick={() => handleSendMessage('Make this shorter and more concise')}
+                                onClick={() =>
+                                  handleSendMessage('Make this shorter and more concise')
+                                }
                                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF7F2] hover:bg-[#FACC15] text-black border border-black font-mono text-xs font-bold transition-all shadow-[1px_1px_0px_#000] cursor-pointer active:translate-y-0.5"
                               >
                                 <span>↳ Make this shorter and more concise</span>
                               </button>
                               <button
                                 type="button"
-                                onClick={() => handleSendMessage('Add practical code examples or a step-by-step breakdown')}
+                                onClick={() =>
+                                  handleSendMessage(
+                                    'Add practical code examples or a step-by-step breakdown',
+                                  )
+                                }
                                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF7F2] hover:bg-[#FACC15] text-black border border-black font-mono text-xs font-bold transition-all shadow-[1px_1px_0px_#000] cursor-pointer active:translate-y-0.5"
                               >
                                 <span>↳ Add practical code examples or step-by-step breakdown</span>
@@ -1262,7 +1803,9 @@ export const AiChatPage: React.FC = () => {
                             type="button"
                             onClick={() => handleToggleLike(msg.id, 'up')}
                             className={`p-1.5 rounded-lg border border-black/20 hover:border-black bg-white transition-all shadow-[1px_1px_0px_#000] cursor-pointer ${
-                              likedMessages[msg.id] === 'up' ? 'bg-[#4ADE80] text-black font-bold' : 'hover:bg-neutral-100'
+                              likedMessages[msg.id] === 'up'
+                                ? 'bg-[#4ADE80] text-black font-bold'
+                                : 'hover:bg-neutral-100'
                             }`}
                             title="Helpful response"
                           >
@@ -1272,7 +1815,9 @@ export const AiChatPage: React.FC = () => {
                             type="button"
                             onClick={() => handleToggleLike(msg.id, 'down')}
                             className={`p-1.5 rounded-lg border border-black/20 hover:border-black bg-white transition-all shadow-[1px_1px_0px_#000] cursor-pointer ${
-                              likedMessages[msg.id] === 'down' ? 'bg-red-200 text-black font-bold' : 'hover:bg-neutral-100'
+                              likedMessages[msg.id] === 'down'
+                                ? 'bg-red-200 text-black font-bold'
+                                : 'hover:bg-neutral-100'
                             }`}
                             title="Unhelpful response"
                           >
@@ -1389,7 +1934,8 @@ export const AiChatPage: React.FC = () => {
                   placeholder="Ask Vexora AI anything..."
                   rows={1}
                   disabled={isGenerating}
-                  className="w-full max-h-36 min-h-[38px] bg-transparent text-sm font-semibold text-black placeholder:text-neutral-500 focus:outline-none resize-none px-2 py-2"
+                  className="w-full max-h-36 min-h-[38px] bg-transparent text-sm font-semibold text-black placeholder:text-neutral-500 border-0 border-none outline-none focus:outline-none focus:border-0 focus:ring-0 shadow-none resize-none px-2 py-2"
+                  style={{ border: 'none', outline: 'none', boxShadow: 'none' }}
                 />
 
                 {isGenerating ? (
@@ -1532,7 +2078,9 @@ export const AiChatPage: React.FC = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-neutral-500 font-medium">Speed:</span>
-                      <span className="font-mono font-bold text-[11px] text-black">~700ms TTFB</span>
+                      <span className="font-mono font-bold text-[11px] text-black">
+                        ~700ms TTFB
+                      </span>
                     </div>
                   </div>
                 </div>

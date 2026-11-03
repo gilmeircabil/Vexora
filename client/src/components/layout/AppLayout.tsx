@@ -36,16 +36,14 @@ export const AppLayout: React.FC = () => {
   const isAdminPreviewActive = lockStatus.isLocked && isAdmin;
 
   // Require login for non-public pages (unless already under maintenance for regular users)
-  // Set REQUIRE_AUTH_TO_OPEN_PAGES = true when ready to re-enable authentication gating.
-  const REQUIRE_AUTH_TO_OPEN_PAGES = false;
+  const REQUIRE_AUTH_TO_OPEN_PAGES = true;
   const isPublicPage = PUBLIC_PATHS.has(location.pathname);
   const isAiChatRoute =
     location.pathname.startsWith('/ai-tools/chat') ||
     location.pathname === '/ai-chat' ||
     location.pathname === '/chat';
   const isStudySpaceRoute =
-    location.pathname.startsWith('/study') ||
-    location.pathname.startsWith('/study-space');
+    location.pathname.startsWith('/study') || location.pathname.startsWith('/study-space');
   const isFullBleedRoute = isAiChatRoute || isStudySpaceRoute;
 
   const [isFocusMode, setIsFocusMode] = useState(false);
@@ -107,7 +105,9 @@ export const AppLayout: React.FC = () => {
                   Admin Preview Active: Maintenance Mode
                 </p>
                 <p className="text-xs font-semibold text-neutral-700">
-                  This page ({lockStatus.pageTitle}) is currently marked as <strong>under maintenance</strong> for regular users and guests. As an administrator, you have bypass access to test and manage this workspace.
+                  This page ({lockStatus.pageTitle}) is currently marked as{' '}
+                  <strong>under maintenance</strong> for regular users and guests. As an
+                  administrator, you have bypass access to test and manage this workspace.
                 </p>
               </div>
             </div>

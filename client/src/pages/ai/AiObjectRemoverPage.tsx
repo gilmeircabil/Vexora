@@ -172,7 +172,10 @@ export const AiObjectRemoverPage: React.FC = () => {
             for (let x = 0; x < w; x++) {
               const mIdx = (y * w + x) * 4;
               if ((mData[mIdx] ?? 0) > 120) {
-                let r = 0, g = 0, b = 0, count = 0;
+                let r = 0,
+                  g = 0,
+                  b = 0,
+                  count = 0;
                 for (let dy = -radius; dy <= radius; dy += 3) {
                   for (let dx = -radius; dx <= radius; dx += 3) {
                     const nx = x + dx;

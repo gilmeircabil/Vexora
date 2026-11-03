@@ -2,7 +2,11 @@ import type { Request, Response } from 'express';
 import { User } from '../models/User.js';
 import { LearningPost } from '../models/LearningPost.js';
 import { DeveloperProject } from '../models/DeveloperProject.js';
-import { PlatformConfig, ContactInquiry, DEFAULT_MAINTENANCE_CONFIG } from '../models/PlatformConfig.js';
+import {
+  PlatformConfig,
+  ContactInquiry,
+  DEFAULT_MAINTENANCE_CONFIG,
+} from '../models/PlatformConfig.js';
 import { DonationService } from '../services/donationService.js';
 import { LearningService } from '../services/learningService.js';
 import { ReviewService } from '../services/reviewService.js';
@@ -151,7 +155,9 @@ export class PlatformController {
    */
   static async getMaintenanceConfig(_req: Request, res: Response): Promise<void> {
     try {
-      const configDoc = await PlatformConfig.findOne({ key: 'default' }).select('maintenance').lean();
+      const configDoc = await PlatformConfig.findOne({ key: 'default' })
+        .select('maintenance')
+        .lean();
       const maintenance = configDoc?.maintenance || DEFAULT_MAINTENANCE_CONFIG;
       res.status(200).json({ success: true, data: maintenance });
     } catch (err: any) {

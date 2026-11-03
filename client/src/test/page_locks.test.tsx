@@ -111,10 +111,7 @@ describe('MaintenanceModal & Dynamic Page Locks Suite', () => {
   it('maintains backward compatibility with LockedPageModal export', () => {
     render(
       <BrowserRouter>
-        <LockedPageModal
-          title="Maintenance Mode"
-          description="Legacy alias compatibility test."
-        />
+        <LockedPageModal title="Maintenance Mode" description="Legacy alias compatibility test." />
       </BrowserRouter>,
     );
 

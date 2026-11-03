@@ -7,7 +7,6 @@ import {
   Flag,
   Edit,
   ExternalLink,
-  CheckCircle2,
   AlertCircle,
   X,
   Code2,

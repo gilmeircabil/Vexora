@@ -34,6 +34,10 @@ interface DashboardStats {
   recentAttempts: any[];
   recentSessions: any[];
   totalStudyMinutes: number;
+  lessonPlanCount?: number;
+  worksheetCount?: number;
+  examCount?: number;
+  gradebookCount?: number;
 }
 
 interface EducationDashboardProps {
@@ -184,8 +188,7 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
     },
   ];
 
-  const activeAchievements =
-    currentWorkspace === 'teacher' ? teacherAchievements : achievements;
+  const activeAchievements = currentWorkspace === 'teacher' ? teacherAchievements : achievements;
 
   return (
     <div className="space-y-5">
@@ -248,7 +251,9 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
             <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">
               {stats.worksheetCount ?? stats.deckCount}
             </div>
-            <span className="text-[11px] text-indigo-600 font-bold">Printable activities &rarr;</span>
+            <span className="text-[11px] text-indigo-600 font-bold">
+              Printable activities &rarr;
+            </span>
           </div>
 
           <div
@@ -301,7 +306,9 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
             <span className="text-[10px] font-mono font-bold uppercase text-neutral-500 block">
               Flashcard Decks
             </span>
-            <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">{stats.deckCount}</div>
+            <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">
+              {stats.deckCount}
+            </div>
             <span className="text-[11px] text-indigo-600 font-bold">Study & Review &rarr;</span>
           </div>
 
@@ -312,7 +319,9 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
             <span className="text-[10px] font-mono font-bold uppercase text-neutral-500 block">
               Study Notes
             </span>
-            <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">{stats.noteCount}</div>
+            <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">
+              {stats.noteCount}
+            </div>
             <span className="text-[11px] text-emerald-600 font-bold">Capture notes &rarr;</span>
           </div>
 
@@ -450,123 +459,123 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <button
-            onClick={() => onSelectTool('study-planner')}
-            className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
-          >
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-              <Calendar className="w-4 h-4 text-indigo-600" />
-            </div>
-            <div className="min-w-0">
-              <h4 className="font-black text-xs text-black truncate">Study Planner</h4>
-              <p className="text-[10px] text-neutral-500 truncate">Tasks & Deadlines</p>
-            </div>
-          </button>
+            <button
+              onClick={() => onSelectTool('study-planner')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <Calendar className="w-4 h-4 text-indigo-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Study Planner</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Tasks & Deadlines</p>
+              </div>
+            </button>
 
-          <button
-            onClick={() => onSelectTool('flashcards')}
-            className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
-          >
-            <div className="w-8 h-8 rounded-lg bg-amber-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-              <Layers className="w-4 h-4 text-amber-600" />
-            </div>
-            <div className="min-w-0">
-              <h4 className="font-black text-xs text-black truncate">Flashcard Maker</h4>
-              <p className="text-[10px] text-neutral-500 truncate">Leitner System</p>
-            </div>
-          </button>
+            <button
+              onClick={() => onSelectTool('flashcards')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-amber-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <Layers className="w-4 h-4 text-amber-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Flashcard Maker</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Leitner System</p>
+              </div>
+            </button>
 
-          <button
-            onClick={() => onSelectTool('quizzes')}
-            className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
-          >
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-              <HelpCircle className="w-4 h-4 text-emerald-600" />
-            </div>
-            <div className="min-w-0">
-              <h4 className="font-black text-xs text-black truncate">Practice Tests</h4>
-              <p className="text-[10px] text-neutral-500 truncate">Instant Grading</p>
-            </div>
-          </button>
+            <button
+              onClick={() => onSelectTool('quizzes')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <HelpCircle className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Practice Tests</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Instant Grading</p>
+              </div>
+            </button>
 
-          <button
-            onClick={() => onSelectTool('doc-quiz')}
-            className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
-          >
-            <div className="w-8 h-8 rounded-lg bg-sky-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-              <FileQuestion className="w-4 h-4 text-sky-600" />
-            </div>
-            <div className="min-w-0">
-              <h4 className="font-black text-xs text-black truncate">Doc to Quiz</h4>
-              <p className="text-[10px] text-neutral-500 truncate">Auto-generate tests</p>
-            </div>
-          </button>
+            <button
+              onClick={() => onSelectTool('doc-quiz')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-sky-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <FileQuestion className="w-4 h-4 text-sky-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Doc to Quiz</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Auto-generate tests</p>
+              </div>
+            </button>
 
-          <button
-            onClick={() => onSelectTool('grade-calculator')}
-            className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
-          >
-            <div className="w-8 h-8 rounded-lg bg-purple-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-              <TrendingUp className="w-4 h-4 text-purple-600" />
-            </div>
-            <div className="min-w-0">
-              <h4 className="font-black text-xs text-black truncate">GPA Calculator</h4>
-              <p className="text-[10px] text-neutral-500 truncate">Weighted Grades</p>
-            </div>
-          </button>
+            <button
+              onClick={() => onSelectTool('grade-calculator')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-purple-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <TrendingUp className="w-4 h-4 text-purple-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">GPA Calculator</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Weighted Grades</p>
+              </div>
+            </button>
 
-          <button
-            onClick={() => onSelectTool('citations')}
-            className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
-          >
-            <div className="w-8 h-8 rounded-lg bg-rose-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-              <Quote className="w-4 h-4 text-rose-500" />
-            </div>
-            <div className="min-w-0">
-              <h4 className="font-black text-xs text-black truncate">Citations</h4>
-              <p className="text-[10px] text-neutral-500 truncate">APA, MLA, IEEE</p>
-            </div>
-          </button>
+            <button
+              onClick={() => onSelectTool('citations')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-rose-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <Quote className="w-4 h-4 text-rose-500" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Citations</h4>
+                <p className="text-[10px] text-neutral-500 truncate">APA, MLA, IEEE</p>
+              </div>
+            </button>
 
-          <button
-            onClick={() => onSelectTool('timetable')}
-            className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
-          >
-            <div className="w-8 h-8 rounded-lg bg-cyan-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-              <Calendar className="w-4 h-4 text-cyan-600" />
-            </div>
-            <div className="min-w-0">
-              <h4 className="font-black text-xs text-black truncate">Timetable</h4>
-              <p className="text-[10px] text-neutral-500 truncate">Weekly Schedule</p>
-            </div>
-          </button>
+            <button
+              onClick={() => onSelectTool('timetable')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-cyan-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <Calendar className="w-4 h-4 text-cyan-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Timetable</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Weekly Schedule</p>
+              </div>
+            </button>
 
-          <button
-            onClick={() => onSelectTool('goals')}
-            className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
-          >
-            <div className="w-8 h-8 rounded-lg bg-amber-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-              <Target className="w-4 h-4 text-amber-600" />
-            </div>
-            <div className="min-w-0">
-              <h4 className="font-black text-xs text-black truncate">Goals Tracker</h4>
-              <p className="text-[10px] text-neutral-500 truncate">Milestones</p>
-            </div>
-          </button>
+            <button
+              onClick={() => onSelectTool('goals')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-amber-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <Target className="w-4 h-4 text-amber-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Goals Tracker</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Milestones</p>
+              </div>
+            </button>
 
-          <button
-            onClick={() => onSelectTool('backup')}
-            className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
-          >
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            </div>
-            <div className="min-w-0">
-              <h4 className="font-black text-xs text-black truncate">Data Backup</h4>
-              <p className="text-[10px] text-neutral-500 truncate">Export & Purge</p>
-            </div>
-          </button>
-        </div>
+            <button
+              onClick={() => onSelectTool('backup')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Data Backup</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Export & Purge</p>
+              </div>
+            </button>
+          </div>
         )}
       </div>
 
@@ -575,10 +584,13 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-black text-black flex items-center gap-1.5 uppercase tracking-wider">
             <Award className="w-4 h-4 text-amber-500" />
-            <span>{currentWorkspace === 'teacher' ? 'Curriculum Milestones' : 'Learning Milestones'}</span>
+            <span>
+              {currentWorkspace === 'teacher' ? 'Curriculum Milestones' : 'Learning Milestones'}
+            </span>
           </h3>
           <span className="text-[11px] font-bold text-neutral-500">
-            {activeAchievements.filter((a) => a.unlocked).length} of {activeAchievements.length} Unlocked
+            {activeAchievements.filter((a) => a.unlocked).length} of {activeAchievements.length}{' '}
+            Unlocked
           </span>
         </div>
 

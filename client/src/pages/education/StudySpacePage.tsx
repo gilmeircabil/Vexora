@@ -157,8 +157,15 @@ export const StudySpacePage: React.FC = () => {
     setIsMobileNavOpen(false);
   };
 
+  interface StudySpaceNavItem {
+    id: string;
+    label: string;
+    icon: any;
+    badge?: string;
+  }
+
   // Student Navigation Items
-  const studentNavItems = [
+  const studentNavItems: StudySpaceNavItem[] = [
     { id: 'dashboard', label: 'Dashboard', icon: GraduationCap },
     { id: 'study-planner', label: 'Study Planner', icon: Calendar },
     { id: 'flashcards', label: 'Flashcard Maker', icon: Layers },
@@ -174,7 +181,7 @@ export const StudySpacePage: React.FC = () => {
   ];
 
   // Teacher Navigation Items
-  const teacherNavItems = [
+  const teacherNavItems: StudySpaceNavItem[] = [
     { id: 'dashboard', label: 'Teacher Dashboard', icon: School },
     { id: 'lesson-plans', label: 'Lesson Plan Creator', icon: FileCheck },
     { id: 'worksheets', label: 'Worksheet Generator', icon: FileText },
@@ -266,7 +273,9 @@ export const StudySpacePage: React.FC = () => {
             <div className="mx-2.5 mt-2 px-2.5 py-1.5 rounded-lg bg-emerald-50 border border-emerald-400 text-[11px] font-bold text-emerald-950 flex items-center justify-between shadow-[1px_1px_0px_#000]">
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5] shrink-0" />
-                <span>{user?.name ? `Teacher: ${user.name.split(' ')[0]}` : 'Teacher Mode Active'}</span>
+                <span>
+                  {user?.name ? `Teacher: ${user.name.split(' ')[0]}` : 'Teacher Mode Active'}
+                </span>
               </div>
               <span className="text-[9px] font-mono font-bold uppercase bg-emerald-200 px-1 py-0.5 rounded text-emerald-800">
                 Authorized
@@ -315,7 +324,8 @@ export const StudySpacePage: React.FC = () => {
                 <span className="text-[11px] font-black">Teacher Mode Required</span>
               </div>
               <p className="text-[10px] text-amber-800 leading-tight">
-                Log in with a teacher account or enable teacher mode to create curriculum documents and manage student records.
+                Log in with a teacher account or enable teacher mode to create curriculum documents
+                and manage student records.
               </p>
               <div className="flex flex-col gap-1.5">
                 {!user && (

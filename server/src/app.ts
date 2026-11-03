@@ -7,15 +7,46 @@ import { env } from './config/env.js';
 export function createApp() {
   const app = express();
 
+  // Trust reverse proxy (e.g. Cloudflare, AWS ALB, Nginx, Render) for HTTPS detection
+  app.set('trust proxy', 1);
+
+  // HTTPS Transport Encryption enforcement: redirect insecure HTTP requests in production
+  app.use((req, res, next) => {
+    const isProd = env.NODE_ENV === 'production' || process.env.NODE_ENV === 'production';
+    if (isProd) {
+      const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
+      if (!isSecure && req.headers.host) {
+        return res.redirect(301, `https://${req.headers.host}${req.originalUrl || req.url}`);
+      }
+    }
+    next();
+  });
+
   // Security headers
   app.use((_req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-    if (env.NODE_ENV === 'production') {
-      res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-    }
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+
+    const csp = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-eval' 'unsafe-inline' 'wasm-unsafe-eval' blob: https://challenges.cloudflare.com https://accounts.google.com https://apis.google.com https://connect.facebook.net",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com",
+      "font-src 'self' data: https://fonts.gstatic.com",
+      "img-src 'self' data: blob: https://* http://*",
+      "media-src 'self' data: blob:",
+      "connect-src 'self' blob: data: ws: wss: https://challenges.cloudflare.com https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://staticimgly.com https://cdn.jsdelivr.net https://unpkg.com https://huggingface.co https://*.r2.cloudflarestorage.com",
+      "worker-src 'self' blob:",
+      "object-src 'none'",
+      "frame-src 'self' blob: https://challenges.cloudflare.com https://accounts.google.com https://www.facebook.com",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      'upgrade-insecure-requests',
+    ].join('; ');
+    res.setHeader('Content-Security-Policy', csp);
     next();
   });
 

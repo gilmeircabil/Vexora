@@ -627,7 +627,7 @@ export const CanvasWorkspace: React.FC<CanvasWorkspaceProps> = ({
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
-      className={`flex-1 h-full bg-[#E5E0D8] overflow-auto touch-pan-x touch-pan-y flex items-center justify-center p-3 sm:p-8 relative select-none ${
+      className={`flex-1 h-full bg-[#f0f2f5] overflow-auto touch-pan-x touch-pan-y flex items-center justify-center p-4 sm:p-10 relative select-none ${
         isSpacePressed ? 'cursor-grab active:cursor-grabbing' : 'cursor-default'
       }`}
     >
@@ -637,13 +637,13 @@ export const CanvasWorkspace: React.FC<CanvasWorkspaceProps> = ({
           transform: `scale(${zoom})`,
           transformOrigin: 'center center',
         }}
-        className="relative bg-white shadow-[8px_8px_0px_#000000] sm:shadow-[12px_12px_0px_#000000] border-2 sm:border-4 border-black rounded-sm"
+        className="relative bg-white shadow-[0_4px_28px_rgba(0,0,0,0.08),0_1px_4px_rgba(0,0,0,0.04)] border border-slate-200/70 rounded-[3px]"
       >
         <canvas ref={canvasRef} style={{ touchAction: 'none' }} />
       </div>
 
       {/* Floating Canvas Dimensions Tag */}
-      <div className="absolute bottom-3 left-3 px-2 sm:px-3 py-0.5 sm:py-1 bg-black text-[#FACC15] font-black text-[10px] sm:text-xs rounded-lg shadow-[2px_2px_0px_#000000] border border-black z-10">
+      <div className="absolute bottom-3 left-3 px-2.5 py-1 bg-white/90 backdrop-blur-xs text-slate-600 font-medium text-[11px] sm:text-xs rounded-md shadow-xs border border-slate-200 z-10">
         {width} × {height} px
       </div>
     </div>

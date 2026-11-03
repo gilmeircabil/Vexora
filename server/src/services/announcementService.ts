@@ -1,6 +1,11 @@
 import { Types } from 'mongoose';
 import type { Response } from 'express';
-import { Announcement, type AnnouncementType, type AnnouncementStatus, type IAnnouncement } from '../models/Announcement.js';
+import {
+  Announcement,
+  type AnnouncementType,
+  type AnnouncementStatus,
+  type IAnnouncement,
+} from '../models/Announcement.js';
 import { AnnouncementDismissal } from '../models/AnnouncementDismissal.js';
 
 export interface CreateAnnouncementInput {
@@ -28,7 +33,9 @@ export class AnnouncementService {
     res.flushHeaders?.();
 
     // Send initial connection event
-    res.write(`data: ${JSON.stringify({ type: 'connected', timestamp: new Date().toISOString() })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({ type: 'connected', timestamp: new Date().toISOString() })}\n\n`,
+    );
 
     this.sseClients.add(res);
 
@@ -210,11 +217,7 @@ export class AnnouncementService {
       return null;
     }
 
-    return Announcement.findByIdAndUpdate(
-      announcementId,
-      { status },
-      { new: true },
-    );
+    return Announcement.findByIdAndUpdate(announcementId, { status }, { new: true });
   }
 
   /**

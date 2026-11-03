@@ -18,19 +18,19 @@ export function useFullscreenMode(): UseFullscreenModeReturn {
     return false;
   });
 
-  const isSupported = typeof document !== 'undefined' && Boolean(
-    document.fullscreenEnabled ||
-    (document as any).webkitFullscreenEnabled ||
-    (document as any).mozFullScreenEnabled ||
-    (document as any).msFullscreenEnabled
-  );
+  const isSupported =
+    typeof document !== 'undefined' &&
+    Boolean(
+      document.fullscreenEnabled ||
+      (document as any).webkitFullscreenEnabled ||
+      (document as any).mozFullScreenEnabled ||
+      (document as any).msFullscreenEnabled,
+    );
 
   const notifyChange = useCallback((active: boolean) => {
     setIsFullscreen(active);
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(
-        new CustomEvent(FULLSCREEN_EVENT, { detail: { isFullscreen: active } }),
-      );
+      window.dispatchEvent(new CustomEvent(FULLSCREEN_EVENT, { detail: { isFullscreen: active } }));
     }
   }, []);
 

@@ -218,7 +218,8 @@ export class TurnstileService {
     }
 
     const isTestOrLocal =
-      env.NODE_ENV === 'test' || env.TURNSTILE_SECRET_KEY === '1x0000000000000000000000000000000AA';
+      env.NODE_ENV !== 'production' ||
+      env.TURNSTILE_SECRET_KEY === '1x0000000000000000000000000000000AA';
 
     if (isTestOrLocal) {
       const isRecognizedValidToken =

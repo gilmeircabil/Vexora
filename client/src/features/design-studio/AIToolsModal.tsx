@@ -10,7 +10,6 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import type { Canvas, FabricImage } from 'fabric';
-import { useAuth } from '../../context/AuthContext.js';
 import { addImageFromUrl } from './canvasUtils.js';
 
 interface AIToolsModalProps {
@@ -26,8 +25,6 @@ export const AIToolsModal: React.FC<AIToolsModalProps> = ({
   canvas,
   selectedImage,
 }) => {
-  const { user } = useAuth();
-
   const [mode, setMode] = useState<'enhance' | 'denoise' | 'restore_faces' | 'sharpen'>('enhance');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -114,57 +111,59 @@ export const AIToolsModal: React.FC<AIToolsModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-md bg-[#FAF7F2] rounded-2xl border-4 border-black p-6 shadow-[8px_8px_0px_#000000]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
+      <div className="relative w-full max-w-md bg-white rounded-2xl border border-slate-200 p-6 shadow-2xl animate-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b-2 border-black">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-[#FACC15] rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000]">
-              <Sparkles className="w-5 h-5 text-black" />
+            <div className="p-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl shadow-xs">
+              <Sparkles className="w-5 h-5 text-amber-300" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-black">AI Studio Magic</h3>
-              <p className="text-xs font-semibold text-gray-600">
+              <h3 className="text-base font-bold text-slate-900">AI Studio Magic</h3>
+              <p className="text-xs text-slate-500">
                 Enhance clarity, sharpen details, and denoise imagery
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl border-2 border-black bg-white hover:bg-gray-100 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5 text-black" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Free Editing Disclaimer */}
-        <div className="my-3 p-2.5 bg-emerald-50 border-2 border-emerald-600 rounded-xl flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
-          <p className="text-[11px] font-bold text-emerald-800">
+        <div className="my-3 p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2">
+          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+          <p className="text-[11px] font-semibold text-emerald-800">
             VexoraMods Studio and AI Magic tools are 100% FREE and open-source.
           </p>
         </div>
 
         {error && (
-          <div className="mb-3 p-3 bg-red-100 border-2 border-red-500 rounded-xl text-xs font-bold text-red-800 flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-red-600 shrink-0" />
+          <div className="mb-3 p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs font-semibold text-rose-800 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {successMsg && (
-          <div className="mb-3 p-3 bg-green-100 border-2 border-green-600 rounded-xl text-xs font-bold text-green-800 flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
+          <div className="mb-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-semibold text-emerald-800 flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{successMsg}</span>
           </div>
         )}
 
         {/* Target Indicator */}
         <div className="py-2">
-          <div className="text-xs font-black uppercase text-black mb-1.5">Processing Target</div>
-          <div className="p-3 bg-white rounded-xl border-2 border-black flex items-center gap-2.5">
-            <ImageIcon className="w-4 h-4 text-[#EA580C]" />
-            <span className="text-xs font-bold text-black">
+          <div className="text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+            Processing Target
+          </div>
+          <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-2.5">
+            <ImageIcon className="w-4 h-4 text-[#7d2ae8]" />
+            <span className="text-xs font-semibold text-slate-800">
               {selectedImage ? 'Selected image element on canvas' : 'Current canvas frame snapshot'}
             </span>
           </div>
@@ -172,7 +171,7 @@ export const AIToolsModal: React.FC<AIToolsModalProps> = ({
 
         {/* Enhancement Mode Picker */}
         <div className="py-2">
-          <label className="block text-xs font-black uppercase text-black mb-1.5">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
             Enhancement Mode
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -186,37 +185,37 @@ export const AIToolsModal: React.FC<AIToolsModalProps> = ({
                 key={m.id}
                 type="button"
                 onClick={() => setMode(m.id as any)}
-                className={`p-2.5 rounded-xl border-2 border-black text-left transition-all ${
+                className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                   mode === m.id
-                    ? 'bg-[#FACC15] shadow-[2px_2px_0px_#000000]'
-                    : 'bg-white hover:bg-gray-50'
+                    ? 'bg-purple-50 border-purple-300 text-purple-900 shadow-xs ring-1 ring-[#7d2ae8]'
+                    : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-700'
                 }`}
               >
-                <div className="font-black text-xs text-black">{m.name}</div>
-                <div className="text-[10px] text-gray-600 font-semibold">{m.desc}</div>
+                <div className="font-bold text-xs text-slate-800">{m.name}</div>
+                <div className="text-[10px] text-slate-500 mt-0.5">{m.desc}</div>
               </button>
             ))}
           </div>
         </div>
 
         {/* Status */}
-        <div className="mt-3 p-3 rounded-xl border-2 border-black bg-white flex items-center justify-between">
+        <div className="mt-3 p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
           <div>
-            <div className="text-xs font-bold text-gray-600">Platform Edition</div>
-            <div className="text-sm font-black text-black">100% Free & Unlimited</div>
+            <div className="text-xs font-semibold text-slate-500">Platform Edition</div>
+            <div className="text-sm font-bold text-slate-800">100% Free & Unlimited</div>
           </div>
           <div className="text-right">
-            <div className="text-xs font-bold text-gray-600">Access</div>
-            <div className="text-sm font-black text-emerald-600">Free / Uncapped</div>
+            <div className="text-xs font-semibold text-slate-500">Access</div>
+            <div className="text-sm font-bold text-emerald-600">Free / Uncapped</div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="mt-5 pt-3 border-t-2 border-black flex items-center justify-end gap-2.5">
+        <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl border-2 border-black font-bold text-sm bg-white hover:bg-gray-100 text-black transition-colors"
+            className="px-4 py-2 rounded-xl font-semibold text-sm text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -224,7 +223,7 @@ export const AIToolsModal: React.FC<AIToolsModalProps> = ({
             type="button"
             onClick={handleProcess}
             disabled={isProcessing}
-            className="flex items-center gap-2 px-5 py-2 rounded-xl border-2 border-black font-black text-sm bg-[#FACC15] text-black shadow-[3px_3px_0px_#000000] hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer disabled:opacity-50"
+            className="flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-sm bg-[#7d2ae8] hover:bg-[#6c22cf] text-white shadow-sm transition-all cursor-pointer disabled:opacity-50"
           >
             {isProcessing ? (
               <>

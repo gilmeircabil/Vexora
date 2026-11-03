@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Card } from '../../components/common/Card.js';
 import { Button } from '../../components/common/Button.js';
 import { CopyButton } from '../../components/common/CopyButton.js';
-import { generateBulkUuids, type UuidOptions } from '../../lib/dev/uuid.js';
-import { RefreshCw, Copy, Check } from 'lucide-react';
+import { generateBulkUuids } from '../../lib/dev/uuid.js';
+import { RefreshCw } from 'lucide-react';
 
 export const UuidGeneratorTool: React.FC = () => {
   const [count, setCount] = useState<number>(5);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import {
   Sparkles,
@@ -23,15 +23,22 @@ import { useAuth } from '../context/AuthContext.js';
 import { useToast } from '../context/ToastContext.js';
 import { TurnstileWidget } from '../components/auth/TurnstileWidget.js';
 import { MathVerificationModal } from '../components/auth/MathVerificationModal.js';
+import { SocialAuthButtons } from '../components/auth/SocialAuthButtons.js';
 import { FallingStarsBackground } from '../components/common/FallingStarsBackground.js';
 import { BrandLogo } from '../components/common/BrandLogo.js';
 
 export const RegisterPage: React.FC = () => {
-  const { login } = useAuth();
+  const { user, login, isLoading: authLoading } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get('redirect') || '/dashboard';
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate(redirect, { replace: true });
+    }
+  }, [user, authLoading, redirect, navigate]);
 
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
@@ -216,7 +223,9 @@ export const RegisterPage: React.FC = () => {
 
             <div className="p-4 rounded-2xl bg-amber-50 border-2 border-black space-y-2">
               <p className="text-xs font-bold text-black leading-relaxed">
-                Because VexoraMods does not use emails, this <strong>Emergency Recovery Code</strong> is the <em>only</em> way to recover your account if you forget your password.
+                Because VexoraMods does not use emails, this{' '}
+                <strong>Emergency Recovery Code</strong> is the <em>only</em> way to recover your
+                account if you forget your password.
               </p>
             </div>
 
@@ -300,7 +309,8 @@ export const RegisterPage: React.FC = () => {
                 Create Your Account. Start Building.
               </h1>
               <p className="text-sm sm:text-lg font-semibold text-neutral-700 leading-relaxed">
-                Join VexoraMods in seconds. Pick a username and password to create studio graphics, save quiz sets, and publish tutorials.
+                Join VexoraMods in seconds. Pick a username and password to create studio graphics,
+                save quiz sets, and publish tutorials.
               </p>
             </div>
 
@@ -310,7 +320,8 @@ export const RegisterPage: React.FC = () => {
                 <span>Zero Email Hassle &amp; Privacy First</span>
               </div>
               <p className="text-xs font-bold text-neutral-800 leading-relaxed">
-                No email verification links, no promotional emails, and no tracking cookies. You control your username and secure recovery code.
+                No email verification links, no promotional emails, and no tracking cookies. You
+                control your username and secure recovery code.
               </p>
             </div>
           </div>
@@ -391,7 +402,8 @@ export const RegisterPage: React.FC = () => {
                     htmlFor="reg-name"
                     className="block font-black text-black text-xs uppercase tracking-wider mb-1.5"
                   >
-                    Display Name <span className="text-neutral-500 font-normal lowercase">(optional)</span>
+                    Display Name{' '}
+                    <span className="text-neutral-500 font-normal lowercase">(optional)</span>
                   </label>
                   <input
                     id="reg-name"
@@ -442,20 +454,44 @@ export const RegisterPage: React.FC = () => {
                 {/* Password Requirements Badges */}
                 {password.length > 0 && (
                   <div className="grid grid-cols-2 gap-1.5 pt-1 text-[11px] font-bold">
-                    <span className={`flex items-center gap-1 ${hasMinLength ? 'text-green-700' : 'text-neutral-500'}`}>
-                      {hasMinLength ? <CheckCircle2 className="w-3.5 h-3.5 text-green-600" /> : <XCircle className="w-3.5 h-3.5 text-neutral-400" />}
+                    <span
+                      className={`flex items-center gap-1 ${hasMinLength ? 'text-green-700' : 'text-neutral-500'}`}
+                    >
+                      {hasMinLength ? (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />
+                      ) : (
+                        <XCircle className="w-3.5 h-3.5 text-neutral-400" />
+                      )}
                       8+ characters
                     </span>
-                    <span className={`flex items-center gap-1 ${hasUppercase ? 'text-green-700' : 'text-neutral-500'}`}>
-                      {hasUppercase ? <CheckCircle2 className="w-3.5 h-3.5 text-green-600" /> : <XCircle className="w-3.5 h-3.5 text-neutral-400" />}
+                    <span
+                      className={`flex items-center gap-1 ${hasUppercase ? 'text-green-700' : 'text-neutral-500'}`}
+                    >
+                      {hasUppercase ? (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />
+                      ) : (
+                        <XCircle className="w-3.5 h-3.5 text-neutral-400" />
+                      )}
                       Uppercase letter
                     </span>
-                    <span className={`flex items-center gap-1 ${hasLowercase ? 'text-green-700' : 'text-neutral-500'}`}>
-                      {hasLowercase ? <CheckCircle2 className="w-3.5 h-3.5 text-green-600" /> : <XCircle className="w-3.5 h-3.5 text-neutral-400" />}
+                    <span
+                      className={`flex items-center gap-1 ${hasLowercase ? 'text-green-700' : 'text-neutral-500'}`}
+                    >
+                      {hasLowercase ? (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />
+                      ) : (
+                        <XCircle className="w-3.5 h-3.5 text-neutral-400" />
+                      )}
                       Lowercase letter
                     </span>
-                    <span className={`flex items-center gap-1 ${hasNumber ? 'text-green-700' : 'text-neutral-500'}`}>
-                      {hasNumber ? <CheckCircle2 className="w-3.5 h-3.5 text-green-600" /> : <XCircle className="w-3.5 h-3.5 text-neutral-400" />}
+                    <span
+                      className={`flex items-center gap-1 ${hasNumber ? 'text-green-700' : 'text-neutral-500'}`}
+                    >
+                      {hasNumber ? (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />
+                      ) : (
+                        <XCircle className="w-3.5 h-3.5 text-neutral-400" />
+                      )}
                       Number (0-9)
                     </span>
                   </div>
@@ -484,7 +520,9 @@ export const RegisterPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword((prev) => !prev)}
-                      aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+                      aria-label={
+                        showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'
+                      }
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-600 hover:text-black cursor-pointer"
                     >
                       {showConfirmPassword ? (
@@ -540,7 +578,8 @@ export const RegisterPage: React.FC = () => {
                     <ShieldCheck className="w-3.5 h-3.5 stroke-[2.5]" />
                   </div>
                   <span>
-                    Protected by <strong>Human Brain Check</strong> &amp; Turnstile bot verification.
+                    Protected by <strong>Human Brain Check</strong> &amp; Turnstile bot
+                    verification.
                   </span>
                 </div>
 
@@ -548,7 +587,9 @@ export const RegisterPage: React.FC = () => {
 
                 <button
                   type="submit"
-                  disabled={isLoading || !isUsernameValid || (password.length > 0 && !passwordsMatch)}
+                  disabled={
+                    isLoading || !isUsernameValid || (password.length > 0 && !passwordsMatch)
+                  }
                   className="w-full py-3.5 px-4 rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-black font-black text-xs shadow-[3px_3px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#000000] flex items-center justify-center gap-2 transition-all mt-4 cursor-pointer disabled:opacity-60"
                 >
                   {isLoading ? (
@@ -560,7 +601,27 @@ export const RegisterPage: React.FC = () => {
                     </>
                   )}
                 </button>
+
+                <p className="text-[11px] font-bold text-neutral-500 text-center leading-relaxed mt-2.5">
+                  By creating an account, you agree to our{' '}
+                  <Link
+                    to="/terms"
+                    className="text-black font-black underline hover:text-neutral-700"
+                  >
+                    Terms of Use
+                  </Link>{' '}
+                  and acknowledge our{' '}
+                  <Link
+                    to="/privacy"
+                    className="text-black font-black underline hover:text-neutral-700"
+                  >
+                    Privacy Policy
+                  </Link>
+                  .
+                </p>
               </form>
+
+              <SocialAuthButtons mode="register" />
 
               <div className="mt-6 pt-5 border-t-2 border-black/10 text-center text-xs font-bold text-neutral-600">
                 Already have an account?{' '}
