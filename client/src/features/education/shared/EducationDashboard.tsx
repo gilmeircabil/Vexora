@@ -18,6 +18,9 @@ import {
   ShieldCheck,
   CheckCircle2,
   FileQuestion,
+  FileText,
+  FileCode,
+  School,
 } from 'lucide-react';
 import { educationApi } from '../../../services/educationApi.js';
 import { useAuth } from '../../../context/AuthContext.js';
@@ -37,13 +40,16 @@ interface EducationDashboardProps {
   onSelectTool: (toolId: string) => void;
   activeRole: 'student' | 'teacher' | 'educator';
   onRoleChange: (role: 'student' | 'teacher' | 'educator') => void;
+  workspace?: 'student' | 'teacher';
 }
 
 export const EducationDashboard: React.FC<EducationDashboardProps> = ({
   onSelectTool,
   activeRole,
   onRoleChange,
+  workspace,
 }) => {
+  const currentWorkspace = workspace || (activeRole === 'teacher' || activeRole === 'educator' ? 'teacher' : 'student');
   const { user, refreshUser } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
     pendingTasks: 0,
@@ -230,12 +236,121 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
       <div className="space-y-2.5">
         <div className="flex items-center justify-between px-1">
           <h3 className="text-xs font-black text-black uppercase tracking-wider">
-            Quick Launchpad
+            {currentWorkspace === 'teacher' ? 'Teacher Curriculum Launchpad' : 'Quick Launchpad'}
           </h3>
-          <span className="text-[11px] text-neutral-500 font-bold">8 Tools</span>
+          <span className="text-[11px] text-neutral-500 font-bold">
+            {currentWorkspace === 'teacher' ? '8 Tools' : '9 Tools'}
+          </span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        {currentWorkspace === 'teacher' ? (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <button
+              onClick={() => onSelectTool('lesson-plans')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-amber-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <FileCheck className="w-4 h-4 text-amber-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Lesson Plans</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Curriculum Design</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onSelectTool('worksheets')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <FileText className="w-4 h-4 text-indigo-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Worksheets</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Printable Activities</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onSelectTool('exams')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <FileCode className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Exam Builder</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Tests & Keys</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onSelectTool('attendance')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-sky-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <Users className="w-4 h-4 text-sky-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Attendance</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Rosters & Roll</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onSelectTool('gradebook')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-purple-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <GraduationCap className="w-4 h-4 text-purple-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Gradebook</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Scores & Mastery</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onSelectTool('rubrics')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-rose-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <Table className="w-4 h-4 text-rose-500" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Rubrics</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Scoring Guides</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onSelectTool('certificates')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-[#FFD21A] border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <Award className="w-4 h-4 text-black" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Certificates</h4>
+                <p className="text-[10px] text-neutral-500 truncate">PDF Diplomas</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onSelectTool('backup')}
+              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-black text-xs text-black truncate">Data Backup</h4>
+                <p className="text-[10px] text-neutral-500 truncate">Export & Purge</p>
+              </div>
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           <button
             onClick={() => onSelectTool('study-planner')}
             className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
@@ -353,6 +468,7 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
             </div>
           </button>
         </div>
+        )}
       </div>
 
       {/* Learning Achievements: Minimal Inline Badges */}

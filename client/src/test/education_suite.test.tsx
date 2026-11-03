@@ -1,10 +1,11 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 import { AuthProvider } from '../context/AuthContext.js';
 import { ToastProvider } from '../context/ToastContext.js';
 import { StudySpacePage } from '../pages/education/StudySpacePage.js';
+import { StudySpaceHeader } from '../features/education/shared/StudySpaceHeader.js';
 import { generateCertificatePdf } from '../features/education/shared/PdfExportHelper.js';
 import { educationAudio } from '../features/education/shared/EducationAudio.js';
 
@@ -252,6 +253,58 @@ describe('VexoraMods Zero-Cost Education Suite Tests', () => {
       expect(screen.getAllByText(/Study Planner/i).length).toBeGreaterThan(0);
       expect(screen.getAllByText(/Flashcard Maker/i).length).toBeGreaterThan(0);
       expect(screen.getAllByText(/Practice Tests & Quizzes/i).length).toBeGreaterThan(0);
+    });
+
+    it('renders StudySpaceHeader with Workspace Switcher and Fullscreen Toggle', () => {
+      const handleWorkspaceChange = vi.fn();
+      const handleToggleSidebar = vi.fn();
+      const handleToggleMobileNav = vi.fn();
+      const handleToggleFullscreen = vi.fn();
+
+      const { rerender } = render(
+        <StudySpaceHeader
+          workspace="student"
+          onWorkspaceChange={handleWorkspaceChange}
+          activeTab="flashcards"
+          isSidebarCollapsed={false}
+          onToggleSidebar={handleToggleSidebar}
+          onToggleMobileNav={handleToggleMobileNav}
+          isFullscreen={false}
+          onToggleFullscreen={handleToggleFullscreen}
+        />,
+      );
+
+      const studentBtn = screen.getByRole('button', { name: /student workspace/i });
+      const teacherBtn = screen.getByRole('button', { name: /teacher workspace/i });
+      const fullscreenBtn = screen.getByRole('button', { name: /full screen/i });
+
+      expect(studentBtn).toBeInTheDocument();
+      expect(teacherBtn).toBeInTheDocument();
+      expect(fullscreenBtn).toBeInTheDocument();
+
+      // Click Teacher Workspace
+      fireEvent.click(teacherBtn);
+      expect(handleWorkspaceChange).toHaveBeenCalledWith('teacher');
+
+      // Click Fullscreen
+      fireEvent.click(fullscreenBtn);
+      expect(handleToggleFullscreen).toHaveBeenCalledTimes(1);
+
+      // Rerender in fullscreen mode
+      rerender(
+        <StudySpaceHeader
+          workspace="teacher"
+          onWorkspaceChange={handleWorkspaceChange}
+          activeTab="lesson-plans"
+          isSidebarCollapsed={false}
+          onToggleSidebar={handleToggleSidebar}
+          onToggleMobileNav={handleToggleMobileNav}
+          isFullscreen={true}
+          onToggleFullscreen={handleToggleFullscreen}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: /exit full screen/i })).toBeInTheDocument();
     });
   });
 });
