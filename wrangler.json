@@ -1,7 +1,11 @@
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "vexora",
+  "main": "./worker.js",
   "compatibility_date": "2026-11-01",
   "assets": {
-    "directory": "./client/dist"
+    "directory": "./client/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
   }
 }
