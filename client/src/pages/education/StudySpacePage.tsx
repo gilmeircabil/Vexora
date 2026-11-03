@@ -70,7 +70,9 @@ export const StudySpacePage: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<string>('dashboard');
   const [educationRole, setEducationRole] = useState<'student' | 'teacher' | 'educator'>(() => {
-    return (user?.educationRole as any) || 'student';
+    if (urlWorkspace === 'teacher') return 'teacher';
+    if (urlWorkspace === 'student') return 'student';
+    return (user?.educationRole as any) || (workspace === 'teacher' ? 'teacher' : 'student');
   });
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -81,15 +83,24 @@ export const StudySpacePage: React.FC = () => {
   const isTeacherAuthorized =
     educationRole === 'teacher' || educationRole === 'educator' || user?.role === 'admin';
 
-  // Synchronize workspace changes with URL parameters
+  // Synchronize workspace changes with URL parameters and active role
   const handleWorkspaceChange = (newWorkspace: 'student' | 'teacher') => {
     setWorkspace(newWorkspace);
+    setEducationRole(newWorkspace);
     setActiveTab('dashboard');
     setIsMobileNavOpen(false);
     const newParams = new URLSearchParams(searchParams);
     newParams.set('workspace', newWorkspace);
     setSearchParams(newParams, { replace: true });
   };
+
+  useEffect(() => {
+    const ws = searchParams.get('workspace');
+    if (ws === 'student' || ws === 'teacher') {
+      setWorkspace(ws);
+      setEducationRole(ws);
+    }
+  }, [searchParams]);
 
   const handleSelectTool = (toolId: string) => {
     setActiveTab(toolId);
