@@ -55,6 +55,7 @@ export const DesignStudioPage: React.FC = () => {
 
   // Modals & Action Menus
   const [isNewDesignModalOpen, setIsNewDesignModalOpen] = useState<boolean>(false);
+  const [failedThumbnailIds, setFailedThumbnailIds] = useState<Set<string>>(() => new Set());
   const [selectedPreset, setSelectedPreset] = useState<DesignPreset | null>(null);
   const [customWidth, setCustomWidth] = useState<number>(1080);
   const [customHeight, setCustomHeight] = useState<number>(1080);
@@ -461,10 +462,17 @@ export const DesignStudioPage: React.FC = () => {
                   >
                     {/* Thumbnail Preview Area */}
                     <div className="h-44 bg-[#F3EFE6] border-b-2 border-black relative flex items-center justify-center p-3 overflow-hidden">
-                      {proj.thumbnailUrl ? (
+                      {proj.thumbnailUrl && !failedThumbnailIds.has(proj._id) ? (
                         <img
                           src={proj.thumbnailUrl}
                           alt={proj.title}
+                          onError={() => {
+                            setFailedThumbnailIds((prev) => {
+                              const next = new Set(prev);
+                              next.add(proj._id);
+                              return next;
+                            });
+                          }}
                           className="max-h-full max-w-full object-contain drop-shadow"
                         />
                       ) : (

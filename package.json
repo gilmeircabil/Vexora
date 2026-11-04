@@ -31,7 +31,8 @@
     "test:client": "vitest run --dir client",
     "test:server": "vitest run --dir server",
     "test:e2e": "playwright test --config client/playwright.config.ts",
-    "test:e2e:install": "playwright install chromium"
+    "test:e2e:install": "playwright install chromium",
+    "check:missing-assets": "tsx server/scripts/checkMissingAssets.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1161.0",

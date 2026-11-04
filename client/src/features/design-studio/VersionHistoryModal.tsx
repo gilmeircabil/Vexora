@@ -25,6 +25,7 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
   const [isCreatingSnapshot, setIsCreatingSnapshot] = useState<boolean>(false);
   const [snapshotName, setSnapshotName] = useState<string>('');
   const [restoringVersionId, setRestoringVersionId] = useState<string | null>(null);
+  const [failedThumbnailIds, setFailedThumbnailIds] = useState<Set<string>>(() => new Set());
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
@@ -198,10 +199,17 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    {ver.thumbnailUrl ? (
+                    {ver.thumbnailUrl && !failedThumbnailIds.has(ver._id) ? (
                       <img
                         src={ver.thumbnailUrl}
                         alt={`v${ver.versionNumber}`}
+                        onError={() => {
+                          setFailedThumbnailIds((prev) => {
+                            const next = new Set(prev);
+                            next.add(ver._id);
+                            return next;
+                          });
+                        }}
                         className="w-12 h-12 object-contain bg-slate-50 rounded-lg border border-slate-200 shrink-0"
                       />
                     ) : (

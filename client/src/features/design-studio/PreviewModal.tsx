@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, Download } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { X, Download, ImageOff } from 'lucide-react';
 import type { Canvas } from 'fabric';
 import { exportCanvas } from '../../lib/designStudio/exportCanvas.js';
 
@@ -18,9 +18,18 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   projectName,
   canvasBackground,
 }) => {
-  if (!isOpen || !canvas) return null;
+  const [hasError, setHasError] = useState(false);
 
-  const previewDataUrl = canvas.toDataURL({ format: 'png', multiplier: 1.5 });
+  const previewDataUrl = useMemo(() => {
+    if (!isOpen || !canvas) return '';
+    try {
+      return canvas.toDataURL({ format: 'png', multiplier: 1.5 });
+    } catch {
+      return '';
+    }
+  }, [isOpen, canvas]);
+
+  if (!isOpen || !canvas) return null;
 
   const handleDownload = () => {
     exportCanvas(canvas, canvasBackground, {
@@ -58,11 +67,19 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
 
         {/* Canvas Display */}
         <div className="flex-1 overflow-auto flex items-center justify-center p-6 bg-slate-100/70 rounded-xl min-h-0 mt-3">
-          <img
-            src={previewDataUrl}
-            alt="Preview"
-            className="max-w-full max-h-[70vh] object-contain rounded-md border border-slate-200 shadow-xl"
-          />
+          {hasError || !previewDataUrl ? (
+            <div className="flex flex-col items-center justify-center text-slate-400 p-8 text-center select-none">
+              <ImageOff className="w-8 h-8 mb-2 text-slate-300" />
+              <span className="text-sm font-medium">Preview unavailable</span>
+            </div>
+          ) : (
+            <img
+              src={previewDataUrl}
+              alt="Preview"
+              onError={() => setHasError(true)}
+              className="max-w-full max-h-[70vh] object-contain rounded-md border border-slate-200 shadow-xl"
+            />
+          )}
         </div>
       </div>
     </div>

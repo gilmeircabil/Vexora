@@ -1,7 +1,5 @@
 import type { Request, Response } from 'express';
 import { Types } from 'mongoose';
-import fs from 'node:fs';
-import { env } from '../config/env.js';
 import { DesignAsset } from '../models/DesignAsset.js';
 import { StorageService } from '../services/storageService.js';
 import type { AuthenticatedRequest } from '../middleware/authMiddleware.js';
@@ -151,14 +149,6 @@ export class DesignAssetController {
 
       if (!storageKey) {
         res.status(400).send('Bad request');
-        return;
-      }
-
-      // If a public R2/S3 domain is configured and S3 is enabled, redirect directly to CDN
-      if (StorageService.isS3Enabled() && env.S3_PUBLIC_URL) {
-        const publicBase = env.S3_PUBLIC_URL.replace(/\/+$/, '');
-        const targetPath = isThumb ? `thumbs/${storageKey}` : `assets/${storageKey}`;
-        res.redirect(302, `${publicBase}/${targetPath}`);
         return;
       }
 

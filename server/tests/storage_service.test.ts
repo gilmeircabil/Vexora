@@ -77,5 +77,18 @@ describe('StorageService & Cloudflare R2 Safety Cap', () => {
       expect(await StorageService.getAssetStream('folder\\file.png')).toBeNull();
       expect(await StorageService.getAssetStream('')).toBeNull();
     });
+
+    it('should fall through to local disk when S3 throws NoSuchKey or 404', async () => {
+      vi.spyOn(StorageService, 'isS3Enabled').mockReturnValue(true);
+      const mockS3 = {
+        send: vi.fn().mockRejectedValue({ name: 'NoSuchKey', $metadata: { httpStatusCode: 404 } }),
+      };
+      vi.spyOn(StorageService, 'getS3Client').mockReturnValue(mockS3 as any);
+      vi.spyOn(StorageService, 'getAssetFilePath').mockReturnValue(null);
+
+      const stream = await StorageService.getAssetStream('asset_nonexistent_123.jpg');
+      expect(stream).toBeNull();
+      expect(mockS3.send).toHaveBeenCalled();
+    });
   });
 });

@@ -244,55 +244,68 @@ export class StorageService {
       return null;
     }
 
+    const candidateKeys = [storageKey];
+    if (isThumb && storageKey.startsWith('asset_')) {
+      candidateKeys.unshift(
+        storageKey.replace(/^asset_/, 'thumb_').replace(/\.[^.]+$/, '.webp'),
+      );
+    }
+
     if (this.isS3Enabled()) {
       try {
         const s3 = this.getS3Client();
-        const s3Key = isThumb ? `thumbs/${storageKey}` : `assets/${storageKey}`;
-        const response = await s3.send(
-          new GetObjectCommand({
-            Bucket: env.S3_BUCKET,
-            Key: s3Key,
-          }),
-        );
 
-        if (!response.Body) {
-          return null;
+        for (const key of candidateKeys) {
+          const s3Key = isThumb ? `thumbs/${key}` : `assets/${key}`;
+          try {
+            const response = await s3.send(
+              new GetObjectCommand({
+                Bucket: env.S3_BUCKET,
+                Key: s3Key,
+              }),
+            );
+
+            if (response.Body) {
+              return {
+                stream: response.Body as Readable,
+                contentType:
+                  response.ContentType || (isThumb ? 'image/webp' : 'application/octet-stream'),
+                contentLength: response.ContentLength,
+              };
+            }
+          } catch (err: any) {
+            if (err.name === 'NoSuchKey' || err.$metadata?.httpStatusCode === 404) {
+              continue;
+            }
+            console.error('S3 GetObject error:', err);
+          }
         }
-
-        return {
-          stream: response.Body as Readable,
-          contentType:
-            response.ContentType || (isThumb ? 'image/webp' : 'application/octet-stream'),
-          contentLength: response.ContentLength,
-        };
       } catch (err: any) {
-        if (err.name === 'NoSuchKey' || err.$metadata?.httpStatusCode === 404) {
-          return null;
-        }
-        console.error('S3 GetObject error:', err);
-        return null;
+        console.error('S3 client error:', err);
       }
     }
 
-    // Local disk stream
-    const filePath = this.getAssetFilePath(storageKey, isThumb);
-    if (!filePath || !fsSync.existsSync(filePath)) {
-      return null;
+    // Local disk stream fallback
+    for (const key of candidateKeys) {
+      const filePath = this.getAssetFilePath(key, isThumb);
+      if (filePath && fsSync.existsSync(filePath)) {
+        let contentType = 'application/octet-stream';
+        if (isThumb || key.endsWith('.webp')) {
+          contentType = 'image/webp';
+        } else if (key.endsWith('.png')) {
+          contentType = 'image/png';
+        } else if (key.endsWith('.jpg') || key.endsWith('.jpeg')) {
+          contentType = 'image/jpeg';
+        }
+
+        return {
+          stream: fsSync.createReadStream(filePath),
+          contentType,
+        };
+      }
     }
 
-    let contentType = 'application/octet-stream';
-    if (isThumb || storageKey.endsWith('.webp')) {
-      contentType = 'image/webp';
-    } else if (storageKey.endsWith('.png')) {
-      contentType = 'image/png';
-    } else if (storageKey.endsWith('.jpg') || storageKey.endsWith('.jpeg')) {
-      contentType = 'image/jpeg';
-    }
-
-    return {
-      stream: fsSync.createReadStream(filePath),
-      contentType,
-    };
+    return null;
   }
 
   /**

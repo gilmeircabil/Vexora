@@ -22,6 +22,7 @@ import {
   ChevronDown,
   Loader2,
   FolderOpen,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { Link } from 'react-router';
 import type { Canvas, FabricObject } from 'fabric';
@@ -87,6 +88,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
 
   // Uploads state
   const [assets, setAssets] = useState<DesignAssetDTO[]>([]);
+  const [failedAssetIds, setFailedAssetIds] = useState<Set<string>>(() => new Set());
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
@@ -555,33 +557,63 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
 
                 {/* Assets Grid */}
                 <div className="grid grid-cols-2 gap-2 max-h-[350px] overflow-y-auto pr-1">
-                  {assets.map((asset) => (
-                    <div
-                      key={asset._id}
-                      className="group relative rounded-xl border border-slate-200 bg-white overflow-hidden shadow-xs hover:shadow-md hover:border-purple-300 transition-all"
-                    >
-                      <img
-                        src={asset.thumbnailUrl || asset.url}
-                        alt={asset.originalName}
-                        onClick={() =>
-                          handleItemAdd(() => canvas && addImageFromUrl(canvas, asset.url))
-                        }
-                        className="w-full h-24 object-contain bg-slate-50 cursor-pointer group-hover:scale-105 transition-transform"
-                        title="Click to place on canvas"
-                      />
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteAsset(asset._id);
-                        }}
-                        className="absolute top-1.5 right-1.5 p-1 bg-white/90 hover:bg-rose-500 hover:text-white rounded-lg shadow-xs text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                        title="Delete image"
+                  {assets.map((asset) => {
+                    const isFailed = failedAssetIds.has(asset._id);
+                    const assetSrc = asset.thumbnailUrl || asset.url;
+
+                    return (
+                      <div
+                        key={asset._id}
+                        className="group relative rounded-xl border border-slate-200 bg-white overflow-hidden shadow-xs hover:shadow-md hover:border-purple-300 transition-all"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  ))}
+                        {isFailed ? (
+                          <div
+                            className="w-full h-24 flex flex-col items-center justify-center bg-slate-100 text-slate-400 p-2 text-center select-none"
+                            title="Asset could not be loaded"
+                          >
+                            <ImageIcon className="w-6 h-6 mb-1 text-slate-400" />
+                            <span className="text-[10px] font-medium text-slate-500 truncate max-w-full">
+                              {asset.originalName || 'Unavailable'}
+                            </span>
+                          </div>
+                        ) : (
+                          <img
+                            src={assetSrc}
+                            alt={asset.originalName}
+                            onError={() => {
+                              setFailedAssetIds((prev) => {
+                                const next = new Set(prev);
+                                next.add(asset._id);
+                                return next;
+                              });
+                            }}
+                            onClick={() =>
+                              handleItemAdd(async () => {
+                                try {
+                                  if (canvas) await addImageFromUrl(canvas, asset.url);
+                                } catch (err) {
+                                  console.warn('Failed to place asset onto canvas:', err);
+                                }
+                              })
+                            }
+                            className="w-full h-24 object-contain bg-slate-50 cursor-pointer group-hover:scale-105 transition-transform"
+                            title="Click to place on canvas"
+                          />
+                        )}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteAsset(asset._id);
+                          }}
+                          className="absolute top-1.5 right-1.5 p-1 bg-white/90 hover:bg-rose-500 hover:text-white rounded-lg shadow-xs text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                          title="Delete image"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
