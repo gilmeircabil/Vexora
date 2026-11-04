@@ -134,6 +134,7 @@ export class DeveloperController {
         },
       });
     } catch (err: any) {
+      console.error('DeveloperController.uploadAvatar error:', err);
       res.status(500).json({ success: false, error: err.message || 'Avatar upload failed' });
     }
   }
@@ -170,6 +171,7 @@ export class DeveloperController {
         },
       });
     } catch (err: any) {
+      console.error('DeveloperController.uploadCover error:', err);
       res.status(500).json({ success: false, error: err.message || 'Cover photo upload failed' });
     }
   }

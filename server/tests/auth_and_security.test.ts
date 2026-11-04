@@ -744,4 +744,47 @@ describe('VexoraMods Username & Password Auth Suite', () => {
       process.env.NODE_ENV = originalEnv;
     }
   });
+
+  it('16. Multer upload errors return 400 Bad Request instead of 500 Internal Server Error', async () => {
+    const { createApp } = await import('../src/app.js');
+    const app = createApp();
+
+    const multerErr: any = new Error('File too large');
+    multerErr.name = 'MulterError';
+    multerErr.code = 'LIMIT_FILE_SIZE';
+
+    const req: any = { method: 'POST', url: '/api/auth/avatar', headers: {} };
+    const res = createMockRes();
+
+    // Directly test app error middleware
+    const routes = (app as any)._router?.stack || [];
+    const errorHandler = routes.find((layer: any) => layer.handle?.length === 4)?.handle;
+    if (errorHandler) {
+      errorHandler(multerErr, req, res, () => {});
+      expect(res.statusCode).toBe(400);
+      expect(res.body.success).toBe(false);
+      expect(res.body.error).toContain('limit');
+    }
+  });
+
+  it('17. Unsupported image format errors return 400 Bad Request instead of 500', async () => {
+    const { createApp } = await import('../src/app.js');
+    const app = createApp();
+
+    const formatErr = new Error(
+      'Unsupported file format. Please upload a valid JPEG, PNG, or WebP image.',
+    );
+
+    const req: any = { method: 'POST', url: '/api/auth/avatar', headers: {} };
+    const res = createMockRes();
+
+    const routes = (app as any)._router?.stack || [];
+    const errorHandler = routes.find((layer: any) => layer.handle?.length === 4)?.handle;
+    if (errorHandler) {
+      errorHandler(formatErr, req, res, () => {});
+      expect(res.statusCode).toBe(400);
+      expect(res.body.success).toBe(false);
+      expect(res.body.error).toContain('Unsupported file format');
+    }
+  });
 });

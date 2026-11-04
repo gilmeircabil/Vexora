@@ -95,6 +95,27 @@ export function createApp() {
   // Global error handler
   app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     console.error('Unhandled API Error:', err);
+
+    // Map Multer upload errors and file rejections to 400 Bad Request instead of 500
+    if (err.name === 'MulterError' || err.code === 'LIMIT_FILE_SIZE') {
+      res.status(400).json({
+        success: false,
+        error:
+          err.code === 'LIMIT_FILE_SIZE'
+            ? 'File size exceeds maximum allowed limit.'
+            : err.message || 'File upload error',
+      });
+      return;
+    }
+
+    if (err.message && err.message.toLowerCase().includes('unsupported file format')) {
+      res.status(400).json({
+        success: false,
+        error: err.message,
+      });
+      return;
+    }
+
     res.status(err.status || 500).json({
       success: false,
       error: process.env.NODE_ENV === 'production' ? 'An internal error occurred' : err.message,

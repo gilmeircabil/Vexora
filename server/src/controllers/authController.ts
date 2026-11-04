@@ -764,6 +764,7 @@ export class AuthController {
         },
       });
     } catch (err: any) {
+      console.error('AuthController.uploadAvatar error:', err);
       res.status(500).json({ success: false, error: err.message || 'Avatar upload failed' });
     }
   }
@@ -793,6 +794,7 @@ export class AuthController {
         },
       });
     } catch (err: any) {
+      console.error('AuthController.deleteAvatar error:', err);
       res.status(500).json({ success: false, error: err.message || 'Failed to remove avatar' });
     }
   }
