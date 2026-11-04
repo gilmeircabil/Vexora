@@ -103,6 +103,7 @@ export const SocialAuthButtons: React.FC<{
       const res = await fetch('/api/auth/google', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ credential }),
       });
       const data = await res.json();

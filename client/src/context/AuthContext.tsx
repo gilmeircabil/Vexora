@@ -50,7 +50,14 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserProfile | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(() => {
+    try {
+      const saved = localStorage.getItem('tn_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('tn_token'));
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -66,6 +73,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (data.success && data.data?.accessToken) {
           localStorage.setItem('tn_token', data.data.accessToken);
           localStorage.setItem('tn_has_session', 'true');
+          if (data.data.user) {
+            localStorage.setItem('tn_user', JSON.stringify(data.data.user));
+          }
           setToken(data.data.accessToken);
           setUser(data.data.user);
           return true;
@@ -94,7 +104,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (res.ok) {
           const data = await res.json();
           if (data.success) {
-            setUser(data.data);
+            // Guard: don't overwrite if user was logged out while request was in-flight
+            if (localStorage.getItem('tn_token')) {
+              localStorage.setItem('tn_user', JSON.stringify(data.data));
+              setUser(data.data);
+            }
             return;
           }
         }
@@ -103,6 +117,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const refreshed = await tryRefreshToken();
         if (!refreshed) {
           localStorage.removeItem('tn_token');
+          localStorage.removeItem('tn_user');
           localStorage.removeItem('tn_has_session');
           setToken(null);
           setUser(null);
@@ -135,6 +150,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = (newToken: string, newUser: UserProfile) => {
     localStorage.setItem('tn_token', newToken);
     localStorage.setItem('tn_has_session', 'true');
+    localStorage.setItem('tn_user', JSON.stringify(newUser));
     setToken(newToken);
     setUser(newUser);
   };
@@ -150,6 +166,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Ignore network errors on logout
     }
     localStorage.removeItem('tn_token');
+    localStorage.removeItem('tn_user');
     localStorage.removeItem('tn_has_session');
     setToken(null);
     setUser(null);
@@ -175,7 +192,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateUser = useCallback((updated: Partial<UserProfile>) => {
-    setUser((prev) => (prev ? { ...prev, ...updated } : null));
+    setUser((prev) => {
+      if (!prev) return null;
+      const next = { ...prev, ...updated };
+      try {
+        localStorage.setItem('tn_user', JSON.stringify(next));
+      } catch {
+        // Fallback in case of quota or serialization issues
+      }
+      return next;
+    });
   }, []);
 
   return (

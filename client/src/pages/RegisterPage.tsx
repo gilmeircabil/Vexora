@@ -128,6 +128,7 @@ export const RegisterPage: React.FC = () => {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           username: trimmedUsername,
           name: name.trim() || trimmedUsername,
