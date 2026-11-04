@@ -48,6 +48,26 @@ describe('StorageService & Cloudflare R2 Safety Cap', () => {
         expect(StorageService.isS3Enabled()).toBe(false);
       }
     });
+
+    it('should fall back to local disk storage if S3 upload throws an error', async () => {
+      vi.spyOn(StorageService, 'isS3Enabled').mockReturnValue(true);
+      const mockS3 = {
+        send: vi.fn().mockRejectedValue(new Error('S3 access denied or network down')),
+      };
+      vi.spyOn(StorageService, 'getS3Client').mockReturnValue(mockS3 as any);
+      vi.spyOn(StorageService, 'checkQuota').mockResolvedValue(undefined);
+
+      const fakeBuffer = Buffer.from('test image data');
+      const result = await StorageService.saveAsset({
+        buffer: fakeBuffer,
+        originalName: 'avatar.png',
+        mimeType: 'image/png',
+        userId: 'user123',
+      });
+
+      expect(result).toBeDefined();
+      expect(result.url).toContain('/api/design-assets/files/asset_user123_');
+    });
   });
 
   describe('Asset Streaming & Security', () => {

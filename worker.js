@@ -13,14 +13,30 @@ export default {
       const headers = new Headers(request.headers);
       headers.set('Host', 'vexora-backend-ilhn.onrender.com');
 
-      const backendRequest = new Request(targetUrl.toString(), {
-        method: request.method,
-        headers,
-        body: request.body,
-        redirect: 'follow',
-      });
+      const hasBody = request.method !== 'GET' && request.method !== 'HEAD';
 
-      return fetch(backendRequest);
+      try {
+        const backendRequest = new Request(targetUrl.toString(), {
+          method: request.method,
+          headers,
+          body: hasBody ? request.body : undefined,
+          redirect: 'follow',
+          duplex: 'half',
+        });
+
+        return await fetch(backendRequest);
+      } catch (proxyErr) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: 'Backend proxy error: ' + (proxyErr?.message || 'Failed to reach origin server'),
+          }),
+          {
+            status: 502,
+            headers: { 'Content-Type': 'application/json' },
+          },
+        );
+      }
     }
 
     // Serve static client assets with SPA fallback

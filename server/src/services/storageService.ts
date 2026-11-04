@@ -140,47 +140,54 @@ export class StorageService {
     }
 
     if (this.isS3Enabled()) {
-      const s3 = this.getS3Client();
+      try {
+        const s3 = this.getS3Client();
 
-      // Upload primary asset to Cloudflare R2
-      await s3.send(
-        new PutObjectCommand({
-          Bucket: env.S3_BUCKET,
-          Key: `assets/${storageKey}`,
-          Body: params.buffer,
-          ContentType: params.mimeType,
-        }),
-      );
-
-      // Upload thumbnail if generated
-      if (thumbBuffer) {
+        // Upload primary asset to Cloudflare R2
         await s3.send(
           new PutObjectCommand({
             Bucket: env.S3_BUCKET,
-            Key: `thumbs/${thumbKey}`,
-            Body: thumbBuffer,
-            ContentType: 'image/webp',
+            Key: `assets/${storageKey}`,
+            Body: params.buffer,
+            ContentType: params.mimeType,
           }),
         );
+
+        // Upload thumbnail if generated
+        if (thumbBuffer) {
+          await s3.send(
+            new PutObjectCommand({
+              Bucket: env.S3_BUCKET,
+              Key: `thumbs/${thumbKey}`,
+              Body: thumbBuffer,
+              ContentType: 'image/webp',
+            }),
+          );
+        }
+
+        // Generate public or proxy URLs
+        const publicBase = env.S3_PUBLIC_URL?.replace(/\/+$/, '');
+        const url = publicBase
+          ? `${publicBase}/assets/${storageKey}`
+          : `/api/design-assets/files/${storageKey}`;
+        const thumbnailUrl = publicBase
+          ? `${publicBase}/thumbs/${thumbKey}`
+          : `/api/design-assets/files/thumbs/${thumbKey}`;
+
+        return {
+          storageKey,
+          url,
+          thumbnailUrl,
+          width,
+          height,
+          size: params.buffer.length,
+        };
+      } catch (s3Err: any) {
+        console.error(
+          'Cloudflare R2 storage error, falling back to local file storage:',
+          s3Err?.message || s3Err,
+        );
       }
-
-      // Generate public or proxy URLs
-      const publicBase = env.S3_PUBLIC_URL?.replace(/\/+$/, '');
-      const url = publicBase
-        ? `${publicBase}/assets/${storageKey}`
-        : `/api/design-assets/files/${storageKey}`;
-      const thumbnailUrl = publicBase
-        ? `${publicBase}/thumbs/${thumbKey}`
-        : `/api/design-assets/files/thumbs/${thumbKey}`;
-
-      return {
-        storageKey,
-        url,
-        thumbnailUrl,
-        width,
-        height,
-        size: params.buffer.length,
-      };
     }
 
     // Local file storage fallback
