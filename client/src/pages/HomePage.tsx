@@ -42,7 +42,6 @@ import { aiToolsApi } from '../services/aiToolsApi.js';
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const [heroSearch, setHeroSearch] = useState('');
   const [studyWorkspaceTab, setStudyWorkspaceTab] = useState<'student' | 'teacher'>('student');
   const { mood, triggerMood } = useMascot();
 
@@ -270,39 +269,6 @@ export const HomePage: React.FC = () => {
               {overview?.config?.heroDescription ||
                 'Discover 38+ free browser tools, full-screen AI chat, vector design studio, and dual-workspace study suite — completely open and unlocked with zero paywalls.'}
             </p>
-
-            {/* Hero Search Bar */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                triggerMood('celebrate', 2000);
-                if (heroSearch.trim()) {
-                  navigate(`/tools?q=${encodeURIComponent(heroSearch.trim())}`);
-                } else {
-                  navigate('/tools');
-                }
-              }}
-              className="relative max-w-xl"
-            >
-              <Search className="w-4 h-4 text-neutral-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
-              <input
-                type="text"
-                value={heroSearch}
-                onChange={(e) => {
-                  setHeroSearch(e.target.value);
-                  triggerMood('crunch', 1500);
-                }}
-                aria-label="Search all tools by name, description, or keyword"
-                placeholder="Search 38+ tools (e.g. background remover, pdf merger, ocr, json)..."
-                className="w-full pl-11 pr-24 py-3 bg-white border-2 border-black rounded-xl text-xs sm:text-sm font-bold text-black placeholder:text-neutral-400 shadow-[2.5px_2.5px_0px_#000000] focus:shadow-[4px_4px_0px_#000000] focus:outline-none transition-all"
-              />
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-[#FACC15] hover:bg-[#EAB308] border border-black font-black text-xs text-black transition-colors cursor-pointer"
-              >
-                Search
-              </button>
-            </form>
           </div>
 
           {/* Squirrel Mascot Hero Companion (Transparent Background with Animated Speech Bubble) */}
@@ -387,8 +353,6 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 2. ALL TOOLS DIRECTORY (Combined with HomePage) */}
-
-      {/* 3. ALL TOOLS DIRECTORY (Combined with HomePage) */}
       <section className="border-t-2 border-black pt-12 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
