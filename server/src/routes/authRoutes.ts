@@ -2,12 +2,7 @@ import { Router } from 'express';
 import { AuthController } from '../controllers/authController.js';
 import { authenticate } from '../middleware/authMiddleware.js';
 import { uploadImage, validateImageMagicBytes } from '../middleware/uploadMiddleware.js';
-import {
-  registrationRateLimiter,
-  loginRateLimiter,
-  passwordResetRateLimiter,
-} from '../middleware/rateLimitMiddleware.js';
-import { enforceLimits, checkStorageQuota } from '../middleware/limitMiddleware.js';
+import { enforceLimits } from '../middleware/limitMiddleware.js';
 import { defaultLimits } from '../config/limits.js';
 
 const router = Router();

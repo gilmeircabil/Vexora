@@ -1,8 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import type {AuthenticatedRequest} from './authMiddleware.js';
 import {LimitService, LimitResult, StorageQuotaResult} from '../services/limitService.js';
-import {limits, defaultLimits} from '../config/limits.js';
-import {Types} from 'mongoose';
 
 export interface LimitOptions {
   category: string;
@@ -23,9 +21,6 @@ export function enforceLimits(options: LimitOptions) {
       const userId = req.user?.userId;
       const ipAddress = req.ip || req.socket.remoteAddress;
       const windowMs = options.windowMs || 60000;
-
-      // Determine default limit based on authentication status
-      const defaultLimit = userId ? defaultLimits.api.authenticatedPerMinute : defaultLimits.api.guestPerMinute;
 
       // Check the limit
       const result: LimitResult = await LimitService.checkLimit(
@@ -86,37 +81,6 @@ export function enforceLimits(options: LimitOptions) {
 }
 
 /**
- * Decorator to track usage after a successful operation
- */
-export function trackUsage(
-  category: string,
-  action: string,
-  valueGetter?: (req: Request) => number,
-) {
-  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const originalSend = res.send.bind(res);
-
-    res.send = (body: any) => {
-      // Only track if the operation was successful
-      if (res.statusCode >= 200 && res.statusCode < 400) {
-        const userId = req.user?.userId;
-        const ipAddress = req.ip || req.socket.remoteAddress;
-        const windowMs = 60000;
-        const metadata = body ? {responseType: typeof body === 'string' ? 'json' : 'stream'} : {};
-
-        LimitService.incrementUsage(userId, ipAddress, category as any, action as any, windowMs, metadata).catch(err => {
-          console.error('Error tracking usage:', err);
-        });
-      }
-
-      return originalSend(body);
-    };
-
-    next();
-  };
-}
-
-/**
  * Check storage quota before allowing an upload
  */
 export function checkStorageQuota(maxBytes: number = 0) {
@@ -155,27 +119,6 @@ export function checkStorageQuota(maxBytes: number = 0) {
       console.error('Error checking storage quota:', err);
       next();
     }
-  };
-}
-
-/**
- * Middleware to track and limit authentication actions
- */
-export function authRateLimiter(action: string, configKey: keyof typeof defaultLimits.auth) {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const ipAddress = req.ip || req.socket.remoteAddress;
-    const limit = defaultLimits.auth[configKey];
-
-    // Store reset time on response for use by error handler
-    const windowMs = 3600000; // 1 hour window for auth actions
-    (res as any).authRateLimit = {
-      action,
-      limit,
-      windowMs,
-      ipAddress,
-    };
-
-    next();
   };
 }
 

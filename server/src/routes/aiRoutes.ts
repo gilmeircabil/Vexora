@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { AIController } from '../controllers/aiController.js';
 import { optionalAuthenticate, authenticate } from '../middleware/authMiddleware.js';
-import { aiRateLimiter } from '../middleware/rateLimitMiddleware.js';
 import {
   uploadImage,
   uploadImageAndMask,
