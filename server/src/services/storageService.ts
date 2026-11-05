@@ -50,6 +50,7 @@ export class StorageService {
       this.s3ClientInstance = new S3Client({
         region: env.S3_REGION || 'auto',
         endpoint: env.S3_ENDPOINT || undefined,
+        forcePathStyle: true,
         credentials: {
           accessKeyId: env.S3_ACCESS_KEY || '',
           secretAccessKey: env.S3_SECRET_KEY || '',
