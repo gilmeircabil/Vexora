@@ -13,6 +13,16 @@ import {
   Search,
   Info,
   X,
+  GraduationCap,
+  BrainCircuit,
+  BookMarked,
+  Clock,
+  FileText,
+  FolderKanban,
+  Calculator,
+  Award,
+  Palette,
+  BookOpen,
 } from 'lucide-react';
 import {
   TOOL_CATALOG,

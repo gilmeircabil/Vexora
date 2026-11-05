@@ -166,6 +166,7 @@ export const ToolsDirectoryPage: React.FC = () => {
             />
             {query && (
               <button
+                type="button"
                 onClick={() => setQuery('')}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-black hover:scale-110 p-1"
                 aria-label="Clear search"
