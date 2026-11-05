@@ -78,18 +78,6 @@ export const Header: React.FC = () => {
             className="hidden md:flex items-center gap-1.5 text-xs sm:text-sm font-black"
           >
             <Link
-              to="/tools"
-              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
-                isNavActive('/tools')
-                  ? 'bg-[#4ADE80] border-black shadow-[2px_2px_0px_#000000]'
-                  : 'border-transparent hover:bg-black/5'
-              }`}
-            >
-              <Wrench className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>All Tools</span>
-            </Link>
-
-            <Link
               to="/ai-chat"
               className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
                 isNavActive('/ai-chat')

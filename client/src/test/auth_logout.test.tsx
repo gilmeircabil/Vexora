@@ -31,19 +31,29 @@ const LogoutConsumer: React.FC<{ customRedirect?: string }> = ({ customRedirect 
 };
 
 describe('AuthContext Sign Out & Redirect Suite', () => {
-  const originalLocation = window.location;
-
   beforeEach(() => {
     localStorage.clear();
     vi.restoreAllMocks();
 
-    delete (window as unknown as { location?: Location }).location;
-    window.location = {
-      ...originalLocation,
+    // Mock window.location using vi.stubGlobal
+    const mockLocation = {
       pathname: '/dashboard',
       href: 'http://localhost/dashboard',
       reload: vi.fn(),
-    } as unknown as Location;
+      origin: 'http://localhost',
+      protocol: 'http:',
+      host: 'localhost',
+      hostname: 'localhost',
+      port: '',
+      hash: '',
+      search: '',
+      ancestorOrigins: [],
+      toString: () => 'http://localhost/dashboard',
+      assign: vi.fn(),
+      replace: vi.fn(),
+    };
+
+    vi.stubGlobal('location', mockLocation);
 
     // Mock fetch for auth calls
     global.fetch = vi.fn().mockImplementation((url: string) => {
@@ -70,7 +80,7 @@ describe('AuthContext Sign Out & Redirect Suite', () => {
   });
 
   afterEach(() => {
-    window.location = originalLocation;
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
   });
 
@@ -105,6 +115,7 @@ describe('AuthContext Sign Out & Redirect Suite', () => {
   });
 
   it('reloads if already on /login when logout is triggered', async () => {
+    // Update the mock location for this test
     window.location.pathname = '/login';
     window.location.href = 'http://localhost/login';
 

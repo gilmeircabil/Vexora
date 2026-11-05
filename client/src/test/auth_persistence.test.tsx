@@ -34,6 +34,26 @@ describe('AuthContext Session Persistence Suite', () => {
     localStorage.clear();
     vi.restoreAllMocks();
 
+    // Mock window.location using vi.stubGlobal
+    const mockLocation = {
+      pathname: '/dashboard',
+      href: 'http://localhost/dashboard',
+      reload: vi.fn(),
+      origin: 'http://localhost',
+      protocol: 'http:',
+      host: 'localhost',
+      hostname: 'localhost',
+      port: '',
+      hash: '',
+      search: '',
+      ancestorOrigins: [],
+      toString: () => 'http://localhost/dashboard',
+      assign: vi.fn(),
+      replace: vi.fn(),
+    };
+
+    vi.stubGlobal('location', mockLocation);
+
     global.fetch = vi.fn().mockImplementation((url: string) => {
       if (url === '/api/auth/me') {
         return Promise.resolve({
@@ -53,6 +73,7 @@ describe('AuthContext Session Persistence Suite', () => {
 
   afterEach(() => {
     localStorage.clear();
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
   });
 
@@ -101,16 +122,6 @@ describe('AuthContext Session Persistence Suite', () => {
       JSON.stringify({ id: 'u1', username: 'alice', name: 'Alice', role: 'user' }),
     );
 
-    // Mock window.location
-    const originalLocation = window.location;
-    delete (window as unknown as { location?: Location }).location;
-    window.location = {
-      ...originalLocation,
-      pathname: '/dashboard',
-      href: 'http://localhost/dashboard',
-      reload: vi.fn(),
-    } as unknown as Location;
-
     render(
       <AuthProvider>
         <TestAuthConsumer />
@@ -129,8 +140,6 @@ describe('AuthContext Session Persistence Suite', () => {
     expect(localStorage.getItem('tn_token')).toBeNull();
     expect(localStorage.getItem('tn_user')).toBeNull();
     expect(localStorage.getItem('tn_has_session')).toBeNull();
-
-    window.location = originalLocation;
   });
 
   it('updates tn_user in localStorage when updateUser is called', async () => {

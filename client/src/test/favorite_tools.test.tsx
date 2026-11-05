@@ -5,7 +5,6 @@ import { BrowserRouter } from 'react-router';
 import { AuthProvider } from '../context/AuthContext.js';
 import { ToastProvider } from '../context/ToastContext.js';
 import { FavoritesProvider, useFavorites } from '../context/FavoritesContext.js';
-import { ToolsDirectoryPage } from '../pages/ToolsDirectoryPage.js';
 import { ToolCard } from '../components/common/ToolCard.js';
 import { TOOL_CATALOG } from '../tools/catalog.js';
 
@@ -183,117 +182,7 @@ describe('VexoraMods Favorite Tools System Suite', () => {
     });
   });
 
-  describe('3. All Tools Directory Favorites Ordering & Filtering', () => {
-    it('shows empty state when filtering by Favorites category without favorites', async () => {
-      render(
-        <BrowserRouter>
-          <AuthProvider>
-            <ToastProvider>
-              <FavoritesProvider>
-                <ToolsDirectoryPage />
-              </FavoritesProvider>
-            </ToastProvider>
-          </AuthProvider>
-        </BrowserRouter>,
-      );
-
-      // Click Favorites filter pill
-      const favFilterBtn = screen.getByRole('button', { name: /Favorites \(0\)/i });
-      act(() => {
-        fireEvent.click(favFilterBtn);
-      });
-
-      expect(screen.getByRole('heading', { name: /Your Favorite Tools/i })).toBeInTheDocument();
-      expect(screen.getByText(/Your favorite tools will appear here/i)).toBeInTheDocument();
-      expect(
-        screen.getByText(/Tap the star on any tool to save it for quick access/i),
-      ).toBeInTheDocument();
-    });
-
-    it('places favorited tools first in the unified tools directory without separate duplicate sections', async () => {
-      // Pre-seed 1 favorite: word-counter
-      localStorage.setItem('vexoramods_favorite_tool_ids', JSON.stringify(['word-counter']));
-
-      render(
-        <BrowserRouter>
-          <AuthProvider>
-            <ToastProvider>
-              <FavoritesProvider>
-                <ToolsDirectoryPage />
-              </FavoritesProvider>
-            </ToastProvider>
-          </AuthProvider>
-        </BrowserRouter>,
-      );
-
-      // Verify Word & Character Counter is rendered and marked as favorite
-      expect(screen.getByText('Word & Character Counter')).toBeInTheDocument();
-      const removeBtn = screen.getByRole('button', {
-        name: /Remove Word & Character Counter from favorites/i,
-      });
-      expect(removeBtn).toBeInTheDocument();
-
-      // Tool cards list is unified (exactly 1 instance of the tool on the page)
-      const allWordCounters = screen.getAllByText('Word & Character Counter');
-      expect(allWordCounters.length).toBe(1);
-    });
-
-    it('allows searching across all tools regardless of favorite status', async () => {
-      localStorage.setItem('vexoramods_favorite_tool_ids', JSON.stringify(['word-counter']));
-
-      render(
-        <BrowserRouter>
-          <AuthProvider>
-            <ToastProvider>
-              <FavoritesProvider>
-                <ToolsDirectoryPage />
-              </FavoritesProvider>
-            </ToastProvider>
-          </AuthProvider>
-        </BrowserRouter>,
-      );
-
-      const searchInput = screen.getByPlaceholderText(/Search all/i);
-      fireEvent.change(searchInput, { target: { value: 'word' } });
-
-      // When actively searching, search finds Word & Character Counter in the search results
-      await waitFor(() => {
-        const matchingCards = screen.getAllByText('Word & Character Counter');
-        expect(matchingCards.length).toBeGreaterThan(0);
-      });
-    });
-
-    it('supports the dedicated Favorites category tab filter', async () => {
-      localStorage.setItem(
-        'vexoramods_favorite_tool_ids',
-        JSON.stringify(['word-counter', 'json-formatter']),
-      );
-
-      render(
-        <BrowserRouter>
-          <AuthProvider>
-            <ToastProvider>
-              <FavoritesProvider>
-                <ToolsDirectoryPage />
-              </FavoritesProvider>
-            </ToastProvider>
-          </AuthProvider>
-        </BrowserRouter>,
-      );
-
-      // Click Favorites category filter button
-      const favFilterBtn = screen.getByRole('button', { name: /Favorites \(2\)/i });
-      act(() => {
-        fireEvent.click(favFilterBtn);
-      });
-
-      // View switches to dedicated Favorites view showing both favorited tools
-      expect(screen.getByText('Word & Character Counter')).toBeInTheDocument();
-      expect(screen.getByText('JSON Formatter & Validator')).toBeInTheDocument();
-    });
-  });
-
-  describe('4. Guest-to-Account Synchronization Logic', () => {
+  describe('3. Guest-to-Account Synchronization Logic', () => {
     it('merges guest favorites with account favorites without duplicates upon login', async () => {
       // Simulate guest who favorited 'image-compressor' before signing in
       localStorage.setItem('vexoramods_favorite_tool_ids', JSON.stringify(['image-compressor']));

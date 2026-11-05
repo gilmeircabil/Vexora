@@ -14,7 +14,6 @@ import { Header } from '../components/layout/Header.js';
 import { Footer } from '../components/layout/Footer.js';
 import { HomePage } from '../pages/HomePage.js';
 import { ReviewsPage } from '../pages/ReviewsPage.js';
-import { ToolsDirectoryPage } from '../pages/ToolsDirectoryPage.js';
 import { CommunityPage } from '../pages/community/CommunityPage.js';
 import { LearningHubPage } from '../pages/learning/LearningHubPage.js';
 import { RegisterPage } from '../pages/RegisterPage.js';
@@ -122,7 +121,7 @@ describe('VexoraMods Unified Platform Restructuring Suite', () => {
     ]);
   });
 
-  it('renders Header with app name linking to Home and primary navigation (All Tools, Studio, Learning Hub, Community)', () => {
+  it('renders Header with app name linking to Home and primary navigation (AI Chat, Studio, Learning Hub, Community)', () => {
     render(
       <ToastProvider>
         <AuthProvider>
@@ -136,11 +135,12 @@ describe('VexoraMods Unified Platform Restructuring Suite', () => {
     const homeLogoLink = screen.getByLabelText('VexoraMods Home');
     expect(homeLogoLink).toHaveAttribute('href', '/');
     expect(screen.queryByText('Home')).not.toBeInTheDocument();
-    expect(screen.getByText('All Tools')).toBeInTheDocument();
+    expect(screen.getByText('AI Chat')).toBeInTheDocument();
     expect(screen.getByText('Studio')).toBeInTheDocument();
     expect(screen.getByText('Learning Hub')).toBeInTheDocument();
     expect(screen.getByText('Community')).toBeInTheDocument();
     expect(screen.queryByText('Developer Hub')).not.toBeInTheDocument();
+    expect(screen.queryByText('All Tools')).not.toBeInTheDocument();
   });
 
   it('replaces Homepage Contact section with Ratings & Reviews section, zero-review state, Write a Review modal, and View All Reviews link', async () => {
@@ -223,21 +223,25 @@ describe('VexoraMods Unified Platform Restructuring Suite', () => {
     expect(screen.getByRole('link', { name: 'Licenses' })).toHaveAttribute('href', '/licenses');
   });
 
-  it('renders Unified All Tools Directory with search, category filters, and AI tool badges', () => {
+  it('renders Unified Tools Directory on HomePage with search, category filters, and AI tool badges', () => {
     render(
       <ToastProvider>
         <AuthProvider>
           <BrowserRouter>
-            <ToolsDirectoryPage />
+            <HomePage />
           </BrowserRouter>
         </AuthProvider>
       </ToastProvider>,
     );
 
-    expect(screen.getByText('All Tools Directory')).toBeInTheDocument();
+    // Verify tools section is present on HomePage
+    expect(screen.getByText('Browse All 43 Tools')).toBeInTheDocument();
     expect(screen.getByText('AI Background Remover')).toBeInTheDocument();
-    expect(screen.getByText('AI Document OCR')).toBeInTheDocument();
     expect(screen.getByText('PDF Merger')).toBeInTheDocument();
+
+    // Search for tools
+    const searchInput = screen.getByPlaceholderText(/Search all/i);
+    fireEvent.change(searchInput, { target: { value: 'PDF' } });
 
     // Filter to PDF category
     const pdfBtn = screen.getAllByRole('button', { name: /PDF/i })[0]!;

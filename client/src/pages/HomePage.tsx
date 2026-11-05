@@ -36,6 +36,7 @@ import { ToolCard } from '../components/common/ToolCard.js';
 import { platformApi } from '../services/platformApi.js';
 import { reviewApi, type ReviewSummary } from '../services/reviewApi.js';
 import { ReviewSubmissionModal } from '../components/reviews/ReviewSubmissionModal.js';
+import { useFavorites } from '../context/FavoritesContext.js';
 import { useMascot } from '../context/MascotContext.js';
 import { SquirrelMascot } from '../components/mascot/SquirrelMascot.js';
 import { aiToolsApi } from '../services/aiToolsApi.js';
@@ -44,6 +45,7 @@ export const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const [studyWorkspaceTab, setStudyWorkspaceTab] = useState<'student' | 'teacher'>('student');
   const { mood, triggerMood } = useMascot();
+  const { favoriteIds, favoritesCount } = useFavorites();
 
   const getHeroSpeechText = () => {
     if (mood === 'celebrate') {
@@ -150,8 +152,7 @@ export const HomePage: React.FC = () => {
     const byQuery = searchTools(toolsQuery);
     const filtered = byQuery.filter((tool) => {
       if (selectedCategory === 'Favorites') {
-        // TODO: Get favorites from context
-        return false; // Skip for now
+        if (!favoriteIds.includes(tool.id)) return false;
       } else if (selectedCategory !== 'All') {
         if (getUnifiedCategory(tool) !== selectedCategory) return false;
       }
@@ -164,10 +165,18 @@ export const HomePage: React.FC = () => {
       return typeMatch;
     });
 
+    // Place favorite tools first in the listing
     return [...filtered].sort((a, b) => {
-      return 0; // No favorites sorting for now
+      const aFav = favoriteIds.includes(a.id);
+      const bFav = favoriteIds.includes(b.id);
+      if (aFav && !bFav) return -1;
+      if (!aFav && bFav) return 1;
+      if (aFav && bFav) {
+        return favoriteIds.indexOf(a.id) - favoriteIds.indexOf(b.id);
+      }
+      return 0;
     });
-  }, [toolsQuery, selectedCategory, selectedType]);
+  }, [toolsQuery, selectedCategory, selectedType, favoriteIds]);
 
   const totalAiTools = useMemo(() => TOOL_CATALOG.filter((t) => isAiPoweredTool(t)).length, []);
   const totalStandardTools = TOOL_CATALOG.length - totalAiTools;
@@ -447,8 +456,40 @@ export const HomePage: React.FC = () => {
             </button>
           </div>
 
-          {/* Category Filter Tabs */}
+          {/* Category Filter Tabs including Favorites */}
           <div className="flex items-center gap-2 flex-wrap">
+            {/* Favorites Filter Pill */}
+            <button
+              type="button"
+              onClick={() => setSelectedCategory('Favorites')}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all border-2 border-black ${
+                selectedCategory === 'Favorites'
+                  ? 'bg-[#FFD21A] text-black shadow-[2px_2px_0px_#000000]'
+                  : 'bg-white text-black hover:bg-neutral-100'
+              }`}
+            >
+              <Star
+                className={`w-3.5 h-3.5 ${
+                  favoritesCount > 0 ? 'fill-black text-black' : 'text-neutral-500'
+                }`}
+              />
+              <span>Favorites</span>
+              <span className="text-[10px] font-mono opacity-80">({favoritesCount})</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSelectedCategory('All')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all border-2 border-black ${
+                selectedCategory === 'All'
+                  ? 'bg-black text-[#FACC15]'
+                  : 'bg-white text-black hover:bg-neutral-100'
+              }`}
+            >
+              <span>All</span>
+              <span className="ml-1.5 text-[10px] font-mono opacity-80">({TOOL_CATALOG.length})</span>
+            </button>
+
             {UNIFIED_CATEGORIES.map((cat) => {
               const active = selectedCategory === cat;
               const count = TOOL_CATALOG.filter((t) => getUnifiedCategory(t) === cat).length;

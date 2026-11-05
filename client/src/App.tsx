@@ -12,7 +12,6 @@ import { FloatingMascotWidget } from './components/mascot/FloatingMascotWidget.j
 import { AppLayout } from './components/layout/AppLayout.js';
 
 import { HomePage } from './pages/HomePage.js';
-import { ToolsDirectoryPage } from './pages/ToolsDirectoryPage.js';
 import { CategoryPage } from './pages/CategoryPage.js';
 import { ToolDetailPage } from './pages/ToolDetailPage.js';
 import { DashboardPage } from './pages/DashboardPage.js';
@@ -147,7 +146,7 @@ export const App: React.FC = () => {
                         <Route path="/" element={<HomePage />} />
 
                         {/* 2. All Tools (Unified Normal + AI Tools) */}
-                        <Route path="/tools" element={<ToolsDirectoryPage />} />
+                        <Route path="/tools" element={<Navigate to="/" replace />} />
                         <Route path="/tools/:toolSlug" element={<ToolDetailPage />} />
                         <Route path="/category/:categorySlug" element={<CategoryPage />} />
 

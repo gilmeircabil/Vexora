@@ -5,9 +5,7 @@ import { BrowserRouter } from 'react-router';
 import { searchTools, isAiPoweredTool, TOOL_BY_ID } from '../tools/catalog.js';
 import { GoogleFlowTool } from '../features/external/GoogleFlowTool.js';
 import { ToolCard } from '../components/common/ToolCard.js';
-import { ToolsDirectoryPage } from '../pages/ToolsDirectoryPage.js';
 import { AuthProvider } from '../context/AuthContext.js';
-import { ToastProvider } from '../context/ToastContext.js';
 
 describe('Google Flow External AI Tool Integration Suite', () => {
   it('registers Google Flow in TOOL_CATALOG with required external metadata', () => {
@@ -81,30 +79,5 @@ describe('Google Flow External AI Tool Integration Suite', () => {
     expect(launchBtn).toHaveAttribute('href', 'https://labs.google/fx/tools/flow');
     expect(launchBtn).toHaveAttribute('target', '_blank');
     expect(launchBtn).toHaveAttribute('rel', 'noopener noreferrer');
-  });
-
-  it('displays Google Flow in ToolsDirectoryPage under All and AI-Powered views', () => {
-    render(
-      <ToastProvider>
-        <AuthProvider>
-          <BrowserRouter>
-            <ToolsDirectoryPage />
-          </BrowserRouter>
-        </AuthProvider>
-      </ToastProvider>,
-    );
-
-    // Should be visible in the catalog
-    expect(screen.getByText('Google Flow')).toBeInTheDocument();
-
-    // Switch to AI-Powered
-    const aiBtn = screen.getByRole('button', { name: /AI-Powered/i });
-    fireEvent.click(aiBtn);
-    expect(screen.getByText('Google Flow')).toBeInTheDocument();
-
-    // Search specifically for "Flow"
-    const searchInput = screen.getByPlaceholderText(/Search all/i);
-    fireEvent.change(searchInput, { target: { value: 'Flow' } });
-    expect(screen.getByText('Google Flow')).toBeInTheDocument();
   });
 });

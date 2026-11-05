@@ -13,7 +13,7 @@ vi.mock('../components/common/ScrollToTop', () => ({
 }));
 
 describe('Mascot Integration', () => {
-  it('renders hero mascot on HomePage and typing in search triggers crunch state', async () => {
+  it('renders hero mascot on HomePage and clicking triggers celebrate state', async () => {
     await act(async () => {
       render(
         <MemoryRouter initialEntries={['/']}>
@@ -40,18 +40,6 @@ describe('Mascot Integration', () => {
     const speechBubble = screen.getByTestId('mascot-speech-bubble');
     expect(speechBubble).toBeDefined();
     expect(speechBubble.textContent).toContain('Hi! Click me to high-five! 🌰');
-
-    // Type in search bar
-    const searchInput = screen.getByRole('textbox', {
-      name: /Search all tools by name, description, or keyword/i,
-    });
-    await act(async () => {
-      fireEvent.change(searchInput, { target: { value: 'pdf' } });
-    });
-
-    // Mascot and speech bubble should now be in crunch state
-    expect(heroMascot.getAttribute('data-state')).toBe('crunch');
-    expect(speechBubble.textContent).toContain('Crunching code! High focus! 🔥');
 
     // Clicking mascot triggers celebrate state
     await act(async () => {
