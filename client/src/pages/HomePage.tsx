@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Wrench,
   Sparkles,
@@ -27,14 +27,24 @@ import {
   BrainCircuit,
   FolderKanban,
   Calculator,
+  X,
+  Info,
 } from 'lucide-react';
-import { TOOL_CATALOG } from '../tools/catalog.js';
+import {
+  TOOL_CATALOG,
+  UNIFIED_CATEGORIES,
+  type UnifiedToolCategory,
+  searchTools,
+  getUnifiedCategory,
+  isAiPoweredTool,
+} from '../tools/catalog.js';
 import { ToolCard } from '../components/common/ToolCard.js';
 import { platformApi } from '../services/platformApi.js';
 import { reviewApi, type ReviewSummary } from '../services/reviewApi.js';
 import { ReviewSubmissionModal } from '../components/reviews/ReviewSubmissionModal.js';
 import { useMascot } from '../context/MascotContext.js';
 import { SquirrelMascot } from '../components/mascot/SquirrelMascot.js';
+import { AiToolsApi } from '../services/aiToolsApi.js';
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -99,6 +109,75 @@ export const HomePage: React.FC = () => {
   } | null>(null);
 
   const [loadingStats, setLoadingStats] = useState(true);
+
+  // Tools Directory Filters (from ToolsDirectoryPage)
+  const [toolsQuery, setToolsQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<UnifiedToolCategory | 'All' | 'Favorites'>('All');
+  const [selectedType, setSelectedType] = useState<'all' | 'standard' | 'ai-powered'>('all');
+
+  // AI Status for tool availability
+  const [aiStatus, setAiStatus] = useState<{
+    checked: boolean;
+    online: boolean;
+    readyTools: Record<string, boolean>;
+  }>({
+    checked: false,
+    online: true,
+    readyTools: {},
+  });
+
+  // Check AI provider status
+  useEffect(() => {
+    let active = true;
+    AiToolsApi.getModelStatus()
+      .then((res) => {
+        if (!active) return;
+        if (res?.success && res.data) {
+          setAiStatus({
+            checked: true,
+            online: res.data.service?.nodeBackend === 'online',
+            readyTools: res.data.readyTools || {},
+          });
+        } else {
+          setAiStatus({ checked: true, online: false, readyTools: {} });
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setAiStatus({ checked: true, online: false, readyTools: {} });
+        }
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Tools filtering logic
+  const filteredTools = useMemo(() => {
+    const byQuery = searchTools(toolsQuery);
+    const filtered = byQuery.filter((tool) => {
+      if (selectedCategory === 'Favorites') {
+        // TODO: Get favorites from context
+        return false; // Skip for now
+      } else if (selectedCategory !== 'All') {
+        if (getUnifiedCategory(tool) !== selectedCategory) return false;
+      }
+
+      const isAi = isAiPoweredTool(tool);
+      const typeMatch =
+        selectedType === 'all' ||
+        (selectedType === 'ai-powered' && isAi) ||
+        (selectedType === 'standard' && !isAi);
+      return typeMatch;
+    });
+
+    return [...filtered].sort((a, b) => {
+      return 0; // No favorites sorting for now
+    });
+  }, [toolsQuery, selectedCategory, selectedType]);
+
+  const totalAiTools = useMemo(() => TOOL_CATALOG.filter((t) => isAiPoweredTool(t)).length, []);
+  const totalStandardTools = TOOL_CATALOG.length - totalAiTools;
 
   // Ratings & Reviews State
   const [reviewsData, setReviewsData] = useState<ReviewSummary>({
@@ -748,36 +827,158 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 3. FEATURED TOOLS (Single 3-Card Row for Quick Utilities) */}
+      {/* 3. ALL TOOLS DIRECTORY (Combined with HomePage) */}
       <section className="border-t-2 border-black pt-12 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
               <Wrench className="w-3.5 h-3.5 text-black" />
-              <span>Instant Client-Side Tools</span>
+              <span>All Client-Side Tools</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-black">
-              Featured Tools &amp; AI Utilities
+              Browse All {TOOL_CATALOG.length} Tools
             </h2>
             <p className="text-xs sm:text-sm font-semibold text-neutral-600 mt-1">
-              Instant browser utilities and built-in AI tools with zero paywalls.
+              Instant browser utilities, AI-powered tools, and design suite - all free and open source.
             </p>
           </div>
 
-          <Link
-            to="/tools"
-            className="inline-flex items-center gap-1.5 text-xs font-black text-black hover:underline self-start sm:self-auto"
-          >
-            <span>Browse all {TOOL_CATALOG.length} tools</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+          {/* AI Configuration Notice when AI backend is unreachable */}
+          {aiStatus.checked && !aiStatus.online && (
+            <div className="py-3 px-4 rounded-xl bg-amber-50 border border-black flex items-start gap-3">
+              <Info className="w-4 h-4 text-amber-800 shrink-0 mt-0.5" />
+              <div className="text-xs space-y-0.5">
+                <p className="font-black text-black">AI Provider Configuration Notice</p>
+                <p className="font-semibold text-neutral-700">
+                  The Node/Sharp AI vision service is currently unreachable. All {totalStandardTools}{' '}
+                  Standard Tools continue to work 100% offline in your browser. To enable AI-powered
+                  tools ({totalAiTools} tools), ensure the VexoraMods backend server is running.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {featuredTools.map((tool) => (
-            <ToolCard key={tool.id} tool={tool} />
-          ))}
+        {/* Search + Tool Type Filter */}
+        <div className="border-b-2 border-black pb-6 space-y-4">
+          {/* Search Input */}
+          <div className="relative max-w-xl">
+            <Search className="w-4 h-4 text-black absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
+            <input
+              type="text"
+              value={toolsQuery}
+              onChange={(e) => setToolsQuery(e.target.value)}
+              aria-label="Search tools by name, description, or keyword"
+              placeholder={`Search all ${TOOL_CATALOG.length} tools by name, description, or keyword...`}
+              className="w-full pl-10 pr-9 py-2.5 text-sm bg-white border-2 border-black rounded-xl focus:outline-none text-black font-bold placeholder:text-neutral-500 placeholder:font-semibold"
+            />
+            {toolsQuery && (
+              <button
+                type="button"
+                onClick={() => setToolsQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-black hover:text-neutral-600 p-1"
+                aria-label="Clear search"
+              >
+                <X className="w-4 h-4 stroke-[2.5]" />
+              </button>
+            )}
+          </div>
+
+          {/* Tool Type Filter Buttons */}
+          <div className="inline-flex items-center bg-white p-1 rounded-xl border-2 border-black self-start">
+            <button
+              type="button"
+              onClick={() => setSelectedType('all')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-black transition-all ${
+                selectedType === 'all'
+                  ? 'bg-[#FACC15] text-black border border-black'
+                  : 'text-neutral-700 hover:text-black'
+              }`}
+            >
+              All ({TOOL_CATALOG.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedType('standard')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-black transition-all ${
+                selectedType === 'standard'
+                  ? 'bg-[#4ADE80] text-black border border-black'
+                  : 'text-neutral-700 hover:text-black'
+              }`}
+            >
+              Standard ({totalStandardTools})
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedType('ai-powered')}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-black transition-all ${
+                selectedType === 'ai-powered'
+                  ? 'bg-[#F472B6] text-black border border-black'
+                  : 'text-neutral-700 hover:text-black'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>AI-Powered ({totalAiTools})</span>
+            </button>
+          </div>
+
+          {/* Category Filter Tabs */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {UNIFIED_CATEGORIES.map((cat) => {
+              const active = selectedCategory === cat;
+              const count = TOOL_CATALOG.filter((t) => getUnifiedCategory(t) === cat).length;
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all border-2 border-black ${
+                    active ? 'bg-black text-[#FACC15]' : 'bg-white text-black hover:bg-neutral-100'
+                  }`}
+                >
+                  <span>{cat}</span>
+                  <span className="ml-1.5 text-[10px] font-mono opacity-80">({count})</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
+
+        {/* Tools Grid */}
+        {filteredTools.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredTools.map((tool) => {
+              const isToolAiReady =
+                aiStatus.online &&
+                (aiStatus.readyTools[tool.id] !== undefined ? aiStatus.readyTools[tool.id] : true);
+              return <ToolCard key={tool.id} tool={tool} aiAvailable={isToolAiReady} />;
+            })}
+          </div>
+        ) : (
+          <div className="p-12 text-center bg-white rounded-3xl border-2 border-black shadow-[5px_5px_0px_#000000] space-y-3">
+            <p className="text-lg font-black text-black">
+              {toolsQuery ? `No tools matched "${toolsQuery}"` : 'No tools found'}
+            </p>
+            <p className="text-xs font-semibold text-neutral-600 max-w-md mx-auto">
+              {toolsQuery
+                ? 'Try searching for keywords like "resize", "ocr", "background", "pdf", "json", or clear your filters.'
+                : 'Try selecting a different category or clearing your filters.'}
+            </p>
+            {(toolsQuery || selectedCategory !== 'All' || selectedType !== 'all') && (
+              <button
+                type="button"
+                onClick={() => {
+                  setToolsQuery('');
+                  setSelectedCategory('All');
+                  setSelectedType('all');
+                }}
+                className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FACC15] border-2 border-black text-xs font-black uppercase shadow-[3px_3px_0px_#000000] cursor-pointer"
+              >
+                Reset Filters
+              </button>
+            )}
+          </div>
+        )}
       </section>
 
       {/* 4. INTERACTIVE STUDY SPACE SPOTLIGHT (Dual Student / Teacher Capabilities) */}
