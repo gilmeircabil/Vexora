@@ -25,3 +25,4 @@ export * from './UserFavorite.js';
 export * from './Announcement.js';
 export * from './AnnouncementDismissal.js';
 export * from './AIChatSession.js';
+export * from './UsageLimit.js';

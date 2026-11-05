@@ -5,20 +5,15 @@ import {
   authenticate,
   optionalAuthenticate as optionalAuth,
 } from '../middleware/authMiddleware.js';
-import { createRateLimiter } from '../middleware/rateLimitMiddleware.js';
+import { enforceLimits, checkStorageQuota } from '../middleware/limitMiddleware.js';
+import { defaultLimits } from '../config/limits.js';
 
 const router = Router();
-
-const writeLimiter = createRateLimiter({
-  windowMs: 60 * 1000,
-  maxRequests: 25,
-  message: 'Too many write requests to Learning Hub. Please wait a moment.',
-});
 
 const learningUpload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 50 * 1024 * 1024, // 50MB max for learning PDFs/files/videos
+    fileSize: defaultLimits.upload.learningAttachmentMaxSize, // 25MB
   },
 });
 
@@ -31,25 +26,65 @@ router.get('/posts/:id/reviews', LearningController.getReviews);
 
 // Creator Profiles
 router.get('/creators/:usernameOrId', optionalAuth, LearningController.getCreatorProfile);
-router.put('/creator/profile', authenticate, writeLimiter, LearningController.updateCreatorProfile);
+router.put(
+  '/creator/profile',
+  authenticate,
+  enforceLimits({
+    category: 'learning',
+    action: 'updateProfile',
+    windowMs: 60 * 60 * 1000, // 1 hour
+    maxRequests: defaultLimits.api.authenticatedPerMinute,
+  }),
+  LearningController.updateCreatorProfile,
+);
 router.post(
   '/creators/:creatorId/follow',
   authenticate,
-  writeLimiter,
+  enforceLimits({
+    category: 'learning',
+    action: 'followCreator',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: defaultLimits.learningHub.commentsPerHour,
+  }),
   LearningController.toggleFollowCreator,
 );
 
 // Creator Dashboard, Earnings & Payouts
 router.get('/creator/dashboard', authenticate, LearningController.getCreatorDashboard);
-router.post('/creator/payouts', authenticate, writeLimiter, LearningController.requestPayout);
+router.post(
+  '/creator/payouts',
+  authenticate,
+  enforceLimits({
+    category: 'learning',
+    action: 'payoutRequest',
+    windowMs: 24 * 60 * 60 * 1000, // 24 hours
+    maxRequests: defaultLimits.learningHub.payoutRequestsPerDay,
+  }),
+  LearningController.requestPayout,
+);
 
 // Learner Library & Course Progress
 router.get('/library', authenticate, LearningController.getLearnerLibrary);
-router.post('/posts/:id/library', authenticate, writeLimiter, LearningController.saveFreeToLibrary);
+router.post(
+  '/posts/:id/library',
+  authenticate,
+  enforceLimits({
+    category: 'learning',
+    action: 'saveToLibrary',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: defaultLimits.learningHub.postsPerDay,
+  }),
+  LearningController.saveFreeToLibrary,
+);
 router.post(
   '/posts/:id/progress',
   authenticate,
-  writeLimiter,
+  enforceLimits({
+    category: 'learning',
+    action: 'updateProgress',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: defaultLimits.learningHub.commentsPerHour,
+  }),
   LearningController.updateCourseProgress,
 );
 router.get('/bookmarks', authenticate, LearningController.getUserBookmarks);
@@ -58,7 +93,18 @@ router.get('/bookmarks', authenticate, LearningController.getUserBookmarks);
 router.post(
   '/files/upload',
   authenticate,
-  writeLimiter,
+  enforceLimits({
+    category: 'upload',
+    action: 'learningFile',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: defaultLimits.api.uploadPerHour,
+  }),
+  enforceLimits({
+    category: 'storage',
+    action: 'storageUsage',
+    windowMs: 1000,
+    maxRequests: 1,
+  }),
   learningUpload.single('file'),
   LearningController.uploadLearningFile,
 );
@@ -72,38 +118,163 @@ router.get(
 router.post(
   '/posts/:id/checkout',
   authenticate,
-  writeLimiter,
+  enforceLimits({
+    category: 'payment',
+    action: 'checkout',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: 10,
+  }),
   LearningController.createPurchaseCheckout,
 );
 router.post('/webhooks/:provider', LearningController.handlePaymentWebhook);
 router.post(
   '/purchases/:purchaseId/verify-sandbox',
   authenticate,
-  writeLimiter,
+  enforceLimits({
+    category: 'payment',
+    action: 'verifySandbox',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: 5,
+  }),
   LearningController.verifySandboxPurchase,
 );
 router.post(
   '/purchases/:purchaseId/refund',
   authenticate,
-  writeLimiter,
+  enforceLimits({
+    category: 'payment',
+    action: 'refund',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: 5,
+  }),
   LearningController.refundPurchase,
 );
 
 // Publishing & Content Management
-router.post('/posts', authenticate, writeLimiter, LearningController.createPost);
-router.put('/posts/:id', authenticate, writeLimiter, LearningController.updatePost);
-router.delete('/posts/:id', authenticate, writeLimiter, LearningController.deletePost);
+router.post(
+  '/posts',
+  authenticate,
+  enforceLimits({
+    category: 'learning',
+    action: 'createPost',
+    windowMs: 24 * 60 * 60 * 1000,
+    maxRequests: defaultLimits.learningHub.postsPerDay,
+  }),
+  LearningController.createPost,
+);
+router.put(
+  '/posts/:id',
+  authenticate,
+  enforceLimits({
+    category: 'learning',
+    action: 'updatePost',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: defaultLimits.learningHub.commentsPerHour,
+  }),
+  LearningController.updatePost,
+);
+router.delete(
+  '/posts/:id',
+  authenticate,
+  enforceLimits({
+    category: 'learning',
+    action: 'deletePost',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: 10,
+  }),
+  LearningController.deletePost,
+);
 
 // Community Interactions (Likes, Bookmarks, Comments, Reviews, Reports)
-router.post('/posts/:id/like', authenticate, writeLimiter, LearningController.toggleLike);
-router.post('/posts/:id/bookmark', authenticate, writeLimiter, LearningController.toggleBookmark);
-router.post('/posts/:id/comments', authenticate, writeLimiter, LearningController.addComment);
-router.put('/comments/:commentId', authenticate, writeLimiter, LearningController.updateComment);
-router.delete('/comments/:commentId', authenticate, writeLimiter, LearningController.deleteComment);
+router.post(
+  '/posts/:id/like',
+  authenticate,
+  enforceLimits({
+    category: 'community',
+    action: 'reaction',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: defaultLimits.community.reactionsPerHour,
+  }),
+  LearningController.toggleLike,
+);
+router.post(
+  '/posts/:id/bookmark',
+  authenticate,
+  enforceLimits({
+    category: 'learning',
+    action: 'bookmark',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: defaultLimits.learningHub.commentsPerHour,
+  }),
+  LearningController.toggleBookmark,
+);
+router.post(
+  '/posts/:id/comments',
+  authenticate,
+  enforceLimits({
+    category: 'learning',
+    action: 'comment',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: defaultLimits.learningHub.commentsPerHour,
+  }),
+  LearningController.addComment,
+);
+router.put(
+  '/comments/:commentId',
+  authenticate,
+  enforceLimits({
+    category: 'community',
+    action: 'comment',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: defaultLimits.community.communityCommentsPerHour,
+  }),
+  LearningController.updateComment,
+);
+router.delete(
+  '/comments/:commentId',
+  authenticate,
+  enforceLimits({
+    category: 'community',
+    action: 'comment',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: defaultLimits.community.communityCommentsPerHour,
+  }),
+  LearningController.deleteComment,
+);
 
-router.post('/posts/:id/reviews', authenticate, writeLimiter, LearningController.upsertReview);
-router.delete('/reviews/:reviewId', authenticate, writeLimiter, LearningController.deleteReview);
+router.post(
+  '/posts/:id/reviews',
+  authenticate,
+  enforceLimits({
+    category: 'reviews',
+    action: 'submitReview',
+    windowMs: 24 * 60 * 60 * 1000,
+    maxRequests: defaultLimits.reviews.reviewsPerDayPerUser,
+  }),
+  LearningController.upsertReview,
+);
+router.delete(
+  '/reviews/:reviewId',
+  authenticate,
+  enforceLimits({
+    category: 'reviews',
+    action: 'deleteReview',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: 5,
+  }),
+  LearningController.deleteReview,
+);
 
-router.post('/reports', authenticate, writeLimiter, LearningController.createReport);
+router.post(
+  '/reports',
+  authenticate,
+  enforceLimits({
+    category: 'community',
+    action: 'report',
+    windowMs: 60 * 60 * 1000,
+    maxRequests: defaultLimits.community.reportsPerHour,
+  }),
+  LearningController.createReport,
+);
 
 export default router;

@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import apiRouter from './routes/index.js';
 import { env } from './config/env.js';
+import { defaultLimits } from './config/limits.js';
 
 export function createApp() {
   const app = express();
@@ -80,6 +81,28 @@ export function createApp() {
   );
 
   app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+
+  // Centralized Rate Limit Headers - adds rate limit info to all responses
+  // Note: Actual rate limiting is handled by dedicated middleware on specific routes
+  app.use((req, res, next) => {
+    const userId = (req as any).user?.userId;
+    const ipAddress = req.ip || req.socket.remoteAddress;
+
+    // Set default rate limit headers based on configuration
+    res.setHeader('X-RateLimit-Limit', String(defaultLimits.api.authenticatedPerMinute));
+
+    // These will be updated by the enforceLimits middleware when that's used
+    if (userId) {
+      res.setHeader('X-RateLimit-Remaining', String(defaultLimits.api.authenticatedPerMinute));
+    } else {
+      res.setHeader('X-RateLimit-Remaining', String(defaultLimits.api.guestPerMinute));
+    }
+
+    // Initialize with 1 minute window
+    res.setHeader('X-RateLimit-Reset', String(Math.floor(Date.now() / 1000) + 60));
+
+    next();
+  });
 
   // API router
   app.use('/api', apiRouter);

@@ -13,9 +13,39 @@ import reviewRoutes from './reviewRoutes.js';
 import { educationRoutes } from './educationRoutes.js';
 import favoriteRoutes from './favoriteRoutes.js';
 import announcementRoutes from './announcementRoutes.js';
+import limitRoutes from './limitRoutes.js';
+import { enforceLimits } from '../middleware/limitMiddleware.js';
+import { defaultLimits } from '../config/limits.js';
+import type { AuthenticatedRequest } from '../middleware/authMiddleware.js';
 
 const apiRouter = Router();
 
+// Global API rate limiting for all API endpoints
+// This runs before all route handlers
+apiRouter.use((req, res, next) => {
+  const userId = (req as any).user?.userId;
+  const ipAddress = req.ip || req.socket.remoteAddress;
+
+  // Set rate limit headers
+  const limit = userId ? defaultLimits.api.authenticatedPerMinute : defaultLimits.api.guestPerMinute;
+
+  res.setHeader('X-RateLimit-Limit', limit.toString());
+  res.setHeader('X-RateLimit-Remaining', limit.toString());
+  res.setHeader('X-RateLimit-Reset', String(Math.floor(Date.now() / 1000) + 60));
+
+  next();
+});
+
+// Health check endpoint (no rate limiting)
+apiRouter.get('/health', (_req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    service: 'VexoraMods API',
+  });
+});
+
+// API routes with rate limiting
 apiRouter.use('/auth', authRoutes);
 apiRouter.use('/ai', aiRoutes);
 apiRouter.use('/admin', adminRoutes);
@@ -30,14 +60,6 @@ apiRouter.use('/reviews', reviewRoutes);
 apiRouter.use('/education', educationRoutes);
 apiRouter.use('/favorites', favoriteRoutes);
 apiRouter.use('/announcements', announcementRoutes);
-
-// Health check endpoint
-apiRouter.get('/health', (_req, res) => {
-  res.json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    service: 'VexoraMods API',
-  });
-});
+apiRouter.use('/limits', limitRoutes);
 
 export default apiRouter;

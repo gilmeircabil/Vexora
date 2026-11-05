@@ -3,6 +3,7 @@ import { Types } from 'mongoose';
 import { DesignAsset } from '../models/DesignAsset.js';
 import { StorageService } from '../services/storageService.js';
 import type { AuthenticatedRequest } from '../middleware/authMiddleware.js';
+import { User } from '../models/User.js';
 
 function getParam(val: string | string[] | undefined): string {
   if (Array.isArray(val)) return val[0] || '';
@@ -30,7 +31,7 @@ export class DesignAssetController {
 
       const { projectId } = req.body;
 
-      // Save via StorageService
+      // Save via StorageService (checks platform quota)
       const saved = await StorageService.saveAsset({
         buffer: file.buffer,
         originalName: file.originalname,
@@ -52,6 +53,11 @@ export class DesignAssetController {
         thumbnailUrl: saved.thumbnailUrl,
         width: saved.width,
         height: saved.height,
+      });
+
+      // Update user's storage usage counter
+      await User.findByIdAndUpdate(userId, {
+        $inc: { storageUsedBytes: saved.size },
       });
 
       res.status(201).json({
@@ -125,7 +131,13 @@ export class DesignAssetController {
         return;
       }
 
+      // Delete from storage
       await StorageService.deleteAsset(asset.storageKey);
+
+      // Update user's storage usage counter
+      await User.findByIdAndUpdate(userId, {
+        $inc: { storageUsedBytes: -asset.size },
+      });
 
       res.json({
         success: true,

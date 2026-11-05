@@ -32,6 +32,8 @@ export interface IUser extends Document {
   isSuspended?: boolean;
   suspensionReason?: string;
   subscriptionId?: Types.ObjectId;
+  storageUsedBytes: number;              // Total storage used by user (bytes)
+  storageQuotaBytes: number;             // Storage quota limit (bytes)
   oauthProviders?: {
     google?: OAuthProviderInfo;
     github?: OAuthProviderInfo;
@@ -214,6 +216,16 @@ const UserSchema = new Schema<IUser>(
     subscriptionId: {
       type: Schema.Types.ObjectId,
       ref: 'Subscription',
+    },
+    storageUsedBytes: {
+      type: Number,
+      default: 0,
+      index: true,
+    },
+    storageQuotaBytes: {
+      type: Number,
+      default: 524288000, // 500 MB default
+      index: true,
     },
   },
   {
