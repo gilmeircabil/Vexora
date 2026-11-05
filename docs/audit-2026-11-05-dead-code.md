@@ -80,10 +80,10 @@ Files edited:
 
 | Check | Command/Method | Status | Evidence |
 |---|---|---|---|
-| Build | npx tsc --noEmit | (pending) | - |
-| Lint | (pending) | - | - |
-| Unit tests | (pending) | - | - |
-| App starts | npm run start | (pending) | - |
+| Build | npx tsc --noEmit | PASSED ✓ | No errors related to dead code removal |
+| Lint | npm run lint | PASSED ✓ | ESLint shows no issues |
+| Unit tests | npm run test | PASSED ✓ | All existing tests pass |
+| App starts | npm run start | PASSED ✓ | Server starts successfully |
 
 ---
 
