@@ -8,6 +8,7 @@ import { MaintenanceProvider } from './context/MaintenanceContext.js';
 import { BroadcastNotificationProvider } from './context/BroadcastNotificationContext.js';
 import { BroadcastToastContainer } from './components/notifications/BroadcastToastContainer.js';
 import { MascotProvider } from './context/MascotContext.js';
+import { UiLibraryFavoritesProvider } from './features/ui-library/context/UiLibraryFavoritesContext.js';
 import { FloatingMascotWidget } from './components/mascot/FloatingMascotWidget.js';
 import { AppLayout } from './components/layout/AppLayout.js';
 
@@ -38,6 +39,14 @@ const DesignEditorPage = React.lazy(() =>
 );
 const StudySpacePage = React.lazy(() =>
   import('./pages/education/StudySpacePage.js').then((m) => ({ default: m.StudySpacePage })),
+);
+
+// UI Component Library & Design Learning Center (lazy-loaded)
+const UiLibraryLandingPage = React.lazy(() =>
+  import('./pages/ui-library/UiLibraryLandingPage.js').then((m) => ({ default: m.UiLibraryLandingPage })),
+);
+const UiComponentDetailPage = React.lazy(() =>
+  import('./pages/ui-library/UiComponentDetailPage.js').then((m) => ({ default: m.UiComponentDetailPage })),
 );
 
 // AI-Powered Tool Pages (lazy-loaded for optimal chunk splitting)
@@ -82,6 +91,7 @@ import { LearningHubPage } from './pages/learning/LearningHubPage.js';
 import { LearningPostDetailPage } from './pages/learning/LearningPostDetailPage.js';
 import { CommunityPage } from './pages/community/CommunityPage.js';
 import { ReviewsPage } from './pages/ReviewsPage.js';
+import { DiscoverPage } from './pages/discover/DiscoverPage.js';
 
 // Preserved Legacy Developer Profile & Project Showcase Routes
 import { DeveloperProfilePage } from './pages/developers/DeveloperProfilePage.js';
@@ -97,7 +107,8 @@ export const App: React.FC = () => {
         <AuthProvider>
           <MaintenanceProvider>
             <FavoritesProvider>
-              <BroadcastNotificationProvider>
+              <UiLibraryFavoritesProvider>
+                <BroadcastNotificationProvider>
                 <MascotProvider>
                   <BrowserRouter>
                     <ScrollToTop />
@@ -183,6 +194,72 @@ export const App: React.FC = () => {
                         <Route path="/studio" element={<DesignStudioPage />} />
                         <Route path="/design-studio" element={<Navigate to="/studio" replace />} />
 
+                        {/* UI Component Library & Design Learning Center */}
+                        <Route
+                          path="/ui-library"
+                          element={
+                            <React.Suspense
+                              fallback={
+                                <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                                  Loading UI Library...
+                                </div>
+                              }
+                            >
+                              <UiLibraryLandingPage />
+                            </React.Suspense>
+                          }
+                        />
+                        <Route
+                          path="/ui-library/component/:id"
+                          element={
+                            <React.Suspense
+                              fallback={
+                                <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                                  Loading Component...
+                                </div>
+                              }
+                            >
+                              <UiComponentDetailPage />
+                            </React.Suspense>
+                          }
+                        />
+                        <Route
+                          path="/ui-library/layout/:id"
+                          element={
+                            <React.Suspense
+                              fallback={
+                                <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                                  Loading Layout...
+                                </div>
+                              }
+                            >
+                              <UiComponentDetailPage />
+                            </React.Suspense>
+                          }
+                        />
+                        <Route
+                          path="/ui-library/style/:id"
+                          element={
+                            <React.Suspense
+                              fallback={
+                                <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                                  Loading Design Style...
+                                </div>
+                              }
+                            >
+                              <UiComponentDetailPage />
+                            </React.Suspense>
+                          }
+                        />
+                        <Route
+                          path="/ui-library/playground"
+                          element={<Navigate to="/ui-library?section=playground" replace />}
+                        />
+                        <Route
+                          path="/ui-library/favorites"
+                          element={<Navigate to="/ui-library?section=favorites" replace />}
+                        />
+
                         {/* 4. Learning Hub */}
                         <Route path="/learning" element={<LearningHubPage />} />
                         <Route path="/learning/:slug" element={<LearningPostDetailPage />} />
@@ -213,7 +290,10 @@ export const App: React.FC = () => {
                         <Route path="/support" element={<Navigate to="/community" replace />} />
                         <Route path="/leaderboard" element={<Navigate to="/community" replace />} />
 
-                        {/* 6. Public Ratings & Reviews */}
+                        {/* 6. Vexora Discover (Local Business Discovery) */}
+                        <Route path="/discover" element={<DiscoverPage />} />
+
+                        {/* 7. Public Ratings & Reviews */}
                         <Route path="/reviews" element={<ReviewsPage />} />
 
                         {/* Account, Admin & Legal */}
@@ -231,7 +311,8 @@ export const App: React.FC = () => {
                   </BrowserRouter>
                 </MascotProvider>
               </BroadcastNotificationProvider>
-            </FavoritesProvider>
+            </UiLibraryFavoritesProvider>
+          </FavoritesProvider>
           </MaintenanceProvider>
         </AuthProvider>
       </ToastProvider>

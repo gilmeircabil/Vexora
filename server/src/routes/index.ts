@@ -24,7 +24,6 @@ const apiRouter = Router();
 // This runs before all route handlers
 apiRouter.use((req, res, next) => {
   const userId = (req as any).user?.userId;
-  const ipAddress = req.ip || req.socket.remoteAddress;
 
   // Set rate limit headers
   const limit = userId ? defaultLimits.api.authenticatedPerMinute : defaultLimits.api.guestPerMinute;

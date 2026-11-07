@@ -23,6 +23,7 @@ import {
   Award,
   Palette,
   BookOpen,
+  LayoutGrid,
 } from 'lucide-react';
 import {
   TOOL_CATALOG,
@@ -46,8 +47,12 @@ export const HomePage: React.FC = () => {
   const [studyWorkspaceTab, setStudyWorkspaceTab] = useState<'student' | 'teacher'>('student');
   const { mood, triggerMood } = useMascot();
   const { favoriteIds, favoritesCount } = useFavorites();
+  const [isWakingUp, setIsWakingUp] = useState(false);
 
   const getHeroSpeechText = () => {
+    if (isWakingUp) {
+      return 'Cloud server waking up... 🌰 Syncing live data!';
+    }
     if (mood === 'celebrate') {
       return 'Woohoo! Sparkle power! 🌰✨';
     }
@@ -192,28 +197,55 @@ export const HomePage: React.FC = () => {
   const [reviewsError, setReviewsError] = useState('');
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
 
-  const fetchReviewsSummary = useCallback(async () => {
+  // Detect slow server response (e.g. Render free tier cold-start waking up)
+  useEffect(() => {
+    if (!loadingStats) {
+      setIsWakingUp(false);
+      return;
+    }
+    const timer = setTimeout(() => {
+      if (loadingStats) {
+        setIsWakingUp(true);
+      }
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [loadingStats]);
+
+  const fetchReviewsSummary = useCallback(async (retryCount = 0) => {
     setLoadingReviews(true);
     setReviewsError('');
     try {
       const res = await reviewApi.getSummary(3);
       if (res?.success && res.data) {
         setReviewsData(res.data);
+        setLoadingReviews(false);
       } else if (res?.error) {
-        setReviewsError(res.error);
+        if (retryCount < 8) {
+          setTimeout(() => fetchReviewsSummary(retryCount + 1), 4000);
+        } else {
+          setReviewsError(res.error);
+          setLoadingReviews(false);
+        }
       }
     } catch {
-      setReviewsError('Unable to load recent reviews.');
-    } finally {
-      setLoadingReviews(false);
+      if (retryCount < 8) {
+        setTimeout(() => fetchReviewsSummary(retryCount + 1), 4000);
+      } else {
+        setReviewsError('Unable to load recent reviews.');
+        setLoadingReviews(false);
+      }
     }
   }, []);
 
   useEffect(() => {
     let active = true;
-    platformApi
-      .getHomeOverview()
-      .then((res) => {
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    let attempts = 0;
+    const maxAttempts = 12; // ~48s coverage for Render cold start
+
+    const fetchOverviewWithRetry = async () => {
+      try {
+        const res = await platformApi.getHomeOverview();
         if (!active) return;
         if (res?.success && res.data) {
           setOverview(res.data);
@@ -221,17 +253,29 @@ export const HomePage: React.FC = () => {
             setReviewsData(res.data.reviewsSummary);
             setLoadingReviews(false);
           }
+          setLoadingStats(false);
+          setIsWakingUp(false);
+          return;
         }
-      })
-      .catch(() => {})
-      .finally(() => {
-        if (active) setLoadingStats(false);
-      });
+        throw new Error('Retrying home overview');
+      } catch {
+        if (!active) return;
+        attempts += 1;
+        if (attempts < maxAttempts) {
+          retryTimer = setTimeout(fetchOverviewWithRetry, 4000);
+        } else {
+          setLoadingStats(false);
+          setIsWakingUp(false);
+        }
+      }
+    };
 
+    fetchOverviewWithRetry();
     fetchReviewsSummary();
 
     return () => {
       active = false;
+      if (retryTimer) clearTimeout(retryTimer);
     };
   }, [fetchReviewsSummary]);
 
@@ -309,17 +353,31 @@ export const HomePage: React.FC = () => {
         </div>
 
         {/* Live Platform Telemetry & Top Supporter Strip */}
+        {isWakingUp && loadingStats && (
+          <div className="mb-3 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 border-2 border-amber-500 text-amber-950 text-xs font-black animate-pulse shadow-[2px_2px_0px_#000000]">
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+            <span>Connecting to live cloud server... syncing telemetry</span>
+          </div>
+        )}
         <div className="border-y-2 border-black py-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:divide-x-2 lg:divide-black/15">
           <div className="lg:pr-4">
             <div className="text-2xl sm:text-3xl font-black text-black">
-              {loadingStats ? '—' : stats.totalMembers.toLocaleString()}
+              {loadingStats ? (
+                <div className="h-8 w-24 bg-black/10 rounded-lg animate-pulse my-0.5" />
+              ) : (
+                stats.totalMembers.toLocaleString()
+              )}
             </div>
             <div className="text-xs font-bold text-neutral-600 mt-0.5">Community Members</div>
           </div>
 
           <div className="lg:px-5">
             <div className="text-2xl sm:text-3xl font-black text-black">
-              {loadingStats ? '—' : stats.totalPublishedPosts.toLocaleString()}
+              {loadingStats ? (
+                <div className="h-8 w-24 bg-black/10 rounded-lg animate-pulse my-0.5" />
+              ) : (
+                stats.totalPublishedPosts.toLocaleString()
+              )}
             </div>
             <div className="text-xs font-bold text-neutral-600 mt-0.5">
               Published Tutorials &amp; Posts
@@ -328,7 +386,11 @@ export const HomePage: React.FC = () => {
 
           <div className="lg:px-5">
             <div className="text-2xl sm:text-3xl font-black text-black">
-              {loadingStats ? '—' : stats.totalSupporters.toLocaleString()}
+              {loadingStats ? (
+                <div className="h-8 w-24 bg-black/10 rounded-lg animate-pulse my-0.5" />
+              ) : (
+                stats.totalSupporters.toLocaleString()
+              )}
             </div>
             <div className="text-xs font-bold text-neutral-600 mt-0.5">Community Supporters</div>
           </div>
@@ -338,7 +400,12 @@ export const HomePage: React.FC = () => {
               <Crown className="w-3.5 h-3.5 text-amber-600" />
               <span>Top Public Supporter</span>
             </div>
-            {overview?.topSupporter ? (
+            {loadingStats ? (
+              <div className="space-y-1.5 mt-1.5">
+                <div className="h-4 w-28 bg-black/10 rounded animate-pulse" />
+                <div className="h-3 w-16 bg-black/5 rounded animate-pulse" />
+              </div>
+            ) : overview?.topSupporter ? (
               <div className="mt-0.5">
                 <span className="font-black text-sm text-black block truncate">
                   {overview.topSupporter.isAnonymous
@@ -766,7 +833,79 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 6. RECENT LEARNING HUB POSTS (Clean Editorial Feed List) */}
+      {/* 6. UI COMPONENT LIBRARY SPOTLIGHT */}
+      <section className="border-t-2 border-black pt-12 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div>
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
+              <LayoutGrid className="w-3.5 h-3.5 text-black" />
+              <span>Visual Learning &amp; Component Catalog</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-black">
+              UI Component Library &amp; Design Center
+            </h2>
+            <p className="text-xs sm:text-sm font-semibold text-neutral-600 mt-1">
+              Explore 100+ components, 12 website layouts, 11 dashboards, and interactive playgrounds.
+            </p>
+          </div>
+
+          <Link
+            to="/ui-library"
+            className="inline-flex items-center gap-1.5 text-xs font-black text-black hover:underline self-start sm:self-auto"
+          >
+            <span>Open UI Library</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+          <Link
+            to="/ui-library?section=components"
+            className="p-5 bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] hover:-translate-y-1 transition space-y-2 group"
+          >
+            <div className="w-10 h-10 rounded-xl bg-[#FACC15] border-2 border-black flex items-center justify-center font-black text-lg">
+              🧩
+            </div>
+            <h3 className="font-black text-sm text-black group-hover:text-blue-600 transition">100+ Components</h3>
+            <p className="text-xs text-neutral-600 font-medium">Navbars, buttons, cards, forms, data tables, modals &amp; feeds.</p>
+          </Link>
+
+          <Link
+            to="/ui-library?section=website-layouts"
+            className="p-5 bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] hover:-translate-y-1 transition space-y-2 group"
+          >
+            <div className="w-10 h-10 rounded-xl bg-[#38BDF8] border-2 border-black flex items-center justify-center font-black text-lg">
+              💻
+            </div>
+            <h3 className="font-black text-sm text-black group-hover:text-blue-600 transition">12 Website Layouts</h3>
+            <p className="text-xs text-neutral-600 font-medium">Full landing pages, SaaS, portfolios, blogs, and pricing pages.</p>
+          </Link>
+
+          <Link
+            to="/ui-library?section=dashboard-layouts"
+            className="p-5 bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] hover:-translate-y-1 transition space-y-2 group"
+          >
+            <div className="w-10 h-10 rounded-xl bg-[#4ADE80] border-2 border-black flex items-center justify-center font-black text-lg">
+              📊
+            </div>
+            <h3 className="font-black text-sm text-black group-hover:text-blue-600 transition">11 Full Dashboards</h3>
+            <p className="text-xs text-neutral-600 font-medium">Admin consoles, analytics, financial, CRM, and Kanban views.</p>
+          </Link>
+
+          <Link
+            to="/ui-library?section=playground"
+            className="p-5 bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] hover:-translate-y-1 transition space-y-2 group"
+          >
+            <div className="w-10 h-10 rounded-xl bg-[#A78BFA] border-2 border-black flex items-center justify-center font-black text-lg">
+              ⚡
+            </div>
+            <h3 className="font-black text-sm text-black group-hover:text-blue-600 transition">Live Playground</h3>
+            <p className="text-xs text-neutral-600 font-medium">Tweak colors, radius, padding, and copy generated React &amp; CSS.</p>
+          </Link>
+        </div>
+      </section>
+
+      {/* 7. RECENT LEARNING HUB POSTS (Clean Editorial Feed List) */}
       <section className="border-t-2 border-black pt-12 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
@@ -791,7 +930,23 @@ export const HomePage: React.FC = () => {
           </Link>
         </div>
 
-        {overview?.recentPosts && overview.recentPosts.length > 0 ? (
+        {loadingStats ? (
+          <div className="divide-y-2 divide-black/10 border-y-2 border-black/15">
+            {[1, 2, 3].map((n) => (
+              <div
+                key={n}
+                className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-pulse px-2"
+              >
+                <div className="space-y-2 min-w-0 flex-1">
+                  <div className="h-3 w-36 bg-black/10 rounded" />
+                  <div className="h-5 w-3/4 max-w-sm bg-black/10 rounded" />
+                  <div className="h-3 w-1/2 max-w-xs bg-black/5 rounded" />
+                </div>
+                <div className="h-4 w-16 bg-black/10 rounded shrink-0 hidden sm:block" />
+              </div>
+            ))}
+          </div>
+        ) : overview?.recentPosts && overview.recentPosts.length > 0 ? (
           <div className="divide-y-2 divide-black/10 border-y-2 border-black/15">
             {overview.recentPosts.slice(0, 4).map((post) => (
               <Link
@@ -990,9 +1145,21 @@ export const HomePage: React.FC = () => {
           {/* Right Column: Recent Approved Reviews Stream */}
           <div className="lg:col-span-8">
             {loadingReviews ? (
-              <div className="space-y-4">
-                {[1, 2].map((n) => (
-                  <div key={n} className="h-20 rounded-xl bg-black/5 animate-pulse" />
+              <div className="space-y-3">
+                {[1, 2, 3].map((n) => (
+                  <div
+                    key={n}
+                    className="p-4 rounded-xl border border-black/10 bg-black/5 animate-pulse space-y-2.5"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-black/10 shrink-0" />
+                      <div className="space-y-1">
+                        <div className="h-3.5 w-24 bg-black/10 rounded" />
+                        <div className="h-2.5 w-16 bg-black/5 rounded" />
+                      </div>
+                    </div>
+                    <div className="h-3.5 w-4/5 bg-black/10 rounded" />
+                  </div>
                 ))}
               </div>
             ) : reviewsError ? (

@@ -12,6 +12,8 @@ import {
   Wrench,
   GraduationCap,
   Bot,
+  Compass,
+  LayoutGrid,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 import { BrandLogo } from '../common/BrandLogo.js';
@@ -45,10 +47,16 @@ export const Header: React.FC = () => {
     if (path === '/ai-chat') {
       return location.pathname.startsWith('/ai-chat') || location.pathname.startsWith('/chat');
     }
+    if (path === '/discover') {
+      return location.pathname.startsWith('/discover');
+    }
     if (path === '/studio') {
       return (
         location.pathname.startsWith('/studio') || location.pathname.startsWith('/design-studio')
       );
+    }
+    if (path === '/ui-library') {
+      return location.pathname.startsWith('/ui-library');
     }
     if (path === '/study') {
       return location.pathname.startsWith('/study') || location.pathname.startsWith('/study-space');
@@ -102,6 +110,18 @@ export const Header: React.FC = () => {
             </Link>
 
             <Link
+              to="/ui-library"
+              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+                isNavActive('/ui-library')
+                  ? 'bg-[#818CF8] border-black shadow-[2px_2px_0px_#000000]'
+                  : 'border-transparent hover:bg-black/5'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>UI Library</span>
+            </Link>
+
+            <Link
               to="/learning"
               className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
                 isNavActive('/learning')
@@ -131,6 +151,18 @@ export const Header: React.FC = () => {
                   ? 'Teacher Workspace'
                   : 'Study Space'}
               </span>
+            </Link>
+
+            <Link
+              to="/discover"
+              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+                isNavActive('/discover')
+                  ? 'bg-[#38BDF8] border-black shadow-[2px_2px_0px_#000000]'
+                  : 'border-transparent hover:bg-black/5'
+              }`}
+            >
+              <Compass className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Discover</span>
             </Link>
 
             <Link
@@ -233,6 +265,14 @@ export const Header: React.FC = () => {
                     </Link>
 
                     <Link
+                      to="/ui-library"
+                      className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-black rounded-lg text-black hover:bg-neutral-100 transition-colors"
+                    >
+                      <LayoutGrid className="w-4 h-4 text-indigo-600" />
+                      <span>UI Component Library</span>
+                    </Link>
+
+                    <Link
                       to="/dashboard"
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-black rounded-lg text-black hover:bg-neutral-100 transition-colors"
                     >
@@ -324,6 +364,14 @@ export const Header: React.FC = () => {
             </Link>
 
             <Link
+              to="/ui-library"
+              className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#818CF8] border-2 border-black shadow-[2px_2px_0px_#000000] text-sm font-black text-black"
+            >
+              <LayoutGrid className="w-4 h-4" />
+              <span>UI Library</span>
+            </Link>
+
+            <Link
               to="/learning"
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#A78BFA] border-2 border-black shadow-[2px_2px_0px_#000000] text-sm font-black text-black"
             >
@@ -345,6 +393,14 @@ export const Header: React.FC = () => {
                   ? 'Teacher Workspace'
                   : 'Study Space'}
               </span>
+            </Link>
+
+            <Link
+              to="/discover"
+              className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#38BDF8] border-2 border-black shadow-[2px_2px_0px_#000000] text-sm font-black text-black"
+            >
+              <Compass className="w-4 h-4" />
+              <span>Vexora Discover</span>
             </Link>
 
             <Link

@@ -70,6 +70,14 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
+                  to="/ui-library"
+                  className="text-neutral-700 hover:text-black hover:underline transition-colors"
+                >
+                  UI Library
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/learning"
                   className="text-neutral-700 hover:text-black hover:underline transition-colors"
                 >

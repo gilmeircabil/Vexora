@@ -86,7 +86,12 @@ export function createApp() {
   // Note: Actual rate limiting is handled by dedicated middleware on specific routes
   app.use((req, res, next) => {
     const userId = (req as any).user?.userId;
-    const ipAddress = req.ip || req.socket.remoteAddress;
+    let ipAddress: string | undefined;
+    try {
+      ipAddress = req.ip || req.socket?.remoteAddress;
+    } catch {
+      ipAddress = req.socket?.remoteAddress || '127.0.0.1';
+    }
 
     // Set default rate limit headers based on configuration
     res.setHeader('X-RateLimit-Limit', String(defaultLimits.api.authenticatedPerMinute));
