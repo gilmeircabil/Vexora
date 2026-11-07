@@ -94,6 +94,14 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
+                  to="/discover"
+                  className="text-neutral-700 hover:text-black hover:underline transition-colors font-bold text-sky-800"
+                >
+                  Vexora Discover
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/community"
                   className="text-neutral-700 hover:text-black hover:underline transition-colors"
                 >

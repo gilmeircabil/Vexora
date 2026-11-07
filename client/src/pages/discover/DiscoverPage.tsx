@@ -68,9 +68,23 @@ export function buildGoogleMapsSearchUrl(
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(trimmedKeyword)}&query_place_id=`;
 }
 
+export function getInitialKeyword(): string {
+  try {
+    if (typeof window !== 'undefined' && window.location?.search) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('keyword') || params.get('q') || '';
+    }
+  } catch {
+    // fallback
+  }
+  return '';
+}
+
 export const DiscoverPage: React.FC = () => {
+  const initialKeyword = getInitialKeyword();
+
   // Search keyword state
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState(initialKeyword);
   const [keywordError, setKeywordError] = useState<string | null>(null);
 
   // Browser geolocation state (never permanently stored)

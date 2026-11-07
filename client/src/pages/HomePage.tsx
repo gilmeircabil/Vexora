@@ -24,6 +24,8 @@ import {
   Palette,
   BookOpen,
   LayoutGrid,
+  Compass,
+  MapPin,
 } from 'lucide-react';
 import {
   TOOL_CATALOG,
@@ -905,7 +907,84 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 7. RECENT LEARNING HUB POSTS (Clean Editorial Feed List) */}
+      {/* 7. VEXORA DISCOVER — LOCAL BUSINESS SEARCH SPOTLIGHT */}
+      <section className="border-t-2 border-black pt-12 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div>
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
+              <Compass className="w-3.5 h-3.5 text-black" />
+              <span>Location-Based Business Discovery</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-black">
+              Vexora Discover
+            </h2>
+            <p className="text-xs sm:text-sm font-semibold text-neutral-600 mt-1">
+              Find coffee shops, gas stations, markets, pharmacies, restaurants, and repair services near you on Google Maps.
+            </p>
+          </div>
+
+          <Link
+            to="/discover"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#FFE600] border-2 border-black rounded-xl font-black text-xs sm:text-sm text-black shadow-[3px_3px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1.5px_1.5px_0px_#000000] transition self-start sm:self-auto"
+          >
+            <Compass className="w-4 h-4" />
+            <span>Open Vexora Discover</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        {/* Quick Discovery Cards / Shortcut Pills */}
+        <div className="p-6 bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000000] space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span className="font-black text-xs sm:text-sm uppercase tracking-wide text-neutral-800">
+                Popular Nearby Searches
+              </span>
+              <p className="text-xs text-neutral-600 font-medium">
+                Tap any category to launch immediate search near your location:
+              </p>
+            </div>
+            <Link
+              to="/discover"
+              className="text-xs font-black text-neutral-800 underline hover:text-black self-start sm:self-auto"
+            >
+              Open Full Search &rarr;
+            </Link>
+          </div>
+
+          <div className="flex flex-wrap gap-2 pt-1">
+            {[
+              { label: 'Coffee Shop', icon: '☕' },
+              { label: 'Gas Station', icon: '⛽' },
+              { label: 'Market', icon: '🏪' },
+              { label: 'Restaurant', icon: '🍽️' },
+              { label: 'Pharmacy', icon: '💊' },
+              { label: 'Grocery', icon: '🛒' },
+              { label: 'Bakery', icon: '🥐' },
+              { label: 'Laundry Shop', icon: '🧺' },
+              { label: 'Salon', icon: '💇' },
+              { label: 'Computer Repair', icon: '💻' },
+              { label: 'Printing Shop', icon: '🖨️' },
+              { label: 'Car Wash', icon: '🚗' },
+              { label: 'ATM / Bank', icon: '🏦' },
+              { label: 'Hardware Store', icon: '🔨' },
+              { label: 'Clinic / Hospital', icon: '🏥' },
+              { label: 'Gym', icon: '🏋️' },
+            ].map((item) => (
+              <Link
+                key={item.label}
+                to={`/discover?keyword=${encodeURIComponent(item.label)}`}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-black shadow-[2px_2px_0px_#000000] hover:bg-[#FFE600] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#000000] transition"
+              >
+                <span>{item.icon}</span>
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 8. RECENT LEARNING HUB POSTS (Clean Editorial Feed List) */}
       <section className="border-t-2 border-black pt-12 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>

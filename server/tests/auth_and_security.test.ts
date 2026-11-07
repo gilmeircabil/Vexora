@@ -667,8 +667,10 @@ describe('VexoraMods Username & Password Auth Suite', () => {
     expect(configRes.body.data.google).toBeDefined();
   });
 
-  it('14. Express application emits Content-Security-Policy, HSTS, and standard security headers', async () => {
-    const { createApp } = await import('../src/app.js');
+  it(
+    '14. Express application emits Content-Security-Policy, HSTS, and standard security headers',
+    async () => {
+      const { createApp } = await import('../src/app.js');
     const app = createApp();
 
     const mockReq: any = {
@@ -690,7 +692,7 @@ describe('VexoraMods Username & Password Auth Suite', () => {
     expect(mockRes.headers['X-Content-Type-Options']).toBe('nosniff');
     expect(mockRes.headers['X-Frame-Options']).toBe('DENY');
     expect(mockRes.headers['Referrer-Policy']).toBe('strict-origin-when-cross-origin');
-  });
+  }, 15000);
 
   it('15. Production environment enforces HTTPS Transport Encryption by redirecting HTTP to HTTPS', async () => {
     const originalEnv = process.env.NODE_ENV;

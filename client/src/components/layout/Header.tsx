@@ -83,11 +83,11 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-2 sm:gap-3">
           <nav
             aria-label="Primary Navigation"
-            className="hidden md:flex items-center gap-1.5 text-xs sm:text-sm font-black"
+            className="hidden md:flex items-center gap-1 xl:gap-1.5 text-xs font-black"
           >
             <Link
               to="/ai-chat"
-              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
                 isNavActive('/ai-chat')
                   ? 'bg-[#FACC15] border-black shadow-[2px_2px_0px_#000000]'
                   : 'border-transparent hover:bg-black/5'
@@ -99,7 +99,7 @@ export const Header: React.FC = () => {
 
             <Link
               to="/studio"
-              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
                 isNavActive('/studio')
                   ? 'bg-[#38BDF8] border-black shadow-[2px_2px_0px_#000000]'
                   : 'border-transparent hover:bg-black/5'
@@ -111,7 +111,7 @@ export const Header: React.FC = () => {
 
             <Link
               to="/ui-library"
-              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
                 isNavActive('/ui-library')
                   ? 'bg-[#818CF8] border-black shadow-[2px_2px_0px_#000000]'
                   : 'border-transparent hover:bg-black/5'
@@ -123,7 +123,7 @@ export const Header: React.FC = () => {
 
             <Link
               to="/learning"
-              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
                 isNavActive('/learning')
                   ? 'bg-[#A78BFA] border-black shadow-[2px_2px_0px_#000000]'
                   : 'border-transparent hover:bg-black/5'
@@ -139,7 +139,7 @@ export const Header: React.FC = () => {
                   ? '/study?workspace=teacher'
                   : '/study'
               }
-              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
                 isNavActive('/study')
                   ? 'bg-[#FFD21A] border-black shadow-[2px_2px_0px_#000000]'
                   : 'border-transparent hover:bg-black/5'
@@ -155,7 +155,7 @@ export const Header: React.FC = () => {
 
             <Link
               to="/discover"
-              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
                 isNavActive('/discover')
                   ? 'bg-[#38BDF8] border-black shadow-[2px_2px_0px_#000000]'
                   : 'border-transparent hover:bg-black/5'
@@ -167,7 +167,7 @@ export const Header: React.FC = () => {
 
             <Link
               to="/community"
-              className={`px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-xl text-black border-2 transition-all flex items-center gap-1.5 ${
                 isNavActive('/community')
                   ? 'bg-[#F472B6] border-black shadow-[2px_2px_0px_#000000]'
                   : 'border-transparent hover:bg-black/5'
@@ -341,6 +341,7 @@ export const Header: React.FC = () => {
           <div className="space-y-2 font-black">
             <Link
               to="/tools"
+              onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#4ADE80] border-2 border-black shadow-[2px_2px_0px_#000000] text-sm font-black text-black"
             >
               <Wrench className="w-4 h-4" />
@@ -349,6 +350,7 @@ export const Header: React.FC = () => {
 
             <Link
               to="/ai-chat"
+              onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#FACC15] border-2 border-black shadow-[2px_2px_0px_#000000] text-sm font-black text-black"
             >
               <Bot className="w-4 h-4" />
@@ -357,6 +359,7 @@ export const Header: React.FC = () => {
 
             <Link
               to="/studio"
+              onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#38BDF8] border-2 border-black shadow-[2px_2px_0px_#000000] text-sm font-black text-black"
             >
               <Sparkles className="w-4 h-4" />
@@ -365,6 +368,7 @@ export const Header: React.FC = () => {
 
             <Link
               to="/ui-library"
+              onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#818CF8] border-2 border-black shadow-[2px_2px_0px_#000000] text-sm font-black text-black"
             >
               <LayoutGrid className="w-4 h-4" />
@@ -373,6 +377,7 @@ export const Header: React.FC = () => {
 
             <Link
               to="/learning"
+              onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#A78BFA] border-2 border-black shadow-[2px_2px_0px_#000000] text-sm font-black text-black"
             >
               <BookOpen className="w-4 h-4" />
@@ -385,6 +390,7 @@ export const Header: React.FC = () => {
                   ? '/study?workspace=teacher'
                   : '/study'
               }
+              onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#FFD21A] border-2 border-black shadow-[2px_2px_0px_#000000] text-sm font-black text-black"
             >
               <GraduationCap className="w-4 h-4" />
@@ -397,6 +403,7 @@ export const Header: React.FC = () => {
 
             <Link
               to="/discover"
+              onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#38BDF8] border-2 border-black shadow-[2px_2px_0px_#000000] text-sm font-black text-black"
             >
               <Compass className="w-4 h-4" />
@@ -405,6 +412,7 @@ export const Header: React.FC = () => {
 
             <Link
               to="/community"
+              onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#F472B6] border-2 border-black shadow-[2px_2px_0px_#000000] text-sm font-black text-black"
             >
               <Heart className="w-4 h-4" />
