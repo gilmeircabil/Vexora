@@ -4,7 +4,6 @@ import {
   Wrench,
   Sparkles,
   Heart,
-  Crown,
   ArrowRight,
   MessageSquare,
   Star,
@@ -292,17 +291,6 @@ export const HomePage: React.FC = () => {
     return (matched.length > 0 ? matched : TOOL_CATALOG).slice(0, 3);
   }, [overview]);
 
-  const stats = {
-    totalMembers: overview?.statistics?.totalMembers ?? overview?.stats?.totalMembers ?? 0,
-    totalPublishedPosts:
-      overview?.statistics?.publishedLearningPosts ?? overview?.stats?.totalPublishedPosts ?? 0,
-    totalSupporters: overview?.statistics?.totalSupporters ?? overview?.stats?.totalSupporters ?? 0,
-    totalDonationsAmount:
-      overview?.statistics?.totalDonationsAmount ?? overview?.stats?.totalDonationsAmount ?? 0,
-    totalDonationsCount:
-      overview?.statistics?.totalVerifiedDonations ?? overview?.stats?.totalDonationsCount ?? 0,
-  };
-
   // Comprehensive Platform Suites Summary
 
   return (
@@ -353,85 +341,10 @@ export const HomePage: React.FC = () => {
             />
           </div>
         </div>
-
-        {/* Live Platform Telemetry & Top Supporter Strip */}
-        {isWakingUp && loadingStats && (
-          <div className="mb-3 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 border-2 border-amber-500 text-amber-950 text-xs font-black animate-pulse shadow-[2px_2px_0px_#000000]">
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
-            <span>Connecting to live cloud server... syncing telemetry</span>
-          </div>
-        )}
-        <div className="border-y-2 border-black py-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:divide-x-2 lg:divide-black/15">
-          <div className="lg:pr-4">
-            <div className="text-2xl sm:text-3xl font-black text-black">
-              {loadingStats ? (
-                <div className="h-8 w-24 bg-black/10 rounded-lg animate-pulse my-0.5" />
-              ) : (
-                stats.totalMembers.toLocaleString()
-              )}
-            </div>
-            <div className="text-xs font-bold text-neutral-600 mt-0.5">Community Members</div>
-          </div>
-
-          <div className="lg:px-5">
-            <div className="text-2xl sm:text-3xl font-black text-black">
-              {loadingStats ? (
-                <div className="h-8 w-24 bg-black/10 rounded-lg animate-pulse my-0.5" />
-              ) : (
-                stats.totalPublishedPosts.toLocaleString()
-              )}
-            </div>
-            <div className="text-xs font-bold text-neutral-600 mt-0.5">
-              Published Tutorials &amp; Posts
-            </div>
-          </div>
-
-          <div className="lg:px-5">
-            <div className="text-2xl sm:text-3xl font-black text-black">
-              {loadingStats ? (
-                <div className="h-8 w-24 bg-black/10 rounded-lg animate-pulse my-0.5" />
-              ) : (
-                stats.totalSupporters.toLocaleString()
-              )}
-            </div>
-            <div className="text-xs font-bold text-neutral-600 mt-0.5">Community Supporters</div>
-          </div>
-
-          <div className="col-span-2 sm:col-span-1 lg:pl-5 flex flex-col justify-center">
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
-              <Crown className="w-3.5 h-3.5 text-amber-600" />
-              <span>Top Public Supporter</span>
-            </div>
-            {loadingStats ? (
-              <div className="space-y-1.5 mt-1.5">
-                <div className="h-4 w-28 bg-black/10 rounded animate-pulse" />
-                <div className="h-3 w-16 bg-black/5 rounded animate-pulse" />
-              </div>
-            ) : overview?.topSupporter ? (
-              <div className="mt-0.5">
-                <span className="font-black text-sm text-black block truncate">
-                  {overview.topSupporter.isAnonymous
-                    ? 'Anonymous Supporter'
-                    : overview.topSupporter.displayName}
-                </span>
-                <span className="text-xs font-mono font-bold text-neutral-600">
-                  ₱{Number(overview.topSupporter.totalAmount).toLocaleString()} PHP
-                </span>
-              </div>
-            ) : (
-              <Link
-                to="/community"
-                className="text-xs font-black text-black underline mt-1 inline-block"
-              >
-                Become our first supporter
-              </Link>
-            )}
-          </div>
-        </div>
       </section>
 
       {/* 2. ALL TOOLS DIRECTORY (Combined with HomePage) */}
-      <section className="border-t-2 border-black pt-12 space-y-6">
+      <section className="pt-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
@@ -463,7 +376,7 @@ export const HomePage: React.FC = () => {
         </div>
 
         {/* Search + Tool Type Filter */}
-        <div className="border-b-2 border-black pb-6 space-y-4">
+        <div className="pb-4 space-y-4">
           {/* Search Input */}
           <div className="relative max-w-xl">
             <Search className="w-4 h-4 text-black absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
@@ -617,7 +530,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 4. INTERACTIVE STUDY SPACE SPOTLIGHT (Dual Student / Teacher Capabilities) */}
-      <section className="border-t-2 border-black pt-12 space-y-6">
+      <section className="pt-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
@@ -770,7 +683,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 5. VEXORAMODS STUDIO INTRODUCTION */}
-      <section className="border-t-2 border-black pt-12 space-y-6">
+      <section className="pt-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
@@ -836,7 +749,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 6. UI COMPONENT LIBRARY SPOTLIGHT */}
-      <section className="border-t-2 border-black pt-12 space-y-6">
+      <section className="pt-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
@@ -908,7 +821,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 7. VEXORA DISCOVER — LOCAL BUSINESS SEARCH SPOTLIGHT */}
-      <section className="border-t-2 border-black pt-12 space-y-6">
+      <section className="pt-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
@@ -985,7 +898,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 8. RECENT LEARNING HUB POSTS (Clean Editorial Feed List) */}
-      <section className="border-t-2 border-black pt-12 space-y-6">
+      <section className="pt-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
@@ -1084,7 +997,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 7. ABOUT VEXORAMODS MANIFESTO */}
-      <section className="border-t-2 border-black pt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <section className="pt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div className="lg:col-span-5 space-y-3">
           <h2 className="text-2xl sm:text-3xl font-black text-black leading-tight">
             Built for Everyone. Free &amp; Open Source Forever.
@@ -1126,7 +1039,7 @@ export const HomePage: React.FC = () => {
       <section
         id="reviews"
         aria-labelledby="homepage-reviews-heading"
-        className="border-t-2 border-black pt-12 space-y-8"
+        className="pt-8 space-y-8"
       >
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-1">

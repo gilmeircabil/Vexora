@@ -16,6 +16,7 @@ import {
   Crown,
 } from 'lucide-react';
 import { donationApi } from '../../services/donationApi.js';
+import { platformApi } from '../../services/platformApi.js';
 import { useAuth } from '../../context/AuthContext.js';
 import { useToast } from '../../context/ToastContext.js';
 
@@ -43,6 +44,7 @@ export const CommunityPage: React.FC = () => {
     calendarMonth: string;
   } | null>(null);
   const [isLoadingBoard, setIsLoadingBoard] = useState(true);
+  const [platformStats, setPlatformStats] = useState({ totalMembers: 0, totalPublishedPosts: 0, totalSupporters: 0 });
 
   // Checkout return verification
   const checkoutStatus = searchParams.get('status');
@@ -52,12 +54,21 @@ export const CommunityPage: React.FC = () => {
   const loadCommunityData = async () => {
     try {
       setIsLoadingBoard(true);
-      const [sumRes, leadRes] = await Promise.all([
+      const [sumRes, leadRes, homeRes] = await Promise.all([
         donationApi.getSummary(),
         donationApi.getLeaderboard(30),
+        platformApi.getHomeOverview().catch(() => null),
       ]);
       if (sumRes.success) setSummary(sumRes.data);
       if (leadRes.success) setLeaderboard(leadRes.data);
+      if (homeRes?.success && homeRes.data) {
+        const s = homeRes.data.statistics || homeRes.data.stats || {};
+        setPlatformStats({
+          totalMembers: s.totalMembers ?? 0,
+          totalPublishedPosts: s.publishedLearningPosts ?? s.totalPublishedPosts ?? 0,
+          totalSupporters: s.totalSupporters ?? sumRes.data?.uniqueSupporters ?? 0,
+        });
+      }
     } catch {
       // ignore offline error
     } finally {
@@ -193,42 +204,67 @@ export const CommunityPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Community Statistics Ribbon (Real Database-Backed — Zero Stat Cards) */}
-        <div className="border-y-2 border-black py-5 grid grid-cols-2 lg:grid-cols-4 gap-6 lg:divide-x-2 lg:divide-black/15">
-          <div>
+        {/* Community Telemetry Strip */}
+        <div className="bg-white border-2 border-black rounded-3xl p-6 sm:p-8 shadow-[5px_5px_0px_#000000] grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:divide-x-2 lg:divide-black/15">
+          <div className="lg:pr-4">
             <div className="text-2xl sm:text-3xl font-black text-black">
-              ₱{summary ? Number(summary.totalAmount || 0).toLocaleString() : '0'}
+              {isLoadingBoard ? (
+                <div className="h-8 w-24 bg-black/10 rounded-lg animate-pulse my-0.5" />
+              ) : (
+                platformStats.totalMembers.toLocaleString()
+              )}
+            </div>
+            <div className="text-xs font-bold text-neutral-600 mt-0.5">Community Members</div>
+          </div>
+
+          <div className="lg:px-5">
+            <div className="text-2xl sm:text-3xl font-black text-black">
+              {isLoadingBoard ? (
+                <div className="h-8 w-24 bg-black/10 rounded-lg animate-pulse my-0.5" />
+              ) : (
+                platformStats.totalPublishedPosts.toLocaleString()
+              )}
             </div>
             <div className="text-xs font-bold text-neutral-600 mt-0.5">
-              Total Verified Donations
+              Published Tutorials &amp; Posts
             </div>
           </div>
 
-          <div className="lg:pl-6">
+          <div className="lg:px-5">
             <div className="text-2xl sm:text-3xl font-black text-black">
-              {summary ? Number(summary.uniqueSupporters || 0).toLocaleString() : '0'}
+              {isLoadingBoard ? (
+                <div className="h-8 w-24 bg-black/10 rounded-lg animate-pulse my-0.5" />
+              ) : (
+                (platformStats.totalSupporters || summary?.uniqueSupporters || 0).toLocaleString()
+              )}
             </div>
-            <div className="text-xs font-bold text-neutral-600 mt-0.5">Unique Supporters</div>
+            <div className="text-xs font-bold text-neutral-600 mt-0.5">Community Supporters</div>
           </div>
 
-          <div className="lg:pl-6">
-            <div className="text-2xl sm:text-3xl font-black text-black">
-              {summary ? Number(summary.totalDonations || 0).toLocaleString() : '0'}
+          <div className="col-span-2 sm:col-span-1 lg:pl-5 flex flex-col justify-center">
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
+              <Crown className="w-3.5 h-3.5 text-amber-600" />
+              <span>Top Public Supporter</span>
             </div>
-            <div className="text-xs font-bold text-neutral-600 mt-0.5">
-              Successful Contributions
-            </div>
-          </div>
-
-          <div className="lg:pl-6">
-            <div className="text-lg font-black text-black truncate">
-              {topSupporter ? topSupporter.displayName : 'Be the First!'}
-            </div>
-            <div className="text-xs font-bold text-neutral-600 mt-0.5">
-              {topSupporter
-                ? `Top Public Supporter · ₱${Number(topSupporter.totalAmount).toLocaleString()}`
-                : 'Top Public Supporter'}
-            </div>
+            {isLoadingBoard ? (
+              <div className="space-y-1.5 mt-1.5">
+                <div className="h-4 w-28 bg-black/10 rounded animate-pulse" />
+                <div className="h-3 w-16 bg-black/5 rounded animate-pulse" />
+              </div>
+            ) : topSupporter ? (
+              <div className="mt-0.5">
+                <span className="font-black text-sm text-black block truncate">
+                  {topSupporter.isAnonymous ? 'Anonymous Supporter' : topSupporter.displayName}
+                </span>
+                <span className="text-xs font-mono font-bold text-neutral-600">
+                  ₱{Number(topSupporter.totalAmount).toLocaleString()} PHP
+                </span>
+              </div>
+            ) : (
+              <span className="text-xs font-black text-black underline mt-1 inline-block">
+                Become our first supporter
+              </span>
+            )}
           </div>
         </div>
       </div>
