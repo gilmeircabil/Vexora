@@ -14,13 +14,13 @@ import { ToastProvider } from '../context/ToastContext.js';
 import { LockedPageModal } from '../components/common/LockedPageModal.js';
 import { AuthRequiredModal } from '../components/common/AuthRequiredModal.js';
 
-describe('60-30-10 Gray (#2B2D31), Silver (#d9dadc), and Yellow (#ffc93c) Theme Suite', () => {
-  it('defines centralized CSS variables for 60% gray (#2B2D31), 30% silver (#d9dadc), and 10% yellow (#ffc93c) in index.css', () => {
+describe('60-30-10 Black (#101010), Silver (#d9dadc), and Yellow (#ffc93c) Theme Suite', () => {
+  it('defines centralized CSS variables for 60% black (#101010), 30% silver (#d9dadc), and 10% yellow (#ffc93c) in index.css', () => {
     const cssPath = path.resolve(__dirname, '../index.css');
     const cssContent = fs.readFileSync(cssPath, 'utf-8');
 
     // Centralized theme tokens
-    expect(cssContent).toMatch(/--theme-canvas:\s*#2B2D31/i);
+    expect(cssContent).toMatch(/--theme-canvas:\s*#101010/i);
     expect(cssContent).toMatch(/--theme-silver:\s*#d9dadc/i);
     expect(cssContent).toMatch(/--theme-dirty-white:\s*#d9dadc/i);
     expect(cssContent).toMatch(/--theme-yellow:\s*#ffc93c/i);

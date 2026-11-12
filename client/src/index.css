@@ -4,14 +4,14 @@
 
 @layer base {
   :root {
-    /* 60-30-10 Golden Theme: 60% Gray (#2B2D31), 30% Silver (#d9dadc), 10% Yellow (#ffc93c) */
+    /* 60-30-10 Golden Theme: 60% Black (#101010), 30% Silver (#d9dadc), 10% Yellow (#ffc93c) */
     
-    /* 60% Dominant: Slate Gray (#2B2D31) */
-    --theme-canvas: #2B2D31;
-    --theme-surface: #313338;
-    --theme-surface-raised: #383a40;
-    --theme-gray-border: #3f4147;
-    --theme-gray-subtle: #4e5058;
+    /* 60% Dominant: Black (#101010) */
+    --theme-canvas: #101010;
+    --theme-surface: #181818;
+    --theme-surface-raised: #222222;
+    --theme-gray-border: #2a2a2a;
+    --theme-gray-subtle: #383838;
     --theme-gray-muted: #949ba4;
     --theme-gray-dim: #5c5e66;
 
