@@ -1210,21 +1210,23 @@ export const AdminDashboardPage: React.FC = () => {
 
           {/* Master Global Switch Card */}
           <div
-            className={`p-6 rounded-3xl border border-[var(--theme-gray-border)] shadow-sm transition-colors ${
-              maintenanceForm.global ? 'bg-red-100' : 'bg-amber-100'
+            className={`p-6 rounded-3xl border shadow-sm transition-colors ${
+              maintenanceForm.global
+                ? 'bg-rose-950/30 border-rose-500/40'
+                : 'bg-[var(--theme-surface)] border-[var(--theme-gray-border)]'
             }`}
           >
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
               <div className="space-y-1.5 max-w-2xl">
                 <div className="flex items-center gap-2">
-                  <span className="p-2 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 shadow-sm">
-                    <Wrench className="w-5 h-5 text-slate-100 stroke-[2.5]" />
+                  <span className="p-2 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-silver)] shadow-sm">
+                    <Wrench className="w-5 h-5 text-[var(--theme-silver)] stroke-[2.5]" />
                   </span>
-                  <h3 className="text-lg font-black text-slate-100 uppercase tracking-tight">
+                  <h3 className="text-lg font-black text-[var(--theme-silver)] uppercase tracking-tight">
                     Global Platform Maintenance Switch
                   </h3>
                 </div>
-                <p className="text-xs sm:text-sm font-semibold text-neutral-800 leading-relaxed">
+                <p className="text-xs sm:text-sm font-semibold text-[var(--theme-gray-muted)] leading-relaxed">
                   When enabled, <strong>every single page</strong> on VexoraMods is locked with your
                   customized maintenance notice. Visitors cannot interact with any workspaces or
                   tools. Administrators remain able to navigate and test via Admin Bypass.
@@ -1235,15 +1237,15 @@ export const AdminDashboardPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleToggleGlobalMaintenance}
-                  className={`px-6 py-3.5 rounded-2xl border border-[var(--theme-gray-border)] font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer shadow-xs active:translate-y-0.5 transition-all flex items-center gap-2.5 ${
+                  className={`px-6 py-3.5 rounded-2xl border font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer shadow-xs active:translate-y-0.5 transition-all flex items-center gap-2.5 ${
                     maintenanceForm.global
-                      ? 'bg-red-600 text-white hover:bg-red-700 ring-2 ring-red-400'
-                      : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]'
+                      ? 'bg-rose-600 text-white hover:bg-rose-700 border-rose-500 ring-2 ring-rose-400'
+                      : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-silver)] border-[var(--theme-gray-border)]'
                   }`}
                 >
                   <span
                     className={`w-3 h-3 rounded-full ${
-                      maintenanceForm.global ? 'bg-[var(--theme-dirty-white)] animate-ping' : 'bg-[var(--theme-gray-muted)]'
+                      maintenanceForm.global ? 'bg-white animate-ping' : 'bg-[var(--theme-gray-muted)]'
                     }`}
                   />
                   <span>
@@ -1261,18 +1263,18 @@ export const AdminDashboardPage: React.FC = () => {
             {/* Notice Customizer Form */}
             <div className="lg:col-span-7 bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] p-6 sm:p-7 shadow-xs space-y-5">
               <div>
-                <h3 className="text-base font-black text-slate-100 uppercase tracking-tight flex items-center gap-2">
+                <h3 className="text-base font-black text-[var(--theme-silver)] uppercase tracking-tight flex items-center gap-2">
                   <Megaphone className="w-4 h-4 stroke-[2.5]" />
                   <span>Customize Maintenance Notice</span>
                 </h3>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">
+                <p className="text-xs text-[var(--theme-gray-muted)] font-medium mt-0.5">
                   This text appears inside the maintenance modal seen by visitors on locked pages.
                 </p>
               </div>
 
               {/* Quick Presets */}
               <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span className="text-[11px] font-black uppercase text-slate-400 mr-1">
+                <span className="text-[11px] font-black uppercase text-[var(--theme-gray-muted)] mr-1">
                   Presets:
                 </span>
                 <button
@@ -1286,7 +1288,7 @@ export const AdminDashboardPage: React.FC = () => {
                       estimatedReturn: 'In 30 minutes',
                     }))
                   }
-                  className="px-2.5 py-1 rounded-lg bg-slate-900/60 hover:bg-neutral-100 border border-black text-[11px] font-bold text-slate-300 cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[11px] font-bold text-[var(--theme-silver)] cursor-pointer"
                 >
                   Routine Maintenance
                 </button>
@@ -1301,7 +1303,7 @@ export const AdminDashboardPage: React.FC = () => {
                       estimatedReturn: '11:00 PM UTC',
                     }))
                   }
-                  className="px-2.5 py-1 rounded-lg bg-slate-900/60 hover:bg-neutral-100 border border-black text-[11px] font-bold text-slate-300 cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[11px] font-bold text-[var(--theme-silver)] cursor-pointer"
                 >
                   System Upgrade
                 </button>
@@ -1316,7 +1318,7 @@ export const AdminDashboardPage: React.FC = () => {
                       estimatedReturn: 'Shortly',
                     }))
                   }
-                  className="px-2.5 py-1 rounded-lg bg-slate-900/60 hover:bg-neutral-100 border border-black text-[11px] font-bold text-slate-300 cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[11px] font-bold text-[var(--theme-silver)] cursor-pointer"
                 >
                   Emergency Fix
                 </button>
@@ -1324,7 +1326,7 @@ export const AdminDashboardPage: React.FC = () => {
 
               {/* Notice Title */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-black uppercase text-slate-100">
+                <label className="block text-xs font-black uppercase text-[var(--theme-silver)]">
                   Notice Header Title
                 </label>
                 <input
@@ -1333,13 +1335,13 @@ export const AdminDashboardPage: React.FC = () => {
                   value={maintenanceForm.title}
                   onChange={(e) => setMaintenanceForm((p) => ({ ...p, title: e.target.value }))}
                   placeholder="e.g. Scheduled Maintenance"
-                  className="w-full px-3.5 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-[var(--theme-yellow)] shadow-sm"
+                  className="w-full px-3.5 py-2.5 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold text-[var(--theme-silver)] placeholder:text-[var(--theme-gray-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-yellow)] shadow-sm"
                 />
               </div>
 
               {/* Notice Message */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-black uppercase text-slate-100">
+                <label className="block text-xs font-black uppercase text-[var(--theme-silver)]">
                   Detailed Notice Message
                 </label>
                 <textarea
@@ -1348,13 +1350,13 @@ export const AdminDashboardPage: React.FC = () => {
                   value={maintenanceForm.message}
                   onChange={(e) => setMaintenanceForm((p) => ({ ...p, message: e.target.value }))}
                   placeholder="Explain what is happening and when the feature will return..."
-                  className="w-full px-3.5 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-semibold text-slate-100 focus:outline-none focus:ring-2 focus:ring-[var(--theme-yellow)] shadow-sm"
+                  className="w-full px-3.5 py-2.5 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl text-xs font-semibold text-[var(--theme-silver)] placeholder:text-[var(--theme-gray-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-yellow)] shadow-sm"
                 />
               </div>
 
               {/* Estimated Return Time */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-black uppercase text-slate-100">
+                <label className="block text-xs font-black uppercase text-[var(--theme-silver)]">
                   Estimated Completion / Return Time (Optional)
                 </label>
                 <input
@@ -1365,7 +1367,7 @@ export const AdminDashboardPage: React.FC = () => {
                     setMaintenanceForm((p) => ({ ...p, estimatedReturn: e.target.value }))
                   }
                   placeholder="e.g. 10:30 PM UTC or In 45 minutes"
-                  className="w-full px-3.5 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-[var(--theme-yellow)] shadow-sm"
+                  className="w-full px-3.5 py-2.5 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold text-[var(--theme-silver)] placeholder:text-[var(--theme-gray-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-yellow)] shadow-sm"
                 />
               </div>
             </div>
@@ -1418,7 +1420,7 @@ export const AdminDashboardPage: React.FC = () => {
                 )}
 
                 <div className="pt-2">
-                  <div className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-bold text-xs shadow-xs">
+                  <div className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] font-bold text-xs shadow-xs">
                     <span>Return to Homepage</span>
                   </div>
                 </div>
@@ -1430,11 +1432,11 @@ export const AdminDashboardPage: React.FC = () => {
           <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] p-6 sm:p-7 shadow-xs space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h3 className="text-base font-black text-slate-100 uppercase tracking-tight flex items-center gap-2">
+                <h3 className="text-base font-black text-[var(--theme-silver)] uppercase tracking-tight flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
                   <span>Individual Workspace & Page Locks</span>
                 </h3>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">
+                <p className="text-xs text-[var(--theme-gray-muted)] font-medium mt-0.5">
                   Toggle individual workspaces into maintenance without taking the rest of the site
                   offline.
                 </p>
@@ -1450,7 +1452,7 @@ export const AdminDashboardPage: React.FC = () => {
                     });
                     setMaintenanceForm((p) => ({ ...p, pages: { ...p.pages, ...allLocked } }));
                   }}
-                  className="px-3 py-1.5 rounded-xl bg-slate-900/60 hover:bg-neutral-100 border border-black text-[11px] font-black text-slate-100 cursor-pointer shadow-sm"
+                  className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[11px] font-black text-[var(--theme-silver)] cursor-pointer shadow-sm"
                 >
                   Lock All Pages
                 </button>
@@ -1463,7 +1465,7 @@ export const AdminDashboardPage: React.FC = () => {
                     });
                     setMaintenanceForm((p) => ({ ...p, pages: { ...p.pages, ...allUnlocked } }));
                   }}
-                  className="px-3 py-1.5 rounded-xl bg-slate-900/60 hover:bg-neutral-100 border border-black text-[11px] font-black text-slate-100 cursor-pointer shadow-sm"
+                  className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[11px] font-black text-[var(--theme-silver)] cursor-pointer shadow-sm"
                 >
                   Unlock All Pages
                 </button>
@@ -1479,8 +1481,10 @@ export const AdminDashboardPage: React.FC = () => {
                 return (
                   <div
                     key={item.key}
-                    className={`p-4 rounded-2xl border border-[var(--theme-gray-border)] transition-all shadow-sm flex flex-col justify-between gap-3 ${
-                      isUnderGlobal || isPageLocked ? 'bg-amber-50/60' : 'bg-slate-900/60'
+                    className={`p-4 rounded-2xl border transition-all shadow-sm flex flex-col justify-between gap-3 ${
+                      isUnderGlobal || isPageLocked
+                        ? 'bg-amber-950/20 border-amber-500/40'
+                        : 'bg-[var(--theme-surface-raised)] border-[var(--theme-gray-border)]'
                     }`}
                   >
                     <div className="space-y-1.5">
@@ -1488,44 +1492,44 @@ export const AdminDashboardPage: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <span
                             style={{ backgroundColor: item.accentColor }}
-                            className="w-3 h-3 rounded-full border border-black"
+                            className="w-3 h-3 rounded-full border border-black/30"
                           />
-                          <h4 className="font-black text-sm text-slate-100">{item.label}</h4>
+                          <h4 className="font-bold text-sm text-[var(--theme-silver)]">{item.label}</h4>
                         </div>
                         <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase border border-black ${
+                          className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border ${
                             isUnderGlobal
-                              ? 'bg-red-200 text-red-900'
+                              ? 'bg-rose-950/60 text-rose-300 border-rose-800/60'
                               : isPageLocked
-                                ? 'bg-amber-300 text-amber-900'
-                                : 'bg-emerald-200 text-emerald-900'
+                                ? 'bg-amber-950/60 text-amber-300 border-amber-800/60'
+                                : 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60'
                           }`}
                         >
                           {isUnderGlobal ? 'Global Lock' : isPageLocked ? 'Maintenance' : 'Online'}
                         </span>
                       </div>
-                      <p className="text-xs font-semibold text-slate-400 leading-snug">
+                      <p className="text-xs font-medium text-[var(--theme-gray-muted)] leading-snug">
                         {item.description}
                       </p>
-                      <div className="text-[10px] font-mono text-slate-400 pt-1">
+                      <div className="text-[10px] font-mono text-[var(--theme-gray-muted)]/80 pt-1">
                         Paths: {item.paths.join(', ')}
                       </div>
                     </div>
 
-                    <div className="pt-2 border-t border-black/10 flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-slate-300">
+                    <div className="pt-2 border-t border-[var(--theme-gray-border)] flex items-center justify-between">
+                      <span className="text-[11px] font-medium text-[var(--theme-gray-muted)]">
                         {isPageLocked ? 'Lock active' : 'Accessible to users'}
                       </span>
                       <button
                         type="button"
                         onClick={() => handleTogglePageMaintenance(item.key)}
                         disabled={isUnderGlobal}
-                        className={`px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] font-black text-xs cursor-pointer shadow-sm active:translate-x-0.5 active:translate-y-0.5 transition-all ${
+                        className={`px-3 py-1.5 rounded-xl border font-bold text-xs cursor-pointer shadow-sm active:translate-y-0.5 transition-all ${
                           isUnderGlobal
-                            ? 'bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] cursor-not-allowed border-[var(--theme-gray-border)] shadow-none'
+                            ? 'bg-[var(--theme-surface)] text-[var(--theme-gray-muted)] cursor-not-allowed border-[var(--theme-gray-border)] shadow-none'
                             : isPageLocked
-                              ? 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]'
-                              : 'bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)]'
+                              ? 'bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-raised)] text-[var(--theme-silver)] border-[var(--theme-gray-border)]'
+                              : 'bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] border-[var(--theme-yellow)]'
                         }`}
                       >
                         {isPageLocked ? 'Set Online' : 'Put in Maintenance'}
@@ -1541,10 +1545,10 @@ export const AdminDashboardPage: React.FC = () => {
           <div className="sticky bottom-4 z-30 p-4 bg-[var(--theme-surface)]/95 backdrop-blur-md rounded-2xl border border-[var(--theme-gray-border)] shadow-xs flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <span className="p-2 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] shadow-xs">
-                <CheckCircle2 className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2.5]" />
+                <CheckCircle2 className="w-5 h-5 text-[var(--theme-silver)] stroke-[2.5]" />
               </span>
               <div>
-                <p className="text-xs sm:text-sm font-bold text-[var(--theme-dirty-white)]">Ready to apply changes?</p>
+                <p className="text-xs sm:text-sm font-bold text-[var(--theme-silver)]">Ready to apply changes?</p>
                 <p className="text-[11px] font-normal text-[var(--theme-gray-muted)]">
                   Settings are saved to the database and sync instantly with all visitor sessions.
                 </p>
@@ -1555,7 +1559,7 @@ export const AdminDashboardPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleResetMaintenanceDefaults}
-                className="px-4 py-2.5 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-xl text-xs font-bold cursor-pointer shadow-xs active:translate-y-0.5 transition-all"
+                className="px-4 py-2.5 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-silver)] rounded-xl text-xs font-bold cursor-pointer shadow-xs active:translate-y-0.5 transition-all"
               >
                 Reset to Defaults
               </button>
@@ -1564,7 +1568,7 @@ export const AdminDashboardPage: React.FC = () => {
                 type="button"
                 onClick={handleSaveMaintenance}
                 disabled={isSavingMaintenance}
-                className="px-6 py-2.5 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl text-xs sm:text-sm font-bold text-[var(--theme-canvas)] cursor-pointer shadow-xs active:translate-y-0.5 transition-all flex items-center gap-2"
+                className="px-6 py-2.5 bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] border border-[var(--theme-yellow)] rounded-xl text-xs sm:text-sm font-bold text-[var(--theme-canvas)] cursor-pointer shadow-xs active:translate-y-0.5 transition-all flex items-center gap-2"
               >
                 {isSavingMaintenance ? (
                   <>
