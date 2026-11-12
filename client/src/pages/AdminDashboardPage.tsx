@@ -1240,12 +1240,12 @@ export const AdminDashboardPage: React.FC = () => {
                   className={`px-6 py-3.5 rounded-2xl border font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer shadow-xs active:translate-y-0.5 transition-all flex items-center gap-2.5 ${
                     maintenanceForm.global
                       ? 'bg-rose-600 text-white hover:bg-rose-700 border-rose-500 ring-2 ring-rose-400'
-                      : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-silver)] border-[var(--theme-gray-border)]'
+                      : 'bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] border-[var(--theme-yellow)]'
                   }`}
                 >
                   <span
                     className={`w-3 h-3 rounded-full ${
-                      maintenanceForm.global ? 'bg-white animate-ping' : 'bg-[var(--theme-gray-muted)]'
+                      maintenanceForm.global ? 'bg-white animate-ping' : 'bg-[var(--theme-canvas)]'
                     }`}
                   />
                   <span>
@@ -1452,7 +1452,7 @@ export const AdminDashboardPage: React.FC = () => {
                     });
                     setMaintenanceForm((p) => ({ ...p, pages: { ...p.pages, ...allLocked } }));
                   }}
-                  className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[11px] font-black text-[var(--theme-silver)] cursor-pointer shadow-sm"
+                  className="px-3 py-1.5 rounded-xl bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] border border-[var(--theme-yellow)] text-[11px] font-black text-[var(--theme-canvas)] cursor-pointer shadow-sm"
                 >
                   Lock All Pages
                 </button>
@@ -2043,7 +2043,7 @@ export const AdminDashboardPage: React.FC = () => {
 
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-xl bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] text-xs font-black uppercase shadow-sm"
+              className="px-5 py-2.5 rounded-xl bg-[var(--theme-yellow)] text-[var(--theme-canvas)] hover:bg-[var(--theme-yellow-hover)] border border-[var(--theme-yellow)] text-xs font-black uppercase shadow-sm cursor-pointer"
             >
               Save Platform Configuration
             </button>
