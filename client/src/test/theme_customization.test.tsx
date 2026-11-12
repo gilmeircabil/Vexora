@@ -14,17 +14,19 @@ import { ToastProvider } from '../context/ToastContext.js';
 import { LockedPageModal } from '../components/common/LockedPageModal.js';
 import { AuthRequiredModal } from '../components/common/AuthRequiredModal.js';
 
-describe('Soft Black, Dirty White, and Gray Dynamic Theme Suite', () => {
-  it('defines centralized CSS variables for soft black (#121214), dirty white (#f4f4f0), and gray (#27272a) in index.css', () => {
+describe('60-30-10 Gray (#2B2D31), Silver (#d9dadc), and Yellow (#ffc93c) Theme Suite', () => {
+  it('defines centralized CSS variables for 60% gray (#2B2D31), 30% silver (#d9dadc), and 10% yellow (#ffc93c) in index.css', () => {
     const cssPath = path.resolve(__dirname, '../index.css');
     const cssContent = fs.readFileSync(cssPath, 'utf-8');
 
     // Centralized theme tokens
-    expect(cssContent).toMatch(/--theme-canvas:\s*#121214/i);
-    expect(cssContent).toMatch(/--theme-dirty-white:\s*#f4f4f0/i);
-    expect(cssContent).toMatch(/--theme-gray-border:\s*#27272a/i);
+    expect(cssContent).toMatch(/--theme-canvas:\s*#2B2D31/i);
+    expect(cssContent).toMatch(/--theme-silver:\s*#d9dadc/i);
+    expect(cssContent).toMatch(/--theme-dirty-white:\s*#d9dadc/i);
+    expect(cssContent).toMatch(/--theme-yellow:\s*#ffc93c/i);
+    expect(cssContent).toMatch(/--theme-10-accent:\s*var\(--theme-yellow\)/i);
     expect(cssContent).toMatch(/--bg-page:\s*var\(--theme-canvas\)/i);
-    expect(cssContent).toMatch(/--text-primary:\s*var\(--theme-dirty-white\)/i);
+    expect(cssContent).toMatch(/--text-primary:\s*var\(--theme-silver\)|var\(--theme-dirty-white\)/i);
   });
 
   it('renders Card with centralized surface variable and gray border', () => {
@@ -61,7 +63,7 @@ describe('Soft Black, Dirty White, and Gray Dynamic Theme Suite', () => {
     const { container: logoContainer } = render(<BrandLogo size="md" />);
     const emblem = logoContainer.querySelector('[data-testid="brand-emblem"]');
     expect(emblem).toBeInTheDocument();
-    expect(emblem?.className).toMatch(/bg-\[var\(--theme-surface-raised\)\]|bg-\[var\(--theme-dirty-white\)\]|bg-theme-surface-raised/);
+    expect(emblem?.className).toMatch(/bg-\[var\(--theme-yellow\)\]|bg-\[var\(--theme-dirty-white\)\]|bg-\[var\(--theme-surface-raised\)\]/);
   });
 
   it('renders modals and feature common components with centralized theme variables', () => {

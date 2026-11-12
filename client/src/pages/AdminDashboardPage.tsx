@@ -597,8 +597,8 @@ export const AdminDashboardPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-[var(--theme-gray-border)]">
         <div>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] flex items-center justify-center shadow-sm">
-              <ShieldCheck className="w-5 h-5 text-slate-100 stroke-[2.5]" />
+            <div className="w-10 h-10 rounded-xl bg-[var(--theme-yellow)] text-[var(--theme-canvas)] hover:bg-[var(--theme-yellow-hover)] border border-[var(--theme-yellow)] flex items-center justify-center shadow-sm">
+              <ShieldCheck className="w-5 h-5 text-[var(--theme-canvas)] stroke-[2.5]" />
             </div>
             <h1 className="text-2xl sm:text-4xl font-black text-slate-100">
               Admin Moderation &amp; Governance
@@ -695,8 +695,8 @@ export const AdminDashboardPage: React.FC = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`pb-3 px-4 transition-all border-b-4 flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
                 active
-                  ? 'border-black text-slate-100'
-                  : 'border-transparent text-slate-400 hover:text-slate-100'
+                  ? 'border-[var(--theme-yellow)] text-[var(--theme-yellow)] font-bold'
+                  : 'border-transparent text-[var(--theme-gray-muted)] hover:text-[var(--theme-silver)]'
               }`}
             >
               <IconComp className="w-4 h-4" />
@@ -886,7 +886,7 @@ export const AdminDashboardPage: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isBroadcasting}
-                    className="w-full py-3.5 px-6 bg-[#FFD21A] hover:bg-[#EAB308] border border-[var(--theme-gray-border)] rounded-2xl font-black text-sm uppercase tracking-wider text-slate-100 shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+                    className="w-full py-3.5 px-6 bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] border border-[var(--theme-yellow)] rounded-2xl font-black text-sm uppercase tracking-wider text-[var(--theme-canvas)] shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
                   >
                     <Send className="w-4 h-4 stroke-[2.5]" />
                     <span>Broadcast Announcement to All Users</span>
@@ -1333,7 +1333,7 @@ export const AdminDashboardPage: React.FC = () => {
                   value={maintenanceForm.title}
                   onChange={(e) => setMaintenanceForm((p) => ({ ...p, title: e.target.value }))}
                   placeholder="e.g. Scheduled Maintenance"
-                  className="w-full px-3.5 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#FFD21A] shadow-sm"
+                  className="w-full px-3.5 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-[var(--theme-yellow)] shadow-sm"
                 />
               </div>
 
@@ -1348,7 +1348,7 @@ export const AdminDashboardPage: React.FC = () => {
                   value={maintenanceForm.message}
                   onChange={(e) => setMaintenanceForm((p) => ({ ...p, message: e.target.value }))}
                   placeholder="Explain what is happening and when the feature will return..."
-                  className="w-full px-3.5 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-semibold text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#FFD21A] shadow-sm"
+                  className="w-full px-3.5 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-semibold text-slate-100 focus:outline-none focus:ring-2 focus:ring-[var(--theme-yellow)] shadow-sm"
                 />
               </div>
 
@@ -1365,7 +1365,7 @@ export const AdminDashboardPage: React.FC = () => {
                     setMaintenanceForm((p) => ({ ...p, estimatedReturn: e.target.value }))
                   }
                   placeholder="e.g. 10:30 PM UTC or In 45 minutes"
-                  className="w-full px-3.5 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#FFD21A] shadow-sm"
+                  className="w-full px-3.5 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-[var(--theme-yellow)] shadow-sm"
                 />
               </div>
             </div>

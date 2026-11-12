@@ -4,21 +4,29 @@
 
 @layer base {
   :root {
-    /* Main Tri-Color Theme: Soft Black, Dirty White, Gray */
-    /* Soft Black (not too black) */
-    --theme-canvas: #121214;
-    --theme-surface: #18181b;
-    --theme-surface-raised: #202024;
+    /* 60-30-10 Golden Theme: 60% Gray (#2B2D31), 30% Silver (#d9dadc), 10% Yellow (#ffc93c) */
+    
+    /* 60% Dominant: Slate Gray (#2B2D31) */
+    --theme-canvas: #2B2D31;
+    --theme-surface: #313338;
+    --theme-surface-raised: #383a40;
+    --theme-gray-border: #3f4147;
+    --theme-gray-subtle: #4e5058;
+    --theme-gray-muted: #949ba4;
+    --theme-gray-dim: #5c5e66;
 
-    /* Dirty White */
-    --theme-dirty-white: #f4f4f0;
-    --theme-dirty-white-muted: #d4d4ce;
+    /* 30% Secondary: Silver (#d9dadc) */
+    --theme-silver: #d9dadc;
+    --theme-silver-muted: #b5b6b8;
+    --theme-dirty-white: #d9dadc;
+    --theme-dirty-white-muted: #b5b6b8;
 
-    /* Gray */
-    --theme-gray-border: #27272a;
-    --theme-gray-subtle: #3f3f46;
-    --theme-gray-muted: #8e8e93;
-    --theme-gray-dim: #52525b;
+    /* 10% Accent: Yellow (#ffc93c) */
+    --theme-yellow: #ffc93c;
+    --theme-yellow-hover: #e5b32f;
+    --theme-yellow-muted: rgba(255, 201, 60, 0.15);
+    --theme-accent-yellow: #ffc93c;
+    --theme-accent-yellow-hover: #e5b32f;
 
     /* Semantic Aliases & Backward Compatibility */
     --theme-60-canvas: var(--theme-canvas);
@@ -26,16 +34,16 @@
     --theme-30-onyx: var(--theme-surface);
     --theme-30-dark: var(--theme-canvas);
     --theme-30-border: var(--theme-gray-border);
-    --theme-30-text: var(--theme-dirty-white);
-    --theme-10-accent: var(--theme-dirty-white);
-    --theme-10-accent-hover: var(--theme-dirty-white-muted);
+    --theme-30-text: var(--theme-silver);
+    --theme-10-accent: var(--theme-yellow);
+    --theme-10-accent-hover: var(--theme-yellow-hover);
 
     --bg-page: var(--theme-canvas);
-    --text-primary: var(--theme-dirty-white);
+    --text-primary: var(--theme-silver);
     --text-secondary: var(--theme-gray-muted);
     --border-neo: var(--theme-gray-border);
-    --spaciaz-lime: var(--theme-dirty-white);
-    --spaciaz-lime-hover: var(--theme-dirty-white-muted);
+    --spaciaz-lime: var(--theme-yellow);
+    --spaciaz-lime-hover: var(--theme-yellow-hover);
     --spaciaz-dark: var(--theme-surface);
     --spaciaz-card-dark: var(--theme-canvas);
     --spaciaz-muted: var(--theme-gray-muted);
@@ -97,7 +105,7 @@
 
 /* Accessible focus-visible styles */
 :focus-visible {
-  outline: 2px solid var(--theme-dirty-white);
+  outline: 2px solid var(--theme-yellow);
   outline-offset: 2px;
 }
 

@@ -89,7 +89,7 @@ export const Header: React.FC = () => {
             to="/ai-chat"
             className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
               isNavActive('/ai-chat')
-                ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
                 : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
             }`}
           >
@@ -101,7 +101,7 @@ export const Header: React.FC = () => {
             to="/studio"
             className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
               isNavActive('/studio')
-                ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
                 : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
             }`}
           >
@@ -113,7 +113,7 @@ export const Header: React.FC = () => {
             to="/ui-library"
             className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
               isNavActive('/ui-library')
-                ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
                 : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
             }`}
           >
@@ -125,7 +125,7 @@ export const Header: React.FC = () => {
             to="/learning"
             className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
               isNavActive('/learning')
-                ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
                 : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
             }`}
           >
@@ -141,7 +141,7 @@ export const Header: React.FC = () => {
             }
             className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
               isNavActive('/study')
-                ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
                 : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
             }`}
           >
@@ -157,7 +157,7 @@ export const Header: React.FC = () => {
             to="/discover"
             className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
               isNavActive('/discover')
-                ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
                 : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
             }`}
           >
@@ -169,7 +169,7 @@ export const Header: React.FC = () => {
             to="/community"
             className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
               isNavActive('/community')
-                ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
                 : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
             }`}
           >
@@ -414,7 +414,7 @@ export const Header: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
                 isNavActive('/ai-chat')
-                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)]'
+                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
                   : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
               }`}
             >
@@ -427,7 +427,7 @@ export const Header: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
                 isNavActive('/studio')
-                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)]'
+                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
                   : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
               }`}
             >
@@ -440,7 +440,7 @@ export const Header: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
                 isNavActive('/ui-library')
-                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)]'
+                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
                   : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
               }`}
             >
@@ -453,7 +453,7 @@ export const Header: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
                 isNavActive('/learning')
-                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)]'
+                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
                   : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
               }`}
             >
@@ -470,7 +470,7 @@ export const Header: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
                 isNavActive('/study')
-                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)]'
+                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
                   : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
               }`}
             >
@@ -487,7 +487,7 @@ export const Header: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
                 isNavActive('/discover')
-                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)]'
+                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
                   : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
               }`}
             >
@@ -500,7 +500,7 @@ export const Header: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
                 isNavActive('/community')
-                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)]'
+                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
                   : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
               }`}
             >
@@ -513,7 +513,7 @@ export const Header: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
                 isNavActive('/reviews')
-                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)]'
+                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
                   : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
               }`}
             >

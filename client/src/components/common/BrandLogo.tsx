@@ -41,8 +41,8 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         data-testid="brand-emblem"
         className={`${iconSizes[size]} ${badgeShadow[size]} rounded-xl border flex items-center justify-center font-black transition-all ${
           monochrome
-            ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)]'
-            : 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)]'
+            ? 'bg-[var(--theme-surface)] text-[var(--theme-silver)] border-[var(--theme-gray-border)]'
+            : 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] shadow-xs'
         }`}
       >
         <svg
@@ -63,9 +63,9 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       {/* Typography */}
       <div className="flex flex-col">
         <span
-          className={`${textSizes[size]} font-black tracking-tight leading-none text-[var(--theme-dirty-white)] font-sans`}
+          className={`${textSizes[size]} font-black tracking-tight leading-none text-[var(--theme-silver)] font-sans`}
         >
-          Vexora<span className="text-[var(--theme-gray-muted)]">Mods</span>
+          Vexora<span className="text-[var(--theme-yellow)]">Mods</span>
         </span>
         {showTagline && (
           <span className="text-[10px] font-medium text-[var(--theme-gray-muted)] tracking-wider uppercase mt-1">

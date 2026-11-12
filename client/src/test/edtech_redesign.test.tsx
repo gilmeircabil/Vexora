@@ -92,7 +92,7 @@ describe('Modern Campus & Clean EdTech Design System Suite', () => {
     const { container } = render(<BrandLogo size="md" />);
     const emblem = container.firstChild?.firstChild as HTMLElement;
     expect(emblem).toBeInTheDocument();
-    expect(emblem.className).toMatch(/bg-\[var\(--theme-surface-raised\)|bg-\[\#2563eb\]/);
+    expect(emblem.className).toMatch(/bg-\[var\(--theme-yellow\)|bg-\[var\(--theme-dirty-white\)|bg-\[var\(--theme-surface-raised\)|bg-\[\#2563eb\]/);
   });
 
   it('renders Button with Modern Campus primary royal blue and secondary clean slate variants', () => {

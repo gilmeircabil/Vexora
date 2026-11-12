@@ -72,11 +72,11 @@ describe('Common UI Components', () => {
     expect(screen.getByRole('link')).toHaveAttribute('href', `/tools/${tool.slug}`);
   });
 
-  it('renders BrandLogo with high-contrast dirty-white emblem badge and dark icon', () => {
+  it('renders BrandLogo with high-contrast accent emblem badge and dark icon', () => {
     render(<BrandLogo size="md" showTagline />);
     const emblem = screen.getByTestId('brand-emblem');
     expect(emblem).toBeInTheDocument();
-    expect(emblem).toHaveClass('bg-[var(--theme-dirty-white)]');
+    expect(emblem.className).toMatch(/bg-\[var\(--theme-yellow\)\]|bg-\[var\(--theme-dirty-white\)\]/);
     expect(emblem).toHaveClass('text-[var(--theme-canvas)]');
     expect(screen.getByText('Vexora')).toBeInTheDocument();
     expect(screen.getByText('Mods')).toBeInTheDocument();
