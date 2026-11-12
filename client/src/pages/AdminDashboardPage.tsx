@@ -1123,7 +1123,7 @@ export const AdminDashboardPage: React.FC = () => {
                     type="button"
                     onClick={handleBroadcastSubmit}
                     disabled={isBroadcasting}
-                    className="px-5 py-2.5 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold text-[var(--theme-canvas)] cursor-pointer shadow-xs flex items-center gap-2"
+                    className="px-5 py-2.5 bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] border border-[var(--theme-yellow)] rounded-xl text-xs font-bold text-[var(--theme-canvas)] cursor-pointer shadow-xs flex items-center gap-2"
                   >
                     <Send className="w-4 h-4 stroke-[2.5]" />
                     <span>{isBroadcasting ? 'Broadcasting...' : 'Yes, Broadcast to All'}</span>

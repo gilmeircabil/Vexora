@@ -83,4 +83,10 @@ describe('60-30-10 Gray (#2B2D31), Silver (#d9dadc), and Yellow (#ffc93c) Theme 
     const authCard = authContainer.querySelector('.rounded-2xl, .rounded-3xl');
     expect(authCard?.className).toMatch(/var\(--theme-surface\)/);
   });
+
+  it('ensures index.css specifies yellow button overrides for global action buttons', () => {
+    const cssPath = path.resolve(__dirname, '../index.css');
+    const cssContent = fs.readFileSync(cssPath, 'utf-8');
+    expect(cssContent).toMatch(/button\[class\*="bg-\[var\(--theme-dirty-white\)\]"\].*var\(--theme-yellow\)/s);
+  });
 });

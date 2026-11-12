@@ -150,7 +150,7 @@ export const ManageProjectsPage: React.FC = () => {
 
           <button
             onClick={openCreateModal}
-            className="px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs font-black shadow-sm flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 bg-[var(--theme-yellow)] text-[var(--theme-canvas)] hover:bg-[var(--theme-yellow-hover)] border border-[var(--theme-yellow)] rounded-xl font-mono text-xs font-black shadow-sm flex items-center gap-1.5 cursor-pointer"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>Publish New Project</span>
@@ -431,7 +431,7 @@ export const ManageProjectsPage: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs font-black shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="w-full py-3 bg-[var(--theme-yellow)] text-[var(--theme-canvas)] hover:bg-[var(--theme-yellow-hover)] border border-[var(--theme-yellow)] rounded-xl font-mono text-xs font-black shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
                     <Save className="w-4 h-4" />
                     <span>

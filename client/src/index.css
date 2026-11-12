@@ -109,6 +109,42 @@
   outline-offset: 2px;
 }
 
+/* Action buttons & CTAs across client & admin pages adopting the 10% accent Yellow (#ffc93c) */
+button[class*="bg-[var(--theme-dirty-white)]"],
+a[class*="bg-[var(--theme-dirty-white)]"],
+[role="button"][class*="bg-[var(--theme-dirty-white)]"],
+input[type="submit"][class*="bg-[var(--theme-dirty-white)]"],
+input[type="button"][class*="bg-[var(--theme-dirty-white)]"],
+button[class*="hover:bg-[var(--theme-dirty-white)]"]:hover,
+a[class*="hover:bg-[var(--theme-dirty-white)]"]:hover {
+  background-color: var(--theme-yellow) !important;
+  color: var(--theme-canvas) !important;
+  border-color: var(--theme-yellow) !important;
+}
+
+button[class*="bg-[var(--theme-dirty-white)]"]:hover,
+a[class*="bg-[var(--theme-dirty-white)]"]:hover,
+[role="button"][class*="bg-[var(--theme-dirty-white)]"]:hover,
+input[type="submit"][class*="bg-[var(--theme-dirty-white)]"]:hover,
+input[type="button"][class*="bg-[var(--theme-dirty-white)]"]:hover {
+  background-color: var(--theme-yellow-hover) !important;
+  border-color: var(--theme-yellow-hover) !important;
+  color: var(--theme-canvas) !important;
+}
+
+button[class*="bg-[var(--theme-dirty-white)]"] svg,
+a[class*="bg-[var(--theme-dirty-white)]"] svg,
+[role="button"][class*="bg-[var(--theme-dirty-white)]"] svg {
+  color: var(--theme-canvas) !important;
+  stroke: var(--theme-canvas) !important;
+}
+
+button[class*="bg-[var(--theme-dirty-white)]"] span,
+a[class*="bg-[var(--theme-dirty-white)]"] span,
+[role="button"][class*="bg-[var(--theme-dirty-white)]"] span {
+  color: var(--theme-canvas) !important;
+}
+
 /* Hide scrollbar while preserving scroll functionality */
 .no-scrollbar::-webkit-scrollbar {
   display: none;

@@ -205,7 +205,7 @@ export const DashboardPage: React.FC = () => {
             type="button"
             disabled={isUploadingAvatar}
             onClick={() => fileInputRef.current?.click()}
-            className="px-4 py-2 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-semibold text-xs uppercase rounded-xl shadow-sm flex items-center gap-2 transition-all cursor-pointer"
+            className="px-4 py-2 bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] border border-[var(--theme-yellow)] font-semibold text-xs uppercase rounded-xl shadow-sm flex items-center gap-2 transition-all cursor-pointer"
           >
             {isUploadingAvatar ? (
               <>
@@ -376,7 +376,7 @@ export const DashboardPage: React.FC = () => {
                           target="_blank"
                           rel="noreferrer"
                           download
-                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-semibold text-[11px] rounded-lg shadow-sm"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] border border-[var(--theme-yellow)] font-semibold text-[11px] rounded-lg shadow-sm"
                         >
                           <Download className="w-3 h-3" /> Download
                         </a>

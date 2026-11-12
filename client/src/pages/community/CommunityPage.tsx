@@ -392,7 +392,7 @@ export const CommunityPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 px-5 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-dirty-white)] rounded-xl font-bold text-xs sm:text-sm text-[var(--theme-canvas)] shadow-sm hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="w-full py-3.5 px-5 bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] border border-[var(--theme-yellow)] rounded-xl font-bold text-xs sm:text-sm text-[var(--theme-canvas)] shadow-sm hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 <Heart className="w-4 h-4 text-[var(--theme-canvas)] fill-current" />
                 <span>

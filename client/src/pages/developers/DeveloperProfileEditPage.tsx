@@ -564,7 +564,7 @@ export const DeveloperProfileEditPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSaving}
-              className="py-3.5 px-8 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-sm font-black text-slate-100 shadow-sm hover:-translate-y-0.5 active:translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              className="py-3.5 px-8 bg-[var(--theme-yellow)] text-[var(--theme-canvas)] hover:bg-[var(--theme-yellow-hover)] border border-[var(--theme-yellow)] rounded-xl font-mono text-sm font-black shadow-sm hover:-translate-y-0.5 active:translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
               <span>{isSaving ? 'Saving...' : 'Save Profile Changes'}</span>

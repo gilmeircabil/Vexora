@@ -122,7 +122,7 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({
               <Link
                 to="/login"
                 onClick={onClose}
-                className="px-5 py-2.5 rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold uppercase text-[var(--theme-canvas)] shadow-sm"
+                className="px-5 py-2.5 rounded-full bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-xs font-bold uppercase text-[var(--theme-canvas)] border border-[var(--theme-yellow)] shadow-sm"
               >
                 Sign In
               </Link>

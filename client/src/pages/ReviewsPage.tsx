@@ -77,7 +77,7 @@ export const ReviewsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsWriteModalOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold uppercase tracking-wider text-[var(--theme-canvas)] shadow-sm cursor-pointer transition-transform hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-xs font-bold uppercase tracking-wider text-[var(--theme-canvas)] border border-[var(--theme-yellow)] shadow-sm cursor-pointer transition-transform hover:-translate-y-0.5"
           >
             <PenSquare className="w-4 h-4 stroke-[2.2]" />
             <span>Write a Review</span>
@@ -228,7 +228,7 @@ export const ReviewsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsWriteModalOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold uppercase text-[var(--theme-canvas)] shadow-sm cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-xs font-bold uppercase text-[var(--theme-canvas)] border border-[var(--theme-yellow)] shadow-sm cursor-pointer"
           >
             <PenSquare className="w-4 h-4" />
             <span>Write a Review</span>
