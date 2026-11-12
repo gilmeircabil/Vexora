@@ -132,17 +132,11 @@ input[type="button"][class*="bg-[var(--theme-dirty-white)]"]:hover {
   color: var(--theme-canvas) !important;
 }
 
-button[class*="bg-[var(--theme-dirty-white)]"] svg,
-a[class*="bg-[var(--theme-dirty-white)]"] svg,
-[role="button"][class*="bg-[var(--theme-dirty-white)]"] svg {
-  color: var(--theme-canvas) !important;
-  stroke: var(--theme-canvas) !important;
-}
-
-button[class*="bg-[var(--theme-dirty-white)]"] span,
-a[class*="bg-[var(--theme-dirty-white)]"] span,
-[role="button"][class*="bg-[var(--theme-dirty-white)]"] span {
-  color: var(--theme-canvas) !important;
+button[class*="bg-[var(--theme-dirty-white)]"] svg:not([class*="fill-"]):not([class*="text-"]),
+a[class*="bg-[var(--theme-dirty-white)]"] svg:not([class*="fill-"]):not([class*="text-"]),
+[role="button"][class*="bg-[var(--theme-dirty-white)]"] svg:not([class*="fill-"]):not([class*="text-"]) {
+  color: var(--theme-canvas);
+  stroke: var(--theme-canvas);
 }
 
 /* Hide scrollbar while preserving scroll functionality */

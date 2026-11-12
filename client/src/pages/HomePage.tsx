@@ -604,7 +604,7 @@ export const HomePage: React.FC = () => {
               <span className="text-xs font-bold uppercase tracking-wider text-[var(--theme-canvas)] group-hover:underline">
                 Explore AI Tool
               </span>
-              <span className="w-10 h-10 rounded-full bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] font-bold flex items-center justify-center transition-transform group-hover:rotate-45 shadow-xs">
+              <span className="w-10 h-10 rounded-full bg-[var(--theme-canvas)] text-[var(--theme-yellow)] font-bold flex items-center justify-center transition-transform group-hover:rotate-45 shadow-xs">
                 ↗
               </span>
             </div>
