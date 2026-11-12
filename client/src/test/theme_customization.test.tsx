@@ -58,7 +58,7 @@ describe('60-30-10 Gray (#2B2D31), Silver (#d9dadc), and Yellow (#ffc93c) Theme 
       <Button variant="primary">Dirty White Primary</Button>,
     );
     const btn = buttonContainer.firstChild as HTMLElement;
-    expect(btn.className).toMatch(/bg-\[var\(--theme-dirty-white\)\]|bg-theme-dirty-white/);
+    expect(btn.className).toMatch(/bg-\[var\(--theme-yellow\)\]|bg-\[var\(--theme-dirty-white\)\]|bg-theme-dirty-white/);
 
     const { container: logoContainer } = render(<BrandLogo size="md" />);
     const emblem = logoContainer.querySelector('[data-testid="brand-emblem"]');

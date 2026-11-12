@@ -365,7 +365,7 @@ export const ForgotPasswordPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-3.5 px-4 rounded-xl bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-bold text-xs shadow-sm active:translate-y-0.5 flex items-center justify-center gap-2 transition-all mt-4 cursor-pointer disabled:opacity-60"
+                  className="w-full py-3.5 px-4 rounded-xl bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] font-bold text-xs shadow-sm active:translate-y-0.5 flex items-center justify-center gap-2 transition-all mt-4 cursor-pointer disabled:opacity-60"
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin stroke-[2]" />

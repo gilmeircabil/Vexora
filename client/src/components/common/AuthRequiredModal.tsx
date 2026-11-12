@@ -47,7 +47,7 @@ export const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
         <div className="pt-2 space-y-2.5">
           <Link
             to={`/login${redirectQuery}`}
-            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-semibold text-sm shadow-sm active:translate-y-0.5 transition-all"
+            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] font-bold text-sm shadow-sm active:translate-y-0.5 transition-all"
           >
             <LogIn className="w-4 h-4 stroke-[2]" />
             <span>Sign In to Proceed</span>

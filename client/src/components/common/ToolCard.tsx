@@ -111,7 +111,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool }) => {
         <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--theme-gray-muted)] group-hover:text-[var(--theme-dirty-white)] transition-colors">
           {tool.isExternal ? 'View External Tool' : 'Open Tool'}
         </span>
-        <span className="w-8 h-8 rounded-full bg-[var(--theme-dirty-white)] group-hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] flex items-center justify-center font-bold text-xs transition-transform group-hover:rotate-45 shadow-xs">
+        <span className="w-8 h-8 rounded-full bg-[var(--theme-yellow)] group-hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] flex items-center justify-center font-bold text-xs transition-transform group-hover:rotate-45 shadow-xs">
           ↗
         </span>
       </div>

@@ -182,7 +182,7 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <Link
             to="/reviews"
-            className="hidden sm:inline-flex px-4 py-2 text-xs font-bold rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] border border-[var(--theme-dirty-white)] shadow-xs hover:shadow-sm active:scale-95 transition-all whitespace-nowrap"
+            className="hidden sm:inline-flex px-4 py-2 text-xs font-bold rounded-full bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] border border-[var(--theme-yellow)] shadow-xs hover:shadow-sm active:scale-95 transition-all whitespace-nowrap"
           >
             Ratings
           </Link>
@@ -274,7 +274,7 @@ export const Header: React.FC = () => {
               </Link>
               <Link
                 to="/register"
-                className="px-4 py-1.5 text-xs font-bold rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] shadow-xs transition-all"
+                className="px-4 py-1.5 text-xs font-bold rounded-full bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] shadow-xs transition-all"
               >
                 Sign Up
               </Link>
@@ -393,7 +393,7 @@ export const Header: React.FC = () => {
                 <Link
                   to="/register"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex-1 py-2 text-center text-xs font-bold rounded-xl bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] shadow-xs"
+                  className="flex-1 py-2 text-center text-xs font-bold rounded-xl bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] shadow-xs"
                 >
                   Sign Up
                 </Link>

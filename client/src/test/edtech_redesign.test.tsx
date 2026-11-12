@@ -85,7 +85,7 @@ describe('Modern Campus & Clean EdTech Design System Suite', () => {
     // Ratings CTA uses theme token
     const ctaButton = screen.getByRole('link', { name: /Ratings|Get In Touch/i });
     expect(ctaButton).toBeInTheDocument();
-    expect(ctaButton.className).toMatch(/bg-\[var\(--theme-dirty-white\)|bg-\[\#2563eb\]/);
+    expect(ctaButton.className).toMatch(/bg-\[var\(--theme-yellow\)|bg-\[var\(--theme-dirty-white\)|bg-\[\#2563eb\]/);
   });
 
   it('renders BrandLogo with academic royal blue emblem and refined soft elevation', () => {
@@ -98,7 +98,7 @@ describe('Modern Campus & Clean EdTech Design System Suite', () => {
   it('renders Button with Modern Campus primary royal blue and secondary clean slate variants', () => {
     const { rerender } = render(<Button variant="primary">Start Learning</Button>);
     const primaryBtn = screen.getByRole('button', { name: /Start Learning/i });
-    expect(primaryBtn.className).toMatch(/bg-\[var\(--theme-dirty-white\)|bg-\[\#2563eb\]/);
+    expect(primaryBtn.className).toMatch(/bg-\[var\(--theme-yellow\)|bg-\[var\(--theme-dirty-white\)|bg-\[\#2563eb\]/);
 
     rerender(<Button variant="secondary">Browse Courses</Button>);
     const secondaryBtn = screen.getByRole('button', { name: /Browse Courses/i });

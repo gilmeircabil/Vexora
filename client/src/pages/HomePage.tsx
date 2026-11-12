@@ -490,10 +490,10 @@ export const HomePage: React.FC = () => {
                       window.location.hash = 'tools-directory';
                     }
                   }}
-                  className="inline-flex items-center gap-3 pl-6 pr-2 py-2 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-bold text-sm rounded-full shadow-sm hover:shadow-md transition-all group cursor-pointer"
+                  className="inline-flex items-center gap-3 pl-6 pr-2 py-2 bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] font-bold text-sm rounded-full shadow-sm hover:shadow-md transition-all group cursor-pointer"
                 >
                   <span>Browse All Tools</span>
-                  <span className="w-9 h-9 rounded-full bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] flex items-center justify-center font-bold transition-transform group-hover:rotate-45 shadow-xs">
+                  <span className="w-9 h-9 rounded-full bg-[var(--theme-canvas)] text-[var(--theme-yellow)] flex items-center justify-center font-bold transition-transform group-hover:rotate-45 shadow-xs">
                     ↗
                   </span>
                 </button>

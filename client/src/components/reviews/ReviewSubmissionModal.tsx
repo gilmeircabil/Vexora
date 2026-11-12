@@ -209,7 +209,7 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold uppercase tracking-wider text-[var(--theme-canvas)] shadow-sm cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-xs font-bold uppercase tracking-wider text-[var(--theme-canvas)] shadow-sm cursor-pointer disabled:opacity-50"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{submitting ? 'Submitting...' : 'Submit Review'}</span>

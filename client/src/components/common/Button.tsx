@@ -25,13 +25,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary:
-        'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-dirty-white)] shadow-xs',
+        'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] hover:bg-[var(--theme-yellow-hover)] border border-[var(--theme-yellow)] shadow-xs font-bold',
       secondary:
-        'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)] shadow-xs',
+        'bg-[var(--theme-surface)] text-[var(--theme-silver)] border border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)] shadow-xs',
       outline:
-        'bg-transparent text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface)]',
+        'bg-transparent text-[var(--theme-silver)] border border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface)]',
       ghost:
-        'border-transparent shadow-none hover:shadow-none bg-transparent text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)]',
+        'border-transparent shadow-none hover:shadow-none bg-transparent text-[var(--theme-gray-muted)] hover:text-[var(--theme-silver)] hover:bg-[var(--theme-surface)]',
       danger: 'bg-red-950/60 text-red-300 border border-red-800 hover:bg-red-900 hover:text-white shadow-xs',
     };
 
