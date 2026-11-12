@@ -3,9 +3,9 @@ import { Outlet, useLocation, Link } from 'react-router';
 import { Wrench } from 'lucide-react';
 import { Header } from './Header.js';
 import { Footer } from './Footer.js';
-import { FallingStarsBackground } from '../common/FallingStarsBackground.js';
 import { MaintenanceModal } from '../common/LockedPageModal.js';
 import { AuthRequiredModal } from '../common/AuthRequiredModal.js';
+import { WindBackground } from '../common/WindBackground.js';
 import { useAuth } from '../../context/AuthContext.js';
 import { useMaintenance } from '../../context/MaintenanceContext.js';
 import { FULLSCREEN_EVENT } from '../../features/education/shared/useFullscreenMode.js';
@@ -71,17 +71,15 @@ export const AppLayout: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen relative overflow-x-hidden">
+    <div className="flex flex-col min-h-screen relative overflow-x-clip">
+      <WindBackground />
       {/* Accessible Skip to Content Link */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 px-4 py-2 bg-[#FACC15] text-black font-black text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[3px_3px_0px_#000000]"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-semibold text-xs uppercase tracking-wider rounded-full shadow-sm"
       >
         Skip to main content
       </a>
-
-      {/* Neo-Brutalist Falling Stars Canvas Animation */}
-      <FallingStarsBackground />
 
       {!isFocusMode && <Header />}
       <main
@@ -95,25 +93,25 @@ export const AppLayout: React.FC = () => {
       >
         {/* Admin Bypass Notification Banner */}
         {isAdminPreviewActive && (
-          <div className="mb-6 p-4 rounded-2xl bg-amber-100 border-2 border-black shadow-[4px_4px_0px_#000] flex flex-wrap items-center justify-between gap-3 text-black animate-in fade-in">
+          <div className="mb-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 shadow-sm flex flex-wrap items-center justify-between gap-3 text-slate-100 animate-in fade-in">
             <div className="flex items-center gap-3">
-              <span className="p-2 rounded-xl bg-amber-400 border-2 border-black shadow-[2px_2px_0px_#000]">
-                <Wrench className="w-5 h-5 text-black stroke-[2.5]" />
+              <span className="p-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400">
+                <Wrench className="w-5 h-5 stroke-[2]" />
               </span>
               <div>
-                <p className="text-sm font-black tracking-tight">
+                <p className="text-sm font-bold tracking-tight text-slate-100">
                   Admin Preview Active: Maintenance Mode
                 </p>
-                <p className="text-xs font-semibold text-neutral-700">
+                <p className="text-xs font-normal text-slate-300">
                   This page ({lockStatus.pageTitle}) is currently marked as{' '}
-                  <strong>under maintenance</strong> for regular users and guests. As an
+                  <strong className="text-white">under maintenance</strong> for regular users and guests. As an
                   administrator, you have bypass access to test and manage this workspace.
                 </p>
               </div>
             </div>
             <Link
               to="/admin"
-              className="px-3.5 py-2 rounded-xl bg-white hover:bg-neutral-50 border-2 border-black text-black font-black text-xs shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all"
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs shadow-sm active:translate-y-0.5 transition-all"
             >
               Open Admin Settings
             </Link>

@@ -70,8 +70,8 @@ export const FEEDBACK_COMPONENTS: UIComponentItem[] = [
         description: 'Warning dialog with yellow alert icon and Acknowledge button.',
         codeReact: `export const AlertDialogPreview = () => (
   <div className="max-w-xs bg-white border-2 border-black rounded-2xl shadow-[5px_5px_0px_#000] p-5 text-center space-y-3">
-    <div className="w-12 h-12 mx-auto rounded-full bg-[#FACC15] border-2 border-black flex items-center justify-center text-xl font-black shadow-[2px_2px_0px_#000]">
-      ⚠️
+    <div className="w-12 h-12 mx-auto rounded-full bg-[#FACC15] border-2 border-black flex items-center justify-center text-lg font-mono font-black shadow-[2px_2px_0px_#000]">
+      !
     </div>
     <h4 className="font-black text-sm text-black">Session About to Expire</h4>
     <p className="text-xs text-neutral-600">Your secure session will timeout in 2 minutes due to inactivity. Would you like to stay logged in?</p>
@@ -111,7 +111,7 @@ export const FEEDBACK_COMPONENTS: UIComponentItem[] = [
         codeReact: `export const ConfirmationDialogPreview = () => (
   <div className="max-w-xs bg-white border-2 border-black rounded-2xl shadow-[5px_5px_0px_#000] p-5 space-y-3">
     <div className="w-10 h-10 rounded-full bg-rose-100 border-2 border-black flex items-center justify-center text-rose-600 font-black text-base">
-      🗑️
+      <svg className="w-4 h-4 stroke-[2.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
     </div>
     <h4 className="font-black text-sm text-black">Delete this component?</h4>
     <p className="text-xs text-neutral-600">This action cannot be undone. This component will be permanently removed from your catalog.</p>
@@ -321,7 +321,7 @@ export const FEEDBACK_COMPONENTS: UIComponentItem[] = [
       <span className="text-neutral-400 font-mono text-[9px]">⌘C</span>
     </div>
     <div className="w-8 h-8 rounded-lg bg-[#FAF7F2] border-2 border-black flex items-center justify-center font-black text-xs shadow-[1.5px_1.5px_0px_#000]">
-      📋
+      <span className="font-mono text-[10px] font-bold">COPY</span>
     </div>
   </div>
 );`,
@@ -356,7 +356,7 @@ export const FEEDBACK_COMPONENTS: UIComponentItem[] = [
         codeReact: `export const BannerAlertPreview = () => (
   <div className="w-full max-w-md px-4 py-2 bg-[#FACC15] border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] flex items-center justify-between text-xs font-black">
     <div className="flex items-center gap-2">
-      <span>📣</span>
+      <span className="px-1.5 py-0.5 bg-black text-[#d2ee48] text-[9px] rounded font-mono uppercase">NEW</span>
       <span>VexoraMods UI Library 2.0 is now live!</span>
     </div>
     <span className="underline cursor-pointer hover:text-white">Explore →</span>

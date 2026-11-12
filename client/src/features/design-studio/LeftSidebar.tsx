@@ -343,7 +343,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                       }
                       className="p-3 bg-slate-50 hover:bg-purple-50/50 rounded-xl border border-slate-200/80 hover:border-purple-300 flex flex-col items-center gap-1.5 shadow-xs transition-all cursor-pointer group"
                     >
-                      <div className="w-6 h-6 rounded-md bg-sky-400 border border-sky-500 group-hover:scale-110 transition-transform" />
+                      <div className="w-6 h-6 rounded-md bg-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] group-hover:scale-110 transition-transform" />
                       <span className="text-[10px] font-semibold text-slate-700">Rounded</span>
                     </button>
 

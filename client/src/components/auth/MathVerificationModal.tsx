@@ -23,41 +23,41 @@ export const MathVerificationModal: React.FC<MathVerificationModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-4 animate-in fade-in duration-200"
       role="dialog"
       aria-modal="true"
       aria-labelledby="math-modal-title"
     >
-      <div className="bg-[#FAF7F2] border-3 sm:border-4 border-black rounded-3xl p-5 sm:p-7 max-w-md w-full shadow-[8px_8px_0px_#000000] relative space-y-4 animate-in zoom-in-95 duration-150">
+      <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-3xl p-5 sm:p-7 max-w-md w-full shadow-2xl relative space-y-4 text-[var(--theme-dirty-white)] animate-in zoom-in-95 duration-150">
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
           disabled={isLoading}
           aria-label="Close verification modal"
-          className="absolute top-4 right-4 p-1.5 rounded-xl border-2 border-black bg-white hover:bg-neutral-100 text-black shadow-[2px_2px_0px_#000] active:translate-y-0.5 cursor-pointer disabled:opacity-50"
+          className="absolute top-4 right-4 p-1.5 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] active:translate-y-0.5 cursor-pointer disabled:opacity-50"
         >
-          <X className="w-4 h-4 stroke-[2.5]" />
+          <X className="w-4 h-4 stroke-[2]" />
         </button>
 
         {/* Modal Header */}
         <div className="space-y-1 pr-10">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FACC15] border border-black text-[10px] font-mono font-black uppercase shadow-[1px_1px_0px_#000]">
-            <ShieldCheck className="w-3 h-3 stroke-[2.5]" />
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[10px] font-mono font-semibold text-[var(--theme-dirty-white)] uppercase">
+            <ShieldCheck className="w-3 h-3 stroke-[2]" />
             <span>Anti-Bot Verification</span>
           </div>
-          <h3 id="math-modal-title" className="text-xl sm:text-2xl font-black text-black">
+          <h3 id="math-modal-title" className="text-xl sm:text-2xl font-bold text-[var(--theme-dirty-white)]">
             Verify You&apos;re Human
           </h3>
-          <p className="text-xs font-bold text-neutral-600">
+          <p className="text-xs font-normal text-[var(--theme-gray-muted)]">
             Before creating your account, solve these 3 quick math problems to prove you are a
-            human!
+            human.
           </p>
         </div>
 
         {/* Error notice if registration failed */}
         {error && (
-          <div className="p-3 bg-red-100 border-2 border-red-600 rounded-xl text-xs font-bold text-red-800">
+          <div className="p-3 bg-red-950/40 border border-red-800/60 rounded-xl text-xs font-medium text-red-300">
             {error}
           </div>
         )}
@@ -71,22 +71,22 @@ export const MathVerificationModal: React.FC<MathVerificationModalProps> = ({
             type="button"
             disabled={!isVerified || isLoading}
             onClick={onConfirm}
-            className={`w-full py-3.5 px-4 rounded-xl border-2 border-black font-black text-xs sm:text-sm shadow-[3px_3px_0px_#000000] flex items-center justify-center gap-2 transition-all cursor-pointer ${
+            className={`w-full py-3.5 px-4 rounded-xl font-semibold text-xs sm:text-sm shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${
               isVerified && !isLoading
-                ? 'bg-[#4ADE80] hover:bg-emerald-400 text-black active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#000000]'
-                : 'bg-neutral-200 text-neutral-500 border-black/30 cursor-not-allowed opacity-75'
+                ? 'bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] active:translate-y-0.5'
+                : 'bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] border border-[var(--theme-gray-border)] cursor-not-allowed opacity-60'
             }`}
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin stroke-[2.5]" />
+                <Loader2 className="w-4 h-4 animate-spin stroke-[2]" />
                 <span>Creating Account...</span>
               </>
             ) : isVerified ? (
               <>
-                <Award className="w-4 h-4 stroke-[2.5]" />
+                <Award className="w-4 h-4 stroke-[2]" />
                 <span>Verify &amp; Create Account</span>
-                <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                <ArrowRight className="w-4 h-4 stroke-[2]" />
               </>
             ) : (
               <span>Solve all 3 math problems to proceed</span>

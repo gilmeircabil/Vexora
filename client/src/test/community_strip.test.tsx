@@ -103,6 +103,91 @@ describe('Community Telemetry Strip Visibility', () => {
     });
   });
 
+  it('does NOT render the VexoraMods — All-in-One Platform pill badge on HomePage', async () => {
+    render(
+      <ToastProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <HomePage />
+          </BrowserRouter>
+        </AuthProvider>
+      </ToastProvider>,
+    );
+
+    expect(screen.queryByText(/VexoraMods — All-in-One Platform/i)).not.toBeInTheDocument();
+  });
+
+  it('does NOT render the Built for Everyone manifesto section on HomePage', async () => {
+    render(
+      <ToastProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <HomePage />
+          </BrowserRouter>
+        </AuthProvider>
+      </ToastProvider>,
+    );
+
+    expect(screen.queryByText(/Built for Everyone\. Free & Open Source Forever\./i)).not.toBeInTheDocument();
+  });
+
+  it('does NOT render the Study Space for Learners & Educators spotlight section on HomePage', async () => {
+    render(
+      <ToastProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <HomePage />
+          </BrowserRouter>
+        </AuthProvider>
+      </ToastProvider>,
+    );
+
+    expect(screen.queryByText(/Study Space for Learners & Educators/i)).not.toBeInTheDocument();
+  });
+
+  it('does NOT render the Design in VexoraMods Studio section on HomePage', async () => {
+    render(
+      <ToastProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <HomePage />
+          </BrowserRouter>
+        </AuthProvider>
+      </ToastProvider>,
+    );
+
+    expect(screen.queryByText(/Design in VexoraMods Studio/i)).not.toBeInTheDocument();
+  });
+
+  it('does NOT render the UI Component Library spotlight section on HomePage', async () => {
+    render(
+      <ToastProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <HomePage />
+          </BrowserRouter>
+        </AuthProvider>
+      </ToastProvider>,
+    );
+
+    expect(screen.queryByText(/UI Component Library & Design Center/i)).not.toBeInTheDocument();
+  });
+
+  it('does NOT render the Vexora Discover spotlight section on HomePage', async () => {
+    render(
+      <ToastProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <HomePage />
+          </BrowserRouter>
+        </AuthProvider>
+      </ToastProvider>,
+    );
+
+    expect(screen.queryByText(/Location-Based Business Discovery/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Popular Nearby Searches/i)).not.toBeInTheDocument();
+  });
+
   it('renders the community telemetry strip ONLY on CommunityPage as a modern rounded card', async () => {
     const { container } = render(
       <ToastProvider>
@@ -123,8 +208,8 @@ describe('Community Telemetry Strip Visibility', () => {
       // Ensure telemetry strip is a modern rounded card with shadow instead of harsh border-y lines
       const card = screen.getByText('Community Members').closest('.rounded-3xl, .rounded-2xl');
       expect(card).toBeInTheDocument();
-      expect(card).toHaveClass('bg-white');
-      expect(card).toHaveClass('border-2');
+      expect(card?.className).toMatch(/bg-\[var\(--theme-surface\)\]|bg-\[#1e293b\]/);
+      expect(card).toHaveClass('border');
       expect(card).not.toHaveClass('border-y-2');
     });
   });

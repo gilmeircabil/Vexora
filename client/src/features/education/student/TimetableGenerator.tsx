@@ -126,13 +126,13 @@ export const TimetableGenerator: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div>
           <h2 className="text-xl font-black flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-indigo-600" />
+            <Calendar className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             Class Timetable & Schedule Generator
           </h2>
-          <p className="text-xs text-neutral-600 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Plan your weekly lecture schedule with real-time collision detection and printable
             layout.
           </p>
@@ -141,7 +141,7 @@ export const TimetableGenerator: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-white text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-[var(--theme-surface)] text-slate-100 font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
           >
             <Printer className="w-4 h-4" />
             Print Schedule
@@ -149,7 +149,7 @@ export const TimetableGenerator: React.FC = () => {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
             Add Class Slot
@@ -182,10 +182,10 @@ export const TimetableGenerator: React.FC = () => {
           return (
             <div
               key={day}
-              className="bg-white rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000000] p-3.5 flex flex-col min-h-[320px]"
+              className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] shadow-sm p-3.5 flex flex-col min-h-[320px]"
             >
-              <div className="border-b-2 border-black pb-2 mb-3 text-center">
-                <span className="font-black text-xs uppercase tracking-wider text-black">
+              <div className="border-b border-[var(--theme-gray-border)] pb-2 mb-3 text-center">
+                <span className="font-black text-xs uppercase tracking-wider text-slate-100">
                   {day}
                 </span>
                 <span className="block text-[10px] font-bold text-neutral-400">
@@ -202,37 +202,37 @@ export const TimetableGenerator: React.FC = () => {
                   dayEntries.map((item) => (
                     <div
                       key={item.id}
-                      className="p-2.5 rounded-xl border-2 border-black transition-all flex flex-col justify-between relative group text-xs"
+                      className="p-2.5 rounded-xl border border-[var(--theme-gray-border)] transition-all flex flex-col justify-between relative group text-xs"
                       style={{ backgroundColor: item.color || '#FFD21A' }}
                     >
                       <div>
-                        <div className="flex items-center justify-between font-black text-[11px] text-black/80 mb-1">
+                        <div className="flex items-center justify-between font-black text-[11px] text-slate-100/80 mb-1">
                           <span className="flex items-center gap-1">
                             <Clock className="w-3 h-3" />
                             {item.startTime} - {item.endTime}
                           </span>
                           <button
                             onClick={() => handleDeleteEntry(item.id)}
-                            className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 text-black hover:text-red-700"
+                            className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 text-slate-100 hover:text-red-700"
                             title="Delete slot"
                           >
                             <Trash2 className="w-3 h-3" />
                           </button>
                         </div>
 
-                        <h4 className="font-black text-sm text-black leading-tight">
+                        <h4 className="font-black text-sm text-slate-100 leading-tight">
                           {item.subject}
                         </h4>
 
                         {item.location && (
-                          <span className="text-[10px] text-black/70 flex items-center gap-1 mt-1 font-bold">
+                          <span className="text-[10px] text-slate-100/70 flex items-center gap-1 mt-1 font-bold">
                             <MapPin className="w-2.5 h-2.5" />
                             {item.location}
                           </span>
                         )}
 
                         {item.instructor && (
-                          <span className="text-[10px] text-black/70 flex items-center gap-1 font-bold">
+                          <span className="text-[10px] text-slate-100/70 flex items-center gap-1 font-bold">
                             <User className="w-2.5 h-2.5" />
                             {item.instructor}
                           </span>
@@ -250,17 +250,17 @@ export const TimetableGenerator: React.FC = () => {
       {/* Add Slot Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0px_#000000] w-full max-w-md p-6">
+          <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] shadow-sm w-full max-w-md p-6">
             <h3 className="text-lg font-black mb-4">Add Weekly Class Slot</h3>
             <form onSubmit={handleSaveEntry} className="space-y-4">
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Day of the Week *
                 </label>
                 <select
                   value={form.day}
                   onChange={(e: any) => setForm({ ...form, day: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-bold bg-white focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold bg-[var(--theme-surface)] focus:outline-none"
                 >
                   {DAYS.map((d) => (
                     <option key={d} value={d}>
@@ -271,7 +271,7 @@ export const TimetableGenerator: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Subject / Activity *
                 </label>
                 <input
@@ -280,13 +280,13 @@ export const TimetableGenerator: React.FC = () => {
                   placeholder="e.g. Organic Chemistry Lecture"
                   value={form.subject}
                   onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Start Time *
                   </label>
                   <input
@@ -294,12 +294,12 @@ export const TimetableGenerator: React.FC = () => {
                     required
                     value={form.startTime}
                     onChange={(e) => setForm({ ...form, startTime: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     End Time *
                   </label>
                   <input
@@ -307,14 +307,14 @@ export const TimetableGenerator: React.FC = () => {
                     required
                     value={form.endTime}
                     onChange={(e) => setForm({ ...form, endTime: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Room / Location
                   </label>
                   <input
@@ -322,12 +322,12 @@ export const TimetableGenerator: React.FC = () => {
                     placeholder="e.g. Science Hall 302"
                     value={form.location}
                     onChange={(e) => setForm({ ...form, location: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Instructor
                   </label>
                   <input
@@ -335,13 +335,13 @@ export const TimetableGenerator: React.FC = () => {
                     placeholder="e.g. Dr. Aris"
                     value={form.instructor}
                     onChange={(e) => setForm({ ...form, instructor: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Card Color Tag
                 </label>
                 <div className="flex items-center gap-2">
@@ -350,8 +350,8 @@ export const TimetableGenerator: React.FC = () => {
                       type="button"
                       key={color}
                       onClick={() => setForm({ ...form, color })}
-                      className={`w-7 h-7 rounded-lg border-2 border-black transition-transform cursor-pointer ${
-                        form.color === color ? 'scale-110 shadow-[2px_2px_0px_#000000]' : ''
+                      className={`w-7 h-7 rounded-lg border border-[var(--theme-gray-border)] transition-transform cursor-pointer ${
+                        form.color === color ? 'scale-110 shadow-sm' : ''
                       }`}
                       style={{ backgroundColor: color }}
                     />
@@ -363,13 +363,13 @@ export const TimetableGenerator: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border-2 border-black rounded-xl text-xs font-bold hover:bg-neutral-100"
+                  className="px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold hover:bg-neutral-100"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000]"
+                  className="px-5 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm"
                 >
                   Save Class
                 </button>

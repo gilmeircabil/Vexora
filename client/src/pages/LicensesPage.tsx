@@ -18,12 +18,12 @@ export const LicensesPage: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-3xl mx-auto space-y-10">
+    <div className="max-w-3xl mx-auto space-y-10 text-slate-100">
       <div className="space-y-3">
-        <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-black">
+        <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-100">
           Open Source Licenses
         </h1>
-        <p className="text-base font-bold text-neutral-700 leading-relaxed">
+        <p className="text-base font-normal text-slate-400 leading-relaxed">
           VexoraMods is licensed under the MIT License and built upon open-source software.
         </p>
       </div>
@@ -31,11 +31,11 @@ export const LicensesPage: React.FC = () => {
       <div className="space-y-6">
         {/* VexoraMods MIT License */}
         <Card className="space-y-3">
-          <div className="flex items-center gap-2 pb-2 border-b-2 border-black/10">
-            <Shield className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">VexoraMods License (MIT)</h2>
+          <div className="flex items-center gap-2 pb-2 border-b border-[var(--theme-gray-border)]">
+            <Shield className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">VexoraMods License (MIT)</h2>
           </div>
-          <pre className="p-4 rounded-xl bg-[#FAF7F2] border-2 border-black text-black font-mono text-xs overflow-x-auto whitespace-pre-wrap leading-relaxed shadow-[2px_2px_0px_#000]">
+          <pre className="p-4 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white-muted)] font-mono text-xs overflow-x-auto whitespace-pre-wrap leading-relaxed shadow-sm">
             {`MIT License
 
 Copyright (c) 2026 VexoraMods Contributors
@@ -62,21 +62,21 @@ SOFTWARE.`}
 
         {/* Third-Party Dependencies */}
         <Card className="space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b-2 border-black/10">
-            <FileText className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
+          <div className="flex items-center gap-2 pb-2 border-b border-[var(--theme-gray-border)]">
+            <FileText className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">
               Third-Party Dependencies & Libraries
             </h2>
           </div>
 
-          <div className="divide-y-2 divide-black/10 text-xs">
+          <div className="divide-y divide-[var(--theme-gray-border)] text-xs">
             {dependencies.map((dep) => (
               <div key={dep.name} className="py-3 flex items-center justify-between">
                 <div>
-                  <p className="font-black text-black">{dep.name}</p>
-                  <p className="text-neutral-600 font-bold mt-0.5">{dep.purpose}</p>
+                  <p className="font-semibold text-[var(--theme-dirty-white)]">{dep.name}</p>
+                  <p className="text-[var(--theme-gray-muted)] font-normal mt-0.5">{dep.purpose}</p>
                 </div>
-                <span className="font-mono font-bold px-2.5 py-1 rounded-md bg-[#FACC15]/30 border border-black text-black">
+                <span className="font-mono font-medium px-2.5 py-1 rounded-md bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)]">
                   {dep.license}
                 </span>
               </div>

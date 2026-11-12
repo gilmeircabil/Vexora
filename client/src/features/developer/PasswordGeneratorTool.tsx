@@ -76,8 +76,8 @@ export const PasswordGeneratorTool: React.FC = () => {
       };
     return {
       label: 'Very Strong',
-      color: 'text-indigo-600 dark:text-indigo-400',
-      bar: 'w-full bg-indigo-500',
+      color: 'text-[var(--theme-dirty-white)]',
+      bar: 'w-full bg-[var(--theme-dirty-white)]',
     };
   };
 
@@ -131,7 +131,7 @@ export const PasswordGeneratorTool: React.FC = () => {
         <div>
           <div className="flex justify-between items-center text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
             <span>Password Length</span>
-            <span className="font-mono text-indigo-600 dark:text-indigo-400">
+            <span className="font-mono text-[var(--theme-dirty-white)]">
               {length} characters
             </span>
           </div>
@@ -144,7 +144,7 @@ export const PasswordGeneratorTool: React.FC = () => {
               const val = parseInt(e.target.value, 10);
               setLength(val);
             }}
-            className="w-full accent-indigo-600"
+            className="w-full accent-[var(--theme-dirty-white)]"
           />
           <div className="flex justify-between text-[11px] text-neutral-400 mt-1">
             <span>6 (Minimum)</span>
@@ -159,7 +159,7 @@ export const PasswordGeneratorTool: React.FC = () => {
               type="checkbox"
               checked={uppercase}
               onChange={(e) => setUppercase(e.target.checked)}
-              className="rounded accent-indigo-600"
+              className="rounded accent-[var(--theme-dirty-white)]"
             />
             <span>Uppercase Letters (A-Z)</span>
           </label>
@@ -169,7 +169,7 @@ export const PasswordGeneratorTool: React.FC = () => {
               type="checkbox"
               checked={lowercase}
               onChange={(e) => setLowercase(e.target.checked)}
-              className="rounded accent-indigo-600"
+              className="rounded accent-[var(--theme-dirty-white)]"
             />
             <span>Lowercase Letters (a-z)</span>
           </label>
@@ -179,7 +179,7 @@ export const PasswordGeneratorTool: React.FC = () => {
               type="checkbox"
               checked={numbers}
               onChange={(e) => setNumbers(e.target.checked)}
-              className="rounded accent-indigo-600"
+              className="rounded accent-[var(--theme-dirty-white)]"
             />
             <span>Numbers (0-9)</span>
           </label>
@@ -189,7 +189,7 @@ export const PasswordGeneratorTool: React.FC = () => {
               type="checkbox"
               checked={symbols}
               onChange={(e) => setSymbols(e.target.checked)}
-              className="rounded accent-indigo-600"
+              className="rounded accent-[var(--theme-dirty-white)]"
             />
             <span>Symbols (!@#$%^&*...)</span>
           </label>
@@ -199,7 +199,7 @@ export const PasswordGeneratorTool: React.FC = () => {
               type="checkbox"
               checked={excludeAmbiguous}
               onChange={(e) => setExcludeAmbiguous(e.target.checked)}
-              className="rounded accent-indigo-600"
+              className="rounded accent-[var(--theme-dirty-white)]"
             />
             <span>Exclude Ambiguous Characters (0, O, o, l, 1, I)</span>
           </label>

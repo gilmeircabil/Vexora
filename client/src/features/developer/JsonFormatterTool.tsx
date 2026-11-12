@@ -74,7 +74,7 @@ export const JsonFormatterTool: React.FC = () => {
               type="checkbox"
               checked={sortKeys}
               onChange={(e) => setSortKeys(e.target.checked)}
-              className="rounded accent-indigo-600"
+              className="rounded accent-[var(--theme-dirty-white)]"
             />
             <span>Alphabetize Keys</span>
           </label>
@@ -144,7 +144,7 @@ export const JsonFormatterTool: React.FC = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Paste JSON here to format, validate, or minify..."
-          className="w-full p-4 font-mono text-xs bg-neutral-900 text-neutral-100 rounded-xl border border-neutral-800 focus:outline-none focus:border-indigo-500 leading-relaxed"
+          className="w-full p-4 font-mono text-xs bg-neutral-900 text-neutral-100 rounded-xl border border-neutral-800 focus:outline-none focus:border-[var(--theme-dirty-white)] leading-relaxed"
           spellCheck={false}
         />
 

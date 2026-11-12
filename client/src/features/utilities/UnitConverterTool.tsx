@@ -73,7 +73,7 @@ export const UnitConverterTool: React.FC = () => {
               type="number"
               value={inputValue || ''}
               onChange={(e) => setInputValue(parseFloat(e.target.value) || 0)}
-              className="w-full px-3 py-2 text-base font-mono bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 text-base font-mono bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:border-[var(--theme-dirty-white)]"
             />
             <select
               value={fromUnit}
@@ -109,7 +109,7 @@ export const UnitConverterTool: React.FC = () => {
                 type="text"
                 readOnly
                 value={result.ok ? formatNumber(result.value) : '—'}
-                className="w-full px-3 py-2 text-base font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-neutral-100 dark:bg-neutral-800/80 border border-neutral-300 dark:border-neutral-700 rounded-lg"
+                className="w-full px-3 py-2 text-base font-mono font-bold text-[var(--theme-dirty-white)] bg-neutral-100 dark:bg-neutral-800/80 border border-neutral-300 dark:border-neutral-700 rounded-lg"
               />
               {result.ok && <CopyButton value={String(result.value)} label="Copy" size="md" />}
             </div>

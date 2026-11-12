@@ -45,7 +45,7 @@ export class PlatformController {
         configDoc,
         reviewsSummary,
       ] = await Promise.all([
-        User.countDocuments(),
+        User.countDocuments({ isSuspended: { $ne: true } }),
         LearningPost.countDocuments({ status: 'published' }),
         DeveloperProject.countDocuments({ status: 'published' }),
         DonationService.getSummary(),
@@ -89,6 +89,7 @@ export class PlatformController {
       const payload = {
         statistics: {
           totalMembers,
+          activeMembers: totalMembers,
           totalLearningPosts: learningPostsCount + legacyProjectsCount,
           publishedLearningPosts: learningPostsCount,
           totalSupporters: donationSummary.uniqueSupporters,

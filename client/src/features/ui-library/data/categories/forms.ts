@@ -78,9 +78,9 @@ export const FORM_COMPONENTS: UIComponentItem[] = [
         <button
           type="button"
           onClick={() => setShow(!show)}
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-black text-neutral-600 hover:text-black cursor-pointer"
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono font-bold text-neutral-600 hover:text-black cursor-pointer"
         >
-          {show ? '🙈' : '👁️'}
+          {show ? 'HIDE' : 'SHOW'}
         </button>
       </div>
     </div>
@@ -116,7 +116,7 @@ export const FORM_COMPONENTS: UIComponentItem[] = [
         description: 'Input with magnifying glass icon and ⌘K badge.',
         codeReact: `export const SearchInputPreview = () => (
   <div className="w-full max-w-sm relative">
-    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 text-xs">🔍</span>
+    <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400 stroke-[2.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     <input
       type="text"
       placeholder="Search 100+ components..."
@@ -564,7 +564,7 @@ export const FORM_COMPONENTS: UIComponentItem[] = [
     <label className="block text-xs font-black text-black">Upload Identification</label>
     <div className="flex items-center gap-2">
       <button className="px-3.5 py-2 bg-white hover:bg-neutral-50 text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000] cursor-pointer">
-        📁 Choose File
+        Choose File
       </button>
       <span className="text-[11px] font-mono text-neutral-500 truncate">resume_2026.pdf</span>
     </div>
@@ -600,8 +600,8 @@ export const FORM_COMPONENTS: UIComponentItem[] = [
         description: 'Dashed 2px border container with upload icon and accepted formats.',
         codeReact: `export const DropzonePreview = () => (
   <div className="w-full max-w-sm p-6 bg-[#FAF7F2] border-2 border-dashed border-black rounded-2xl text-center space-y-2 hover:bg-yellow-50 transition cursor-pointer">
-    <div className="w-10 h-10 mx-auto rounded-full bg-[#FACC15] border-2 border-black flex items-center justify-center font-black text-lg shadow-[2px_2px_0px_#000]">
-      ☁️
+    <div className="w-10 h-10 mx-auto rounded-full bg-[#FACC15] border-2 border-black flex items-center justify-center font-black shadow-[2px_2px_0px_#000]">
+      <svg className="w-5 h-5 stroke-[2.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
     </div>
     <p className="text-xs font-black text-black">Drag & drop files here, or <span className="underline text-blue-600">browse</span></p>
     <p className="text-[10px] text-neutral-500 font-mono">PNG, JPG, PDF up to 25MB</p>

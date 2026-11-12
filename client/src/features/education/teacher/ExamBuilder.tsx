@@ -105,13 +105,13 @@ export const ExamBuilder: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div>
           <h2 className="text-xl font-black flex items-center gap-2">
-            <FileCode className="w-5 h-5 text-indigo-600" />
+            <FileCode className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             Formal Exam Builder & Question Banks
           </h2>
-          <p className="text-xs text-neutral-600 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Construct sectioned midterms, finals, and standardized assessments with question banks.
           </p>
         </div>
@@ -121,10 +121,10 @@ export const ExamBuilder: React.FC = () => {
             <>
               <button
                 onClick={() => setShowAnswerKey(!showAnswerKey)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 border-black text-xs font-black transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border border-[var(--theme-gray-border)] text-xs font-black transition-all cursor-pointer ${
                   showAnswerKey
-                    ? 'bg-[#FFD21A] shadow-[2px_2px_0px_#000000]'
-                    : 'bg-white hover:bg-neutral-100'
+                    ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-sm'
+                    : 'bg-[var(--theme-surface)] hover:bg-neutral-100'
                 }`}
               >
                 {showAnswerKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -133,7 +133,7 @@ export const ExamBuilder: React.FC = () => {
 
               <button
                 onClick={() => window.print()}
-                className="flex items-center gap-1.5 px-3.5 py-2 bg-white text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+                className="flex items-center gap-1.5 px-3.5 py-2 bg-[var(--theme-surface)] text-slate-100 font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
               >
                 <Printer className="w-4 h-4" />
                 Print Exam
@@ -143,7 +143,7 @@ export const ExamBuilder: React.FC = () => {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
             New Exam
@@ -155,13 +155,13 @@ export const ExamBuilder: React.FC = () => {
         {/* Left: Exams List */}
         <div className="md:col-span-1 space-y-3 max-h-[650px] overflow-y-auto pr-1">
           {isLoading ? (
-            <div className="text-center py-8 text-xs font-bold text-neutral-500">
+            <div className="text-center py-8 text-xs font-bold text-slate-400">
               Loading exams...
             </div>
           ) : exams.length === 0 ? (
-            <div className="p-8 text-center bg-white rounded-xl border-2 border-dashed border-neutral-300">
+            <div className="p-8 text-center bg-[var(--theme-surface)] rounded-xl border-2 border-dashed border-neutral-300">
               <BookOpen className="w-8 h-8 text-neutral-300 mx-auto mb-2" />
-              <p className="text-xs font-bold text-neutral-600">No exams created yet</p>
+              <p className="text-xs font-bold text-slate-400">No exams created yet</p>
             </div>
           ) : (
             exams.map((ex) => (
@@ -170,12 +170,12 @@ export const ExamBuilder: React.FC = () => {
                 onClick={() => setActiveExam(ex)}
                 className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   activeExam?._id === ex._id
-                    ? 'border-black bg-[#FAF7F2] shadow-[3px_3px_0px_#000000]'
-                    : 'border-neutral-200 bg-white hover:border-black'
+                    ? 'border-black bg-[var(--theme-surface-raised)] shadow-sm'
+                    : 'border-neutral-200 bg-[var(--theme-surface)] hover:border-black'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-white border border-black/20 text-neutral-700">
+                  <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-[var(--theme-surface)] border border-black/20 text-slate-300">
                     {ex.subject}
                   </span>
                   <button
@@ -186,7 +186,7 @@ export const ExamBuilder: React.FC = () => {
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
-                <h4 className="font-black text-sm text-black truncate">{ex.title}</h4>
+                <h4 className="font-black text-sm text-slate-100 truncate">{ex.title}</h4>
                 <div className="flex items-center gap-3 text-[11px] font-bold text-neutral-400 mt-2">
                   <span>{ex.durationMinutes} min</span>
                   <span>•</span>
@@ -200,16 +200,16 @@ export const ExamBuilder: React.FC = () => {
         {/* Right: Printable Exam Sheet */}
         <div className="md:col-span-2">
           {activeExam ? (
-            <div className="bg-white p-8 sm:p-10 rounded-2xl border-2 border-black shadow-[6px_6px_0px_#000000] space-y-6 print:border-none print:shadow-none print:p-0">
+            <div className="bg-[var(--theme-surface)] p-8 sm:p-10 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-6 print:border-none print:shadow-none print:p-0">
               {/* Formal Header */}
               <div className="border-b-4 border-black pb-4 text-center space-y-2">
-                <span className="text-[11px] font-black uppercase tracking-widest text-neutral-500">
+                <span className="text-[11px] font-black uppercase tracking-widest text-slate-400">
                   OFFICIAL EXAMINATION PAPER
                 </span>
-                <h3 className="text-2xl font-black text-black uppercase tracking-tight">
+                <h3 className="text-2xl font-black text-slate-100 uppercase tracking-tight">
                   {activeExam.title}
                 </h3>
-                <p className="text-xs font-bold text-neutral-600">
+                <p className="text-xs font-bold text-slate-400">
                   Course: {activeExam.subject} • Time Limit: {activeExam.durationMinutes} minutes •
                   Total Points: {activeExam.totalPoints}
                 </p>
@@ -224,7 +224,7 @@ export const ExamBuilder: React.FC = () => {
                 </div>
 
                 {activeExam.instructions && (
-                  <p className="text-xs text-neutral-600 text-left pt-2 font-medium">
+                  <p className="text-xs text-slate-400 text-left pt-2 font-medium">
                     <strong>General Instructions:</strong> {activeExam.instructions}
                   </p>
                 )}
@@ -233,10 +233,10 @@ export const ExamBuilder: React.FC = () => {
               {/* Sections & Questions */}
               {activeExam.sections?.map((sec, sIdx) => (
                 <div key={sec.id || sIdx} className="space-y-4">
-                  <div className="bg-[#FAF7F2] p-2.5 rounded-xl border border-black/20">
-                    <h4 className="font-black text-sm uppercase text-black">{sec.title}</h4>
+                  <div className="bg-[var(--theme-surface-raised)] p-2.5 rounded-xl border border-black/20">
+                    <h4 className="font-black text-sm uppercase text-slate-100">{sec.title}</h4>
                     {sec.instructions && (
-                      <p className="text-xs text-neutral-600 mt-0.5">{sec.instructions}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{sec.instructions}</p>
                     )}
                   </div>
 
@@ -291,9 +291,9 @@ export const ExamBuilder: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="bg-white p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
+            <div className="bg-[var(--theme-surface)] p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
               <FileCode className="w-12 h-12 text-neutral-300 mx-auto mb-2" />
-              <p className="text-sm font-bold text-neutral-600">Select an exam to view or print</p>
+              <p className="text-sm font-bold text-slate-400">Select an exam to view or print</p>
             </div>
           )}
         </div>
@@ -302,11 +302,11 @@ export const ExamBuilder: React.FC = () => {
       {/* New Exam Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0px_#000000] w-full max-w-lg p-6 space-y-4">
+          <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] shadow-sm w-full max-w-lg p-6 space-y-4">
             <h3 className="text-lg font-black">Create Examination</h3>
             <form onSubmit={handleCreateExam} className="space-y-4">
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Subject *
                 </label>
                 <input
@@ -315,12 +315,12 @@ export const ExamBuilder: React.FC = () => {
                   placeholder="e.g. Modern Physics"
                   value={form.subject}
                   onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Exam Title *
                 </label>
                 <input
@@ -329,13 +329,13 @@ export const ExamBuilder: React.FC = () => {
                   placeholder="e.g. Midterm Examination Semester 1"
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Duration (Minutes)
                   </label>
                   <input
@@ -345,12 +345,12 @@ export const ExamBuilder: React.FC = () => {
                     onChange={(e) =>
                       setForm({ ...form, durationMinutes: Number(e.target.value) || 60 })
                     }
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Total Points
                   </label>
                   <input
@@ -360,20 +360,20 @@ export const ExamBuilder: React.FC = () => {
                     onChange={(e) =>
                       setForm({ ...form, totalPoints: Number(e.target.value) || 100 })
                     }
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Instructions
                 </label>
                 <textarea
                   rows={2}
                   value={form.instructions}
                   onChange={(e) => setForm({ ...form, instructions: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                 />
               </div>
 
@@ -381,13 +381,13 @@ export const ExamBuilder: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border-2 border-black rounded-xl text-xs font-bold hover:bg-neutral-100"
+                  className="px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold hover:bg-neutral-100"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000]"
+                  className="px-6 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm"
                 >
                   Create Exam
                 </button>

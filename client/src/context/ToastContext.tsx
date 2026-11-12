@@ -66,29 +66,23 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={t.id}
             role="alert"
-            className={`pointer-events-auto flex items-start gap-3 p-4 rounded-2xl shadow-[4px_4px_0px_#000000] border-2 border-black text-sm transition-all animate-in fade-in slide-in-from-bottom-2 duration-200 text-black ${
-              t.type === 'success'
-                ? 'bg-[#4ADE80]'
-                : t.type === 'error'
-                  ? 'bg-[#F472B6]'
-                  : 'bg-[#FACC15]'
-            }`}
+            className="pointer-events-auto flex items-start gap-3 p-4 rounded-2xl shadow-xl border border-[var(--theme-gray-border)] text-sm transition-all animate-in fade-in slide-in-from-bottom-2 duration-200 bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]"
           >
             {t.type === 'success' && (
-              <CheckCircle2 className="w-5 h-5 text-black stroke-[2.5] shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-emerald-400 stroke-[2] shrink-0 mt-0.5" />
             )}
             {t.type === 'error' && (
-              <AlertCircle className="w-5 h-5 text-black stroke-[2.5] shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-rose-400 stroke-[2] shrink-0 mt-0.5" />
             )}
             {t.type === 'info' && (
-              <Info className="w-5 h-5 text-black stroke-[2.5] shrink-0 mt-0.5" />
+              <Info className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2] shrink-0 mt-0.5" />
             )}
 
             <div className="flex-1">
-              {t.title && <p className="font-black text-black">{t.title}</p>}
+              {t.title && <p className="font-bold text-slate-100">{t.title}</p>}
               <p
                 className={
-                  t.title ? 'text-xs font-bold mt-0.5 text-black' : 'text-xs font-black text-black'
+                  t.title ? 'text-xs font-normal mt-0.5 text-slate-300' : 'text-xs font-medium text-slate-200'
                 }
               >
                 {t.message}
@@ -98,9 +92,9 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             <button
               onClick={() => removeToast(t.id)}
               aria-label="Close notification"
-              className="text-black hover:bg-black/10 p-1 rounded-lg transition-colors cursor-pointer"
+              className="text-slate-400 hover:text-slate-100 hover:bg-slate-800 p-1 rounded-lg transition-colors cursor-pointer"
             >
-              <X className="w-4 h-4 stroke-[2.5]" />
+              <X className="w-4 h-4 stroke-[2]" />
             </button>
           </div>
         ))}

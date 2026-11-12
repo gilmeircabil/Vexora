@@ -116,7 +116,7 @@ export const AIToolsModal: React.FC<AIToolsModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
-            <div className="p-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl shadow-xs">
+            <div className="p-2.5 bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] rounded-xl shadow-xs">
               <Sparkles className="w-5 h-5 text-amber-300" />
             </div>
             <div>

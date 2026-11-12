@@ -108,8 +108,8 @@ export const CARD_COMPONENTS: UIComponentItem[] = [
         description: 'Product card with price tag, discount chip, and quick add button.',
         codeReact: `export const ProductCardPreview = () => (
   <div className="max-w-xs bg-white rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000] overflow-hidden">
-    <div className="h-36 bg-[#FFE4E6] border-b-2 border-black flex items-center justify-center font-black text-3xl relative">
-      🎨
+    <div className="h-36 bg-[#FFE4E6] border-b-2 border-black flex items-center justify-center font-black text-2xl relative">
+      <span className="font-mono text-lg font-black tracking-wider">PACK</span>
       <span className="absolute top-2.5 right-2.5 px-2 py-0.5 bg-[#F43F5E] text-white text-[10px] font-black rounded-lg border border-black shadow-[1.5px_1.5px_0px_#000]">
         -25%
       </span>
@@ -161,7 +161,7 @@ export const CARD_COMPONENTS: UIComponentItem[] = [
   <div className="max-w-xs bg-white p-4 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000]">
     <div className="flex justify-between items-center text-xs text-neutral-500 font-bold mb-1">
       <span>Total Active Users</span>
-      <span className="w-6 h-6 rounded-lg bg-[#FAF7F2] border border-black flex items-center justify-center text-xs">👥</span>
+      <span className="w-6 h-6 rounded-lg bg-[#FAF7F2] border border-black flex items-center justify-center text-[10px] font-mono font-bold">USR</span>
     </div>
     <div className="text-2xl font-black text-black mb-2">24,892</div>
     <div className="flex items-center gap-1.5 text-[11px] font-bold">
@@ -202,8 +202,8 @@ export const CARD_COMPONENTS: UIComponentItem[] = [
         description: 'Vibrant yellow icon box with bold title and arrow link.',
         codeReact: `export const FeatureCardPreview = () => (
   <div className="max-w-xs bg-white p-6 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000] hover:-translate-y-1 transition">
-    <div className="w-12 h-12 rounded-xl bg-[#FACC15] border-2 border-black shadow-[2px_2px_0px_#000] flex items-center justify-center text-xl mb-4">
-      ⚡
+    <div className="w-12 h-12 rounded-xl bg-[#FACC15] border-2 border-black shadow-[2px_2px_0px_#000] flex items-center justify-center mb-4">
+      <svg className="w-6 h-6 stroke-[2.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
     </div>
     <h4 className="font-black text-base text-black mb-2">Zero-Config Playgrounds</h4>
     <p className="text-xs text-neutral-600 mb-4 leading-relaxed">
@@ -418,8 +418,8 @@ export const CARD_COMPONENTS: UIComponentItem[] = [
         description: 'Side-by-side square media thumbnail and text content.',
         codeReact: `export const HorizontalCardPreview = () => (
   <div className="max-w-md bg-white rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000] p-3 flex gap-4 items-center">
-    <div className="w-20 h-20 rounded-xl bg-[#FACC15] border-2 border-black flex items-center justify-center font-black text-2xl shrink-0">
-      ⚡
+    <div className="w-20 h-20 rounded-xl bg-[#FACC15] border-2 border-black flex items-center justify-center font-black text-sm font-mono shrink-0">
+      #04
     </div>
     <div className="min-w-0 flex-1">
       <span className="text-[10px] font-black uppercase text-neutral-400">Tutorial #04</span>

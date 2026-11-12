@@ -5,26 +5,26 @@ import { Link } from 'react-router';
 
 export const TermsPage: React.FC = () => {
   return (
-    <div className="max-w-3xl mx-auto space-y-10">
+    <div className="max-w-3xl mx-auto space-y-10 text-[var(--theme-dirty-white)]">
       <div className="space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#38BDF8] border-2 border-black text-black text-xs font-black shadow-[2px_2px_0px_#000]">
-          <Scale className="w-3.5 h-3.5 stroke-[2.5]" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] text-xs font-semibold">
+          <Scale className="w-3.5 h-3.5 stroke-[2]" />
           <span>Terms of Use &amp; Service</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-black">
+        <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-[var(--theme-dirty-white)]">
           Terms of Service
         </h1>
-        <p className="text-base font-bold text-neutral-700 leading-relaxed">
+        <p className="text-base font-normal text-[var(--theme-gray-muted)] leading-relaxed">
           Welcome to VexoraMods. These terms govern your access to and use of our 100% free and
           open-source web utilities, Design Studio, and Learning Hub.
         </p>
       </div>
 
-      <div className="space-y-6 text-sm text-neutral-800 leading-relaxed font-semibold">
+      <div className="space-y-6 text-sm text-[var(--theme-dirty-white-muted)] leading-relaxed font-normal">
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
-            <HeartHandshake className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
+            <HeartHandshake className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">
               1. Open Philosophy &amp; Free Access
             </h2>
           </div>
@@ -38,11 +38,11 @@ export const TermsPage: React.FC = () => {
 
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
-            <ShieldAlert className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">2. Acceptable Use Policy</h2>
+            <ShieldAlert className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">2. Acceptable Use Policy</h2>
           </div>
           <p>By accessing VexoraMods, you agree that you will not:</p>
-          <ul className="list-disc list-inside space-y-1 text-xs font-semibold">
+          <ul className="list-disc list-inside space-y-1 text-xs font-normal text-[var(--theme-dirty-white-muted)]">
             <li>
               Attempt to bypass, disable, or disrupt the rate limiters, security controls, or
               infrastructure of the platform.
@@ -60,18 +60,18 @@ export const TermsPage: React.FC = () => {
 
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
-            <FileText className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
+            <FileText className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">
               3. User Content &amp; Intellectual Property
             </h2>
           </div>
           <p>
-            <strong>Your Content:</strong> You retain 100% ownership of all images, documents, and
+            <strong className="text-[var(--theme-dirty-white)]">Your Content:</strong> You retain 100% ownership of all images, documents, and
             designs you create or process using VexoraMods. Standard utility processing occurs
             locally in your browser RAM and is never stored on our servers.
           </p>
           <p>
-            <strong>Community Submissions:</strong> If you publish articles, tutorials, or public
+            <strong className="text-[var(--theme-dirty-white)]">Community Submissions:</strong> If you publish articles, tutorials, or public
             templates in the Learning Hub, you grant VexoraMods a non-exclusive license to host and
             display that content for the community.
           </p>
@@ -79,8 +79,8 @@ export const TermsPage: React.FC = () => {
 
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
-            <Cpu className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
+            <Cpu className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">
               4. Local AI &amp; Self-Hosted Integration
             </h2>
           </div>
@@ -91,19 +91,19 @@ export const TermsPage: React.FC = () => {
           </p>
         </Card>
 
-        <Card className="space-y-3 bg-[#FAF7F2]">
+        <Card className="space-y-3">
           <div className="flex items-center gap-2">
-            <Scale className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
+            <Scale className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">
               5. Disclaimer of Warranties &amp; Limitation of Liability
             </h2>
           </div>
-          <p className="text-xs text-neutral-800 font-semibold">
+          <p className="text-xs text-[var(--theme-gray-muted)] font-normal">
             VexoraMods and its source code are licensed under the MIT License and provided &ldquo;as
             is&rdquo;, without warranty of any kind, express or implied. In no event shall the
             authors, maintainers, or contributors be liable for any claim, damages, or other
             liability arising from the use of the platform. Please see our{' '}
-            <Link to="/licenses" className="text-black font-black underline hover:text-neutral-700">
+            <Link to="/licenses" className="text-[var(--theme-dirty-white)] font-semibold underline hover:text-[var(--theme-dirty-white-muted)]">
               Open Source Licenses
             </Link>{' '}
             for full software license terms.

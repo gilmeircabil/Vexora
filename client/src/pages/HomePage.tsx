@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate, useLocation } from 'react-router';
 import {
   Wrench,
   Sparkles,
   Heart,
   ArrowRight,
-  MessageSquare,
   Star,
   PenSquare,
   AlertCircle,
@@ -13,18 +12,13 @@ import {
   Info,
   X,
   GraduationCap,
-  BrainCircuit,
-  BookMarked,
-  Clock,
   FileText,
-  FolderKanban,
-  Calculator,
-  Award,
   Palette,
-  BookOpen,
-  LayoutGrid,
-  Compass,
-  MapPin,
+  Bot,
+  Cpu,
+  ShieldCheck,
+  WifiOff,
+  Layers,
 } from 'lucide-react';
 import {
   TOOL_CATALOG,
@@ -45,23 +39,80 @@ import { aiToolsApi } from '../services/aiToolsApi.js';
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const [studyWorkspaceTab, setStudyWorkspaceTab] = useState<'student' | 'teacher'>('student');
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash === '#tools-directory') {
+      const scroll = () => {
+        const el = document.getElementById('tools-directory');
+        if (el && typeof el.scrollIntoView === 'function') {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
+      scroll();
+      const timer = setTimeout(scroll, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [location.hash]);
+  const [heroMode, setHeroMode] = useState<'studio' | 'vision' | 'pdf'>('studio');
   const { mood, triggerMood } = useMascot();
   const { favoriteIds, favoritesCount } = useFavorites();
   const [isWakingUp, setIsWakingUp] = useState(false);
 
+  const heroModeDetails = {
+    studio: {
+      title: 'Vector Design Studio',
+      tag: 'Multi-Page Canvas',
+      info: '38+ Tools · Zero Paywalls',
+      link: '/studio',
+      btnText: 'Open Studio',
+    },
+    vision: {
+      title: 'Neural Vision AI',
+      tag: 'WebGPU Engine',
+      info: 'Local WASM · 100% Private',
+      link: '/tools/ai-background-remover',
+      btnText: 'Launch Vision AI',
+    },
+    pdf: {
+      title: 'Document Workspace',
+      tag: 'Client-Side Engine',
+      info: 'Unlimited Pages · High Speed',
+      link: '/tools/pdf-merger',
+      btnText: 'Explore PDF Suite',
+    },
+  };
+
   const getHeroSpeechText = () => {
     if (isWakingUp) {
-      return 'Cloud server waking up... 🌰 Syncing live data!';
+      return 'Cloud server waking up... Syncing live data!';
     }
     if (mood === 'celebrate') {
-      return 'Woohoo! Sparkle power! 🌰✨';
+      return 'Woohoo! Sparkle power!';
     }
     if (mood === 'crunch') {
-      return 'Crunching code! High focus! 🔥';
+      return 'Crunching code! High focus!';
     }
-    return 'Hi! Click me to high-five! 🌰';
+    if (heroMode === 'vision') {
+      return 'Neural AI ready! Tap to isolate subjects!';
+    }
+    if (heroMode === 'pdf') {
+      return 'Client-side PDF suite ready to go!';
+    }
+    return 'Hi! Click me to high-five!';
   };
+
+  const formatMetricCount = (count?: number, fallback: string = '0'): string => {
+    if (count === undefined || count === null) return fallback;
+    if (count >= 1000000) {
+      return `${(count / 1000000).toFixed(1).replace(/\.0$/, '')}M`;
+    }
+    if (count >= 1000) {
+      return `${(count / 1000).toFixed(1).replace(/\.0$/, '')}k`;
+    }
+    return count.toLocaleString();
+  };
+
   const [overview, setOverview] = useState<{
     stats?: {
       totalMembers: number;
@@ -72,6 +123,7 @@ export const HomePage: React.FC = () => {
     };
     statistics?: {
       totalMembers: number;
+      activeMembers?: number;
       publishedLearningPosts: number;
       totalLearningPosts: number;
       totalSupporters: number;
@@ -126,6 +178,36 @@ export const HomePage: React.FC = () => {
     online: true,
     readyTools: {},
   });
+
+  // Real Client-Side Telemetry & Diagnostic Metrics
+  const [liveTelemetry, setLiveTelemetry] = useState<{
+    latencyMs: number | null;
+    storageQuota: string;
+    isOnline: boolean;
+  }>({
+    latencyMs: null,
+    storageQuota: 'Private Sandbox',
+    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
+  });
+
+  useEffect(() => {
+    if (typeof navigator !== 'undefined' && navigator.storage?.estimate) {
+      navigator.storage.estimate().then((est) => {
+        if (est.usage !== undefined) {
+          const mb = (est.usage / (1024 * 1024)).toFixed(1);
+          setLiveTelemetry((prev) => ({ ...prev, storageQuota: `${mb} MB IndexedDB` }));
+        }
+      }).catch(() => {});
+    }
+    const handleOnline = () => setLiveTelemetry((prev) => ({ ...prev, isOnline: true }));
+    const handleOffline = () => setLiveTelemetry((prev) => ({ ...prev, isOnline: false }));
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   // Check AI provider status
   useEffect(() => {
@@ -246,8 +328,11 @@ export const HomePage: React.FC = () => {
 
     const fetchOverviewWithRetry = async () => {
       try {
+        const pingStart = performance.now();
         const res = await platformApi.getHomeOverview();
+        const elapsed = Math.round(performance.now() - pingStart);
         if (!active) return;
+        setLiveTelemetry((prev) => ({ ...prev, latencyMs: elapsed }));
         if (res?.success && res.data) {
           setOverview(res.data);
           if (res.data.reviewsSummary) {
@@ -296,76 +381,530 @@ export const HomePage: React.FC = () => {
   return (
     <div className="space-y-20 pb-12">
       {/* 1. HERO SECTION & FAST DISCOVERY */}
-      <section className="pt-4 sm:pt-8 space-y-10">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-          <div className="max-w-4xl lg:max-w-3xl space-y-5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 border border-black text-xs font-mono font-bold text-black shadow-[1.5px_1.5px_0px_#000000]">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-400" />
-              <span>VexoraMods — All-in-One Creative, Utility &amp; AI Platform</span>
-            </div>
+      <section className="pt-2 sm:pt-4">
+        <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] p-6 lg:p-10 shadow-md">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left: Showcase Visual Card (Dynamic Studio Showcase with Mascot) */}
+            <div className="lg:col-span-5 relative">
+              <div className="rounded-2xl border border-[var(--theme-gray-border)] bg-gradient-to-b from-[var(--theme-canvas)] to-[var(--theme-surface)] text-[var(--theme-dirty-white)] p-6 sm:p-8 flex flex-col justify-between min-h-[400px] lg:min-h-[470px] shadow-md relative overflow-hidden group">
+                {/* Capability Switcher Tabs */}
+                <div className="flex items-center justify-between gap-2 z-10">
+                  <div className="flex items-center gap-1 p-1 rounded-full bg-[var(--theme-canvas)]/80 border border-[var(--theme-gray-border)] backdrop-blur-sm">
+                    {(
+                      [
+                        { id: 'studio', label: 'Vector Studio', mood: 'celebrate' as const },
+                        { id: 'vision', label: 'Neural Vision', mood: 'crunch' as const },
+                        { id: 'pdf', label: 'Offline PDF', mood: 'celebrate' as const },
+                      ] as const
+                    ).map((tab) => (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => {
+                          setHeroMode(tab.id);
+                          triggerMood(tab.mood, 2000);
+                        }}
+                        className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
+                          heroMode === tab.id
+                            ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                            : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)]'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+                  <span className="w-7 h-7 rounded-full bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
+                    ★
+                  </span>
+                </div>
 
-            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-black leading-[1.05]">
-              {overview?.config?.heroHeadline || 'Everything You Need. One Platform.'}
-            </h1>
+                {/* Subtle Background Blueprint / Wireframe Accent */}
+                <div className="absolute inset-0 opacity-10 pointer-events-none flex items-center justify-center">
+                  <svg className="w-full h-full text-[var(--theme-gray-muted)]" viewBox="0 0 200 200" fill="none" stroke="currentColor">
+                    <line x1="0" y1="50" x2="200" y2="50" strokeWidth="0.5" strokeDasharray="4 4" />
+                    <line x1="0" y1="100" x2="200" y2="100" strokeWidth="0.5" />
+                    <line x1="0" y1="150" x2="200" y2="150" strokeWidth="0.5" strokeDasharray="4 4" />
+                    <line x1="50" y1="0" x2="50" y2="200" strokeWidth="0.5" strokeDasharray="4 4" />
+                    <line x1="100" y1="0" x2="100" y2="200" strokeWidth="0.5" />
+                    <line x1="150" y1="0" x2="150" y2="200" strokeWidth="0.5" strokeDasharray="4 4" />
+                    <rect x="40" y="40" width="120" height="120" rx="16" strokeWidth="1" />
+                  </svg>
+                </div>
 
-            <p className="text-base sm:text-xl font-semibold text-neutral-700 max-w-3xl leading-relaxed">
-              {overview?.config?.heroDescription ||
-                'Discover 38+ free browser tools, full-screen AI chat, vector design studio, and dual-workspace study suite — completely open and unlocked with zero paywalls.'}
-            </p>
-          </div>
+                {/* Center Mascot Companion with Animated Speech Bubble */}
+                <div className="flex flex-col items-center justify-center my-3 z-10">
+                  <div
+                    data-testid="mascot-speech-bubble"
+                    aria-live="polite"
+                    className="relative mb-2 max-w-[240px] rounded-2xl bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] px-4 py-2 shadow-xs border border-[var(--theme-gray-border)] text-xs font-semibold leading-relaxed text-center"
+                  >
+                    <div>{getHeroSpeechText()}</div>
+                    <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[var(--theme-surface-raised)] border-r border-b border-[var(--theme-gray-border)] transform rotate-45" />
+                  </div>
 
-          {/* Squirrel Mascot Hero Companion (Transparent Background with Animated Speech Bubble) */}
-          <div className="hidden sm:flex flex-col items-center justify-center shrink-0 self-center lg:self-end relative lg:mr-4 xl:mr-8 pb-1">
-            {/* Animated Speech Bubble */}
-            <div
-              data-testid="mascot-speech-bubble"
-              aria-live="polite"
-              className="relative mb-2 max-w-[240px] rounded-2xl bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-100 px-4 py-2.5 shadow-[2.5px_2.5px_0px_#000000] border-2 border-black backdrop-blur-md text-xs font-semibold leading-relaxed"
-            >
-              <div
-                key={mood}
-                className="text-xs sm:text-[12.5px] leading-snug font-bold text-center animate-in fade-in zoom-in-95 duration-200"
-              >
-                {getHeroSpeechText()}
+                  <SquirrelMascot
+                    state={mood}
+                    size={185}
+                    onClick={() => triggerMood('celebrate', 2500)}
+                    className="drop-shadow-lg cursor-pointer hover:scale-105 transition-transform"
+                  />
+                </div>
+
+                {/* Bottom preview info */}
+                <div className="pt-3 border-t border-[var(--theme-gray-border)] flex items-center justify-between text-xs z-10">
+                  <span className="text-[var(--theme-gray-muted)] font-medium">
+                    {heroModeDetails[heroMode].info}
+                  </span>
+                  <Link
+                    to={heroModeDetails[heroMode].link}
+                    className="inline-flex items-center gap-1.5 text-[var(--theme-dirty-white)] font-bold hover:underline"
+                  >
+                    <span>{heroModeDetails[heroMode].btnText}</span>
+                    <span>↗</span>
+                  </Link>
+                </div>
               </div>
-              {/* Bubble pointer pointing down */}
-              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-slate-900 border-r-2 border-b-2 border-black transform rotate-45" />
             </div>
 
-            {/* Mascot */}
-            <SquirrelMascot
-              state={mood}
-              size={210}
-              onClick={() => triggerMood('celebrate', 2500)}
-              className="drop-shadow-xl"
-            />
+            {/* Right: Modern Editorial Typography & Action Elements */}
+            <div className="lg:col-span-7 space-y-6">
+              <h1 className="text-4xl sm:text-6xl xl:text-7xl font-extrabold tracking-tight text-[var(--theme-dirty-white)] leading-[1.05]">
+                {overview?.config?.heroHeadline || 'A new standard of excellence'}
+              </h1>
+
+              <p className="text-base sm:text-lg font-normal text-[var(--theme-gray-muted)] max-w-2xl leading-relaxed">
+                {overview?.config?.heroDescription ||
+                  'The largest privately held open platform for creators, students, and developers — completely free with zero paywalls.'}
+              </p>
+
+              {/* Action Elements with Dirty White CTA */}
+              <div className="pt-2 flex flex-wrap items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = document.getElementById('tools-directory');
+                    if (el && typeof el.scrollIntoView === 'function') {
+                      el.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      window.location.hash = 'tools-directory';
+                    }
+                  }}
+                  className="inline-flex items-center gap-3 pl-6 pr-2 py-2 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-bold text-sm rounded-full shadow-sm hover:shadow-md transition-all group cursor-pointer"
+                >
+                  <span>Browse All Tools</span>
+                  <span className="w-9 h-9 rounded-full bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] flex items-center justify-center font-bold transition-transform group-hover:rotate-45 shadow-xs">
+                    ↗
+                  </span>
+                </button>
+              </div>
+
+              {/* 43+ counter & explore pill */}
+              <div className="pt-4 flex flex-wrap items-center gap-4 sm:gap-6">
+                <div data-testid="hero-experience-counter" className="flex items-center gap-3">
+                  <div className="w-14 h-14 rounded-2xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center text-[var(--theme-dirty-white)] font-bold text-xl shadow-xs">
+                    43+
+                  </div>
+                  <div className="text-xs font-medium leading-tight text-[var(--theme-gray-muted)]">
+                    <span className="block font-bold text-sm text-[var(--theme-dirty-white)]">Browser Tools</span>
+                    <span>100% Free &amp; Open</span>
+                  </div>
+                </div>
+
+                <Link
+                  to="/ai-chat"
+                  className="inline-flex items-center gap-2.5 px-5 py-3 rounded-full bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] text-xs font-bold border border-[var(--theme-gray-border)] shadow-sm transition-transform hover:-translate-y-0.5"
+                >
+                  <Bot className="w-4 h-4 text-[var(--theme-dirty-white)]" />
+                  <span>Vexora AI Chat</span>
+                  <span className="text-[var(--theme-dirty-white-muted)]">▶</span>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 2. ALL TOOLS DIRECTORY (Combined with HomePage) */}
-      <section className="pt-8 space-y-6">
+      {/* 2. FLAGSHIP SPOTLIGHT (Clean EdTech 3-Card Bento Layout) */}
+      <section className="pt-6 space-y-8">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[11px] font-mono font-semibold uppercase tracking-wider text-[var(--theme-gray-muted)] shadow-xs">
+            <span>WHO WE ARE ↗</span>
+          </div>
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-[var(--theme-dirty-white)] tracking-tight">
+            We developed landmark tools &amp; utilities
+          </h2>
+          <p className="text-xs sm:text-sm font-normal text-[var(--theme-gray-muted)] max-w-xl mx-auto">
+            Engineered for high speed, client-side data privacy, and zero subscriptions.
+          </p>
+        </div>
+
+        {/* The 3-Card Bento Row: Soft Black - Dirty White - Gray */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Card 1: Soft Black Surface */}
+          <Link
+            to="/tools/smart-image-studio"
+            className="group bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] rounded-2xl p-8 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between min-h-[340px] relative overflow-hidden"
+          >
+            {/* Architectural isometric wireframe accent */}
+            <div className="absolute -right-4 -bottom-4 w-32 h-32 opacity-15 pointer-events-none">
+              <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" className="text-[var(--theme-dirty-white)] w-full h-full">
+                <polygon points="50,15 85,32 50,50 15,32" strokeWidth="1.5" />
+                <polygon points="50,50 85,68 50,85 15,68" strokeWidth="1.5" />
+                <line x1="15" y1="32" x2="15" y2="68" strokeWidth="1.5" />
+                <line x1="50" y1="50" x2="50" y2="85" strokeWidth="1.5" />
+                <line x1="85" y1="32" x2="85" y2="68" strokeWidth="1.5" />
+              </svg>
+            </div>
+
+            <div className="space-y-4 z-10">
+              <span className="font-mono text-xs text-[var(--theme-gray-muted)]">01.</span>
+              <h3 className="text-xl sm:text-2xl font-bold text-[var(--theme-dirty-white)] group-hover:underline transition-colors">
+                What we do: Smart Image Studio
+              </h3>
+              <p className="text-xs sm:text-sm font-normal text-[var(--theme-gray-muted)] leading-relaxed">
+                Multi-page vector design studio, custom SVGs, layers, filters, and high-res export directly in your browser.
+              </p>
+            </div>
+            <div className="pt-6 flex items-center justify-between z-10">
+              <span className="text-xs font-bold uppercase tracking-wider text-[var(--theme-gray-muted)] group-hover:text-[var(--theme-dirty-white)]">
+                Launch Studio
+              </span>
+              <span className="w-10 h-10 rounded-full bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-bold flex items-center justify-center transition-transform group-hover:rotate-45 shadow-xs">
+                ↗
+              </span>
+            </div>
+          </Link>
+
+          {/* Card 2: Signature Dirty White */}
+          <Link
+            to="/tools/ai-background-remover"
+            className="group bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-dirty-white)] rounded-2xl p-8 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between min-h-[340px] relative overflow-hidden"
+          >
+            {/* Neural scan wireframe accent */}
+            <div className="absolute -right-4 -bottom-4 w-32 h-32 opacity-20 pointer-events-none">
+              <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" className="text-[var(--theme-canvas)] w-full h-full">
+                <circle cx="50" cy="50" r="34" strokeWidth="1.5" strokeDasharray="3 3" />
+                <circle cx="50" cy="50" r="16" strokeWidth="1.5" />
+                <line x1="50" y1="5" x2="50" y2="95" strokeWidth="1" strokeDasharray="2 2" />
+                <line x1="5" y1="50" x2="95" y2="50" strokeWidth="1" strokeDasharray="2 2" />
+              </svg>
+            </div>
+
+            <div className="space-y-4 z-10">
+              <span className="font-mono text-xs text-[var(--theme-gray-dim)]">02.</span>
+              <h3 className="text-xl sm:text-2xl font-bold text-[var(--theme-canvas)] group-hover:underline">
+                Our impact: AI Vision Remover
+              </h3>
+              <p className="text-xs sm:text-sm font-normal text-[var(--theme-canvas)]/80 leading-relaxed">
+                Neural image processing to isolate subjects and remove backgrounds instantly with client-side privacy preserved.
+              </p>
+            </div>
+            <div className="pt-6 flex items-center justify-between z-10">
+              <span className="text-xs font-bold uppercase tracking-wider text-[var(--theme-canvas)] group-hover:underline">
+                Explore AI Tool
+              </span>
+              <span className="w-10 h-10 rounded-full bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] font-bold flex items-center justify-center transition-transform group-hover:rotate-45 shadow-xs">
+                ↗
+              </span>
+            </div>
+          </Link>
+
+          {/* Card 3: Soft Black Raised Surface */}
+          <Link
+            to="/tools/pdf-merger"
+            className="group bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] rounded-2xl p-8 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between min-h-[340px] relative overflow-hidden"
+          >
+            {/* Multi-sheet document stack wireframe accent */}
+            <div className="absolute -right-4 -bottom-4 w-32 h-32 opacity-15 pointer-events-none">
+              <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" className="text-[var(--theme-dirty-white)] w-full h-full">
+                <rect x="25" y="15" width="50" height="65" rx="4" strokeWidth="1.5" />
+                <rect x="18" y="24" width="50" height="65" rx="4" strokeWidth="1.5" strokeDasharray="2 2" />
+                <line x1="33" y1="30" x2="60" y2="30" strokeWidth="1.5" />
+                <line x1="33" y1="42" x2="60" y2="42" strokeWidth="1.5" />
+              </svg>
+            </div>
+
+            <div className="space-y-4 z-10">
+              <span className="font-mono text-xs text-[var(--theme-gray-muted)]">03.</span>
+              <h3 className="text-xl sm:text-2xl font-bold text-[var(--theme-dirty-white)] group-hover:underline transition-colors">
+                Core values: PDF Workspace Suite
+              </h3>
+              <p className="text-xs sm:text-sm font-normal text-[var(--theme-gray-muted)] leading-relaxed">
+                Merge multiple documents, extract pages, convert formats, and optimize PDF file sizes completely client-side.
+              </p>
+            </div>
+            <div className="pt-6 flex items-center justify-between z-10">
+              <span className="text-xs font-bold uppercase tracking-wider text-[var(--theme-gray-muted)] group-hover:text-[var(--theme-dirty-white)]">
+                Open PDF Tools
+              </span>
+              <span className="w-10 h-10 rounded-full bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-bold flex items-center justify-center transition-transform group-hover:rotate-45 shadow-xs">
+                ↗
+              </span>
+            </div>
+          </Link>
+        </div>
+
+        {/* Pill Strip matching clean edtech style */}
+        <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none justify-start sm:justify-center">
+          {[
+            { label: 'Image Processing', icon: Palette, cat: 'Image' },
+            { label: 'PDF Document Suite', icon: FileText, cat: 'PDF' },
+            { label: 'Developer Utilities', icon: Wrench, cat: 'Developer' },
+            { label: 'AI Powered Tools', icon: Sparkles, cat: 'ai' },
+            { label: 'Study & Education', icon: GraduationCap, path: '/study' },
+            { label: 'Vector Graphic Studio', icon: Layers, path: '/studio' },
+          ].map((pill) =>
+            pill.path ? (
+              <Link
+                key={pill.label}
+                to={pill.path}
+                className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-xs font-semibold text-[var(--theme-gray-muted)] shadow-xs hover:bg-[var(--theme-surface-raised)] hover:border-[var(--theme-gray-subtle)] hover:text-[var(--theme-dirty-white)] transition-all"
+              >
+                <pill.icon className="w-3.5 h-3.5 text-[var(--theme-dirty-white)]" />
+                <span>{pill.label}</span>
+              </Link>
+            ) : (
+              <button
+                key={pill.label}
+                type="button"
+                onClick={() => {
+                  if (pill.cat === 'ai') {
+                    setSelectedType('ai-powered');
+                  } else {
+                    setSelectedCategory(pill.cat as UnifiedToolCategory);
+                  }
+                  const el = document.getElementById('tools-directory');
+                  if (el && typeof el.scrollIntoView === 'function') {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-xs font-semibold text-[var(--theme-gray-muted)] shadow-xs hover:bg-[var(--theme-surface-raised)] hover:border-[var(--theme-gray-subtle)] hover:text-[var(--theme-dirty-white)] transition-all cursor-pointer"
+              >
+                <pill.icon className="w-3.5 h-3.5 text-[var(--theme-dirty-white)]" />
+                <span>{pill.label}</span>
+              </button>
+            ),
+          )}
+        </div>
+      </section>
+
+      {/* 3. DARK PANORAMIC METRICS BANNER (Soft Black, Dirty White, Gray System) */}
+      <section className="pt-6">
+        <div className="rounded-3xl bg-gradient-to-br from-[var(--theme-canvas)] via-[var(--theme-surface)] to-[var(--theme-canvas)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] p-8 sm:p-14 shadow-md relative overflow-hidden">
+          {/* Subtle grid line overlay */}
+          <div className="absolute inset-0 bg-[radial-gradient(#3f3f46_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
+
+          {/* Architectural Skyline Silhouette */}
+          <div className="absolute bottom-0 left-0 right-0 h-28 opacity-15 pointer-events-none">
+            <svg viewBox="0 0 1000 120" preserveAspectRatio="none" fill="none" stroke="currentColor" className="w-full h-full text-[var(--theme-dirty-white)]">
+              <path d="M0,120 L0,80 L40,80 L40,60 L70,60 L70,90 L110,90 L110,40 L140,40 L140,120 L200,120 L200,30 L250,30 L250,70 L290,70 L290,20 L330,20 L330,120 L400,120 L400,50 L450,50 L450,15 L480,15 L480,90 L530,90 L530,120 L600,120 L600,45 L650,45 L650,120 L720,120 L720,25 L760,25 L760,85 L810,85 L810,35 L860,35 L860,120 L920,120 L920,55 L960,55 L960,120 L1000,120" strokeWidth="1.5" />
+              <circle cx="125" cy="40" r="3" fill="var(--theme-gray-muted)" />
+              <circle cx="310" cy="20" r="3" fill="var(--theme-gray-muted)" />
+              <circle cx="465" cy="15" r="3" fill="var(--theme-gray-muted)" />
+              <circle cx="740" cy="25" r="3" fill="var(--theme-gray-muted)" />
+            </svg>
+          </div>
+
+          <div className="relative z-10 space-y-10">
+            <div className="max-w-2xl">
+              <span className="font-mono text-xs uppercase tracking-wider text-[var(--theme-gray-muted)] font-semibold">
+                Platform Statistics
+              </span>
+              <h3 className="text-2xl sm:text-4xl font-extrabold text-[var(--theme-dirty-white)] tracking-tight mt-1">
+                Built for scale, verified by community
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-4 border-t border-[var(--theme-gray-border)]">
+              <div className="space-y-1">
+                <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-[var(--theme-dirty-white)] tracking-tight flex items-baseline">
+                  <span>{TOOL_CATALOG.length}</span>
+                  <span className="text-[var(--theme-dirty-white-muted)] text-3xl sm:text-4xl">+</span>
+                </div>
+                <p className="text-xs sm:text-sm font-medium text-[var(--theme-gray-muted)]">
+                  free browser tools
+                </p>
+              </div>
+
+              <div className="space-y-1">
+                <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-[var(--theme-dirty-white)] tracking-tight flex items-baseline">
+                  <span>{overview?.statistics?.publishedLearningPosts || 52}</span>
+                  <span className="text-[var(--theme-dirty-white-muted)] text-3xl sm:text-4xl">+</span>
+                </div>
+                <p className="text-xs sm:text-sm font-medium text-[var(--theme-gray-muted)]">
+                  learning tutorials
+                </p>
+              </div>
+
+              <div className="space-y-1">
+                <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-[var(--theme-dirty-white)] tracking-tight flex items-baseline">
+                  <span>
+                    {formatMetricCount(
+                      overview?.statistics?.activeMembers ??
+                        overview?.statistics?.totalMembers ??
+                        overview?.stats?.totalMembers,
+                      '2.3k',
+                    )}
+                  </span>
+                  <span className="text-[var(--theme-dirty-white-muted)] text-3xl sm:text-4xl">+</span>
+                </div>
+                <p className="text-xs sm:text-sm font-medium text-[var(--theme-gray-muted)]">
+                  active members
+                </p>
+              </div>
+
+              <div className="space-y-1">
+                <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-[var(--theme-dirty-white)] tracking-tight">
+                  100%
+                </div>
+                <p className="text-xs sm:text-sm font-medium text-[var(--theme-gray-muted)]">
+                  open source &amp; free
+                </p>
+              </div>
+            </div>
+
+            {/* Bottom row: scroll-to-tools button */}
+            <div className="pt-4 flex items-center justify-between border-t border-[var(--theme-gray-border)] text-xs">
+              <span className="text-[var(--theme-gray-muted)] font-medium">Zero telemetry · Client-side privacy</span>
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById('tools-directory');
+                  if (el && typeof el.scrollIntoView === 'function') {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="w-10 h-10 rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-bold flex items-center justify-center transition-transform hover:scale-110 cursor-pointer shadow-sm"
+                aria-label="Scroll to tools directory"
+              >
+                ↓
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. WHAT MAKES US DIFFERENT! (Real Platform Telemetry & Live Data) */}
+      <section className="pt-6 space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          {/* Left Column: Visual Architecture Blueprint Card with Live Telemetry */}
+          <div className="lg:col-span-5 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-3xl p-8 sm:p-10 text-[var(--theme-dirty-white)] shadow-md flex flex-col justify-between relative overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(#71717a_1px,transparent_1px)] [background-size:20px_20px] opacity-10 pointer-events-none" />
+            <div className="relative z-10 space-y-4">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[11px] font-mono font-semibold text-[var(--theme-dirty-white)]">
+                <span>ARCHITECTURE &amp; TELEMETRY</span>
+              </span>
+              <h3 className="text-3xl sm:text-4xl font-extrabold text-[var(--theme-dirty-white)] tracking-tight leading-tight">
+                What makes us different!
+              </h3>
+              <p className="text-xs sm:text-sm font-normal text-[var(--theme-gray-muted)] leading-relaxed">
+                {overview?.config?.aboutMission ||
+                  'Traditional web applications process your personal media on remote servers. Vexora runs a high-performance in-memory engine entirely on your hardware.'}
+              </p>
+            </div>
+
+            <div className="relative z-10 pt-8 mt-6 border-t border-[var(--theme-gray-border)] space-y-3">
+              <div className="flex items-center justify-between text-xs font-semibold">
+                <span className="text-[var(--theme-gray-muted)]">Active Tools Catalog</span>
+                <span className="text-[var(--theme-dirty-white)]">{TOOL_CATALOG.length} Browser Tools (100% Free)</span>
+              </div>
+              <div className="flex items-center justify-between text-xs font-semibold">
+                <span className="text-[var(--theme-gray-muted)]">Live Cloud Latency</span>
+                <span className="text-[var(--theme-dirty-white)] font-mono">
+                  {liveTelemetry.latencyMs !== null ? `${liveTelemetry.latencyMs} ms` : 'Local Engine (0 ms)'}
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-xs font-semibold">
+                <span className="text-[var(--theme-gray-muted)]">Local Storage Model</span>
+                <span className="text-[var(--theme-dirty-white)]">{liveTelemetry.storageQuota}</span>
+              </div>
+              <div className="flex items-center justify-between text-xs font-semibold">
+                <span className="text-[var(--theme-gray-muted)]">Network Autonomy</span>
+                <span className="text-[var(--theme-dirty-white)]">
+                  {liveTelemetry.isOnline ? 'Online (PWA Ready)' : '100% Offline Mode'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: 4 Capability Pillar Cards in 2x2 Grid with Real DB Stats */}
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            {[
+              {
+                icon: Cpu,
+                title: 'Zero Cloud Latency',
+                metric: `${TOOL_CATALOG.length} In-Browser Tools`,
+                desc: `All ${TOOL_CATALOG.length} utilities compute directly in WebAssembly & WebGPU inside your device memory without remote network queuing.`,
+              },
+              {
+                icon: ShieldCheck,
+                title: 'Private by Architecture',
+                metric: 'Hardware Execution',
+                desc: 'Zero telemetry and client-side sandbox. Your files, photos, and documents never touch a third-party server.',
+              },
+              {
+                icon: WifiOff,
+                title: 'Offline Autonomy',
+                metric: liveTelemetry.isOnline ? 'PWA Synchronized' : 'Offline Active',
+                desc: 'Operates seamlessly even without an active internet connection as a fully installable progressive web app with zero cloud lock-in.',
+              },
+              {
+                icon: Layers,
+                title: 'Unrestricted Studio',
+                metric: 'Multi-Page Canvas',
+                desc: 'Full vector graphic canvas, SVG exports, multi-page layout capabilities, and zero subscription paywalls.',
+              },
+            ].map((pillar) => (
+              <div
+                key={pillar.title}
+                className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-2xl p-6 shadow-sm hover:border-[var(--theme-gray-subtle)] hover:bg-[var(--theme-surface-raised)] transition-all flex flex-col justify-between"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center text-[var(--theme-dirty-white)] shadow-xs">
+                      <pillar.icon className="w-5 h-5 text-[var(--theme-dirty-white)]" />
+                    </div>
+                    <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)]">
+                      {pillar.metric}
+                    </span>
+                  </div>
+                  <h4 className="text-base sm:text-lg font-bold text-[var(--theme-dirty-white)]">
+                    {pillar.title}
+                  </h4>
+                  <p className="text-xs sm:text-sm font-normal text-[var(--theme-gray-muted)] leading-relaxed">
+                    {pillar.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. ALL TOOLS DIRECTORY (Clean EdTech Search & Catalog) */}
+      <section id="tools-directory" className="pt-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
-              <Wrench className="w-3.5 h-3.5 text-black" />
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[var(--theme-gray-muted)]">
+              <Wrench className="w-3.5 h-3.5 text-[var(--theme-dirty-white)]" />
               <span>All Client-Side Tools</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-black">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--theme-dirty-white)]">
               Browse All {TOOL_CATALOG.length} Tools
             </h2>
-            <p className="text-xs sm:text-sm font-semibold text-neutral-600 mt-1">
+            <p className="text-xs sm:text-sm font-normal text-[var(--theme-gray-muted)] mt-1">
               Instant browser utilities, AI-powered tools, and design suite - all free and open source.
             </p>
           </div>
 
           {/* AI Configuration Notice when AI backend is unreachable */}
           {aiStatus.checked && !aiStatus.online && (
-            <div className="py-3 px-4 rounded-xl bg-amber-50 border border-black flex items-start gap-3">
-              <Info className="w-4 h-4 text-amber-800 shrink-0 mt-0.5" />
+            <div className="py-3 px-4 rounded-xl bg-amber-950/40 border border-amber-800/80 flex items-start gap-3">
+              <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
               <div className="text-xs space-y-0.5">
-                <p className="font-black text-black">AI Provider Configuration Notice</p>
-                <p className="font-semibold text-neutral-700">
+                <p className="font-bold text-amber-200">AI Provider Configuration Notice</p>
+                <p className="font-medium text-amber-300/90">
                   The Node/Sharp AI vision service is currently unreachable. All {totalStandardTools}{' '}
                   Standard Tools continue to work 100% offline in your browser. To enable AI-powered
                   tools ({totalAiTools} tools), ensure the VexoraMods backend server is running.
@@ -379,36 +918,36 @@ export const HomePage: React.FC = () => {
         <div className="pb-4 space-y-4">
           {/* Search Input */}
           <div className="relative max-w-xl">
-            <Search className="w-4 h-4 text-black absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
+            <Search className="w-4 h-4 text-[var(--theme-gray-muted)] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.2]" />
             <input
               type="text"
               value={toolsQuery}
               onChange={(e) => setToolsQuery(e.target.value)}
               aria-label="Search tools by name, description, or keyword"
               placeholder={`Search all ${TOOL_CATALOG.length} tools by name, description, or keyword...`}
-              className="w-full pl-10 pr-9 py-2.5 text-sm bg-white border-2 border-black rounded-xl focus:outline-none text-black font-bold placeholder:text-neutral-500 placeholder:font-semibold"
+              className="w-full pl-11 pr-10 py-3 text-sm bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-xl focus:outline-none focus:border-[var(--theme-dirty-white)] focus:ring-1 focus:ring-[var(--theme-dirty-white)] text-[var(--theme-dirty-white)] font-medium placeholder:text-[var(--theme-gray-dim)] shadow-sm"
             />
             {toolsQuery && (
               <button
                 type="button"
                 onClick={() => setToolsQuery('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-black hover:text-neutral-600 p-1"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] p-1"
                 aria-label="Clear search"
               >
-                <X className="w-4 h-4 stroke-[2.5]" />
+                <X className="w-4 h-4 stroke-[2.2]" />
               </button>
             )}
           </div>
 
           {/* Tool Type Filter Buttons */}
-          <div className="inline-flex items-center bg-white p-1 rounded-xl border-2 border-black self-start">
+          <div className="inline-flex items-center bg-[var(--theme-surface)] p-1 rounded-xl border border-[var(--theme-gray-border)] self-start shadow-sm">
             <button
               type="button"
               onClick={() => setSelectedType('all')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-black transition-all ${
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 selectedType === 'all'
-                  ? 'bg-[#FACC15] text-black border border-black'
-                  : 'text-neutral-700 hover:text-black'
+                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                  : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)]'
               }`}
             >
               All ({TOOL_CATALOG.length})
@@ -416,10 +955,10 @@ export const HomePage: React.FC = () => {
             <button
               type="button"
               onClick={() => setSelectedType('standard')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-black transition-all ${
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 selectedType === 'standard'
-                  ? 'bg-[#4ADE80] text-black border border-black'
-                  : 'text-neutral-700 hover:text-black'
+                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                  : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)]'
               }`}
             >
               Standard ({totalStandardTools})
@@ -427,13 +966,13 @@ export const HomePage: React.FC = () => {
             <button
               type="button"
               onClick={() => setSelectedType('ai-powered')}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-black transition-all ${
+              className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 selectedType === 'ai-powered'
-                  ? 'bg-[#F472B6] text-black border border-black'
-                  : 'text-neutral-700 hover:text-black'
+                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                  : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)]'
               }`}
             >
-              <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
+              <Sparkles className="w-3.5 h-3.5 stroke-[2.2]" />
               <span>AI-Powered ({totalAiTools})</span>
             </button>
           </div>
@@ -444,15 +983,15 @@ export const HomePage: React.FC = () => {
             <button
               type="button"
               onClick={() => setSelectedCategory('Favorites')}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all border-2 border-black ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border ${
                 selectedCategory === 'Favorites'
-                  ? 'bg-[#FFD21A] text-black shadow-[2px_2px_0px_#000000]'
-                  : 'bg-white text-black hover:bg-neutral-100'
+                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)] shadow-xs'
+                  : 'bg-[var(--theme-surface)] text-[var(--theme-gray-muted)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)] hover:border-[var(--theme-gray-subtle)] hover:text-[var(--theme-dirty-white)]'
               }`}
             >
               <Star
                 className={`w-3.5 h-3.5 ${
-                  favoritesCount > 0 ? 'fill-black text-black' : 'text-neutral-500'
+                  favoritesCount > 0 ? 'fill-amber-400 text-amber-500' : 'text-[var(--theme-gray-muted)]'
                 }`}
               />
               <span>Favorites</span>
@@ -462,10 +1001,10 @@ export const HomePage: React.FC = () => {
             <button
               type="button"
               onClick={() => setSelectedCategory('All')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all border-2 border-black ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border ${
                 selectedCategory === 'All'
-                  ? 'bg-black text-[#FACC15]'
-                  : 'bg-white text-black hover:bg-neutral-100'
+                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)] shadow-xs'
+                  : 'bg-[var(--theme-surface)] text-[var(--theme-gray-muted)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)] hover:border-[var(--theme-gray-subtle)] hover:text-[var(--theme-dirty-white)]'
               }`}
             >
               <span>All</span>
@@ -480,8 +1019,10 @@ export const HomePage: React.FC = () => {
                   key={cat}
                   type="button"
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all border-2 border-black ${
-                    active ? 'bg-black text-[#FACC15]' : 'bg-white text-black hover:bg-neutral-100'
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border ${
+                    active
+                      ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)] shadow-xs'
+                      : 'bg-[var(--theme-surface)] text-[var(--theme-gray-muted)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)] hover:border-[var(--theme-gray-subtle)] hover:text-[var(--theme-dirty-white)]'
                   }`}
                 >
                   <span>{cat}</span>
@@ -503,11 +1044,11 @@ export const HomePage: React.FC = () => {
             })}
           </div>
         ) : (
-          <div className="p-12 text-center bg-white rounded-3xl border-2 border-black shadow-[5px_5px_0px_#000000] space-y-3">
-            <p className="text-lg font-black text-black">
+          <div className="p-12 text-center bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-3">
+            <p className="text-lg font-bold text-[var(--theme-dirty-white)]">
               {toolsQuery ? `No tools matched "${toolsQuery}"` : 'No tools found'}
             </p>
-            <p className="text-xs font-semibold text-neutral-600 max-w-md mx-auto">
+            <p className="text-xs font-normal text-[var(--theme-gray-muted)] max-w-md mx-auto">
               {toolsQuery
                 ? 'Try searching for keywords like "resize", "ocr", "background", "pdf", "json", or clear your filters.'
                 : 'Try selecting a different category or clearing your filters.'}
@@ -520,519 +1061,13 @@ export const HomePage: React.FC = () => {
                   setSelectedCategory('All');
                   setSelectedType('all');
                 }}
-                className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FACC15] border-2 border-black text-xs font-black uppercase shadow-[3px_3px_0px_#000000] cursor-pointer"
+                className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold uppercase text-[var(--theme-canvas)] shadow-xs cursor-pointer"
               >
                 Reset Filters
               </button>
             )}
           </div>
         )}
-      </section>
-
-      {/* 4. INTERACTIVE STUDY SPACE SPOTLIGHT (Dual Student / Teacher Capabilities) */}
-      <section className="pt-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
-              <GraduationCap className="w-3.5 h-3.5 text-black" />
-              <span>Zero-Cost Education Suite</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-black">
-              Study Space for Learners &amp; Educators
-            </h2>
-            <p className="text-xs sm:text-sm font-semibold text-neutral-600 mt-1">
-              Switch between the student study workstation and teacher classroom tools.
-            </p>
-          </div>
-
-          {/* Interactive Toggle Pill */}
-          <div className="inline-flex items-center p-1 bg-neutral-100 rounded-xl border-2 border-black self-start sm:self-auto shadow-[2px_2px_0px_#000000]">
-            <button
-              type="button"
-              onClick={() => setStudyWorkspaceTab('student')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
-                studyWorkspaceTab === 'student'
-                  ? 'bg-[#FFD21A] text-black border border-black shadow-[1px_1px_0px_#000000]'
-                  : 'text-neutral-600 hover:text-black border border-transparent'
-              }`}
-            >
-              Student Workspace
-            </button>
-            <button
-              type="button"
-              onClick={() => setStudyWorkspaceTab('teacher')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
-                studyWorkspaceTab === 'teacher'
-                  ? 'bg-[#FFD21A] text-black border border-black shadow-[1px_1px_0px_#000000]'
-                  : 'text-neutral-600 hover:text-black border border-transparent'
-              }`}
-            >
-              Teacher Workspace
-            </button>
-          </div>
-        </div>
-
-        {studyWorkspaceTab === 'student' ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-amber-100 border border-black flex items-center justify-center text-amber-900 font-black">
-                <BrainCircuit className="w-4 h-4" />
-              </div>
-              <h4 className="font-black text-sm text-black">Doc-to-Quiz AI</h4>
-              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
-                Upload PDFs or notes and automatically generate interactive multiple-choice
-                assessments.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 border border-black flex items-center justify-center text-emerald-900 font-black">
-                <BookMarked className="w-4 h-4" />
-              </div>
-              <h4 className="font-black text-sm text-black">Flashcards &amp; Quizzes</h4>
-              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
-                Spaced repetition decks and self-testing quizzes with instant scoring and review
-                modes.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-sky-100 border border-black flex items-center justify-center text-sky-900 font-black">
-                <Clock className="w-4 h-4" />
-              </div>
-              <h4 className="font-black text-sm text-black">Pomodoro Focus Timer</h4>
-              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
-                Configurable study sessions, short/long break cycles, and audio alerts to stay in
-                the zone.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-purple-100 border border-black flex items-center justify-center text-purple-900 font-black">
-                <FileText className="w-4 h-4" />
-              </div>
-              <h4 className="font-black text-sm text-black">Citations &amp; Planner</h4>
-              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
-                Format citations in APA, MLA, or Chicago and manage weekly study timetables and
-                deadlines.
-              </p>
-            </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-amber-100 border border-black flex items-center justify-center text-amber-900 font-black">
-                <FolderKanban className="w-4 h-4" />
-              </div>
-              <h4 className="font-black text-sm text-black">Lesson Plan Creator</h4>
-              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
-                Draft structured curriculum objectives, instructional phases, and learning
-                materials.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 border border-black flex items-center justify-center text-emerald-900 font-black">
-                <FileText className="w-4 h-4" />
-              </div>
-              <h4 className="font-black text-sm text-black">Exam &amp; Worksheet Builder</h4>
-              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
-                Generate printable tests, question banks, worksheets, and automatic answer keys.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-sky-100 border border-black flex items-center justify-center text-sky-900 font-black">
-                <Calculator className="w-4 h-4" />
-              </div>
-              <h4 className="font-black text-sm text-black">Gradebook &amp; Attendance</h4>
-              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
-                Track student performance, calculate weighted averages, and monitor daily
-                attendance.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_#000000] space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-purple-100 border border-black flex items-center justify-center text-purple-900 font-black">
-                <Award className="w-4 h-4" />
-              </div>
-              <h4 className="font-black text-sm text-black">Rubrics &amp; Certificates</h4>
-              <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
-                Design custom grading criteria matrices and award completion certificates for
-                milestones.
-              </p>
-            </div>
-          </div>
-        )}
-
-        <div className="pt-2">
-          <Link
-            to={
-              studyWorkspaceTab === 'teacher'
-                ? '/study?workspace=teacher'
-                : '/study?workspace=student'
-            }
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FFD21A] hover:bg-amber-300 border-2 border-black text-black font-black text-xs sm:text-sm shadow-[2.5px_2.5px_0px_#000000] transition-transform hover:-translate-y-0.5"
-          >
-            <span>
-              Launch {studyWorkspaceTab === 'teacher' ? 'Teacher Workspace' : 'Student Workspace'}
-            </span>
-            <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-          </Link>
-        </div>
-      </section>
-
-      {/* 5. VEXORAMODS STUDIO INTRODUCTION */}
-      <section className="pt-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
-              <Palette className="w-3.5 h-3.5 text-black" />
-              <span>Vector Graphic Studio</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-black">
-              Design in VexoraMods Studio
-            </h2>
-            <p className="text-xs sm:text-sm font-semibold text-neutral-600 mt-1">
-              Create graphics, multi-page documents, and templates directly in your browser.
-            </p>
-          </div>
-          <Link
-            to="/studio"
-            className="inline-flex items-center gap-1.5 text-xs font-black text-black hover:underline self-start sm:self-auto"
-          >
-            <span>Open Studio Editor</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2">
-          <div className="space-y-1.5">
-            <div className="text-sm font-black text-black flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-[#FACC15] border border-black flex items-center justify-center text-xs font-black">
-                1
-              </span>
-              <span>Multi-Page Vector Canvas</span>
-            </div>
-            <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
-              Add text, shapes, custom SVGs, image filters, and layers with zero setup or software
-              to install.
-            </p>
-          </div>
-
-          <div className="space-y-1.5">
-            <div className="text-sm font-black text-black flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-[#38BDF8] border border-black flex items-center justify-center text-xs font-black">
-                2
-              </span>
-              <span>Cloud &amp; Offline Autosave</span>
-            </div>
-            <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
-              Save multi-page version history to your account or work in guest mode with instant
-              local caching.
-            </p>
-          </div>
-
-          <div className="space-y-1.5">
-            <div className="text-sm font-black text-black flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-[#4ADE80] border border-black flex items-center justify-center text-xs font-black">
-                3
-              </span>
-              <span>Instant Multi-Format Export</span>
-            </div>
-            <p className="text-xs font-semibold text-neutral-600 leading-relaxed">
-              Export high-resolution PNG, JPEG, vector SVG, and multi-page PDF documents with
-              transparent background support.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. UI COMPONENT LIBRARY SPOTLIGHT */}
-      <section className="pt-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
-              <LayoutGrid className="w-3.5 h-3.5 text-black" />
-              <span>Visual Learning &amp; Component Catalog</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-black">
-              UI Component Library &amp; Design Center
-            </h2>
-            <p className="text-xs sm:text-sm font-semibold text-neutral-600 mt-1">
-              Explore 100+ components, 12 website layouts, 11 dashboards, and interactive playgrounds.
-            </p>
-          </div>
-
-          <Link
-            to="/ui-library"
-            className="inline-flex items-center gap-1.5 text-xs font-black text-black hover:underline self-start sm:self-auto"
-          >
-            <span>Open UI Library</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-          <Link
-            to="/ui-library?section=components"
-            className="p-5 bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] hover:-translate-y-1 transition space-y-2 group"
-          >
-            <div className="w-10 h-10 rounded-xl bg-[#FACC15] border-2 border-black flex items-center justify-center font-black text-lg">
-              🧩
-            </div>
-            <h3 className="font-black text-sm text-black group-hover:text-blue-600 transition">100+ Components</h3>
-            <p className="text-xs text-neutral-600 font-medium">Navbars, buttons, cards, forms, data tables, modals &amp; feeds.</p>
-          </Link>
-
-          <Link
-            to="/ui-library?section=website-layouts"
-            className="p-5 bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] hover:-translate-y-1 transition space-y-2 group"
-          >
-            <div className="w-10 h-10 rounded-xl bg-[#38BDF8] border-2 border-black flex items-center justify-center font-black text-lg">
-              💻
-            </div>
-            <h3 className="font-black text-sm text-black group-hover:text-blue-600 transition">12 Website Layouts</h3>
-            <p className="text-xs text-neutral-600 font-medium">Full landing pages, SaaS, portfolios, blogs, and pricing pages.</p>
-          </Link>
-
-          <Link
-            to="/ui-library?section=dashboard-layouts"
-            className="p-5 bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] hover:-translate-y-1 transition space-y-2 group"
-          >
-            <div className="w-10 h-10 rounded-xl bg-[#4ADE80] border-2 border-black flex items-center justify-center font-black text-lg">
-              📊
-            </div>
-            <h3 className="font-black text-sm text-black group-hover:text-blue-600 transition">11 Full Dashboards</h3>
-            <p className="text-xs text-neutral-600 font-medium">Admin consoles, analytics, financial, CRM, and Kanban views.</p>
-          </Link>
-
-          <Link
-            to="/ui-library?section=playground"
-            className="p-5 bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] hover:-translate-y-1 transition space-y-2 group"
-          >
-            <div className="w-10 h-10 rounded-xl bg-[#A78BFA] border-2 border-black flex items-center justify-center font-black text-lg">
-              ⚡
-            </div>
-            <h3 className="font-black text-sm text-black group-hover:text-blue-600 transition">Live Playground</h3>
-            <p className="text-xs text-neutral-600 font-medium">Tweak colors, radius, padding, and copy generated React &amp; CSS.</p>
-          </Link>
-        </div>
-      </section>
-
-      {/* 7. VEXORA DISCOVER — LOCAL BUSINESS SEARCH SPOTLIGHT */}
-      <section className="pt-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
-              <Compass className="w-3.5 h-3.5 text-black" />
-              <span>Location-Based Business Discovery</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-black">
-              Vexora Discover
-            </h2>
-            <p className="text-xs sm:text-sm font-semibold text-neutral-600 mt-1">
-              Find coffee shops, gas stations, markets, pharmacies, restaurants, and repair services near you on Google Maps.
-            </p>
-          </div>
-
-          <Link
-            to="/discover"
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#FFE600] border-2 border-black rounded-xl font-black text-xs sm:text-sm text-black shadow-[3px_3px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1.5px_1.5px_0px_#000000] transition self-start sm:self-auto"
-          >
-            <Compass className="w-4 h-4" />
-            <span>Open Vexora Discover</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        {/* Quick Discovery Cards / Shortcut Pills */}
-        <div className="p-6 bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000000] space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <span className="font-black text-xs sm:text-sm uppercase tracking-wide text-neutral-800">
-                Popular Nearby Searches
-              </span>
-              <p className="text-xs text-neutral-600 font-medium">
-                Tap any category to launch immediate search near your location:
-              </p>
-            </div>
-            <Link
-              to="/discover"
-              className="text-xs font-black text-neutral-800 underline hover:text-black self-start sm:self-auto"
-            >
-              Open Full Search &rarr;
-            </Link>
-          </div>
-
-          <div className="flex flex-wrap gap-2 pt-1">
-            {[
-              { label: 'Coffee Shop', icon: '☕' },
-              { label: 'Gas Station', icon: '⛽' },
-              { label: 'Market', icon: '🏪' },
-              { label: 'Restaurant', icon: '🍽️' },
-              { label: 'Pharmacy', icon: '💊' },
-              { label: 'Grocery', icon: '🛒' },
-              { label: 'Bakery', icon: '🥐' },
-              { label: 'Laundry Shop', icon: '🧺' },
-              { label: 'Salon', icon: '💇' },
-              { label: 'Computer Repair', icon: '💻' },
-              { label: 'Printing Shop', icon: '🖨️' },
-              { label: 'Car Wash', icon: '🚗' },
-              { label: 'ATM / Bank', icon: '🏦' },
-              { label: 'Hardware Store', icon: '🔨' },
-              { label: 'Clinic / Hospital', icon: '🏥' },
-              { label: 'Gym', icon: '🏋️' },
-            ].map((item) => (
-              <Link
-                key={item.label}
-                to={`/discover?keyword=${encodeURIComponent(item.label)}`}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-black shadow-[2px_2px_0px_#000000] hover:bg-[#FFE600] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#000000] transition"
-              >
-                <span>{item.icon}</span>
-                <span>{item.label}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 8. RECENT LEARNING HUB POSTS (Clean Editorial Feed List) */}
-      <section className="pt-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
-              <BookOpen className="w-3.5 h-3.5 text-black" />
-              <span>Peer Knowledge &amp; Tutorials</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-black">
-              Recent Learning Hub Posts
-            </h2>
-            <p className="text-xs sm:text-sm font-semibold text-neutral-600 mt-1">
-              Tutorials, engineering guides, and ideas shared by community members.
-            </p>
-          </div>
-
-          <Link
-            to="/learning"
-            className="inline-flex items-center gap-1.5 text-xs font-black text-black hover:underline self-start sm:self-auto"
-          >
-            <span>Explore Learning Hub</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        {loadingStats ? (
-          <div className="divide-y-2 divide-black/10 border-y-2 border-black/15">
-            {[1, 2, 3].map((n) => (
-              <div
-                key={n}
-                className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-pulse px-2"
-              >
-                <div className="space-y-2 min-w-0 flex-1">
-                  <div className="h-3 w-36 bg-black/10 rounded" />
-                  <div className="h-5 w-3/4 max-w-sm bg-black/10 rounded" />
-                  <div className="h-3 w-1/2 max-w-xs bg-black/5 rounded" />
-                </div>
-                <div className="h-4 w-16 bg-black/10 rounded shrink-0 hidden sm:block" />
-              </div>
-            ))}
-          </div>
-        ) : overview?.recentPosts && overview.recentPosts.length > 0 ? (
-          <div className="divide-y-2 divide-black/10 border-y-2 border-black/15">
-            {overview.recentPosts.slice(0, 4).map((post) => (
-              <Link
-                key={post._id}
-                to={`/learning/${post.slug}`}
-                className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group hover:bg-black/[0.02] px-2 -mx-2 rounded-lg transition-colors"
-              >
-                <div className="space-y-1 min-w-0">
-                  <div className="flex items-center gap-2.5 text-xs font-mono font-bold text-neutral-600">
-                    <span className="text-black font-black">{post.category}</span>
-                    <span>·</span>
-                    <span>By {post.authorName}</span>
-                    <span>·</span>
-                    <span>{new Date(post.publishedAt || post.createdAt).toLocaleDateString()}</span>
-                  </div>
-                  <h3 className="text-base sm:text-lg font-black text-black group-hover:underline truncate">
-                    {post.title}
-                  </h3>
-                  <p className="text-xs font-semibold text-neutral-600 line-clamp-1">
-                    {post.excerpt}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-4 font-mono text-xs font-bold text-neutral-700 shrink-0">
-                  <span className="inline-flex items-center gap-1">
-                    <Heart className="w-3.5 h-3.5 text-red-600" />
-                    {post.likesCount}
-                  </span>
-                  <span className="inline-flex items-center gap-1">
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    {post.commentsCount}
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="py-6 border-y-2 border-black/15 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <p className="text-sm font-black text-black">
-                No tutorials published yet in the Learning Hub.
-              </p>
-              <p className="text-xs font-semibold text-neutral-600">
-                Share the first programming guide, project idea, or learning note with the
-                community.
-              </p>
-            </div>
-            <Link
-              to="/learning"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#4ADE80] border-2 border-black text-xs font-black text-black self-start sm:self-auto"
-            >
-              Write a Post in Learning Hub
-            </Link>
-          </div>
-        )}
-      </section>
-
-      {/* 7. ABOUT VEXORAMODS MANIFESTO */}
-      <section className="pt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        <div className="lg:col-span-5 space-y-3">
-          <h2 className="text-2xl sm:text-3xl font-black text-black leading-tight">
-            Built for Everyone. Free &amp; Open Source Forever.
-          </h2>
-          <p className="text-sm font-semibold text-neutral-700 leading-relaxed">
-            {overview?.config?.aboutMission ||
-              'VexoraMods exists to provide high-performance online utilities, AI-assisted tools, a professional visual design studio, and a collaborative learning community — 100% free and open source with zero paywalls or subscriptions.'}
-          </p>
-        </div>
-
-        <dl className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:divide-x-2 sm:divide-black/15">
-          <div className="space-y-1.5">
-            <dt className="font-black text-sm text-black">Zero Paywalls or Locks</dt>
-            <dd className="text-xs font-semibold text-neutral-600 leading-relaxed">
-              Every browser tool, AI utility, and Studio design feature is unlocked by default with
-              no subscriptions or credit walls.
-            </dd>
-          </div>
-
-          <div className="sm:pl-5 space-y-1.5">
-            <dt className="font-black text-sm text-black">Privacy-First Architecture</dt>
-            <dd className="text-xs font-semibold text-neutral-600 leading-relaxed">
-              Standard tools process your files locally inside your browser so sensitive documents
-              never leave your device.
-            </dd>
-          </div>
-
-          <div className="sm:pl-5 space-y-1.5">
-            <dt className="font-black text-sm text-black">Community-Driven Growth</dt>
-            <dd className="text-xs font-semibold text-neutral-600 leading-relaxed">
-              Powered by open knowledge in the Learning Hub and sustained through 100% voluntary
-              community support.
-            </dd>
-          </div>
-        </dl>
       </section>
 
       {/* 8. RATINGS & REVIEWS SECTION (Required by platform test assertions) */}
@@ -1045,11 +1080,11 @@ export const HomePage: React.FC = () => {
           <div className="space-y-1">
             <h2
               id="homepage-reviews-heading"
-              className="text-2xl sm:text-3xl font-black text-black"
+              className="text-2xl sm:text-3xl font-extrabold text-[var(--theme-dirty-white)]"
             >
               What People Say About VexoraMods
             </h2>
-            <p className="text-xs sm:text-sm font-semibold text-neutral-600">
+            <p className="text-xs sm:text-sm font-normal text-[var(--theme-gray-muted)]">
               Your feedback helps us improve and build better tools for everyone.
             </p>
           </div>
@@ -1058,15 +1093,15 @@ export const HomePage: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsWriteReviewOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_#000000] cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold text-[var(--theme-canvas)] shadow-xs cursor-pointer transition-transform hover:-translate-y-0.5"
             >
-              <PenSquare className="w-3.5 h-3.5 stroke-[2.5]" />
+              <PenSquare className="w-3.5 h-3.5 stroke-[2.2]" />
               <span>Write a Review</span>
             </button>
 
             <Link
               to="/reviews"
-              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-black text-black hover:underline"
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-[var(--theme-dirty-white)] hover:underline"
             >
               <span>View All Reviews</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -1076,10 +1111,10 @@ export const HomePage: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Column: Rating Summary & 5-Star Distribution */}
-          <div className="lg:col-span-4 space-y-4 lg:border-r-2 lg:border-black/15 lg:pr-8">
+          <div className="lg:col-span-4 space-y-4 lg:border-r lg:border-[var(--theme-gray-border)] lg:pr-8">
             <div className="flex items-baseline gap-3">
               <div
-                className="text-4xl sm:text-5xl font-black text-black"
+                className="text-4xl sm:text-5xl font-extrabold text-[var(--theme-dirty-white)]"
                 data-testid="homepage-average-rating"
               >
                 {reviewsData.totalApproved > 0 ? reviewsData.averageRating.toFixed(1) : '0.0'}
@@ -1093,12 +1128,12 @@ export const HomePage: React.FC = () => {
                         reviewsData.totalApproved > 0 &&
                         star <= Math.round(reviewsData.averageRating)
                           ? 'text-amber-500 fill-amber-400'
-                          : 'text-neutral-300'
+                          : 'text-[var(--theme-gray-dim)]'
                       }`}
                     />
                   ))}
                 </div>
-                <p className="text-xs font-mono font-bold text-neutral-600">
+                <p className="text-xs font-mono font-semibold text-[var(--theme-gray-muted)]">
                   {reviewsData.totalApproved}{' '}
                   {reviewsData.totalApproved === 1 ? 'approved review' : 'approved reviews'}
                 </p>
@@ -1115,19 +1150,19 @@ export const HomePage: React.FC = () => {
                 return (
                   <div
                     key={star}
-                    className="flex items-center gap-2.5 text-xs font-mono font-bold text-black"
+                    className="flex items-center gap-2.5 text-xs font-mono font-medium text-[var(--theme-dirty-white-muted)]"
                   >
                     <span className="w-8 shrink-0 flex items-center gap-1">
                       <span>{star}</span>
                       <Star className="w-3 h-3 text-amber-500 fill-amber-400" />
                     </span>
-                    <div className="flex-1 h-2 rounded-full bg-black/10 overflow-hidden">
+                    <div className="flex-1 h-2 rounded-full bg-[var(--theme-surface-raised)] overflow-hidden">
                       <div
-                        className="h-full bg-black transition-all duration-300"
+                        className="h-full bg-[var(--theme-dirty-white)] transition-all duration-300"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span className="w-7 text-right text-neutral-600">{count}</span>
+                    <span className="w-7 text-right text-[var(--theme-gray-muted)]">{count}</span>
                   </div>
                 );
               })}
@@ -1141,36 +1176,36 @@ export const HomePage: React.FC = () => {
                 {[1, 2, 3].map((n) => (
                   <div
                     key={n}
-                    className="p-4 rounded-xl border border-black/10 bg-black/5 animate-pulse space-y-2.5"
+                    className="p-4 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] animate-pulse space-y-2.5"
                   >
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-black/10 shrink-0" />
+                      <div className="w-8 h-8 rounded-full bg-[var(--theme-surface)] shrink-0" />
                       <div className="space-y-1">
-                        <div className="h-3.5 w-24 bg-black/10 rounded" />
-                        <div className="h-2.5 w-16 bg-black/5 rounded" />
+                        <div className="h-3.5 w-24 bg-[var(--theme-surface)] rounded" />
+                        <div className="h-2.5 w-16 bg-[var(--theme-surface)] rounded" />
                       </div>
                     </div>
-                    <div className="h-3.5 w-4/5 bg-black/10 rounded" />
+                    <div className="h-3.5 w-4/5 bg-[var(--theme-surface)] rounded" />
                   </div>
                 ))}
               </div>
             ) : reviewsError ? (
-              <div className="py-4 flex items-center gap-2 text-red-700 text-xs font-bold">
+              <div className="py-4 flex items-center gap-2 text-red-400 text-xs font-bold">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{reviewsError}</span>
               </div>
             ) : reviewsData.recentReviews.length === 0 ? (
               <div className="py-6 space-y-2">
-                <p className="text-base font-black text-black">
+                <p className="text-base font-bold text-[var(--theme-dirty-white)]">
                   Be the first to review VexoraMods.
                 </p>
-                <p className="text-xs font-semibold text-neutral-600 max-w-md">
+                <p className="text-xs font-normal text-[var(--theme-gray-muted)] max-w-md">
                   No approved reviews yet. Share your experience with our tools, Studio, or Learning
                   Hub!
                 </p>
               </div>
             ) : (
-              <div className="divide-y-2 divide-black/10">
+              <div className="divide-y divide-[var(--theme-gray-border)]">
                 {reviewsData.recentReviews.slice(0, 3).map((review) => {
                   const initials = (review.userName || 'V')
                     .split(' ')
@@ -1186,20 +1221,20 @@ export const HomePage: React.FC = () => {
                             <img
                               src={review.userAvatar}
                               alt={review.userName}
-                              className="w-8 h-8 rounded-full border border-black object-cover shrink-0"
+                              className="w-8 h-8 rounded-full border border-[var(--theme-gray-border)] object-cover shrink-0"
                             />
                           ) : (
                             <div
                               aria-hidden="true"
-                              className="w-8 h-8 rounded-full bg-[#FACC15] border border-black flex items-center justify-center font-black text-[11px] text-black shrink-0"
+                              className="w-8 h-8 rounded-full bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] flex items-center justify-center font-bold text-[11px] shrink-0"
                             >
                               {initials}
                             </div>
                           )}
-                          <span className="font-black text-sm text-black truncate">
+                          <span className="font-bold text-sm text-[var(--theme-dirty-white)] truncate">
                             {review.userName}
                           </span>
-                          <span className="text-xs font-mono text-neutral-500">
+                          <span className="text-xs font-mono text-[var(--theme-gray-muted)]">
                             · {new Date(review.createdAt).toLocaleDateString()}
                           </span>
                         </div>
@@ -1214,14 +1249,14 @@ export const HomePage: React.FC = () => {
                               className={`w-3.5 h-3.5 ${
                                 star <= review.rating
                                   ? 'text-amber-500 fill-amber-400'
-                                  : 'text-neutral-300'
+                                  : 'text-[var(--theme-gray-dim)]'
                               }`}
                             />
                           ))}
                         </div>
                       </div>
 
-                      <p className="text-xs sm:text-sm font-semibold text-neutral-700 leading-relaxed">
+                      <p className="text-xs sm:text-sm font-normal text-[var(--theme-dirty-white-muted)] leading-relaxed">
                         &ldquo;{review.comment}&rdquo;
                       </p>
                     </article>

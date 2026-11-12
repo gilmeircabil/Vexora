@@ -60,20 +60,20 @@ export const AiImageEnhancerPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] py-8 px-4 sm:px-8">
+    <div className="min-h-screen bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] py-8 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto">
         <Link
           to="/tools"
-          className="inline-flex items-center gap-2 text-sm font-mono font-bold text-black hover:underline mb-6"
+          className="inline-flex items-center gap-2 text-sm font-mono font-bold text-[var(--theme-dirty-white)] hover:underline mb-6"
         >
           <ArrowLeft className="w-4 h-4" /> Back to All Tools
         </Link>
 
-        <div className="border-2 border-black bg-white p-6 sm:p-8 shadow-[4px_4px_0px_#000] mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-black pb-4 mb-6">
+        <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] rounded-2xl p-6 sm:p-8 shadow-sm mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--theme-gray-border)] pb-4 mb-6">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-black">AI Image Enhancer</h1>
-              <p className="text-sm text-gray-700 mt-1 font-medium">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--theme-dirty-white)]">AI Image Enhancer</h1>
+              <p className="text-sm text-[var(--theme-gray-muted)] mt-1 font-medium">
                 Upscale images 2x or 4x with sharp edges, artifact reduction, and enhanced details.
               </p>
             </div>
@@ -83,13 +83,13 @@ export const AiImageEnhancerPage: React.FC = () => {
             {/* Settings & Upload */}
             <div className="space-y-6">
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                <label className="block font-mono text-xs font-bold text-[var(--theme-dirty-white)] uppercase mb-2">
                   Upload Image
                 </label>
-                <label className="border-2 border-dashed border-black bg-[#FAF7F2] p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-yellow-50 transition-colors">
-                  <UploadCloud className="w-8 h-8 text-black mb-2" />
-                  <span className="text-xs font-bold text-black">Click or drag image here</span>
-                  <span className="text-[11px] text-gray-500 font-mono mt-1">
+                <label className="border-2 border-dashed border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-[var(--theme-surface)] transition-colors">
+                  <UploadCloud className="w-8 h-8 text-[var(--theme-dirty-white)] mb-2" />
+                  <span className="text-xs font-bold text-[var(--theme-dirty-white)]">Click or drag image here</span>
+                  <span className="text-[11px] text-[var(--theme-gray-muted)] font-mono mt-1">
                     JPG, PNG, WebP (Max 15MB)
                   </span>
                   <input
@@ -102,7 +102,7 @@ export const AiImageEnhancerPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                <label className="block font-mono text-xs font-bold text-[var(--theme-dirty-white)] uppercase mb-2">
                   Upscale Factor
                 </label>
                 <div className="grid grid-cols-2 gap-3">
@@ -110,8 +110,8 @@ export const AiImageEnhancerPage: React.FC = () => {
                     <button
                       key={s}
                       onClick={() => setScale(s)}
-                      className={`py-2 font-mono text-xs font-bold border-2 border-black ${
-                        scale === s ? 'bg-[#FACC15] shadow-[2px_2px_0px_#000]' : 'bg-white'
+                      className={`py-2 font-mono text-xs font-bold rounded-lg border border-[var(--theme-gray-border)] transition ${
+                        scale === s ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs' : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)]'
                       }`}
                     >
                       {s}x Resolution
@@ -121,7 +121,7 @@ export const AiImageEnhancerPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                <label className="block font-mono text-xs font-bold text-[var(--theme-dirty-white)] uppercase mb-2">
                   Enhancement Mode
                 </label>
                 <div className="grid grid-cols-2 gap-2 text-xs font-mono">
@@ -129,10 +129,10 @@ export const AiImageEnhancerPage: React.FC = () => {
                     <button
                       key={m}
                       onClick={() => setMode(m)}
-                      className={`p-2 border border-black font-bold capitalize text-left ${
+                      className={`p-2 rounded-lg border border-[var(--theme-gray-border)] font-bold capitalize text-left transition ${
                         mode === m
-                          ? 'bg-black text-white'
-                          : 'bg-gray-50 text-black hover:bg-gray-100'
+                          ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                          : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)]'
                       }`}
                     >
                       {m.replace('_', ' ')}
@@ -144,7 +144,7 @@ export const AiImageEnhancerPage: React.FC = () => {
               <button
                 onClick={handleProcess}
                 disabled={!selectedFile || isProcessing}
-                className="w-full py-3 bg-black text-white font-mono text-sm font-bold border-2 border-black hover:bg-[#FACC15] hover:text-black transition-all shadow-[3px_3px_0px_#000] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-mono text-sm font-bold rounded-xl border border-[var(--theme-gray-border)] transition-all shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isProcessing ? (
                   <>
@@ -162,35 +162,35 @@ export const AiImageEnhancerPage: React.FC = () => {
 
             {/* Preview & Result */}
             <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="border-2 border-black bg-gray-50 p-4 flex flex-col justify-between">
-                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">
+              <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] rounded-2xl p-4 flex flex-col justify-between">
+                <span className="font-mono text-xs font-bold text-[var(--theme-gray-muted)] uppercase mb-2">
                   Original Image
                 </span>
-                <div className="flex-1 flex items-center justify-center min-h-[260px] bg-white border border-gray-200 overflow-hidden">
+                <div className="flex-1 flex items-center justify-center min-h-[260px] bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-xl overflow-hidden">
                   {previewUrl ? (
                     <img src={previewUrl} alt="Original" className="max-h-[360px] object-contain" />
                   ) : (
-                    <span className="text-xs font-mono text-gray-400">No image selected</span>
+                    <span className="text-xs font-mono text-[var(--theme-gray-muted)]">No image selected</span>
                   )}
                 </div>
               </div>
 
-              <div className="border-2 border-black bg-gray-50 p-4 flex flex-col justify-between">
-                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">
+              <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] rounded-2xl p-4 flex flex-col justify-between">
+                <span className="font-mono text-xs font-bold text-[var(--theme-gray-muted)] uppercase mb-2">
                   Enhanced Output
                 </span>
-                <div className="flex-1 flex items-center justify-center min-h-[260px] bg-white border border-gray-200 overflow-hidden">
+                <div className="flex-1 flex items-center justify-center min-h-[260px] bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-xl overflow-hidden">
                   {resultUrl ? (
                     <img src={resultUrl} alt="Enhanced" className="max-h-[360px] object-contain" />
                   ) : (
-                    <span className="text-xs font-mono text-gray-400">Result will appear here</span>
+                    <span className="text-xs font-mono text-[var(--theme-gray-muted)]">Result will appear here</span>
                   )}
                 </div>
                 {resultUrl && (
                   <a
                     href={resultUrl}
                     download="enhanced-image.png"
-                    className="mt-3 w-full py-2 bg-[#FACC15] text-black font-mono text-xs font-bold border border-black flex items-center justify-center gap-2 hover:bg-yellow-400"
+                    className="mt-3 w-full py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-mono text-xs font-bold rounded-xl border border-[var(--theme-gray-border)] flex items-center justify-center gap-2 cursor-pointer transition shadow-xs"
                   >
                     <Download className="w-4 h-4" /> Download Enhanced PNG
                   </a>

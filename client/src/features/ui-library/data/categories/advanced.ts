@@ -27,7 +27,7 @@ export const ADVANCED_COMPONENTS: UIComponentItem[] = [
         codeReact: `export const AdvancedCommandPalettePreview = () => (
   <div className="w-full max-w-sm bg-white border-2 border-black rounded-2xl shadow-[6px_6px_0px_#000] overflow-hidden text-xs">
     <div className="p-3 border-b-2 border-black flex items-center gap-2 bg-[#FAF7F2]">
-      <span>⚡</span>
+      <span className="font-mono text-black font-black">&gt;</span>
       <input type="text" placeholder="Type a command or search..." className="w-full bg-transparent font-bold outline-none" defaultValue="toggle theme" />
     </div>
     <div className="p-2 space-y-1">
@@ -298,12 +298,12 @@ export const ADVANCED_COMPONENTS: UIComponentItem[] = [
   <div className="w-56 bg-neutral-900 text-neutral-300 p-3 rounded-2xl border-2 border-black font-mono text-xs space-y-1 shadow-[4px_4px_0px_#000]">
     <div className="font-bold text-white text-[11px] mb-2 uppercase tracking-wider">Explorer</div>
     <div className="text-yellow-400 font-bold flex items-center gap-1.5 cursor-pointer">
-      <span>▼ 📁</span> <span>src/components</span>
+      <span>▼</span> <span>src/components</span>
     </div>
     <div className="pl-4 space-y-1 text-neutral-400">
-      <div className="flex items-center gap-1.5 hover:text-white cursor-pointer"><span className="text-blue-400">📄</span> Navbar.tsx</div>
-      <div className="flex items-center gap-1.5 text-white bg-neutral-800 px-1 rounded cursor-pointer"><span className="text-blue-400">📄</span> Button.tsx</div>
-      <div className="flex items-center gap-1.5 hover:text-white cursor-pointer"><span className="text-pink-400">🎨</span> styles.css</div>
+      <div className="flex items-center gap-1.5 hover:text-white cursor-pointer"><span className="text-blue-400 font-mono">::</span> Navbar.tsx</div>
+      <div className="flex items-center gap-1.5 text-white bg-neutral-800 px-1 rounded cursor-pointer"><span className="text-blue-400 font-mono">::</span> Button.tsx</div>
+      <div className="flex items-center gap-1.5 hover:text-white cursor-pointer"><span className="text-pink-400 font-mono">::</span> styles.css</div>
     </div>
   </div>
 );`,
@@ -510,7 +510,7 @@ export const ADVANCED_COMPONENTS: UIComponentItem[] = [
   <div className="max-w-sm bg-neutral-900 text-neutral-200 border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000] overflow-hidden text-xs font-mono">
     <div className="px-3 py-2 bg-neutral-950 border-b border-neutral-800 flex justify-between items-center text-[10px]">
       <span className="text-yellow-400 font-bold">Button.tsx</span>
-      <span className="text-neutral-400">Copy 📋</span>
+      <span className="text-neutral-400">Copy</span>
     </div>
     <div className="p-3 space-y-1">
       <p><span className="text-pink-400">export</span> <span className="text-blue-400">const</span> Button = () =&gt; (</p>

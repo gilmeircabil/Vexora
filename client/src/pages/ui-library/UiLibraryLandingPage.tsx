@@ -150,59 +150,59 @@ export const UiLibraryLandingPage: React.FC = () => {
   }, [favoriteIds]);
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-24">
+    <div className="min-h-screen bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] pb-24">
       {/* Hero Banner */}
-      <section className="border-b-2 border-black bg-white">
+      <section className="border-b border-[var(--theme-gray-border)] bg-[var(--theme-surface)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-[#FACC15] border-2 border-black rounded-xl text-xs font-black shadow-[2px_2px_0px_#000]">
-                <LayoutGrid className="w-3.5 h-3.5" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold shadow-xs">
+                <LayoutGrid className="w-3.5 h-3.5 text-[var(--theme-dirty-white)]" />
                 <span>UI COMPONENT LIBRARY & DESIGN LEARNING CENTER</span>
               </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tight leading-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[var(--theme-dirty-white)] tracking-tight leading-tight">
                 Discover, Study & Preview Modern Web Design
               </h1>
-              <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed font-medium">
+              <p className="text-xs sm:text-sm text-[var(--theme-gray-muted)] leading-relaxed font-normal">
                 A visual learning catalog with 100+ production components, 12 complete website layouts, 11 full dashboards, and 14 design styles. Includes responsive previews, beginner-friendly explanations, interactive playgrounds, and copyable React & CSS code.
               </p>
             </div>
 
             {/* Quick Stats Pill Grid */}
-            <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full md:w-auto shrink-0 font-black">
-              <div className="p-3 bg-[#FAF7F2] border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] text-center min-w-[120px]">
-                <p className="text-xl sm:text-2xl text-black">102</p>
-                <p className="text-[10px] text-neutral-500 uppercase tracking-wide">Components</p>
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full md:w-auto shrink-0 font-bold">
+              <div className="p-3 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl shadow-xs text-center min-w-[120px]">
+                <p className="text-xl sm:text-2xl text-[var(--theme-dirty-white)]">102</p>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] uppercase tracking-wide">Components</p>
               </div>
-              <div className="p-3 bg-[#FAF7F2] border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] text-center min-w-[120px]">
-                <p className="text-xl sm:text-2xl text-black">12</p>
-                <p className="text-[10px] text-neutral-500 uppercase tracking-wide">Web Layouts</p>
+              <div className="p-3 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl shadow-xs text-center min-w-[120px]">
+                <p className="text-xl sm:text-2xl text-[var(--theme-dirty-white)]">12</p>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] uppercase tracking-wide">Web Layouts</p>
               </div>
-              <div className="p-3 bg-[#FAF7F2] border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] text-center min-w-[120px]">
-                <p className="text-xl sm:text-2xl text-black">11</p>
-                <p className="text-[10px] text-neutral-500 uppercase tracking-wide">Dashboards</p>
+              <div className="p-3 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl shadow-xs text-center min-w-[120px]">
+                <p className="text-xl sm:text-2xl text-[var(--theme-dirty-white)]">11</p>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] uppercase tracking-wide">Dashboards</p>
               </div>
-              <div className="p-3 bg-[#FAF7F2] border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] text-center min-w-[120px]">
-                <p className="text-xl sm:text-2xl text-black">14</p>
-                <p className="text-[10px] text-neutral-500 uppercase tracking-wide">Design Styles</p>
+              <div className="p-3 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl shadow-xs text-center min-w-[120px]">
+                <p className="text-xl sm:text-2xl text-[var(--theme-dirty-white)]">14</p>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] uppercase tracking-wide">Design Styles</p>
               </div>
             </div>
           </div>
 
           {/* Global Search Bar */}
           <div className="relative max-w-2xl">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--theme-gray-muted)]" />
             <input
               type="text"
               placeholder="Search components, layouts, design styles, keywords (e.g. Navbar, Glassmorphism, Bento, Dashboard)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-24 py-3 bg-[#FAF7F2] text-black text-xs sm:text-sm font-bold rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000] focus:shadow-[5px_5px_0px_#000] outline-none transition"
+              className="w-full pl-11 pr-24 py-3 bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] placeholder:[var(--theme-gray-muted)] text-xs sm:text-sm font-medium rounded-2xl border border-[var(--theme-gray-border)] shadow-xs focus:border-[var(--theme-dirty-white)] outline-none transition"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 px-2.5 py-1 text-xs font-black bg-neutral-200 hover:bg-neutral-300 rounded-lg border border-black cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 px-2.5 py-1 text-xs font-bold bg-[var(--theme-surface)] hover:bg-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-lg border border-[var(--theme-gray-border)] cursor-pointer"
               >
                 Clear
               </button>
@@ -212,7 +212,7 @@ export const UiLibraryLandingPage: React.FC = () => {
       </section>
 
       {/* Main Section Navigation Bar */}
-      <div className="sticky top-16 z-30 bg-[#FAF7F2] border-b-2 border-black shadow-sm">
+      <div className="sticky top-16 z-30 bg-[var(--theme-canvas)]/95 backdrop-blur-md border-b border-[var(--theme-gray-border)] shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-2 overflow-x-auto no-scrollbar">
           {[
             { id: 'components', label: '1. Components', icon: LayoutGrid, count: ALL_COMPONENTS.length },
@@ -228,17 +228,17 @@ export const UiLibraryLandingPage: React.FC = () => {
               <button
                 key={sec.id}
                 onClick={() => setSection(sec.id as UILibrarySection)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black whitespace-nowrap border-2 transition-all cursor-pointer ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap border transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-[#FACC15] text-black border-black shadow-[2.5px_2.5px_0px_#000] -translate-y-0.5'
-                    : 'bg-white text-neutral-700 border-black shadow-[1.5px_1.5px_0px_#000] hover:bg-neutral-50'
+                    ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border-[var(--theme-dirty-white)] shadow-xs'
+                    : 'bg-[var(--theme-surface)] text-[var(--theme-gray-muted)] border-[var(--theme-gray-border)] shadow-xs hover:bg-[var(--theme-surface-raised)] hover:text-[var(--theme-dirty-white)]'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>{sec.label}</span>
                 {sec.count !== undefined && (
-                  <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-mono border border-black ${
-                    isActive ? 'bg-white' : 'bg-[#FAF7F2]'
+                  <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-mono border ${
+                    isActive ? 'bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] border-transparent' : 'bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] border-[var(--theme-gray-border)]'
                   }`}>
                     {sec.count}
                   </span>
@@ -255,7 +255,7 @@ export const UiLibraryLandingPage: React.FC = () => {
         {activeSection === 'components' && (
           <div className="space-y-6">
             {/* Category Filter Pills & Sort Toolbar */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-4 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000]">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-[var(--theme-surface)] p-4 rounded-2xl border border-[var(--theme-gray-border)] shadow-xs">
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { id: 'all', label: 'All Categories' },
@@ -270,10 +270,10 @@ export const UiLibraryLandingPage: React.FC = () => {
                   <button
                     key={cat.id}
                     onClick={() => setCategory(cat.id)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-black transition cursor-pointer border ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border ${
                       activeCategory === cat.id
-                        ? 'bg-[#38BDF8] text-black border-black shadow-[2px_2px_0px_#000]'
-                        : 'bg-[#FAF7F2] text-neutral-600 border-neutral-300 hover:border-black'
+                        ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)] shadow-xs'
+                        : 'bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] border-[var(--theme-gray-border)] hover:border-[var(--theme-gray-subtle)] hover:text-[var(--theme-dirty-white)]'
                     }`}
                   >
                     {cat.label}
@@ -283,11 +283,11 @@ export const UiLibraryLandingPage: React.FC = () => {
 
               {/* Sorting Filter */}
               <div className="flex items-center gap-2 self-end md:self-auto shrink-0">
-                <span className="text-xs font-bold text-neutral-500">Sort:</span>
+                <span className="text-xs font-bold text-[var(--theme-gray-muted)]">Sort:</span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
-                  className="px-2.5 py-1.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-black outline-none cursor-pointer"
+                  className="px-2.5 py-1.5 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-xl text-xs font-bold outline-none cursor-pointer"
                 >
                   <option value="all">All Items</option>
                   <option value="popular">Popular Highlights</option>
@@ -299,10 +299,10 @@ export const UiLibraryLandingPage: React.FC = () => {
             </div>
 
             {/* Results Counter */}
-            <div className="flex justify-between items-center text-xs font-bold text-neutral-600 px-1">
+            <div className="flex justify-between items-center text-xs font-bold text-[var(--theme-gray-muted)] px-1">
               <span>Showing <strong>{filteredComponents.length}</strong> components</span>
               {activeCategory !== 'all' && (
-                <button onClick={() => setCategory('all')} className="text-blue-600 hover:underline">
+                <button onClick={() => setCategory('all')} className="text-[var(--theme-dirty-white)] hover:underline">
                   Show all categories
                 </button>
               )}
@@ -310,13 +310,13 @@ export const UiLibraryLandingPage: React.FC = () => {
 
             {/* Component Cards Grid */}
             {filteredComponents.length === 0 ? (
-              <div className="p-12 text-center bg-white border-2 border-black rounded-3xl shadow-[4px_4px_0px_#000] space-y-3">
-                <span className="text-3xl">🔍</span>
-                <h3 className="font-black text-base text-black">No matching components found</h3>
-                <p className="text-xs text-neutral-600">Try adjusting your keyword query or resetting active category filters.</p>
+              <div className="p-12 text-center bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-3xl shadow-sm space-y-3">
+                <Search className="w-8 h-8 text-[var(--theme-dirty-white)] mx-auto" />
+                <h3 className="font-black text-base text-[var(--theme-dirty-white)]">No matching components found</h3>
+                <p className="text-xs text-[var(--theme-gray-muted)]">Try adjusting your keyword query or resetting active category filters.</p>
                 <button
                   onClick={() => { setSearchQuery(''); setCategory('all'); setSortBy('all'); }}
-                  className="px-4 py-2 bg-[#FACC15] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000]"
+                  className="px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm"
                 >
                   Reset All Filters
                 </button>
@@ -328,23 +328,23 @@ export const UiLibraryLandingPage: React.FC = () => {
                   return (
                     <div
                       key={comp.id}
-                      className="bg-white rounded-3xl border-2 border-black shadow-[4px_4px_0px_#000] hover:shadow-[6px_6px_0px_#000] transition-all flex flex-col justify-between overflow-hidden group"
+                      className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden group"
                     >
                       {/* Live Visual Preview Frame */}
-                      <div className="h-48 bg-[#FAF7F2] border-b-2 border-black p-4 flex items-center justify-center relative overflow-hidden group-hover:bg-yellow-50/40 transition">
+                      <div className="h-48 bg-[var(--theme-surface-raised)] border-b border-[var(--theme-gray-border)] p-4 flex items-center justify-center relative overflow-hidden transition">
                         <ComponentPreviewRenderer itemId={comp.id} itemType="component" />
 
                         {/* Favorite Star Button */}
                         <button
                           onClick={() => toggleFavorite(comp.id)}
-                          className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-white/90 backdrop-blur border-2 border-black shadow-[1.5px_1.5px_0px_#000] flex items-center justify-center hover:scale-110 active:scale-95 transition cursor-pointer"
+                          className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-[var(--theme-surface)]/90 backdrop-blur border border-[var(--theme-gray-border)] shadow-sm flex items-center justify-center hover:scale-110 active:scale-95 transition cursor-pointer"
                           aria-label="Toggle favorite"
                         >
-                          <Star className={`w-4 h-4 ${favorited ? 'fill-[#F472B6] text-[#F472B6]' : 'text-neutral-500'}`} />
+                          <Star className={`w-4 h-4 ${favorited ? 'fill-[#F472B6] text-[#F472B6]' : 'text-[var(--theme-gray-muted)]'}`} />
                         </button>
 
                         {/* Category Chip */}
-                        <span className="absolute bottom-3 left-3 px-2 py-0.5 bg-white text-black text-[10px] font-black rounded-md border border-black uppercase">
+                        <span className="absolute bottom-3 left-3 px-2 py-0.5 bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] text-[10px] font-black rounded-md border border-[var(--theme-gray-border)] uppercase">
                           {comp.category}
                         </span>
                       </div>
@@ -353,28 +353,28 @@ export const UiLibraryLandingPage: React.FC = () => {
                       <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                         <div className="space-y-1.5">
                           <div className="flex justify-between items-start gap-2">
-                            <h3 className="font-black text-base text-black group-hover:text-blue-600 transition">
+                            <h3 className="font-black text-base text-[var(--theme-dirty-white)] group-hover:text-[var(--theme-dirty-white-muted)] transition">
                               {comp.name}
                             </h3>
-                            <span className={`px-2 py-0.5 text-[9px] font-black uppercase rounded border border-black ${
-                              comp.difficulty === 'beginner' ? 'bg-[#4ADE80]' : comp.difficulty === 'intermediate' ? 'bg-[#38BDF8]' : 'bg-[#F472B6]'
+                            <span className={`px-2 py-0.5 text-[9px] font-black uppercase rounded border border-[var(--theme-gray-border)] ${
+                              comp.difficulty === 'beginner' ? 'bg-[var(--theme-surface-raised)] text-emerald-400' : comp.difficulty === 'intermediate' ? 'bg-[var(--theme-surface-raised)] text-amber-400' : 'bg-[var(--theme-surface-raised)] text-rose-400'
                             }`}>
                               {comp.difficulty}
                             </span>
                           </div>
-                          <p className="text-xs text-neutral-600 leading-relaxed line-clamp-2">
+                          <p className="text-xs text-[var(--theme-gray-muted)] leading-relaxed line-clamp-2">
                             {comp.description}
                           </p>
                         </div>
 
                         {/* Card Footer Actions */}
-                        <div className="pt-2 border-t border-black/10 flex items-center justify-between">
-                          <span className="text-[10px] font-mono text-neutral-500 font-bold">
+                        <div className="pt-2 border-t border-[var(--theme-gray-border)] flex items-center justify-between">
+                          <span className="text-[10px] font-mono text-[var(--theme-gray-muted)] font-bold">
                             {comp.variations.length} {comp.variations.length === 1 ? 'variation' : 'variations'}
                           </span>
                           <Link
                             to={`/ui-library/component/${comp.id}`}
-                            className="flex items-center gap-1 text-xs font-black text-black group-hover:translate-x-1 transition"
+                            className="flex items-center gap-1 text-xs font-bold text-[var(--theme-dirty-white)] group-hover:translate-x-1 transition"
                           >
                             <span>Inspect & Learn</span>
                             <ArrowRight className="w-3.5 h-3.5" />
@@ -392,10 +392,10 @@ export const UiLibraryLandingPage: React.FC = () => {
         {/* SECTION 2: WEBSITE LAYOUTS */}
         {activeSection === 'website-layouts' && (
           <div className="space-y-6">
-            <div className="bg-[#FAF7F2] p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000] flex justify-between items-center">
+            <div className="bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-xs flex justify-between items-center">
               <div>
-                <h3 className="font-black text-base text-black">Complete Website Layouts (12)</h3>
-                <p className="text-xs text-neutral-600">Full landing pages, SaaS storefronts, portfolios, documentation, and blogs.</p>
+                <h3 className="font-bold text-base text-[var(--theme-dirty-white)]">Complete Website Layouts (12)</h3>
+                <p className="text-xs text-[var(--theme-gray-muted)]">Full landing pages, SaaS storefronts, portfolios, documentation, and blogs.</p>
               </div>
             </div>
 
@@ -405,33 +405,33 @@ export const UiLibraryLandingPage: React.FC = () => {
                 return (
                   <div
                     key={layout.id}
-                    className="bg-white rounded-3xl border-2 border-black shadow-[4px_4px_0px_#000] overflow-hidden flex flex-col justify-between"
+                    className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] shadow-sm overflow-hidden flex flex-col justify-between"
                   >
-                    <div className="p-4 bg-[#FAF7F2] border-b-2 border-black relative">
+                    <div className="p-4 bg-[var(--theme-surface-raised)] border-b border-[var(--theme-gray-border)] relative">
                       <ComponentPreviewRenderer itemId={layout.id} itemType="website-layout" />
                       <button
                         onClick={() => toggleFavorite(layout.id)}
-                        className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-white border-2 border-black shadow-[1.5px_1.5px_0px_#000] flex items-center justify-center cursor-pointer"
+                        className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] shadow-sm flex items-center justify-center cursor-pointer"
                       >
-                        <Star className={`w-4 h-4 ${favorited ? 'fill-[#F472B6] text-[#F472B6]' : 'text-neutral-500'}`} />
+                        <Star className={`w-4 h-4 ${favorited ? 'fill-[#F472B6] text-[#F472B6]' : 'text-[var(--theme-gray-muted)]'}`} />
                       </button>
                     </div>
 
                     <div className="p-5 space-y-3">
                       <div>
-                        <h4 className="font-black text-base text-black">{layout.name}</h4>
-                        <p className="text-xs text-neutral-600 mt-1 leading-relaxed">{layout.description}</p>
+                        <h4 className="font-black text-base text-[var(--theme-dirty-white)]">{layout.name}</h4>
+                        <p className="text-xs text-[var(--theme-gray-muted)] mt-1 leading-relaxed">{layout.description}</p>
                       </div>
 
-                      <div className="p-3 bg-[#FAF7F2] rounded-xl border border-black text-xs space-y-1">
-                        <p className="font-black text-black">Primary Use Case:</p>
-                        <p className="text-neutral-600">{layout.useCase}</p>
+                      <div className="p-3 bg-[var(--theme-surface-raised)] rounded-xl border border-[var(--theme-gray-border)] text-xs space-y-1">
+                        <p className="font-black text-[var(--theme-dirty-white)]">Primary Use Case:</p>
+                        <p className="text-[var(--theme-gray-muted)]">{layout.useCase}</p>
                       </div>
 
                       <div className="flex justify-end pt-2">
                         <Link
                           to={`/ui-library/layout/${layout.id}`}
-                          className="px-4 py-2 bg-[#FACC15] hover:bg-[#EAB308] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000] transition"
+                          className="px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm transition"
                         >
                           View Full Layout & Code →
                         </Link>
@@ -447,10 +447,10 @@ export const UiLibraryLandingPage: React.FC = () => {
         {/* SECTION 3: DASHBOARD LAYOUTS */}
         {activeSection === 'dashboard-layouts' && (
           <div className="space-y-6">
-            <div className="bg-[#FAF7F2] p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000] flex justify-between items-center">
+            <div className="bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm flex justify-between items-center">
               <div>
-                <h3 className="font-black text-base text-black">Full Dashboard Layouts (11)</h3>
-                <p className="text-xs text-neutral-600">Complete multi-widget dashboards: Admin, Analytics, Finance, CRM, Kanban & Mobile.</p>
+                <h3 className="font-black text-base text-[var(--theme-dirty-white)]">Full Dashboard Layouts (11)</h3>
+                <p className="text-xs text-[var(--theme-gray-muted)]">Complete multi-widget dashboards: Admin, Analytics, Finance, CRM, Kanban & Mobile.</p>
               </div>
             </div>
 
@@ -460,33 +460,33 @@ export const UiLibraryLandingPage: React.FC = () => {
                 return (
                   <div
                     key={dash.id}
-                    className="bg-white rounded-3xl border-2 border-black shadow-[4px_4px_0px_#000] overflow-hidden flex flex-col justify-between"
+                    className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] shadow-sm overflow-hidden flex flex-col justify-between"
                   >
-                    <div className="p-4 bg-[#FAF7F2] border-b-2 border-black relative">
+                    <div className="p-4 bg-[var(--theme-surface-raised)] border-b border-[var(--theme-gray-border)] relative">
                       <ComponentPreviewRenderer itemId={dash.id} itemType="dashboard-layout" />
                       <button
                         onClick={() => toggleFavorite(dash.id)}
-                        className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-white border-2 border-black shadow-[1.5px_1.5px_0px_#000] flex items-center justify-center cursor-pointer"
+                        className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] shadow-sm flex items-center justify-center cursor-pointer"
                       >
-                        <Star className={`w-4 h-4 ${favorited ? 'fill-[#F472B6] text-[#F472B6]' : 'text-neutral-500'}`} />
+                        <Star className={`w-4 h-4 ${favorited ? 'fill-[#F472B6] text-[#F472B6]' : 'text-[var(--theme-gray-muted)]'}`} />
                       </button>
                     </div>
 
                     <div className="p-5 space-y-3">
                       <div>
                         <div className="flex justify-between items-center">
-                          <h4 className="font-black text-base text-black">{dash.name}</h4>
-                          <span className="text-[10px] font-mono font-bold bg-[#FAF7F2] px-2 py-0.5 border border-black rounded">
+                          <h4 className="font-black text-base text-[var(--theme-dirty-white)]">{dash.name}</h4>
+                          <span className="text-[10px] font-mono font-bold bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] px-2 py-0.5 border border-[var(--theme-gray-border)] rounded">
                             {dash.layoutType}
                           </span>
                         </div>
-                        <p className="text-xs text-neutral-600 mt-1 leading-relaxed">{dash.description}</p>
+                        <p className="text-xs text-[var(--theme-gray-muted)] mt-1 leading-relaxed">{dash.description}</p>
                       </div>
 
                       <div className="flex justify-end pt-2">
                         <Link
                           to={`/ui-library/layout/${dash.id}`}
-                          className="px-4 py-2 bg-[#38BDF8] hover:bg-sky-400 text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000] transition"
+                          className="px-4 py-2 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm transition"
                         >
                           View Full Dashboard & Code →
                         </Link>
@@ -502,10 +502,10 @@ export const UiLibraryLandingPage: React.FC = () => {
         {/* SECTION 4: DESIGN STYLES */}
         {activeSection === 'design-styles' && (
           <div className="space-y-6">
-            <div className="bg-[#FAF7F2] p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000] flex justify-between items-center">
+            <div className="bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm flex justify-between items-center">
               <div>
-                <h3 className="font-black text-base text-black">Design Styles Catalog (14)</h3>
-                <p className="text-xs text-neutral-600">Visual styles: Glassmorphism, Neumorphism, Bento Grid, Brutalism, Editorial, Retro & Aurora.</p>
+                <h3 className="font-black text-base text-[var(--theme-dirty-white)]">Design Styles Catalog (14)</h3>
+                <p className="text-xs text-[var(--theme-gray-muted)]">Visual styles: Glassmorphism, Neumorphism, Bento Grid, Brutalism, Editorial, Retro & Aurora.</p>
               </div>
             </div>
 
@@ -515,33 +515,33 @@ export const UiLibraryLandingPage: React.FC = () => {
                 return (
                   <div
                     key={style.id}
-                    className="bg-white rounded-3xl border-2 border-black shadow-[4px_4px_0px_#000] overflow-hidden flex flex-col justify-between"
+                    className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] shadow-sm overflow-hidden flex flex-col justify-between"
                   >
-                    <div className="p-4 bg-[#FAF7F2] border-b-2 border-black relative">
+                    <div className="p-4 bg-[var(--theme-surface-raised)] border-b border-[var(--theme-gray-border)] relative">
                       <ComponentPreviewRenderer itemId={style.id} itemType="design-style" />
                       <button
                         onClick={() => toggleFavorite(style.id)}
-                        className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-white border-2 border-black shadow-[1.5px_1.5px_0px_#000] flex items-center justify-center cursor-pointer"
+                        className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] shadow-xs flex items-center justify-center cursor-pointer"
                       >
-                        <Star className={`w-4 h-4 ${favorited ? 'fill-[#F472B6] text-[#F472B6]' : 'text-neutral-500'}`} />
+                        <Star className={`w-4 h-4 ${favorited ? 'fill-[#F472B6] text-[#F472B6]' : 'text-[var(--theme-gray-muted)]'}`} />
                       </button>
                     </div>
 
                     <div className="p-5 space-y-3">
                       <div>
-                        <h4 className="font-black text-base text-black">{style.name}</h4>
-                        <p className="text-xs text-neutral-600 mt-1 leading-relaxed">{style.description}</p>
+                        <h4 className="font-bold text-base text-[var(--theme-dirty-white)]">{style.name}</h4>
+                        <p className="text-xs text-[var(--theme-gray-muted)] mt-1 leading-relaxed">{style.description}</p>
                       </div>
 
                       {/* Color Palette Preview */}
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase">Palette:</span>
+                        <span className="text-[10px] font-mono text-[var(--theme-gray-muted)] font-bold uppercase">Palette:</span>
                         <div className="flex gap-1.5">
                           {style.colorPalette.map((col, idx) => (
                             <span
                               key={idx}
                               style={{ backgroundColor: col }}
-                              className="w-5 h-5 rounded-md border border-black shadow-sm inline-block"
+                              className="w-5 h-5 rounded-md border border-[var(--theme-gray-border)] shadow-xs inline-block"
                               title={col}
                             />
                           ))}
@@ -551,7 +551,7 @@ export const UiLibraryLandingPage: React.FC = () => {
                       <div className="flex justify-end pt-2">
                         <Link
                           to={`/ui-library/style/${style.id}`}
-                          className="px-4 py-2 bg-[#A78BFA] hover:bg-purple-400 text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000] transition"
+                          className="px-4 py-2 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-bold text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-xs transition"
                         >
                           Explore Style & Code →
                         </Link>
@@ -570,23 +570,23 @@ export const UiLibraryLandingPage: React.FC = () => {
         {/* SECTION 6: MY FAVORITES */}
         {activeSection === 'favorites' && (
           <div className="space-y-6">
-            <div className="bg-[#FAF7F2] p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000] flex justify-between items-center">
+            <div className="bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-xs flex justify-between items-center">
               <div>
-                <h3 className="font-black text-base text-black">My Saved Favorites ({favoritedItems.length})</h3>
-                <p className="text-xs text-neutral-600">Your personal saved collection of components, layouts, and styles.</p>
+                <h3 className="font-bold text-base text-[var(--theme-dirty-white)]">My Saved Favorites ({favoritedItems.length})</h3>
+                <p className="text-xs text-[var(--theme-gray-muted)]">Your personal saved collection of components, layouts, and styles.</p>
               </div>
             </div>
 
             {favoritedItems.length === 0 ? (
-              <div className="p-12 text-center bg-white border-2 border-black rounded-3xl shadow-[4px_4px_0px_#000] space-y-3">
-                <span className="text-3xl">⭐</span>
-                <h4 className="font-black text-base text-black">No favorites saved yet</h4>
-                <p className="text-xs text-neutral-600 max-w-sm mx-auto">
+              <div className="p-12 text-center bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-3xl shadow-xs space-y-3">
+                <Star className="w-8 h-8 text-[var(--theme-dirty-white)] mx-auto" />
+                <h4 className="font-bold text-base text-[var(--theme-dirty-white)]">No favorites saved yet</h4>
+                <p className="text-xs text-[var(--theme-gray-muted)] max-w-sm mx-auto">
                   Click the star icon on any component, layout, or design style to pin it here for quick reference.
                 </p>
                 <button
                   onClick={() => setSection('components')}
-                  className="px-4 py-2 bg-[#FACC15] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000]"
+                  className="px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-bold text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-xs"
                 >
                   Browse Component Catalog
                 </button>
@@ -596,29 +596,29 @@ export const UiLibraryLandingPage: React.FC = () => {
                 {favoritedItems.map(({ item, type }) => (
                   <div
                     key={item.id}
-                    className="bg-white rounded-3xl border-2 border-black shadow-[4px_4px_0px_#000] overflow-hidden flex flex-col justify-between"
+                    className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] shadow-xs overflow-hidden flex flex-col justify-between"
                   >
-                    <div className="p-4 bg-[#FAF7F2] border-b-2 border-black relative">
+                    <div className="p-4 bg-[var(--theme-surface-raised)] border-b border-[var(--theme-gray-border)] relative">
                       <ComponentPreviewRenderer itemId={item.id} itemType={type} />
                       <button
                         onClick={() => toggleFavorite(item.id)}
-                        className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-white border-2 border-black shadow-[1.5px_1.5px_0px_#000] flex items-center justify-center cursor-pointer"
+                        className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] shadow-xs flex items-center justify-center cursor-pointer"
                       >
-                        <Star className="w-4 h-4 fill-[#F472B6] text-[#F472B6]" />
+                        <Star className="w-4 h-4 fill-[var(--theme-dirty-white)] text-[var(--theme-dirty-white)]" />
                       </button>
                     </div>
 
                     <div className="p-5 space-y-3">
                       <div>
-                        <span className="text-[10px] font-black uppercase text-neutral-400">{type}</span>
-                        <h4 className="font-black text-base text-black">{item.name}</h4>
-                        <p className="text-xs text-neutral-600 mt-1 line-clamp-2">{item.description}</p>
+                        <span className="text-[10px] font-bold uppercase text-[var(--theme-gray-muted)]">{type}</span>
+                        <h4 className="font-bold text-base text-[var(--theme-dirty-white)]">{item.name}</h4>
+                        <p className="text-xs text-[var(--theme-gray-muted)] mt-1 line-clamp-2">{item.description}</p>
                       </div>
 
                       <div className="flex justify-end pt-2">
                         <Link
                           to={type === 'component' ? `/ui-library/component/${item.id}` : type === 'design-style' ? `/ui-library/style/${item.id}` : `/ui-library/layout/${item.id}`}
-                          className="px-4 py-2 bg-[#FACC15] font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000]"
+                          className="px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-bold text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-xs"
                         >
                           View Details →
                         </Link>

@@ -146,36 +146,36 @@ export const StudyPlanner: React.FC = () => {
       case 'urgent':
         return 'bg-red-500 text-white';
       case 'high':
-        return 'bg-amber-400 text-black';
+        return 'bg-amber-400 text-slate-100';
       case 'medium':
-        return 'bg-blue-400 text-black';
+        return 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]';
       default:
-        return 'bg-neutral-200 text-black';
+        return 'bg-neutral-200 text-slate-100';
     }
   };
 
   return (
     <div className="space-y-6">
       {/* Header & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div>
           <h2 className="text-xl font-black flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-indigo-600" />
+            <BookOpen className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             Study Planner
           </h2>
-          <p className="text-xs text-neutral-600 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Organize study schedules, track deadlines, and maintain learning momentum.
           </p>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex bg-[#FAF7F2] p-1 rounded-xl border border-black text-xs font-bold">
+          <div className="flex bg-[var(--theme-surface-raised)] p-1 rounded-xl border border-black text-xs font-bold">
             <button
               onClick={() => setViewMode('list')}
               className={`px-3 py-1 rounded-lg transition-all ${
                 viewMode === 'list'
                   ? 'bg-black text-white shadow-sm'
-                  : 'text-neutral-600 hover:text-black'
+                  : 'text-slate-400 hover:text-slate-100'
               }`}
             >
               All Tasks
@@ -185,7 +185,7 @@ export const StudyPlanner: React.FC = () => {
               className={`px-3 py-1 rounded-lg transition-all ${
                 viewMode === 'daily'
                   ? 'bg-black text-white shadow-sm'
-                  : 'text-neutral-600 hover:text-black'
+                  : 'text-slate-400 hover:text-slate-100'
               }`}
             >
               Today
@@ -195,7 +195,7 @@ export const StudyPlanner: React.FC = () => {
               className={`px-3 py-1 rounded-lg transition-all ${
                 viewMode === 'weekly'
                   ? 'bg-black text-white shadow-sm'
-                  : 'text-neutral-600 hover:text-black'
+                  : 'text-slate-400 hover:text-slate-100'
               }`}
             >
               This Week
@@ -204,7 +204,7 @@ export const StudyPlanner: React.FC = () => {
 
           <button
             onClick={handleOpenCreate}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
             New Task
@@ -213,10 +213,10 @@ export const StudyPlanner: React.FC = () => {
       </div>
 
       {/* Progress & Stats Bar: Single Divided Minimal Row */}
-      <div className="bg-white rounded-xl border-2 border-black p-3.5 shadow-[2px_2px_0px_#000000] grid grid-cols-3 divide-x-2 divide-black/10">
+      <div className="bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] p-3.5 shadow-sm grid grid-cols-3 divide-x-2 divide-[var(--theme-gray-border)]">
         <div className="flex items-center justify-between pr-4">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
               Completion Rate
             </span>
             <p className="text-xl font-black mt-0.5">{progressPercent}%</p>
@@ -231,7 +231,7 @@ export const StudyPlanner: React.FC = () => {
 
         <div className="px-4 flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
               Pending
             </span>
             <p className="text-xl font-black mt-0.5 text-amber-600">{pendingCount}</p>
@@ -241,7 +241,7 @@ export const StudyPlanner: React.FC = () => {
 
         <div className="pl-4 flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
               Completed
             </span>
             <p className="text-xl font-black mt-0.5 text-emerald-600">{completedCount}</p>
@@ -251,8 +251,8 @@ export const StudyPlanner: React.FC = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-[#FAF7F2] p-3 rounded-xl border border-black/20 flex flex-wrap items-center gap-3 text-xs">
-        <div className="flex items-center gap-1.5 font-bold text-neutral-700">
+      <div className="bg-[var(--theme-surface-raised)] p-3 rounded-xl border border-black/20 flex flex-wrap items-center gap-3 text-xs">
+        <div className="flex items-center gap-1.5 font-bold text-slate-300">
           <Filter className="w-3.5 h-3.5" />
           <span>Filters:</span>
         </div>
@@ -260,7 +260,7 @@ export const StudyPlanner: React.FC = () => {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="bg-white border border-black rounded-lg px-2.5 py-1 font-medium text-xs cursor-pointer focus:outline-none"
+          className="bg-[var(--theme-surface)] border border-black rounded-lg px-2.5 py-1 font-medium text-xs cursor-pointer focus:outline-none"
         >
           <option value="all">All Statuses</option>
           <option value="pending">Pending</option>
@@ -271,7 +271,7 @@ export const StudyPlanner: React.FC = () => {
         <select
           value={priorityFilter}
           onChange={(e) => setPriorityFilter(e.target.value)}
-          className="bg-white border border-black rounded-lg px-2.5 py-1 font-medium text-xs cursor-pointer focus:outline-none"
+          className="bg-[var(--theme-surface)] border border-black rounded-lg px-2.5 py-1 font-medium text-xs cursor-pointer focus:outline-none"
         >
           <option value="all">All Priorities</option>
           <option value="urgent">Urgent</option>
@@ -284,7 +284,7 @@ export const StudyPlanner: React.FC = () => {
           <select
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
-            className="bg-white border border-black rounded-lg px-2.5 py-1 font-medium text-xs cursor-pointer focus:outline-none"
+            className="bg-[var(--theme-surface)] border border-black rounded-lg px-2.5 py-1 font-medium text-xs cursor-pointer focus:outline-none"
           >
             <option value="all">All Subjects</option>
             {allSubjects.map((sub) => (
@@ -298,21 +298,21 @@ export const StudyPlanner: React.FC = () => {
 
       {/* Task List */}
       {isLoading ? (
-        <div className="text-center py-12 text-sm font-bold text-neutral-500">
+        <div className="text-center py-12 text-sm font-bold text-slate-400">
           Loading your study tasks...
         </div>
       ) : visibleTasks.length === 0 ? (
-        <div className="bg-white p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
+        <div className="bg-[var(--theme-surface)] p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
           <Calendar className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
-          <h3 className="font-bold text-neutral-700">No study tasks found</h3>
-          <p className="text-xs text-neutral-500 mt-1 max-w-sm mx-auto">
+          <h3 className="font-bold text-slate-300">No study tasks found</h3>
+          <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
             {tasks.length === 0
               ? 'Get started by creating your first study task or assignment deadline.'
               : 'Try clearing your filters to see more tasks.'}
           </p>
           <button
             onClick={handleOpenCreate}
-            className="mt-4 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border border-black shadow-[2px_2px_0px_#000000]"
+            className="mt-4 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-black shadow-sm"
           >
             Create Task
           </button>
@@ -322,10 +322,10 @@ export const StudyPlanner: React.FC = () => {
           {visibleTasks.map((task) => (
             <div
               key={task._id}
-              className={`p-4 bg-white rounded-xl border-2 border-black transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+              className={`p-4 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                 task.status === 'completed'
                   ? 'bg-neutral-50 border-neutral-300 opacity-75'
-                  : 'shadow-[3px_3px_0px_#000000]'
+                  : 'shadow-sm'
               }`}
             >
               <div className="flex items-start gap-3">
@@ -337,13 +337,13 @@ export const StudyPlanner: React.FC = () => {
                   {task.status === 'completed' ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-500 fill-emerald-100" />
                   ) : (
-                    <div className="w-5 h-5 rounded-md border-2 border-black bg-white" />
+                    <div className="w-5 h-5 rounded-md border border-[var(--theme-gray-border)] bg-[var(--theme-surface)]" />
                   )}
                 </button>
 
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-[#FAF7F2] border border-black/30 text-neutral-700">
+                    <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-[var(--theme-surface-raised)] border border-black/30 text-slate-300">
                       {task.subject}
                     </span>
                     <span
@@ -354,7 +354,7 @@ export const StudyPlanner: React.FC = () => {
                       {task.priority}
                     </span>
                     {task.deadline && (
-                      <span className="text-[11px] text-neutral-500 flex items-center gap-1 font-medium">
+                      <span className="text-[11px] text-slate-400 flex items-center gap-1 font-medium">
                         <Calendar className="w-3 h-3" />
                         Due {new Date(task.deadline).toLocaleDateString()}
                       </span>
@@ -362,14 +362,14 @@ export const StudyPlanner: React.FC = () => {
                   </div>
 
                   <h4
-                    className={`font-black text-sm mt-1 text-black ${
+                    className={`font-black text-sm mt-1 text-slate-100 ${
                       task.status === 'completed' ? 'line-through text-neutral-400' : ''
                     }`}
                   >
                     {task.title}
                   </h4>
                   {task.description && (
-                    <p className="text-xs text-neutral-600 mt-0.5">{task.description}</p>
+                    <p className="text-xs text-slate-400 mt-0.5">{task.description}</p>
                   )}
                 </div>
               </div>
@@ -378,14 +378,14 @@ export const StudyPlanner: React.FC = () => {
               <div className="flex items-center gap-1 self-end sm:self-center">
                 <button
                   onClick={() => handleOpenEdit(task)}
-                  className="p-1.5 text-neutral-600 hover:text-black hover:bg-neutral-100 rounded-lg transition-colors"
+                  className="p-1.5 text-slate-400 hover:text-slate-100 hover:bg-neutral-100 rounded-lg transition-colors"
                   title="Edit task"
                 >
                   <Edit2 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => handleDelete(task._id)}
-                  className="p-1.5 text-neutral-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                   title="Delete task"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -399,14 +399,14 @@ export const StudyPlanner: React.FC = () => {
       {/* Create / Edit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0px_#000000] w-full max-w-md p-6 animate-in fade-in zoom-in-95">
+          <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] shadow-sm w-full max-w-md p-6 animate-in fade-in zoom-in-95">
             <h3 className="text-lg font-black mb-4">
               {editingTask ? 'Edit Study Task' : 'Create New Study Task'}
             </h3>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Subject *
                 </label>
                 <input
@@ -415,12 +415,12 @@ export const StudyPlanner: React.FC = () => {
                   placeholder="e.g. Calculus, Physics, Literature"
                   value={formData.subject}
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Task Title *
                 </label>
                 <input
@@ -429,19 +429,19 @@ export const StudyPlanner: React.FC = () => {
                   placeholder="e.g. Complete Problem Set 4, Read Chapter 7"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Priority
                   </label>
                   <select
                     value={formData.priority}
                     onChange={(e: any) => setFormData({ ...formData, priority: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -451,20 +451,20 @@ export const StudyPlanner: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Deadline
                   </label>
                   <input
                     type="date"
                     value={formData.deadline}
                     onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Notes / Description
                 </label>
                 <textarea
@@ -472,7 +472,7 @@ export const StudyPlanner: React.FC = () => {
                   placeholder="Optional details, page numbers, or links"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none"
                 />
               </div>
 
@@ -480,13 +480,13 @@ export const StudyPlanner: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border-2 border-black rounded-xl text-xs font-bold hover:bg-neutral-100"
+                  className="px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold hover:bg-neutral-100"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-transform"
+                  className="px-5 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-transform"
                 >
                   {editingTask ? 'Save Changes' : 'Create Task'}
                 </button>

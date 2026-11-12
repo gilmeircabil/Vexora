@@ -176,13 +176,13 @@ export const RubricBuilder: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div>
           <h2 className="text-xl font-black flex items-center gap-2">
-            <Table className="w-5 h-5 text-indigo-600" />
+            <Table className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             Grading Rubric Matrix Builder
           </h2>
-          <p className="text-xs text-neutral-600 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Construct multi-level grading rubrics with customizable performance scales and
             descriptions.
           </p>
@@ -192,7 +192,7 @@ export const RubricBuilder: React.FC = () => {
           {activeRubric && (
             <button
               onClick={() => window.print()}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-white text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-[var(--theme-surface)] text-slate-100 font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
             >
               <Printer className="w-4 h-4" />
               Print Rubric
@@ -201,7 +201,7 @@ export const RubricBuilder: React.FC = () => {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
             New Rubric
@@ -213,13 +213,13 @@ export const RubricBuilder: React.FC = () => {
         {/* Left: Rubrics List */}
         <div className="md:col-span-1 space-y-3 max-h-[650px] overflow-y-auto pr-1">
           {isLoading ? (
-            <div className="text-center py-8 text-xs font-bold text-neutral-500">
+            <div className="text-center py-8 text-xs font-bold text-slate-400">
               Loading rubrics...
             </div>
           ) : rubrics.length === 0 ? (
-            <div className="p-8 text-center bg-white rounded-xl border-2 border-dashed border-neutral-300">
+            <div className="p-8 text-center bg-[var(--theme-surface)] rounded-xl border-2 border-dashed border-neutral-300">
               <BookOpen className="w-8 h-8 text-neutral-300 mx-auto mb-2" />
-              <p className="text-xs font-bold text-neutral-600">No rubrics created yet</p>
+              <p className="text-xs font-bold text-slate-400">No rubrics created yet</p>
             </div>
           ) : (
             rubrics.map((r) => (
@@ -228,12 +228,12 @@ export const RubricBuilder: React.FC = () => {
                 onClick={() => setActiveRubric(r)}
                 className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   activeRubric?._id === r._id
-                    ? 'border-black bg-[#FAF7F2] shadow-[3px_3px_0px_#000000]'
-                    : 'border-neutral-200 bg-white hover:border-black'
+                    ? 'border-black bg-[var(--theme-surface-raised)] shadow-sm'
+                    : 'border-neutral-200 bg-[var(--theme-surface)] hover:border-black'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-white border border-black/20 text-neutral-700">
+                  <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-[var(--theme-surface)] border border-black/20 text-slate-300">
                     {r.subject}
                   </span>
                   <button
@@ -244,7 +244,7 @@ export const RubricBuilder: React.FC = () => {
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
-                <h4 className="font-black text-sm text-black truncate">{r.title}</h4>
+                <h4 className="font-black text-sm text-slate-100 truncate">{r.title}</h4>
                 <span className="text-[11px] font-bold text-neutral-400 mt-1 block">
                   {r.criteria?.length || 0} criteria • {calculateMaxPoints(r)} max points
                 </span>
@@ -256,19 +256,19 @@ export const RubricBuilder: React.FC = () => {
         {/* Right: Rubric Grid Table */}
         <div className="md:col-span-2">
           {activeRubric ? (
-            <div className="bg-white p-6 sm:p-8 rounded-2xl border-2 border-black shadow-[6px_6px_0px_#000000] space-y-6 print:border-none print:shadow-none print:p-0">
-              <div className="border-b-2 border-black pb-4">
+            <div className="bg-[var(--theme-surface)] p-6 sm:p-8 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-6 print:border-none print:shadow-none print:p-0">
+              <div className="border-b border-[var(--theme-gray-border)] pb-4">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#FAF7F2] border border-black/20 text-neutral-700">
+                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[var(--theme-surface-raised)] border border-black/20 text-slate-300">
                     {activeRubric.subject}
                   </span>
-                  <span className="text-xs font-bold text-neutral-500">
+                  <span className="text-xs font-bold text-slate-400">
                     Total Possible: {calculateMaxPoints(activeRubric)} points
                   </span>
                 </div>
-                <h3 className="text-2xl font-black text-black">{activeRubric.title}</h3>
+                <h3 className="text-2xl font-black text-slate-100">{activeRubric.title}</h3>
                 {activeRubric.description && (
-                  <p className="text-xs text-neutral-600 mt-1">{activeRubric.description}</p>
+                  <p className="text-xs text-slate-400 mt-1">{activeRubric.description}</p>
                 )}
               </div>
 
@@ -276,7 +276,7 @@ export const RubricBuilder: React.FC = () => {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="border-b-2 border-black bg-[#FAF7F2]">
+                    <tr className="border-b border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)]">
                       <th className="p-3 border-r border-black font-black uppercase w-1/4">
                         Criteria
                       </th>
@@ -294,7 +294,7 @@ export const RubricBuilder: React.FC = () => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-black/10">
+                  <tbody className="divide-y divide-[var(--theme-gray-border)]">
                     {activeRubric.criteria?.map((crit, idx) => (
                       <tr key={crit.id || idx} className="hover:bg-neutral-50">
                         <td className="p-3 font-black border-r border-black/20 align-top">
@@ -306,9 +306,9 @@ export const RubricBuilder: React.FC = () => {
                         {crit.levels.map((lvl) => (
                           <td
                             key={lvl.id}
-                            className="p-3 border-r border-black/10 text-neutral-700 align-top leading-relaxed"
+                            className="p-3 border-r border-black/10 text-slate-300 align-top leading-relaxed"
                           >
-                            <span className="font-bold text-[11px] block text-black mb-1">
+                            <span className="font-bold text-[11px] block text-slate-100 mb-1">
                               {lvl.name} ({lvl.points} pts)
                             </span>
                             {lvl.description}
@@ -321,9 +321,9 @@ export const RubricBuilder: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-white p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
+            <div className="bg-[var(--theme-surface)] p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
               <Table className="w-12 h-12 text-neutral-300 mx-auto mb-2" />
-              <p className="text-sm font-bold text-neutral-600">Select a rubric to view or print</p>
+              <p className="text-sm font-bold text-slate-400">Select a rubric to view or print</p>
             </div>
           )}
         </div>
@@ -332,11 +332,11 @@ export const RubricBuilder: React.FC = () => {
       {/* New Rubric Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0px_#000000] w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 space-y-4">
+          <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] shadow-sm w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 space-y-4">
             <h3 className="text-lg font-black">Create Grading Rubric</h3>
             <form onSubmit={handleSaveRubric} className="space-y-4">
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Subject *
                 </label>
                 <input
@@ -345,12 +345,12 @@ export const RubricBuilder: React.FC = () => {
                   placeholder="e.g. English Literature, Computer Science"
                   value={form.subject}
                   onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Rubric Title *
                 </label>
                 <input
@@ -359,19 +359,19 @@ export const RubricBuilder: React.FC = () => {
                   placeholder="e.g. Research Paper Assessment Rubric"
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Description
                 </label>
                 <textarea
                   rows={2}
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                 />
               </div>
 
@@ -379,13 +379,13 @@ export const RubricBuilder: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border-2 border-black rounded-xl text-xs font-bold hover:bg-neutral-100"
+                  className="px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold hover:bg-neutral-100"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000]"
+                  className="px-5 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm"
                 >
                   Save Rubric
                 </button>

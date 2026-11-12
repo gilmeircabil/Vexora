@@ -81,22 +81,22 @@ export const AiOcrPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] py-8 px-4 sm:px-8">
+    <div className="min-h-screen bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] py-8 px-4 sm:px-8">
       <div className="max-w-5xl mx-auto">
         <Link
           to="/tools"
-          className="inline-flex items-center gap-2 text-sm font-mono font-bold text-black hover:underline mb-6"
+          className="inline-flex items-center gap-2 text-sm font-mono font-bold text-[var(--theme-dirty-white)] hover:underline mb-6"
         >
           <ArrowLeft className="w-4 h-4" /> Back to All Tools
         </Link>
 
-        <div className="border-2 border-black bg-white p-6 sm:p-8 shadow-[4px_4px_0px_#000] mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-black pb-4 mb-6">
+        <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] rounded-2xl p-6 sm:p-8 shadow-sm mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--theme-gray-border)] pb-4 mb-6">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-black">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--theme-dirty-white)]">
                 AI Document & Image OCR
               </h1>
-              <p className="text-sm text-gray-700 mt-1 font-medium">
+              <p className="text-sm text-[var(--theme-gray-muted)] mt-1 font-medium">
                 Accurately extract text, tables, and paragraphs from scanned PDFs, receipts, and
                 images.
               </p>
@@ -106,15 +106,15 @@ export const AiOcrPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="space-y-6">
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                <label className="block font-mono text-xs font-bold text-[var(--theme-dirty-white)] uppercase mb-2">
                   Upload Document or Image
                 </label>
-                <label className="border-2 border-dashed border-black bg-[#FAF7F2] p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-yellow-50 transition-colors">
-                  <UploadCloud className="w-8 h-8 text-black mb-2" />
-                  <span className="text-xs font-bold text-black">
+                <label className="border-2 border-dashed border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-[var(--theme-surface)] transition-colors">
+                  <UploadCloud className="w-8 h-8 text-[var(--theme-dirty-white)] mb-2" />
+                  <span className="text-xs font-bold text-[var(--theme-dirty-white)]">
                     {selectedFile ? selectedFile.name : 'Choose PDF, PNG, or JPG'}
                   </span>
-                  <span className="text-[11px] text-gray-500 font-mono mt-1">Up to 30MB</span>
+                  <span className="text-[11px] text-[var(--theme-gray-muted)] font-mono mt-1">Up to 30MB</span>
                   <input
                     type="file"
                     accept="application/pdf,image/jpeg,image/png,image/webp"
@@ -127,7 +127,7 @@ export const AiOcrPage: React.FC = () => {
               <button
                 onClick={handleExtract}
                 disabled={!selectedFile || isProcessing}
-                className="w-full py-3 bg-black text-white font-mono text-sm font-bold border-2 border-black hover:bg-[#FACC15] hover:text-black transition-all shadow-[3px_3px_0px_#000] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-mono text-sm font-bold border border-[var(--theme-gray-border)] rounded-xl transition-all shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isProcessing ? (
                   <>
@@ -143,8 +143,8 @@ export const AiOcrPage: React.FC = () => {
               </button>
 
               {metaInfo && (
-                <div className="bg-gray-50 border border-black p-3 font-mono text-xs space-y-1">
-                  <div className="font-bold text-black border-b border-gray-300 pb-1">
+                <div className="bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl p-3 font-mono text-xs space-y-1 text-[var(--theme-dirty-white)]">
+                  <div className="font-bold text-[var(--theme-dirty-white)] border-b border-[var(--theme-gray-border)] pb-1">
                     Extraction Details
                   </div>
                   {metaInfo.engine && <div>Engine: {metaInfo.engine}</div>}
@@ -158,15 +158,15 @@ export const AiOcrPage: React.FC = () => {
 
             <div className="lg:col-span-2 space-y-4">
               <div className="flex items-center justify-between font-mono text-xs font-bold">
-                <span className="uppercase text-black">Extracted Content</span>
+                <span className="uppercase text-[var(--theme-dirty-white)]">Extracted Content</span>
                 {extractedText && (
                   <div className="flex items-center gap-2">
                     <button
                       onClick={copyToClipboard}
-                      className="px-2.5 py-1 bg-white border border-black hover:bg-gray-100 flex items-center gap-1.5"
+                      className="px-2.5 py-1 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] rounded-lg flex items-center gap-1.5 transition cursor-pointer"
                     >
                       {isCopied ? (
-                        <Check className="w-3.5 h-3.5 text-green-600" />
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
                       ) : (
                         <Copy className="w-3.5 h-3.5" />
                       )}
@@ -174,7 +174,7 @@ export const AiOcrPage: React.FC = () => {
                     </button>
                     <button
                       onClick={downloadTxt}
-                      className="px-2.5 py-1 bg-[#FACC15] border border-black hover:bg-yellow-400 flex items-center gap-1.5"
+                      className="px-2.5 py-1 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-lg flex items-center gap-1.5 transition cursor-pointer"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>Download .TXT</span>
@@ -188,7 +188,7 @@ export const AiOcrPage: React.FC = () => {
                 readOnly
                 placeholder="Extracted OCR text will appear here with full line formatting..."
                 rows={16}
-                className="w-full p-4 border-2 border-black bg-white font-mono text-xs text-gray-800 leading-relaxed shadow-[3px_3px_0px_#000] focus:outline-none"
+                className="w-full p-4 border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] font-mono text-xs text-[var(--theme-dirty-white)] rounded-xl leading-relaxed shadow-xs focus:outline-none"
               />
             </div>
           </div>

@@ -80,18 +80,18 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="write-review-modal-title"
     >
-      <div className="bg-white border-2 border-black rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-[8px_8px_0px_#000000] space-y-5 relative">
+      <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-5 relative text-[var(--theme-dirty-white)]">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <span className="inline-block px-2.5 py-0.5 rounded-lg bg-[#FACC15] border border-black text-[10px] font-mono font-black uppercase text-black mb-1.5">
+            <span className="inline-block px-2.5 py-0.5 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[10px] font-mono font-bold uppercase text-[var(--theme-dirty-white)] mb-1.5">
               Community Feedback
             </span>
-            <h2 id="write-review-modal-title" className="text-xl sm:text-2xl font-black text-black">
+            <h2 id="write-review-modal-title" className="text-xl sm:text-2xl font-extrabold text-[var(--theme-dirty-white)]">
               Write a Review for VexoraMods
             </h2>
           </div>
@@ -100,20 +100,20 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Close review form"
-            className="p-2 rounded-xl bg-[#FAF7F2] hover:bg-neutral-200 border-2 border-black text-black cursor-pointer"
+            className="p-2 rounded-xl bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] border border-[var(--theme-gray-border)] text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] cursor-pointer"
           >
-            <X className="w-4 h-4 stroke-[2.5]" />
+            <X className="w-4 h-4 stroke-[2.2]" />
           </button>
         </div>
 
         {!isAuthenticated ? (
-          <div className="bg-[#FAF7F2] border-2 border-black rounded-2xl p-6 text-center space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#FACC15] border-2 border-black flex items-center justify-center mx-auto shadow-[2px_2px_0px_#000000]">
-              <Lock className="w-5 h-5 text-black" />
+          <div className="bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl p-6 text-center space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] flex items-center justify-center mx-auto text-[var(--theme-dirty-white)] shadow-xs">
+              <Lock className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-base font-black text-black">Sign In to Share Your Review</h3>
-              <p className="text-xs font-semibold text-neutral-600">
+              <h3 className="text-base font-bold text-[var(--theme-dirty-white)]">Sign In to Share Your Review</h3>
+              <p className="text-xs font-normal text-[var(--theme-gray-muted)]">
                 To keep reviews authentic and prevent spam, please sign in with your free VexoraMods
                 account.
               </p>
@@ -122,14 +122,14 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({
               <Link
                 to="/login"
                 onClick={onClose}
-                className="px-5 py-2.5 rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-xs font-black uppercase text-black shadow-[3px_3px_0px_#000000]"
+                className="px-5 py-2.5 rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold uppercase text-[var(--theme-canvas)] shadow-sm"
               >
                 Sign In
               </Link>
               <Link
                 to="/register"
                 onClick={onClose}
-                className="px-5 py-2.5 rounded-xl bg-white hover:bg-neutral-100 border-2 border-black text-xs font-black uppercase text-black shadow-[3px_3px_0px_#000000]"
+                className="px-5 py-2.5 rounded-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold uppercase text-slate-200 shadow-sm"
               >
                 Create Free Account
               </Link>
@@ -137,17 +137,17 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex items-center justify-between text-xs font-bold text-neutral-700 bg-[#FAF7F2] border border-black/30 rounded-xl px-3.5 py-2">
+            <div className="flex items-center justify-between text-xs font-medium text-slate-400 bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2">
               <span>Posting publicly as:</span>
-              <span className="font-black text-black">{user?.name}</span>
+              <span className="font-bold text-slate-100">{user?.name}</span>
             </div>
 
             {/* 1-5 Star Selector */}
             <div className="space-y-2">
-              <label className="block text-xs font-mono font-black uppercase text-black">
+              <label className="block text-xs font-mono font-bold uppercase text-slate-300">
                 Your Rating *
               </label>
-              <div className="flex items-center gap-2 bg-[#FAF7F2] border-2 border-black rounded-2xl p-3.5">
+              <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-2xl p-3.5">
                 <div className="flex items-center gap-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -161,13 +161,13 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({
                     >
                       <Star
                         className={`w-7 h-7 ${
-                          star <= activeStar ? 'text-amber-500 fill-amber-400' : 'text-neutral-300'
+                          star <= activeStar ? 'text-amber-500 fill-amber-400' : 'text-slate-700'
                         }`}
                       />
                     </button>
                   ))}
                 </div>
-                <span className="ml-2 text-xs font-mono font-black text-black">
+                <span className="ml-2 text-xs font-mono font-bold text-slate-300">
                   {RATING_LABELS[activeStar]}
                 </span>
               </div>
@@ -178,11 +178,11 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="review-comment-input"
-                  className="block text-xs font-mono font-black uppercase text-black"
+                  className="block text-xs font-mono font-bold uppercase text-slate-300"
                 >
                   Your Review *
                 </label>
-                <span className="text-[11px] font-mono text-neutral-500">
+                <span className="text-[11px] font-mono text-slate-400">
                   {comment.length}/1500
                 </span>
               </div>
@@ -194,7 +194,7 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Share your experience with VexoraMods tools, Studio, or the Learning Hub..."
                 required
-                className="w-full p-3.5 text-xs sm:text-sm bg-[#FAF7F2] border-2 border-black rounded-2xl font-semibold text-black focus:outline-none focus:bg-white"
+                className="w-full p-3.5 text-xs sm:text-sm bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl font-normal text-[var(--theme-dirty-white)] placeholder:[var(--theme-gray-dim)] focus:outline-none focus:border-[var(--theme-dirty-white)]"
               />
             </div>
 
@@ -202,14 +202,14 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2.5 rounded-xl bg-white hover:bg-neutral-100 border-2 border-black text-xs font-black uppercase text-black cursor-pointer"
+                className="px-5 py-2.5 rounded-full bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] border border-[var(--theme-gray-border)] text-xs font-bold uppercase text-[var(--theme-dirty-white-muted)] cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#4ADE80] hover:bg-emerald-400 border-2 border-black text-xs font-black uppercase tracking-wider text-black shadow-[3px_3px_0px_#000000] cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold uppercase tracking-wider text-[var(--theme-canvas)] shadow-sm cursor-pointer disabled:opacity-50"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{submitting ? 'Submitting...' : 'Submit Review'}</span>

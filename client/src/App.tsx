@@ -121,7 +121,7 @@ export const App: React.FC = () => {
                         element={
                           <React.Suspense
                             fallback={
-                              <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                              <div className="min-h-screen bg-[var(--theme-canvas)] flex items-center justify-center font-mono text-xs font-medium text-[var(--theme-gray-muted)] uppercase tracking-wider">
                                 Loading Studio Editor...
                               </div>
                             }
@@ -135,7 +135,7 @@ export const App: React.FC = () => {
                         element={
                           <React.Suspense
                             fallback={
-                              <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                              <div className="min-h-screen bg-[var(--theme-canvas)] flex items-center justify-center font-mono text-xs font-medium text-[var(--theme-gray-muted)] uppercase tracking-wider">
                                 Loading Studio Editor...
                               </div>
                             }
@@ -157,7 +157,7 @@ export const App: React.FC = () => {
                         <Route path="/" element={<HomePage />} />
 
                         {/* 2. All Tools (Unified Normal + AI Tools) */}
-                        <Route path="/tools" element={<Navigate to="/" replace />} />
+                        <Route path="/tools" element={<Navigate to="/#tools-directory" replace />} />
                         <Route path="/tools/:toolSlug" element={<ToolDetailPage />} />
                         <Route path="/category/:categorySlug" element={<CategoryPage />} />
 
@@ -200,7 +200,7 @@ export const App: React.FC = () => {
                           element={
                             <React.Suspense
                               fallback={
-                                <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                                <div className="min-h-screen bg-[var(--theme-canvas)] flex items-center justify-center font-mono text-xs font-medium text-[var(--theme-gray-muted)] uppercase tracking-wider">
                                   Loading UI Library...
                                 </div>
                               }
@@ -214,7 +214,7 @@ export const App: React.FC = () => {
                           element={
                             <React.Suspense
                               fallback={
-                                <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                                <div className="min-h-screen bg-[var(--theme-canvas)] flex items-center justify-center font-mono text-xs font-medium text-[var(--theme-gray-muted)] uppercase tracking-wider">
                                   Loading Component...
                                 </div>
                               }
@@ -228,7 +228,7 @@ export const App: React.FC = () => {
                           element={
                             <React.Suspense
                               fallback={
-                                <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                                <div className="min-h-screen bg-[var(--theme-canvas)] flex items-center justify-center font-mono text-xs font-medium text-[var(--theme-gray-muted)] uppercase tracking-wider">
                                   Loading Layout...
                                 </div>
                               }
@@ -242,7 +242,7 @@ export const App: React.FC = () => {
                           element={
                             <React.Suspense
                               fallback={
-                                <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center font-mono text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                                <div className="min-h-screen bg-[var(--theme-canvas)] flex items-center justify-center font-mono text-xs font-medium text-[var(--theme-gray-muted)] uppercase tracking-wider">
                                   Loading Design Style...
                                 </div>
                               }

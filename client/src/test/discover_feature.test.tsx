@@ -148,6 +148,16 @@ describe('Vexora Discover — Zero-Authorization Nearby Search Suite', () => {
   });
 
   describe('3. Zero-Authorization Nearby Mode & Custom Area', () => {
+    it('does NOT render the Search Scope card banner or explanatory nearby text', () => {
+      render(<DiscoverPage />);
+
+      expect(screen.queryByText(/Search Scope:/i)).toBeNull();
+      expect(screen.queryByText(/Auto-detected by Google Maps/i)).toBeNull();
+      expect(
+        screen.queryByText(/We append "nearby" directly into your Google Maps search/i)
+      ).toBeNull();
+    });
+
     it('searches nearby without requesting any browser location authorization', () => {
       const mockGetCurrentPosition = vi.fn();
       Object.defineProperty(navigator, 'geolocation', {

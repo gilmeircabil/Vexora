@@ -127,10 +127,10 @@ export const SocialAuthButtons: React.FC<{
     <div className="space-y-3">
       <div className="relative my-4">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t-2 border-black/15" />
+          <div className="w-full border-t border-slate-800" />
         </div>
-        <div className="relative flex justify-center text-[10px] uppercase font-black">
-          <span className="bg-white px-2.5 text-neutral-500 tracking-wider">
+        <div className="relative flex justify-center text-[10px] uppercase font-semibold">
+          <span className="bg-[var(--theme-surface)] px-2.5 text-[var(--theme-gray-muted)] tracking-wider">
             Or {mode === 'register' ? 'sign up' : 'continue'} with
           </span>
         </div>
@@ -141,10 +141,10 @@ export const SocialAuthButtons: React.FC<{
         type="button"
         onClick={handleGoogleClick}
         disabled={isLoading}
-        className="w-full relative flex items-center justify-center gap-3 py-3 px-4 rounded-xl border-2 border-black bg-white hover:bg-neutral-50 text-xs font-black text-black shadow-[3px_3px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#000000] transition-all cursor-pointer disabled:opacity-60"
+        className="w-full relative flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-100 shadow-sm transition-all cursor-pointer disabled:opacity-60"
       >
         {isLoading ? (
-          <Loader2 className="w-4 h-4 animate-spin stroke-[2.5]" />
+          <Loader2 className="w-4 h-4 animate-spin stroke-[2]" />
         ) : (
           <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
             <path
@@ -170,35 +170,35 @@ export const SocialAuthButtons: React.FC<{
 
       {/* Setup Guide Modal */}
       {showSetupModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl border-2 border-black p-6 max-w-md w-full shadow-[6px_6px_0px_#000000] space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
+          <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] p-6 max-w-md w-full shadow-2xl space-y-4 text-[var(--theme-dirty-white)]">
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-[#FACC15] border-2 border-black flex items-center justify-center font-black">
-                  <Info className="w-4 h-4 text-black stroke-[2.5]" />
+                <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center font-bold text-[var(--theme-dirty-white)]">
+                  <Info className="w-4 h-4 stroke-[2]" />
                 </div>
-                <h3 className="font-black text-sm text-black">Activate Google Sign-In (Free)</h3>
+                <h3 className="font-bold text-sm text-[var(--theme-dirty-white)]">Activate Google Sign-In</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setShowSetupModal(false)}
-                className="text-neutral-500 hover:text-black p-1 cursor-pointer"
+                className="text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] p-1 cursor-pointer"
               >
-                <X className="w-4 h-4 stroke-[2.5]" />
+                <X className="w-4 h-4 stroke-[2]" />
               </button>
             </div>
 
-            <p className="text-xs font-semibold text-neutral-700 leading-relaxed">
+            <p className="text-xs font-normal text-[var(--theme-dirty-white-muted)] leading-relaxed">
               Google authentication is ready! To activate it, paste your free Google Client ID into
               your{' '}
-              <code className="bg-neutral-100 px-1 py-0.5 rounded border border-black/20 font-bold">
+              <code className="bg-[var(--theme-surface-raised)] px-1 py-0.5 rounded border border-[var(--theme-gray-border)] font-mono text-[var(--theme-dirty-white)]">
                 .env
               </code>{' '}
               file:
             </p>
 
             <div className="relative">
-              <pre className="p-3 bg-neutral-900 text-neutral-100 text-[11px] font-mono rounded-xl border-2 border-black overflow-x-auto">
+              <pre className="p-3 bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] text-[11px] font-mono rounded-xl border border-[var(--theme-gray-border)] overflow-x-auto">
                 {envSnippet}
               </pre>
               <button
@@ -208,16 +208,16 @@ export const SocialAuthButtons: React.FC<{
                   setCopiedEnv(true);
                   setTimeout(() => setCopiedEnv(false), 2000);
                 }}
-                className="absolute top-2 right-2 px-2 py-1 bg-white hover:bg-neutral-100 border border-black rounded text-[10px] font-black text-black flex items-center gap-1 cursor-pointer"
+                className="absolute top-2 right-2 px-2 py-1 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] border border-[var(--theme-gray-border)] rounded text-[10px] font-medium text-[var(--theme-dirty-white)] flex items-center gap-1 cursor-pointer"
               >
                 {copiedEnv ? (
                   <>
-                    <Check className="w-3 h-3 text-emerald-600 stroke-[2.5]" />
+                    <Check className="w-3 h-3 text-emerald-400 stroke-[2]" />
                     <span>Copied</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-3 h-3 stroke-[2.5]" />
+                    <Copy className="w-3 h-3 stroke-[2]" />
                     <span>Copy</span>
                   </>
                 )}
@@ -229,16 +229,16 @@ export const SocialAuthButtons: React.FC<{
                 href="https://console.cloud.google.com/apis/credentials"
                 target="_blank"
                 rel="noreferrer"
-                className="text-xs font-black text-black underline flex items-center gap-1 hover:text-neutral-700"
+                className="text-xs font-medium text-[var(--theme-dirty-white)] underline flex items-center gap-1 hover:text-[var(--theme-dirty-white-muted)]"
               >
                 <span>Google Cloud Credentials</span>
-                <ExternalLink className="w-3 h-3 stroke-[2.5]" />
+                <ExternalLink className="w-3 h-3 stroke-[2]" />
               </a>
 
               <button
                 type="button"
                 onClick={() => setShowSetupModal(false)}
-                className="px-4 py-2 bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black rounded-xl text-xs font-black text-black shadow-[2px_2px_0px_#000000] cursor-pointer"
+                className="px-4 py-2 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] rounded-xl text-xs font-bold text-[var(--theme-canvas)] shadow-sm cursor-pointer"
               >
                 Got it
               </button>

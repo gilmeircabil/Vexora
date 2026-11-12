@@ -340,7 +340,7 @@ export const LearningPostDetailPage: React.FC = () => {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="bg-white border-2 border-black p-8 animate-pulse h-96" />
+        <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 p-8 animate-pulse h-96" />
       </div>
     );
   }
@@ -348,14 +348,14 @@ export const LearningPostDetailPage: React.FC = () => {
   if (!post) {
     return (
       <div className="space-y-6">
-        <div className="bg-white border-2 border-black p-10 text-center shadow-[6px_6px_0px_#000]">
+        <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 p-10 text-center shadow-sm">
           <h1 className="text-2xl font-black mb-2">Post Not Found</h1>
           <p className="text-gray-600 mb-6">
             This learning post may have been removed or does not exist.
           </p>
           <Link
             to="/learning"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FACC15] border-2 border-black font-black"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] font-black"
           >
             <ArrowLeft className="w-4 h-4" /> Back to Learning Hub
           </Link>
@@ -375,7 +375,7 @@ export const LearningPostDetailPage: React.FC = () => {
       <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
         <Link
           to="/learning"
-          className="inline-flex items-center gap-2 text-sm font-black text-black hover:underline"
+          className="inline-flex items-center gap-2 text-sm font-black text-slate-100 hover:underline"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Learning Hub
         </Link>
@@ -385,7 +385,7 @@ export const LearningPostDetailPage: React.FC = () => {
             <button
               type="button"
               onClick={handleSaveFreeToLibrary}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#4ADE80] border-2 border-black text-xs font-black cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#4ADE80] border border-[var(--theme-gray-border)] text-xs font-black cursor-pointer"
             >
               <FolderPlus className="w-3.5 h-3.5" /> Save to My Library
             </button>
@@ -394,42 +394,42 @@ export const LearningPostDetailPage: React.FC = () => {
       </div>
 
       {/* Main Learning Material Container */}
-      <article className="bg-white border-2 border-black p-6 sm:p-10 shadow-[6px_6px_0px_#000] mb-8">
+      <article className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 p-6 sm:p-10 shadow-sm mb-8">
         <div className="flex flex-wrap items-center gap-2 mb-4">
           <span
-            className={`px-3 py-1 border-2 border-black text-xs font-black uppercase ${
-              isPaid ? 'bg-[#FACC15]' : 'bg-[#4ADE80]'
+            className={`px-3 py-1 border border-[var(--theme-gray-border)] text-xs font-bold uppercase rounded-lg ${
+              isPaid ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)]' : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)]'
             }`}
           >
             {isPaid ? `PAID • ${post.currency || 'PHP'} ${post.price}` : 'FREE'}
           </span>
-          <span className="px-3 py-1 bg-[#38BDF8] border-2 border-black text-xs font-black uppercase">
+          <span className="px-3 py-1 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-xs font-bold uppercase rounded-lg text-[var(--theme-dirty-white)]">
             {post.contentType || 'article'}
           </span>
-          <span className="px-3 py-1 bg-[#FAF7F2] border-2 border-black text-xs font-black uppercase">
+          <span className="px-3 py-1 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-xs font-bold uppercase rounded-lg text-[var(--theme-dirty-white)]">
             {post.category}
           </span>
-          <span className="px-3 py-1 bg-white border-2 border-black text-xs font-bold uppercase">
+          <span className="px-3 py-1 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] text-xs font-bold uppercase rounded-lg">
             {post.difficulty}
           </span>
-          <span className="text-xs font-bold text-gray-600 flex items-center gap-1 ml-auto">
+          <span className="text-xs font-medium text-[var(--theme-gray-muted)] flex items-center gap-1 ml-auto">
             <Clock className="w-4 h-4" /> {post.readTimeMinutes} min •{' '}
             <Eye className="w-4 h-4 ml-2" /> {post.viewsCount} views
           </span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl font-black text-black mb-4 leading-tight">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-[var(--theme-dirty-white)] mb-4 leading-tight">
           {post.title}
         </h1>
 
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-6 border-b-2 border-black">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-6 border-b border-[var(--theme-gray-border)]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-black text-white font-black flex items-center justify-center border-2 border-black">
+            <div className="w-10 h-10 bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] font-bold flex items-center justify-center border border-[var(--theme-gray-border)] rounded-full">
               {post.authorName.charAt(0).toUpperCase()}
             </div>
             <div>
-              <div className="font-black text-sm text-black">{post.authorName}</div>
-              <div className="text-xs text-gray-500">
+              <div className="font-bold text-sm text-[var(--theme-dirty-white)]">{post.authorName}</div>
+              <div className="text-xs text-[var(--theme-gray-muted)]">
                 Published {new Date(post.createdAt).toLocaleDateString()}
               </div>
             </div>
@@ -439,29 +439,29 @@ export const LearningPostDetailPage: React.FC = () => {
             <button
               type="button"
               onClick={handleLike}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 border-2 border-black font-bold text-xs cursor-pointer ${
-                post.viewerLiked ? 'bg-red-100 text-red-700' : 'bg-white text-black'
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 border border-[var(--theme-gray-border)] font-bold text-xs rounded-xl cursor-pointer transition-colors ${
+                post.viewerLiked ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]'
               }`}
             >
-              <Heart className={`w-4 h-4 ${post.viewerLiked ? 'fill-red-600' : ''}`} />
+              <Heart className={`w-4 h-4 ${post.viewerLiked ? 'fill-red-400' : ''}`} />
               {post.likesCount}
             </button>
 
             <button
               type="button"
               onClick={handleBookmark}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 border-2 border-black font-bold text-xs cursor-pointer ${
-                post.viewerBookmarked ? 'bg-[#FACC15]' : 'bg-white'
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 border border-[var(--theme-gray-border)] font-bold text-xs rounded-xl cursor-pointer transition-colors ${
+                post.viewerBookmarked ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)]' : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]'
               }`}
             >
-              <Bookmark className={`w-4 h-4 ${post.viewerBookmarked ? 'fill-black' : ''}`} />
+              <Bookmark className={`w-4 h-4 ${post.viewerBookmarked ? 'fill-current' : ''}`} />
               Save
             </button>
 
             <button
               type="button"
               onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 border-2 border-black font-bold text-xs bg-white cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-[var(--theme-gray-border)] font-bold text-xs bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] rounded-xl cursor-pointer transition-colors"
             >
               <Share2 className="w-4 h-4" /> Share
             </button>
@@ -470,7 +470,7 @@ export const LearningPostDetailPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowReportModal(true)}
-                className="p-1.5 border-2 border-black bg-white text-gray-600 hover:text-red-600 cursor-pointer"
+                className="p-1.5 border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-gray-muted)] hover:text-red-400 rounded-xl cursor-pointer transition-colors"
                 title="Report post"
               >
                 <Flag className="w-4 h-4" />
@@ -481,7 +481,7 @@ export const LearningPostDetailPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleDeletePost}
-                className="p-1.5 border-2 border-black bg-red-50 text-red-600 hover:bg-red-100 cursor-pointer"
+                className="p-1.5 border border-[var(--theme-gray-border)] bg-red-50 text-red-600 hover:bg-red-100 cursor-pointer"
                 title="Delete post"
               >
                 <Trash2 className="w-4 h-4" />
@@ -492,14 +492,14 @@ export const LearningPostDetailPage: React.FC = () => {
 
         {/* Learning Outcomes Box */}
         {post.learningOutcomes && post.learningOutcomes.length > 0 && (
-          <div className="mb-6 p-5 bg-[#FAF7F2] border-2 border-black">
-            <h3 className="text-sm font-black uppercase mb-3 flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-green-700" /> What You Will Learn
+          <div className="mb-6 p-5 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl">
+            <h3 className="text-sm font-black uppercase mb-3 flex items-center gap-2 text-[var(--theme-dirty-white)]">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" /> What You Will Learn
             </h3>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm font-medium text-gray-800">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm font-medium text-[var(--theme-dirty-white)]">
               {post.learningOutcomes.map((outcome, idx) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <span className="font-black text-green-700">✓</span> {outcome}
+                  <span className="font-black text-emerald-400">✓</span> {outcome}
                 </li>
               ))}
             </ul>
@@ -510,17 +510,17 @@ export const LearningPostDetailPage: React.FC = () => {
         {isPaid && !hasAccess && (
           <div
             data-testid="paid-content-lock-banner"
-            className="mb-8 p-6 bg-[#FACC15] border-4 border-black shadow-[6px_6px_0px_#000]"
+            className="mb-8 p-6 bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] rounded-2xl shadow-sm"
           >
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-black text-white text-xs font-black uppercase mb-2">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] rounded-md text-xs font-bold uppercase mb-2">
                   <Lock className="w-3.5 h-3.5" /> Protected Paid Learning Material
                 </div>
-                <h2 className="text-2xl font-black text-black">
+                <h2 className="text-2xl font-black text-[var(--theme-dirty-white)]">
                   Unlock Full Access for {post.currency || 'PHP'} {post.price}
                 </h2>
-                <p className="text-sm font-bold text-gray-900 mt-1 max-w-xl">
+                <p className="text-sm font-medium text-[var(--theme-dirty-white-muted)] mt-1 max-w-xl">
                   You are currently viewing the public preview. Purchase once to unlock the complete
                   lessons, step-by-step instructions, code examples, and downloadable resources
                   permanently in your Learning Library.
@@ -533,7 +533,7 @@ export const LearningPostDetailPage: React.FC = () => {
                     type="button"
                     disabled={processingCheckout}
                     onClick={handleInitiatePurchase}
-                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-black text-white font-black text-sm uppercase border-2 border-black shadow-[4px_4px_0px_#fff] cursor-pointer"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-bold text-sm rounded-xl border border-[var(--theme-gray-border)] shadow-xs cursor-pointer transition-all"
                   >
                     <ShoppingBag className="w-4 h-4" />
                     {processingCheckout
@@ -541,7 +541,7 @@ export const LearningPostDetailPage: React.FC = () => {
                       : `Buy Now • ${post.currency || 'PHP'} ${post.price}`}
                   </button>
                 ) : (
-                  <div className="p-4 bg-white border-2 border-black space-y-2">
+                  <div className="p-4 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 space-y-2">
                     <div className="text-xs font-black uppercase">
                       Checkout Session Ready ({pendingCheckout.paymentProvider})
                     </div>
@@ -552,7 +552,7 @@ export const LearningPostDetailPage: React.FC = () => {
                       type="button"
                       disabled={processingCheckout}
                       onClick={handleCompleteSandboxPayment}
-                      className="w-full px-4 py-2 bg-[#4ADE80] border-2 border-black font-black text-xs uppercase cursor-pointer"
+                      className="w-full px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] font-black text-xs uppercase cursor-pointer"
                     >
                       {processingCheckout ? 'Verifying Payment...' : 'Complete Verified Purchase'}
                     </button>
@@ -565,16 +565,16 @@ export const LearningPostDetailPage: React.FC = () => {
 
         {/* Video Lesson Player */}
         {post.videoUrl && hasAccess && (
-          <div className="mb-6 p-4 bg-black border-2 border-black text-white">
+          <div className="mb-6 p-4 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-2xl">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-black uppercase flex items-center gap-1.5 text-[#FACC15]">
+              <span className="text-xs font-black uppercase flex items-center gap-1.5 text-[var(--theme-dirty-white)]">
                 <PlayCircle className="w-4 h-4" /> Video Lesson Resource
               </span>
               <a
                 href={post.videoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs font-bold underline text-[#38BDF8] inline-flex items-center gap-1"
+                className="text-xs font-bold underline text-[var(--theme-dirty-white)] hover:text-[var(--theme-dirty-white-muted)] inline-flex items-center gap-1"
               >
                 Open Video Stream <ExternalLink className="w-3.5 h-3.5" />
               </a>
@@ -583,21 +583,21 @@ export const LearningPostDetailPage: React.FC = () => {
         )}
 
         {/* Main Written Content / Public Preview */}
-        <div className="prose max-w-none text-gray-900 whitespace-pre-wrap font-medium leading-relaxed text-base mb-8">
+        <div className="prose max-w-none text-[var(--theme-dirty-white)] whitespace-pre-wrap font-medium leading-relaxed text-base mb-8">
           {post.content}
         </div>
 
         {/* Complete Course Curriculum & Interactive Lesson Player */}
         {post.chapters && post.chapters.length > 0 && (
-          <div className="mb-8 border-2 border-black bg-[#FAF7F2] p-5">
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-4 pb-3 border-b-2 border-black">
+          <div className="mb-8 border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] rounded-2xl p-5">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-4 pb-3 border-b border-[var(--theme-gray-border)]">
               <div>
-                <h3 className="text-lg font-black text-black flex items-center gap-2">
+                <h3 className="text-lg font-black text-slate-100 flex items-center gap-2">
                   <BookOpen className="w-5 h-5" /> Course Curriculum ({post.chapters.length}{' '}
                   Chapters)
                 </h3>
                 {hasAccess && isAuthenticated && (
-                  <p className="text-xs font-bold text-gray-600">
+                  <p className="text-xs font-bold text-[var(--theme-gray-muted)]">
                     Your Course Progress: {courseProgressPercent}%{' '}
                     {courseCompleted ? '(Completed ✓)' : ''}
                   </p>
@@ -608,8 +608,8 @@ export const LearningPostDetailPage: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               <div className="lg:col-span-5 space-y-3">
                 {post.chapters.map((ch) => (
-                  <div key={ch.chapterId} className="bg-white border-2 border-black p-3">
-                    <div className="font-black text-sm text-black mb-2">{ch.title}</div>
+                  <div key={ch.chapterId} className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-xl p-3">
+                    <div className="font-black text-sm text-slate-100 mb-2">{ch.title}</div>
                     <div className="space-y-1.5">
                       {ch.lessons.map((les) => {
                         const isCompleted = completedLessons.includes(les.lessonId);
@@ -619,8 +619,8 @@ export const LearningPostDetailPage: React.FC = () => {
                             key={les.lessonId}
                             type="button"
                             onClick={() => setActiveLesson(les)}
-                            className={`w-full text-left p-2 border border-black text-xs font-bold flex items-center justify-between cursor-pointer ${
-                              isSelected ? 'bg-[#FACC15]' : 'bg-[#FAF7F2] hover:bg-gray-100'
+                            className={`w-full text-left p-2.5 rounded-xl border border-[var(--theme-gray-border)] text-xs font-bold flex items-center justify-between cursor-pointer transition-colors ${
+                              isSelected ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs' : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)]'
                             }`}
                           >
                             <span className="truncate pr-2">
@@ -629,12 +629,12 @@ export const LearningPostDetailPage: React.FC = () => {
                             </span>
                             <span className="shrink-0 flex items-center gap-1">
                               {les.isFreePreview && !hasAccess && (
-                                <span className="px-1.5 py-0.5 bg-[#4ADE80] border border-black text-[10px] font-black">
+                                <span className="px-2 py-0.5 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] text-[10px] font-bold rounded-md">
                                   Preview
                                 </span>
                               )}
                               {les.isLocked ? (
-                                <Lock className="w-3.5 h-3.5 text-gray-600" />
+                                <Lock className="w-3.5 h-3.5 text-[var(--theme-gray-muted)]" />
                               ) : (
                                 <span>{les.durationMinutes || 5}m</span>
                               )}
@@ -647,7 +647,7 @@ export const LearningPostDetailPage: React.FC = () => {
                 ))}
               </div>
 
-              <div className="lg:col-span-7 bg-white border-2 border-black p-5">
+              <div className="lg:col-span-7 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 p-5">
                 {activeLesson ? (
                   activeLesson.isLocked ? (
                     <div className="text-center py-12">
@@ -659,16 +659,16 @@ export const LearningPostDetailPage: React.FC = () => {
                     </div>
                   ) : (
                     <div>
-                      <div className="flex items-center justify-between gap-2 mb-3 pb-2 border-b border-gray-200">
-                        <h4 className="font-black text-lg">{activeLesson.title}</h4>
+                      <div className="flex items-center justify-between gap-2 mb-3 pb-2 border-b border-[var(--theme-gray-border)]">
+                        <h4 className="font-bold text-lg text-[var(--theme-dirty-white)]">{activeLesson.title}</h4>
                         {hasAccess && isAuthenticated && (
                           <button
                             type="button"
                             onClick={() => handleToggleLessonComplete(activeLesson.lessonId)}
-                            className={`px-3 py-1 border-2 border-black text-xs font-black cursor-pointer ${
+                            className={`px-3 py-1 border border-[var(--theme-gray-border)] text-xs font-bold rounded-lg cursor-pointer ${
                               completedLessons.includes(activeLesson.lessonId)
-                                ? 'bg-[#4ADE80]'
-                                : 'bg-white'
+                                ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]'
+                                : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)]'
                             }`}
                           >
                             {completedLessons.includes(activeLesson.lessonId)
@@ -677,7 +677,7 @@ export const LearningPostDetailPage: React.FC = () => {
                           </button>
                         )}
                       </div>
-                      <div className="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
+                      <div className="text-sm text-[var(--theme-dirty-white-muted)] whitespace-pre-wrap leading-relaxed">
                         {activeLesson.content}
                       </div>
                     </div>
@@ -693,15 +693,15 @@ export const LearningPostDetailPage: React.FC = () => {
         {/* Step-by-Step Guide Viewer */}
         {post.steps && post.steps.length > 0 && (
           <div className="mb-8 space-y-3">
-            <h3 className="text-lg font-black text-black flex items-center gap-2">
+            <h3 className="text-lg font-black text-slate-100 flex items-center gap-2">
               <ListChecks className="w-5 h-5" /> Step-by-Step Guide
             </h3>
             {post.steps.map((st) => (
-              <div key={st.stepNumber} className="p-4 bg-[#FAF7F2] border-2 border-black space-y-1">
-                <div className="font-black text-sm">
+              <div key={st.stepNumber} className="p-4 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl space-y-1">
+                <div className="font-bold text-sm text-[var(--theme-dirty-white)]">
                   Step {st.stepNumber}: {st.title}
                 </div>
-                <p className="text-sm text-gray-800 whitespace-pre-wrap">{st.content}</p>
+                <p className="text-sm text-[var(--theme-dirty-white-muted)] whitespace-pre-wrap">{st.content}</p>
               </div>
             ))}
           </div>
@@ -710,16 +710,16 @@ export const LearningPostDetailPage: React.FC = () => {
         {/* Code Examples & Project Snippets */}
         {post.codeSnippets && post.codeSnippets.length > 0 && (
           <div className="mb-8 space-y-3">
-            <h3 className="text-lg font-black text-black flex items-center gap-2">
+            <h3 className="text-lg font-black text-slate-100 flex items-center gap-2">
               <Code2 className="w-5 h-5" /> Code Examples & Project Snippets
             </h3>
             {post.codeSnippets.map((snip, idx) => (
-              <div key={idx} className="border-2 border-black bg-gray-900 text-gray-100 p-4">
-                <div className="flex items-center justify-between text-xs font-black text-[#FACC15] mb-2">
+              <div key={idx} className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] p-4 rounded-xl">
+                <div className="flex items-center justify-between text-xs font-black text-[var(--theme-dirty-white)] mb-2">
                   <span>{snip.title}</span>
                   <span className="uppercase">{snip.language}</span>
                 </div>
-                <pre className="text-xs font-mono overflow-x-auto whitespace-pre-wrap">
+                <pre className="text-xs font-mono overflow-x-auto whitespace-pre-wrap text-[var(--theme-dirty-white-muted)]">
                   {snip.code}
                 </pre>
               </div>
@@ -729,7 +729,7 @@ export const LearningPostDetailPage: React.FC = () => {
 
         {/* Protected Downloadable Files */}
         {post.protectedFiles && post.protectedFiles.length > 0 && (
-          <div className="mb-8 p-4 bg-[#FAF7F2] border-2 border-black">
+          <div className="mb-8 p-4 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl">
             <h3 className="text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <Download className="w-4 h-4" /> Downloadable Learning Resources
             </h3>
@@ -737,14 +737,14 @@ export const LearningPostDetailPage: React.FC = () => {
               {post.protectedFiles.map((file) => (
                 <div
                   key={file.fileId}
-                  className="p-3 bg-white border border-black flex items-center justify-between text-xs font-bold"
+                  className="p-3 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl flex items-center justify-between text-xs font-bold text-[var(--theme-dirty-white)]"
                 >
                   <div>
-                    <span className="font-black">{file.originalName}</span>{' '}
-                    <span className="text-gray-500">({Math.round(file.size / 1024)} KB)</span>
+                    <span className="font-bold">{file.originalName}</span>{' '}
+                    <span className="text-[var(--theme-gray-muted)]">({Math.round(file.size / 1024)} KB)</span>
                   </div>
                   {file.isLocked || !file.downloadUrl ? (
-                    <span className="inline-flex items-center gap-1 text-gray-500 font-black">
+                    <span className="inline-flex items-center gap-1 text-[var(--theme-gray-muted)] font-bold">
                       <Lock className="w-3.5 h-3.5" /> Locked (Purchase Required)
                     </span>
                   ) : (
@@ -752,7 +752,7 @@ export const LearningPostDetailPage: React.FC = () => {
                       href={file.downloadUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-1 bg-[#4ADE80] border border-black font-black text-black inline-flex items-center gap-1"
+                      className="px-3 py-1 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] rounded-lg font-bold text-xs inline-flex items-center gap-1 cursor-pointer"
                     >
                       <Download className="w-3.5 h-3.5" /> Download
                     </a>
@@ -764,8 +764,8 @@ export const LearningPostDetailPage: React.FC = () => {
         )}
 
         {post.resourceLinks && post.resourceLinks.length > 0 && (
-          <div className="mt-8 p-4 bg-[#FAF7F2] border-2 border-black">
-            <h3 className="text-xs font-black uppercase tracking-wider mb-2">
+          <div className="mt-8 p-4 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl">
+            <h3 className="text-xs font-black uppercase tracking-wider mb-2 text-[var(--theme-dirty-white)]">
               Helpful Resources & Links
             </h3>
             <div className="flex flex-wrap gap-3">
@@ -775,7 +775,7 @@ export const LearningPostDetailPage: React.FC = () => {
                   href={r.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm font-bold text-blue-700 hover:underline"
+                  className="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--theme-dirty-white)] hover:text-[var(--theme-dirty-white-muted)] hover:underline"
                 >
                   <ExternalLink className="w-4 h-4" /> {r.label}
                 </a>
@@ -785,11 +785,11 @@ export const LearningPostDetailPage: React.FC = () => {
         )}
 
         {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-6 pt-6 border-t border-gray-200">
+          <div className="flex flex-wrap gap-2 mt-6 pt-6 border-t border-[var(--theme-gray-border)]">
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="text-xs font-bold px-2.5 py-1 bg-gray-100 border border-black"
+                className="text-xs font-bold px-2.5 py-1 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-lg"
               >
                 #{tag}
               </span>
@@ -799,20 +799,20 @@ export const LearningPostDetailPage: React.FC = () => {
       </article>
 
       {/* PHASE 8: FORMAL RATINGS & REVIEWS SECTION (Separate from Discussion Comments) */}
-      <section className="bg-white border-2 border-black p-6 sm:p-8 shadow-[6px_6px_0px_#000] mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b-2 border-black">
+      <section className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[var(--theme-gray-border)]">
           <div>
-            <h2 className="text-xl font-black text-black flex items-center gap-2">
-              <Star className="w-5 h-5 fill-[#FACC15]" /> Learner Ratings & Reviews (
+            <h2 className="text-xl font-black text-slate-100 flex items-center gap-2">
+              <Star className="w-5 h-5 fill-amber-400 text-amber-500" /> Learner Ratings & Reviews (
               {reviewSummary.totalApproved})
             </h2>
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-[var(--theme-gray-muted)]">
               Verified ratings from learners who studied or purchased this material.
             </p>
           </div>
-          <div className="flex items-center gap-2 bg-[#FAF7F2] border-2 border-black px-4 py-2">
-            <span className="text-2xl font-black">{reviewSummary.averageRating.toFixed(1)}</span>
-            <span className="text-xs font-bold text-gray-600">
+          <div className="flex items-center gap-2 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl px-4 py-2">
+            <span className="text-2xl font-black text-[var(--theme-dirty-white)]">{reviewSummary.averageRating.toFixed(1)}</span>
+            <span className="text-xs font-bold text-[var(--theme-gray-muted)]">
               out of 5.0 ({reviewSummary.totalApproved} reviews)
             </span>
           </div>
@@ -821,7 +821,7 @@ export const LearningPostDetailPage: React.FC = () => {
         {isAuthenticated && String(user?.id) !== String(post.authorId) && hasAccess && (
           <form
             onSubmit={handleSubmitReview}
-            className="mb-6 p-4 bg-[#FAF7F2] border-2 border-black space-y-3"
+            className="mb-6 p-4 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl space-y-3"
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase">Rate & Review This Material</span>
@@ -847,12 +847,12 @@ export const LearningPostDetailPage: React.FC = () => {
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
               placeholder="Share your honest learning experience with this material..."
-              className="w-full p-2.5 border-2 border-black text-sm bg-white"
+              className="w-full p-2.5 rounded-xl border border-[var(--theme-gray-border)] text-sm bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] placeholder:text-[var(--theme-gray-muted)] focus:outline-none focus:border-[var(--theme-dirty-white)]"
             />
             <button
               type="submit"
               disabled={submittingReview}
-              className="px-4 py-2 bg-[#FACC15] border-2 border-black font-black text-xs uppercase cursor-pointer"
+              className="px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] rounded-xl border border-[var(--theme-gray-border)] font-bold text-xs uppercase cursor-pointer"
             >
               {submittingReview ? 'Saving Review...' : 'Submit Review'}
             </button>
@@ -860,28 +860,28 @@ export const LearningPostDetailPage: React.FC = () => {
         )}
 
         {reviews.length === 0 ? (
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-[var(--theme-gray-muted)]">
             No learner reviews yet. Be the first to rate this material!
           </p>
         ) : (
           <div className="space-y-3">
             {reviews.map((rev) => (
-              <div key={rev._id} className="p-4 bg-[#FAF7F2] border-2 border-black">
+              <div key={rev._id} className="p-4 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl">
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-black text-sm">{rev.userName}</span>
+                    <span className="font-bold text-sm text-[var(--theme-dirty-white)]">{rev.userName}</span>
                     {rev.isVerifiedPurchase && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#4ADE80] border border-black text-[11px] font-black">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded text-[11px] font-bold">
                         <ShieldCheck className="w-3 h-3" /> Verified Purchase
                       </span>
                     )}
                   </div>
-                  <span className="font-black text-xs text-amber-600">
+                  <span className="font-bold text-xs text-amber-500">
                     {'★'.repeat(rev.rating)}
                     {'☆'.repeat(5 - rev.rating)}
                   </span>
                 </div>
-                <p className="text-sm text-gray-800">{rev.comment}</p>
+                <p className="text-sm text-[var(--theme-dirty-white-muted)]">{rev.comment}</p>
               </div>
             ))}
           </div>
@@ -889,20 +889,20 @@ export const LearningPostDetailPage: React.FC = () => {
       </section>
 
       {/* PHASE 9: COMMUNITY DISCUSSION SECTION */}
-      <section className="bg-white border-2 border-black p-6 sm:p-8 shadow-[6px_6px_0px_#000]">
-        <h2 className="text-xl font-black text-black flex items-center gap-2 mb-6">
+      <section className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] p-6 sm:p-8 rounded-2xl shadow-sm">
+        <h2 className="text-xl font-bold text-[var(--theme-dirty-white)] flex items-center gap-2 mb-6">
           <MessageSquare className="w-5 h-5" /> Discussion ({post.commentsCount})
         </h2>
 
         {isAuthenticated ? (
           <form onSubmit={handleAddComment} className="mb-8">
             {replyTo && (
-              <div className="text-xs font-bold text-blue-700 mb-2 flex items-center gap-2">
+              <div className="text-xs font-bold text-[var(--theme-dirty-white)] mb-2 flex items-center gap-2">
                 Replying to comment
                 <button
                   type="button"
                   onClick={() => setReplyTo(null)}
-                  className="underline text-black"
+                  className="underline text-[var(--theme-dirty-white-muted)] hover:text-[var(--theme-dirty-white)] cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -914,21 +914,21 @@ export const LearningPostDetailPage: React.FC = () => {
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder="Ask a question or share your thoughts..."
-              className="w-full p-3 border-2 border-black font-medium text-sm mb-3 bg-[#FAF7F2]"
+              className="w-full p-3 rounded-xl border border-[var(--theme-gray-border)] font-medium text-sm mb-3 bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] placeholder:text-[var(--theme-gray-muted)] focus:outline-none focus:border-[var(--theme-dirty-white)]"
             />
             <button
               type="submit"
               disabled={submittingComment}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#4ADE80] border-2 border-black font-black text-xs uppercase shadow-[3px_3px_0px_#000] cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] rounded-xl border border-[var(--theme-gray-border)] font-bold text-xs uppercase shadow-xs cursor-pointer"
             >
               <Send className="w-3.5 h-3.5" />
               {submittingComment ? 'Posting...' : 'Post Comment'}
             </button>
           </form>
         ) : (
-          <div className="p-4 bg-[#FAF7F2] border-2 border-black mb-6 text-sm font-bold">
+          <div className="p-4 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl mb-6 text-sm font-medium text-[var(--theme-dirty-white)]">
             Please{' '}
-            <Link to="/login" className="underline">
+            <Link to="/login" className="underline text-[var(--theme-dirty-white)] font-bold">
               sign in
             </Link>{' '}
             to join the discussion.
@@ -937,7 +937,7 @@ export const LearningPostDetailPage: React.FC = () => {
 
         <div className="space-y-4">
           {rootComments.length === 0 ? (
-            <p className="text-sm text-gray-500">No comments yet. Start the conversation!</p>
+            <p className="text-sm text-[var(--theme-gray-muted)]">No comments yet. Start the conversation!</p>
           ) : (
             rootComments.map((c) => {
               const replies = comments.filter((r) => r.parentCommentId === c._id);
@@ -945,18 +945,18 @@ export const LearningPostDetailPage: React.FC = () => {
               const canDelete =
                 user && (String(user.id) === String(commentOwnerId) || user.role === 'admin');
               return (
-                <div key={c._id} className="border-2 border-black p-4 bg-[#FAF7F2]">
+                <div key={c._id} className="border border-[var(--theme-gray-border)] rounded-2xl p-4 bg-[var(--theme-surface-raised)]">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-black text-sm text-black">
+                    <span className="font-bold text-sm text-[var(--theme-dirty-white)]">
                       {c.authorName || c.userName || 'Learner'}
                     </span>
-                    <div className="flex items-center gap-3 text-xs text-gray-500">
+                    <div className="flex items-center gap-3 text-xs text-[var(--theme-gray-muted)]">
                       <span>{new Date(c.createdAt).toLocaleDateString()}</span>
                       {isAuthenticated && (
                         <button
                           type="button"
                           onClick={() => setReplyTo(c._id)}
-                          className="font-bold text-black hover:underline"
+                          className="font-bold text-[var(--theme-dirty-white)] hover:underline cursor-pointer"
                         >
                           Reply
                         </button>
@@ -965,28 +965,28 @@ export const LearningPostDetailPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => handleDeleteComment(c._id)}
-                          className="text-red-600 hover:underline font-bold"
+                          className="text-red-400 hover:underline font-bold cursor-pointer"
                         >
                           Delete
                         </button>
                       )}
                     </div>
                   </div>
-                  <p className="text-sm text-gray-800 whitespace-pre-wrap">{c.content}</p>
+                  <p className="text-sm text-[var(--theme-dirty-white-muted)] whitespace-pre-wrap">{c.content}</p>
 
                   {replies.length > 0 && (
-                    <div className="mt-3 pl-4 border-l-2 border-black space-y-2">
+                    <div className="mt-3 pl-4 border-l border-[var(--theme-gray-border)] space-y-2">
                       {replies.map((r) => (
-                        <div key={r._id} className="bg-white border border-black p-3">
+                        <div key={r._id} className="bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] p-3">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="font-black text-xs">
+                            <span className="font-bold text-xs text-[var(--theme-dirty-white)]">
                               {r.authorName || r.userName || 'Learner'}
                             </span>
-                            <span className="text-[11px] text-gray-500">
+                            <span className="text-[11px] text-[var(--theme-gray-muted)]">
                               {new Date(r.createdAt).toLocaleDateString()}
                             </span>
                           </div>
-                          <p className="text-xs text-gray-800">{r.content}</p>
+                          <p className="text-xs text-[var(--theme-dirty-white-muted)]">{r.content}</p>
                         </div>
                       ))}
                     </div>
@@ -999,19 +999,19 @@ export const LearningPostDetailPage: React.FC = () => {
       </section>
 
       {showReportModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white border-4 border-black p-6 max-w-md w-full shadow-[8px_8px_0px_#000]">
-            <h3 className="text-xl font-black mb-2">Report Learning Content</h3>
-            <p className="text-xs text-gray-600 mb-4">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] p-6 rounded-2xl max-w-md w-full shadow-xl">
+            <h3 className="text-xl font-bold mb-2 text-[var(--theme-dirty-white)]">Report Learning Content</h3>
+            <p className="text-xs text-[var(--theme-gray-muted)] mb-4">
               Report spam, copyright infringement, or prohibited material to VexoraMods moderators.
             </p>
             <form onSubmit={handleReport} className="space-y-3">
               <div>
-                <label className="block text-xs font-black uppercase mb-1">Category</label>
+                <label className="block text-xs font-bold uppercase tracking-wide mb-1 text-[var(--theme-dirty-white)]">Category</label>
                 <select
                   value={reportCategory}
                   onChange={(e) => setReportCategory(e.target.value as any)}
-                  className="w-full px-3 py-2 border-2 border-black text-sm font-bold bg-white"
+                  className="w-full px-3 py-2 rounded-xl border border-[var(--theme-gray-border)] text-sm font-semibold bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)]"
                 >
                   <option value="inappropriate">Inappropriate Content</option>
                   <option value="copyright">Copyright Infringement / Plagiarism</option>
@@ -1027,19 +1027,19 @@ export const LearningPostDetailPage: React.FC = () => {
                 value={reportReason}
                 onChange={(e) => setReportReason(e.target.value)}
                 placeholder="Describe why this content should be reviewed..."
-                className="w-full p-3 border-2 border-black text-sm"
+                className="w-full p-3 border border-[var(--theme-gray-border)] text-sm"
               />
               <div className="flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setShowReportModal(false)}
-                  className="px-4 py-2 border-2 border-black font-bold text-xs"
+                  className="px-4 py-2 border border-[var(--theme-gray-border)] font-bold text-xs"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-red-500 text-white border-2 border-black font-black text-xs"
+                  className="px-4 py-2 bg-red-500 text-white border border-[var(--theme-gray-border)] font-black text-xs"
                 >
                   Submit Report
                 </button>

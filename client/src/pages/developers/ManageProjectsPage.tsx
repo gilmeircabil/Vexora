@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import { Plus, Edit, Trash2, Eye, X, Save, Layers, ArrowLeft } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, X, Save, Layers, ArrowLeft, Heart, MessageSquare } from 'lucide-react';
 import { developerApi } from '../../services/developerApi.js';
 import { useToast } from '../../context/ToastContext.js';
 
@@ -136,13 +136,13 @@ export const ManageProjectsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[var(--theme-canvas)] text-slate-100 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto space-y-8">
         {/* Navigation & Header */}
-        <div className="flex items-center justify-between border-b-2 border-black pb-4">
+        <div className="flex items-center justify-between border-b border-[var(--theme-gray-border)] pb-4">
           <Link
             to="/developers"
-            className="inline-flex items-center gap-2 text-xs font-mono font-bold text-black hover:underline"
+            className="inline-flex items-center gap-2 text-xs font-mono font-bold text-slate-100 hover:underline"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Developer Hub</span>
@@ -150,7 +150,7 @@ export const ManageProjectsPage: React.FC = () => {
 
           <button
             onClick={openCreateModal}
-            className="px-4 py-2 bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[2.5px_2.5px_0px_#000] flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs font-black shadow-sm flex items-center gap-1.5 cursor-pointer"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>Publish New Project</span>
@@ -158,10 +158,10 @@ export const ManageProjectsPage: React.FC = () => {
         </div>
 
         <div>
-          <h1 className="text-2xl sm:text-4xl font-black text-black tracking-tight">
+          <h1 className="text-2xl sm:text-4xl font-black text-slate-100 tracking-tight">
             Manage My Projects
           </h1>
-          <p className="text-xs sm:text-sm font-semibold text-neutral-600 mt-1">
+          <p className="text-xs sm:text-sm font-semibold text-slate-400 mt-1">
             Publish web applications, mobile apps, tools, and open-source packages to your developer
             portfolio.
           </p>
@@ -170,7 +170,7 @@ export const ManageProjectsPage: React.FC = () => {
         {/* Project List */}
         {isLoading ? (
           <div className="p-16 flex flex-col items-center justify-center space-y-3">
-            <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border border-[var(--theme-gray-border)] border-t-transparent rounded-full animate-spin" />
             <span className="font-mono text-xs font-bold">Loading your projects...</span>
           </div>
         ) : projects.length > 0 ? (
@@ -178,10 +178,10 @@ export const ManageProjectsPage: React.FC = () => {
             {projects.map((proj) => (
               <div
                 key={proj._id}
-                className="bg-white border-2 border-black rounded-2xl p-5 shadow-[4px_4px_0px_#000] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
               >
                 <div className="flex items-start gap-4 min-w-0">
-                  <div className="w-14 h-14 rounded-xl bg-[#FAF7F2] border-2 border-black overflow-hidden flex items-center justify-center font-black text-sm shrink-0">
+                  <div className="w-14 h-14 rounded-xl bg-slate-900/60 border border-[var(--theme-gray-border)] overflow-hidden flex items-center justify-center font-black text-sm shrink-0">
                     {proj.coverImage ? (
                       <img src={proj.coverImage} alt="" className="w-full h-full object-cover" />
                     ) : (
@@ -190,34 +190,34 @@ export const ManageProjectsPage: React.FC = () => {
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-black text-base text-black truncate">{proj.title}</h3>
+                      <h3 className="font-black text-base text-slate-100 truncate">{proj.title}</h3>
                       <span
                         className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border ${
                           proj.status === 'published'
                             ? 'bg-green-100 border-green-800 text-green-900'
-                            : 'bg-neutral-100 border-neutral-400 text-neutral-600'
+                            : 'bg-neutral-100 border-neutral-400 text-slate-400'
                         }`}
                       >
                         {proj.status}
                       </span>
                     </div>
-                    <p className="text-xs text-neutral-600 font-medium line-clamp-1 mt-0.5">
+                    <p className="text-xs text-slate-400 font-medium line-clamp-1 mt-0.5">
                       {proj.description}
                     </p>
-                    <div className="flex items-center gap-3 text-[11px] font-mono text-neutral-700 mt-1.5 flex-wrap">
-                      <span className="capitalize font-bold bg-[#FAF7F2] border border-black/30 px-1.5 py-0.5 rounded text-[10px]">
+                    <div className="flex items-center gap-3 text-[11px] font-mono text-slate-300 mt-1.5 flex-wrap">
+                      <span className="capitalize font-bold bg-slate-900/60 border border-black/30 px-1.5 py-0.5 rounded text-[10px]">
                         {proj.category}
                       </span>
-                      <span className="font-bold flex items-center gap-1 bg-purple-50 text-purple-900 border border-purple-300 px-1.5 py-0.5 rounded text-[10px]">
-                        <Eye className="w-3 h-3 text-purple-700" />
+                      <span className="font-semibold flex items-center gap-1 bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] px-1.5 py-0.5 rounded text-[10px]">
+                        <Eye className="w-3 h-3 text-[var(--theme-gray-muted)]" />
                         <span>{proj.viewCount || 0} views</span>
                       </span>
-                      <span className="font-bold flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-300 px-1.5 py-0.5 rounded text-[10px]">
-                        <span>❤️</span>
+                      <span className="font-semibold flex items-center gap-1 bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] px-1.5 py-0.5 rounded text-[10px]">
+                        <Heart className="w-3 h-3 text-[var(--theme-gray-muted)]" />
                         <span>{proj.reactionCount || 0} reactions</span>
                       </span>
-                      <span className="font-bold flex items-center gap-1 bg-blue-50 text-blue-900 border border-blue-300 px-1.5 py-0.5 rounded text-[10px]">
-                        <span>💬</span>
+                      <span className="font-semibold flex items-center gap-1 bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] px-1.5 py-0.5 rounded text-[10px]">
+                        <MessageSquare className="w-3 h-3 text-[var(--theme-gray-muted)]" />
                         <span>{proj.commentCount || 0} comments</span>
                       </span>
                     </div>
@@ -227,7 +227,7 @@ export const ManageProjectsPage: React.FC = () => {
                 <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                   <Link
                     to={`/developers/projects/${proj.slug}`}
-                    className="p-2 bg-[#FAF7F2] hover:bg-neutral-200 border-2 border-black rounded-xl text-black"
+                    className="p-2 bg-slate-900/60 hover:bg-neutral-200 border border-[var(--theme-gray-border)] rounded-xl text-slate-100"
                     title="View Public Page"
                   >
                     <Eye className="w-4 h-4" />
@@ -235,7 +235,7 @@ export const ManageProjectsPage: React.FC = () => {
 
                   <button
                     onClick={() => openEditModal(proj)}
-                    className="p-2 bg-white hover:bg-neutral-100 border-2 border-black rounded-xl text-black"
+                    className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 rounded-xl text-slate-100"
                     title="Edit Project"
                   >
                     <Edit className="w-4 h-4" />
@@ -243,7 +243,7 @@ export const ManageProjectsPage: React.FC = () => {
 
                   <button
                     onClick={() => handleDelete(proj._id, proj.title)}
-                    className="p-2 bg-red-50 hover:bg-red-100 border-2 border-black rounded-xl text-red-600"
+                    className="p-2 bg-red-50 hover:bg-red-100 border border-[var(--theme-gray-border)] rounded-xl text-red-600"
                     title="Delete Project"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -253,15 +253,15 @@ export const ManageProjectsPage: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="p-16 text-center bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000] space-y-4">
+          <div className="p-16 text-center bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-2xl shadow-sm space-y-4">
             <Layers className="w-10 h-10 text-neutral-400 mx-auto" />
-            <h3 className="text-base font-black text-black">No projects created yet</h3>
-            <p className="text-xs font-semibold text-neutral-600 max-w-sm mx-auto">
+            <h3 className="text-base font-black text-slate-100">No projects created yet</h3>
+            <p className="text-xs font-semibold text-slate-400 max-w-sm mx-auto">
               Showcase your applications, designs, and tools to recruiters and potential clients.
             </p>
             <button
               onClick={openCreateModal}
-              className="px-4 py-2 bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[2px_2px_0px_#000] cursor-pointer"
+              className="px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs font-black shadow-sm cursor-pointer"
             >
               + Publish Your First Project
             </button>
@@ -271,9 +271,9 @@ export const ManageProjectsPage: React.FC = () => {
         {/* Modal Dialog for Project Form */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-white border-2 border-black rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-[8px_8px_0px_#000] space-y-5 my-8">
-              <div className="flex items-center justify-between border-b-2 border-black pb-3">
-                <h3 className="font-black text-lg text-black">
+            <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-sm space-y-5 my-8">
+              <div className="flex items-center justify-between border-b border-[var(--theme-gray-border)] pb-3">
+                <h3 className="font-black text-lg text-slate-100">
                   {editingId ? 'Edit Project' : 'Publish New Project'}
                 </h3>
                 <button onClick={() => setIsModalOpen(false)}>
@@ -292,7 +292,7 @@ export const ManageProjectsPage: React.FC = () => {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. Modern E-Commerce Platform"
-                    className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold focus:outline-none"
+                    className="w-full p-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold focus:outline-none"
                   />
                 </div>
 
@@ -304,7 +304,7 @@ export const ManageProjectsPage: React.FC = () => {
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
-                      className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold"
+                      className="w-full p-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold"
                     >
                       <option value="web">Web Development</option>
                       <option value="mobile">Mobile Development</option>
@@ -325,7 +325,7 @@ export const ManageProjectsPage: React.FC = () => {
                     <select
                       value={status}
                       onChange={(e) => setStatus(e.target.value as any)}
-                      className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold"
+                      className="w-full p-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold"
                     >
                       <option value="published">Published (Visible in Directory)</option>
                       <option value="draft">Draft (Hidden)</option>
@@ -342,7 +342,7 @@ export const ManageProjectsPage: React.FC = () => {
                     value={coverImage}
                     onChange={(e) => setCoverImage(e.target.value)}
                     placeholder="https://example.com/screenshot.png"
-                    className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold focus:outline-none"
+                    className="w-full p-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold focus:outline-none"
                   />
                 </div>
 
@@ -356,7 +356,7 @@ export const ManageProjectsPage: React.FC = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Provide a detailed explanation of what this application does, problem solved, architecture..."
-                    className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                    className="w-full p-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                   />
                 </div>
 
@@ -369,7 +369,7 @@ export const ManageProjectsPage: React.FC = () => {
                     value={technologiesStr}
                     onChange={(e) => setTechnologiesStr(e.target.value)}
                     placeholder="React, Next.js, TypeScript, Tailwind CSS, PostgreSQL"
-                    className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-mono font-bold focus:outline-none"
+                    className="w-full p-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-mono font-bold focus:outline-none"
                   />
                 </div>
 
@@ -383,7 +383,7 @@ export const ManageProjectsPage: React.FC = () => {
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
                       placeholder="e.g. Lead Full-Stack Developer"
-                      className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold focus:outline-none"
+                      className="w-full p-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold focus:outline-none"
                     />
                   </div>
 
@@ -396,7 +396,7 @@ export const ManageProjectsPage: React.FC = () => {
                       value={liveDemoUrl}
                       onChange={(e) => setLiveDemoUrl(e.target.value)}
                       placeholder="https://myproject.com"
-                      className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold focus:outline-none"
+                      className="w-full p-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold focus:outline-none"
                     />
                   </div>
                 </div>
@@ -410,7 +410,7 @@ export const ManageProjectsPage: React.FC = () => {
                     value={repositoryUrl}
                     onChange={(e) => setRepositoryUrl(e.target.value)}
                     placeholder="https://github.com/username/project"
-                    className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold focus:outline-none"
+                    className="w-full p-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold focus:outline-none"
                   />
                 </div>
 
@@ -423,7 +423,7 @@ export const ManageProjectsPage: React.FC = () => {
                     value={contributions}
                     onChange={(e) => setContributions(e.target.value)}
                     placeholder="Specific modules you built (e.g. auth microservice, real-time sync, state store)..."
-                    className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                    className="w-full p-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                   />
                 </div>
 
@@ -431,7 +431,7 @@ export const ManageProjectsPage: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3 bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[3px_3px_0px_#000] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="w-full py-3 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs font-black shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
                     <Save className="w-4 h-4" />
                     <span>

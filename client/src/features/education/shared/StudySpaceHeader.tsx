@@ -33,14 +33,14 @@ export const StudySpaceHeader: React.FC<StudySpaceHeaderProps> = ({
   onToggleFullscreen,
 }) => {
   return (
-    <header className="h-14 bg-white/80 backdrop-blur-md border-b-2 border-black px-3 sm:px-4 flex items-center justify-between shrink-0 select-none z-20 shadow-[0_2px_0px_#000000]">
+    <header className="h-14 bg-[var(--theme-canvas)]/90 backdrop-blur-md border-b border-[var(--theme-gray-border)] px-3 sm:px-4 flex items-center justify-between shrink-0 select-none z-20 shadow-sm text-[var(--theme-dirty-white)]">
       {/* Left: Sidebar Toggles & Title */}
       <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         {/* Mobile Nav Toggle Button */}
         <button
           type="button"
           onClick={onToggleMobileNav}
-          className="md:hidden p-2 rounded-xl border-2 border-black bg-[#FAF7F2] hover:bg-neutral-100 text-black shadow-[1.5px_1.5px_0px_#000] cursor-pointer"
+          className="md:hidden p-2 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] shadow-sm cursor-pointer"
           aria-label="Toggle navigation menu"
           title="Toggle Navigation Menu"
         >
@@ -51,7 +51,7 @@ export const StudySpaceHeader: React.FC<StudySpaceHeaderProps> = ({
         <button
           type="button"
           onClick={onToggleSidebar}
-          className="hidden md:flex p-1.5 rounded-xl border-2 border-black bg-[#FAF7F2] hover:bg-neutral-100 text-black shadow-[1.5px_1.5px_0px_#000] cursor-pointer transition-transform active:translate-y-0.5"
+          className="hidden md:flex p-1.5 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] shadow-sm cursor-pointer transition-transform active:translate-y-0.5"
           aria-label={isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           title={isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
@@ -64,14 +64,14 @@ export const StudySpaceHeader: React.FC<StudySpaceHeaderProps> = ({
 
         {/* Brand / Space Badge */}
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-[#FFD21A] border-2 border-black flex items-center justify-center text-black font-black text-sm shadow-[2px_2px_0px_#000]">
+          <div className="w-8 h-8 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center text-[var(--theme-dirty-white)] font-black text-sm shadow-sm">
             <GraduationCap className="w-4 h-4 stroke-[2.5]" />
           </div>
           <div className="hidden sm:block">
-            <h1 className="font-black text-xs uppercase tracking-tight text-black leading-none">
+            <h1 className="font-black text-xs uppercase tracking-tight text-[var(--theme-dirty-white)] leading-none">
               Study Space
             </h1>
-            <span className="text-[10px] font-mono font-bold text-neutral-500">
+            <span className="text-[10px] font-mono font-bold text-[var(--theme-gray-muted)]">
               Zero-Cost Education
             </span>
           </div>
@@ -79,14 +79,14 @@ export const StudySpaceHeader: React.FC<StudySpaceHeaderProps> = ({
       </div>
 
       {/* Center: Dedicated Workspace Switcher */}
-      <div className="flex items-center bg-[#FAF7F2] p-1 rounded-xl border-2 border-black shadow-[2px_2px_0px_#000]">
+      <div className="flex items-center bg-[var(--theme-surface)] p-1 rounded-xl border border-[var(--theme-gray-border)] shadow-sm">
         <button
           type="button"
           onClick={() => onWorkspaceChange('student')}
           className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-xs font-black transition-all cursor-pointer ${
             workspace === 'student'
-              ? 'bg-[#FFD21A] text-black border-2 border-black shadow-[1.5px_1.5px_0px_#000]'
-              : 'text-neutral-600 hover:text-black border border-transparent'
+              ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-dirty-white)] shadow-sm'
+              : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] border border-transparent'
           }`}
           aria-label="Student Workspace"
         >
@@ -99,8 +99,8 @@ export const StudySpaceHeader: React.FC<StudySpaceHeaderProps> = ({
           onClick={() => onWorkspaceChange('teacher')}
           className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-xs font-black transition-all cursor-pointer ${
             workspace === 'teacher'
-              ? 'bg-[#FFD21A] text-black border-2 border-black shadow-[1.5px_1.5px_0px_#000]'
-              : 'text-neutral-600 hover:text-black border border-transparent'
+              ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-dirty-white)] shadow-sm'
+              : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] border border-transparent'
           }`}
           aria-label="Teacher Workspace"
         >
@@ -112,18 +112,20 @@ export const StudySpaceHeader: React.FC<StudySpaceHeaderProps> = ({
       {/* Right: Breadcrumb & Fullscreen / Focus Mode Toggle */}
       <div className="flex items-center gap-2">
         {/* Active Tab Breadcrumb pill (Desktop) */}
-        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#FAF7F2] border border-black/20 text-neutral-700 text-xs font-mono font-bold">
-          <span className="capitalize text-neutral-500">{workspace}</span>
-          <ChevronRight className="w-3 h-3 text-neutral-400" />
-          <span className="capitalize text-black font-black">{activeTab.replace('-', ' ')}</span>
+        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-gray-muted)] text-xs font-mono font-bold">
+          <span className="capitalize text-[var(--theme-gray-muted)]">{workspace}</span>
+          <ChevronRight className="w-3 h-3 text-[var(--theme-gray-dim)]" />
+          <span className="capitalize text-[var(--theme-dirty-white)] font-black">{activeTab.replace('-', ' ')}</span>
         </div>
 
         {/* Fullscreen / Focus Mode Toggle Button */}
         <button
           type="button"
           onClick={onToggleFullscreen}
-          className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border-2 border-black text-xs font-black transition-all shadow-[2px_2px_0px_#000] cursor-pointer active:translate-y-0.5 ${
-            isFullscreen ? 'bg-[#FACC15] text-black' : 'bg-white hover:bg-[#FAF7F2] text-black'
+          className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] text-xs font-black transition-all shadow-sm cursor-pointer active:translate-y-0.5 ${
+            isFullscreen
+              ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]'
+              : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]'
           }`}
           aria-label={isFullscreen ? 'Exit Full Screen' : 'Full Screen (Focus Mode)'}
           title={isFullscreen ? 'Exit Full Screen (Esc)' : 'Enter Full Screen Focus Mode'}

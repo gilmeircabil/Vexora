@@ -64,7 +64,7 @@ export const UuidGeneratorTool: React.FC = () => {
               type="checkbox"
               checked={uppercase}
               onChange={(e) => setUppercase(e.target.checked)}
-              className="rounded accent-indigo-600"
+              className="rounded accent-[var(--theme-dirty-white)]"
             />
             <span>UPPERCASE</span>
           </label>
@@ -74,7 +74,7 @@ export const UuidGeneratorTool: React.FC = () => {
               type="checkbox"
               checked={hyphens}
               onChange={(e) => setHyphens(e.target.checked)}
-              className="rounded accent-indigo-600"
+              className="rounded accent-[var(--theme-dirty-white)]"
             />
             <span>Include Hyphens</span>
           </label>
@@ -84,7 +84,7 @@ export const UuidGeneratorTool: React.FC = () => {
               type="checkbox"
               checked={braces}
               onChange={(e) => setBraces(e.target.checked)}
-              className="rounded accent-indigo-600"
+              className="rounded accent-[var(--theme-dirty-white)]"
             />
             <span>Enclose in Braces {'{}'}</span>
           </label>

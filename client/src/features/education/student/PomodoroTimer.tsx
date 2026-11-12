@@ -135,21 +135,21 @@ export const PomodoroTimer: React.FC = () => {
   return (
     <div className="space-y-6 max-w-xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+      <div className="flex items-center justify-between bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div>
           <h2 className="text-xl font-black flex items-center gap-2">
-            <Clock className="w-5 h-5 text-indigo-600" />
+            <Clock className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             Pomodoro Focus Timer
           </h2>
-          <p className="text-xs text-neutral-600 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Structured intervals for intense focus and healthy cognitive recovery.
           </p>
         </div>
 
         <button
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className={`p-2 rounded-xl border-2 border-black transition-all ${
-            soundEnabled ? 'bg-[#FFD21A]' : 'bg-neutral-100 text-neutral-400'
+          className={`p-2 rounded-xl border border-[var(--theme-gray-border)] transition-all ${
+            soundEnabled ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]' : 'bg-neutral-100 text-neutral-400'
           }`}
           title={soundEnabled ? 'Sound Alerts On' : 'Sound Alerts Muted'}
         >
@@ -158,7 +158,7 @@ export const PomodoroTimer: React.FC = () => {
       </div>
 
       {/* Mode Selector Tabs */}
-      <div className="flex p-1.5 bg-[#FAF7F2] rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000000] text-xs font-black">
+      <div className="flex p-1.5 bg-[var(--theme-surface-raised)] rounded-2xl border border-[var(--theme-gray-border)] shadow-sm text-xs font-black">
         <button
           onClick={() => {
             setIsRunning(false);
@@ -166,8 +166,8 @@ export const PomodoroTimer: React.FC = () => {
           }}
           className={`flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
             mode === 'pomodoro'
-              ? 'bg-[#FFD21A] text-black border-2 border-black shadow-[2px_2px_0px_#000000]'
-              : 'text-neutral-600 hover:text-black border-2 border-transparent'
+              ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-gray-border)] shadow-sm'
+              : 'text-slate-400 hover:text-slate-100 border-2 border-transparent'
           }`}
         >
           <Brain className="w-4 h-4" />
@@ -181,8 +181,8 @@ export const PomodoroTimer: React.FC = () => {
           }}
           className={`flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
             mode === 'short_break'
-              ? 'bg-[#4ADE80] text-black border-2 border-black shadow-[2px_2px_0px_#000000]'
-              : 'text-neutral-600 hover:text-black border-2 border-transparent'
+              ? 'bg-[#4ADE80] text-slate-100 border border-[var(--theme-gray-border)] shadow-sm'
+              : 'text-slate-400 hover:text-slate-100 border-2 border-transparent'
           }`}
         >
           <Coffee className="w-4 h-4" />
@@ -196,8 +196,8 @@ export const PomodoroTimer: React.FC = () => {
           }}
           className={`flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
             mode === 'long_break'
-              ? 'bg-[#38BDF8] text-black border-2 border-black shadow-[2px_2px_0px_#000000]'
-              : 'text-neutral-600 hover:text-black border-2 border-transparent'
+              ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-gray-border)] shadow-xs'
+              : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] border-2 border-transparent'
           }`}
         >
           <Sparkles className="w-4 h-4" />
@@ -206,7 +206,7 @@ export const PomodoroTimer: React.FC = () => {
       </div>
 
       {/* Big Display Clock Card */}
-      <div className="bg-white p-8 rounded-3xl border-4 border-black shadow-[8px_8px_0px_#000000] text-center space-y-6">
+      <div className="bg-[var(--theme-surface)] p-8 rounded-3xl border border-[var(--theme-gray-border)] shadow-sm text-center space-y-6">
         {/* Subject Input */}
         <div className="inline-block">
           <input
@@ -214,24 +214,24 @@ export const PomodoroTimer: React.FC = () => {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             placeholder="What are you working on?"
-            className="text-center font-bold text-xs px-3 py-1 bg-[#FAF7F2] border border-black rounded-full focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
+            className="text-center font-bold text-xs px-3 py-1 bg-[var(--theme-surface-raised)] border border-black rounded-full focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
           />
         </div>
 
         {/* Timer Numbers */}
-        <div className="font-mono text-7xl sm:text-8xl font-black text-black tracking-tight select-none">
+        <div className="font-mono text-7xl sm:text-8xl font-black text-slate-100 tracking-tight select-none">
           {minutes < 10 ? `0${minutes}` : minutes}:{seconds < 10 ? `0${seconds}` : seconds}
         </div>
 
         {/* Circular Progress Bar Indicator */}
-        <div className="w-full bg-neutral-100 h-3 rounded-full border-2 border-black overflow-hidden max-w-sm mx-auto">
+        <div className="w-full bg-neutral-100 h-3 rounded-full border border-[var(--theme-gray-border)] overflow-hidden max-w-sm mx-auto">
           <div
             className={`h-full transition-all duration-500 ${
               mode === 'pomodoro'
-                ? 'bg-[#FFD21A]'
+                ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]'
                 : mode === 'short_break'
                   ? 'bg-[#4ADE80]'
-                  : 'bg-[#38BDF8]'
+                  : 'bg-[var(--theme-dirty-white)]'
             }`}
             style={{ width: `${progressPercent}%` }}
           />
@@ -241,7 +241,7 @@ export const PomodoroTimer: React.FC = () => {
         <div className="flex items-center justify-center gap-4 pt-2">
           <button
             onClick={handleReset}
-            className="p-3 rounded-2xl border-2 border-black bg-white hover:bg-neutral-100 text-neutral-700 transition-all hover:scale-105"
+            className="p-3 rounded-2xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-neutral-100 text-slate-300 transition-all hover:scale-105"
             title="Reset Timer"
           >
             <RotateCcw className="w-5 h-5 stroke-[2.5]" />
@@ -249,8 +249,8 @@ export const PomodoroTimer: React.FC = () => {
 
           <button
             onClick={handleStartPause}
-            className={`py-3.5 px-8 rounded-2xl border-3 border-black text-black font-black text-base flex items-center gap-2 shadow-[4px_4px_0px_#000000] hover:-translate-y-0.5 transition-all ${
-              isRunning ? 'bg-amber-300' : 'bg-[#FFD21A]'
+            className={`py-3.5 px-8 rounded-2xl border border-[var(--theme-gray-border)] text-slate-100 font-black text-base flex items-center gap-2 shadow-sm hover:-translate-y-0.5 transition-all ${
+              isRunning ? 'bg-amber-300' : 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]'
             }`}
           >
             {isRunning ? (
@@ -268,7 +268,7 @@ export const PomodoroTimer: React.FC = () => {
 
           <button
             onClick={handleSkip}
-            className="p-3 rounded-2xl border-2 border-black bg-white hover:bg-neutral-100 text-neutral-700 transition-all hover:scale-105"
+            className="p-3 rounded-2xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-neutral-100 text-slate-300 transition-all hover:scale-105"
             title="Skip to Next Phase"
           >
             <SkipForward className="w-5 h-5 stroke-[2.5]" />
@@ -277,10 +277,10 @@ export const PomodoroTimer: React.FC = () => {
       </div>
 
       {/* Focus Statistics Footer: Minimal Divided Row */}
-      <div className="bg-white p-3.5 rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] grid grid-cols-2 divide-x-2 divide-black/10">
+      <div className="bg-[var(--theme-surface)] p-3.5 rounded-xl border border-[var(--theme-gray-border)] shadow-sm grid grid-cols-2 divide-x-2 divide-[var(--theme-gray-border)]">
         <div className="pr-4 flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
               Sessions Completed
             </span>
             <p className="text-xl font-black mt-0.5">{completedSessions}</p>
@@ -290,12 +290,12 @@ export const PomodoroTimer: React.FC = () => {
 
         <div className="pl-4 flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
               Total Focus Time
             </span>
             <p className="text-xl font-black mt-0.5">{totalFocusMinutes} min</p>
           </div>
-          <Brain className="w-5 h-5 text-indigo-500" />
+          <Brain className="w-5 h-5 text-[var(--theme-dirty-white)]" />
         </div>
       </div>
     </div>

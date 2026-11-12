@@ -14,6 +14,7 @@ import {
   Code2,
   Layers,
   ChevronRight,
+  Search,
 } from 'lucide-react';
 import { findAnyCatalogItem, UIComponentItem } from '../../features/ui-library/data/index.js';
 import { ComponentPreviewRenderer } from '../../features/ui-library/previews/ComponentPreviewRenderer.js';
@@ -32,7 +33,7 @@ export const UiComponentDetailPage: React.FC = () => {
     return (
       <div className="max-w-4xl mx-auto p-8 text-center space-y-4">
         <h2 className="text-xl font-black">Component Not Found</h2>
-        <Link to="/ui-library" className="inline-flex items-center gap-2 px-4 py-2 bg-[#FACC15] border-2 border-black rounded-xl font-black text-xs">
+        <Link to="/ui-library" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-slate-800 rounded-xl font-black text-xs">
           ← Back to UI Library
         </Link>
       </div>
@@ -43,15 +44,15 @@ export const UiComponentDetailPage: React.FC = () => {
 
   if (!result) {
     return (
-      <div className="max-w-4xl mx-auto p-12 text-center space-y-4 bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000] my-8">
-        <div className="w-16 h-16 mx-auto rounded-2xl bg-[#FAF7F2] border-2 border-black flex items-center justify-center text-3xl">
-          🔍
+      <div className="max-w-4xl mx-auto p-12 text-center space-y-4 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-2xl shadow-xs my-8">
+        <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center">
+          <Search className="w-8 h-8 text-[var(--theme-dirty-white)]" />
         </div>
-        <h2 className="text-xl font-black text-black">Item Not Found</h2>
-        <p className="text-xs text-neutral-600 max-w-sm mx-auto">
-          We couldn't find a component, layout, or style matching <code className="bg-neutral-100 px-1 py-0.5 rounded font-mono font-bold">"{id}"</code>.
+        <h2 className="text-xl font-bold text-[var(--theme-dirty-white)]">Item Not Found</h2>
+        <p className="text-xs text-[var(--theme-gray-muted)] max-w-sm mx-auto">
+          We couldn't find a component, layout, or style matching <code className="bg-[var(--theme-surface-raised)] px-1 py-0.5 rounded font-mono font-bold">"{id}"</code>.
         </p>
-        <Link to="/ui-library" className="inline-flex items-center gap-2 px-5 py-2 bg-[#FACC15] border-2 border-black rounded-xl font-black text-xs shadow-[2px_2px_0px_#000]">
+        <Link to="/ui-library" className="inline-flex items-center gap-2 px-5 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-bold text-xs shadow-xs">
           ← Back to Catalog
         </Link>
       </div>
@@ -93,39 +94,37 @@ export const UiComponentDetailPage: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-bold text-neutral-500">
-        <Link to="/ui-library" className="hover:text-black transition flex items-center gap-1">
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-bold text-slate-400">
+        <Link to="/ui-library" className="hover:text-slate-100 transition flex items-center gap-1">
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>UI Library</span>
         </Link>
         <ChevronRight className="w-3 h-3 text-neutral-400" />
         <span className="capitalize">{type.replace('-', ' ')}</span>
         <ChevronRight className="w-3 h-3 text-neutral-400" />
-        <span className="text-black font-black">{item.name}</span>
+        <span className="text-[var(--theme-dirty-white)] font-bold">{item.name}</span>
       </nav>
 
       {/* Hero Header */}
-      <div className="bg-[#FAF7F2] p-6 md:p-8 rounded-3xl border-2 border-black shadow-[5px_5px_0px_#000] flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="bg-[var(--theme-surface)] p-6 md:p-8 rounded-3xl border border-[var(--theme-gray-border)] shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 bg-[#FACC15] text-black font-black text-[10px] uppercase rounded-lg border border-black shadow-[1.5px_1.5px_0px_#000]">
+            <span className="px-2.5 py-0.5 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-bold text-[10px] uppercase rounded-lg border border-[var(--theme-gray-border)] shadow-xs">
               {type.replace('-', ' ')}
             </span>
             {compItem && (
-              <span className="px-2.5 py-0.5 bg-white text-black font-black text-[10px] uppercase rounded-lg border border-black">
+              <span className="px-2.5 py-0.5 bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] font-bold text-[10px] uppercase rounded-lg border border-[var(--theme-gray-border)]">
                 {compItem.category}
               </span>
             )}
             {compItem && (
-              <span className={`px-2.5 py-0.5 text-[10px] font-black rounded-lg border border-black ${
-                compItem.difficulty === 'beginner' ? 'bg-[#4ADE80]' : compItem.difficulty === 'intermediate' ? 'bg-[#38BDF8]' : 'bg-[#F472B6]'
-              }`}>
+              <span className="px-2.5 py-0.5 text-[10px] font-bold rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)]">
                 {compItem.difficulty.toUpperCase()}
               </span>
             )}
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-black tracking-tight">{item.name}</h1>
-          <p className="text-xs sm:text-sm text-neutral-600 max-w-2xl leading-relaxed">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[var(--theme-dirty-white)] tracking-tight">{item.name}</h1>
+          <p className="text-xs sm:text-sm text-[var(--theme-gray-muted)] max-w-2xl leading-relaxed">
             {item.description}
           </p>
         </div>
@@ -134,17 +133,17 @@ export const UiComponentDetailPage: React.FC = () => {
         <div className="flex items-center gap-2 self-stretch md:self-auto shrink-0">
           <button
             onClick={() => toggleFavorite(item.id)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black font-black text-xs shadow-[2.5px_2.5px_0px_#000] hover:-translate-y-0.5 active:translate-y-0.5 transition cursor-pointer ${
-              favorited ? 'bg-[#F472B6] text-black' : 'bg-white text-neutral-700 hover:bg-neutral-50'
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[var(--theme-gray-border)] font-bold text-xs shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 transition cursor-pointer ${
+              favorited ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)]' : 'bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)]'
             }`}
           >
-            <Star className={`w-4 h-4 ${favorited ? 'fill-black' : ''}`} />
+            <Star className={`w-4 h-4 ${favorited ? 'fill-current' : ''}`} />
             <span>{favorited ? 'Favorited' : 'Add to Favorites'}</span>
           </button>
 
           <Link
             to="/ui-library/playground"
-            className="flex items-center gap-1.5 px-4 py-2.5 bg-[#FACC15] hover:bg-[#EAB308] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2.5px_2.5px_0px_#000] hover:-translate-y-0.5 active:translate-y-0.5 transition cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2.5 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-bold text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 transition cursor-pointer"
           >
             <Sparkles className="w-4 h-4" />
             <span>Playground</span>
@@ -153,26 +152,26 @@ export const UiComponentDetailPage: React.FC = () => {
       </div>
 
       {/* Large Live Preview Section */}
-      <section className="bg-white rounded-3xl border-2 border-black shadow-[5px_5px_0px_#000] overflow-hidden">
+      <section className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] shadow-xs overflow-hidden">
         {/* Preview Control Bar */}
-        <div className="px-6 py-4 bg-[#FAF7F2] border-b-2 border-black flex flex-wrap justify-between items-center gap-4">
+        <div className="px-6 py-4 bg-[var(--theme-surface-raised)] border-b border-[var(--theme-gray-border)] flex flex-wrap justify-between items-center gap-4">
           <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-black" />
-            <span className="font-black text-xs uppercase tracking-wider text-black">Live Rendered Preview</span>
+            <Layers className="w-4 h-4 text-[var(--theme-dirty-white)]" />
+            <span className="font-bold text-xs uppercase tracking-wider text-[var(--theme-dirty-white)]">Live Rendered Preview</span>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Variation Selector if Component */}
             {variations.length > 1 && (
-              <div className="flex items-center gap-1.5 p-1 bg-white border border-black rounded-xl">
+              <div className="flex items-center gap-1.5 p-1 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-xl">
                 {variations.map((v, idx) => (
                   <button
                     key={v.id}
                     onClick={() => setSelectedVariationIdx(idx)}
-                    className={`px-3 py-1 rounded-lg text-xs font-black transition cursor-pointer ${
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
                       selectedVariationIdx === idx
-                        ? 'bg-[#FACC15] text-black border border-black shadow-sm'
-                        : 'text-neutral-600 hover:text-black'
+                        ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] shadow-xs'
+                        : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)]'
                     }`}
                   >
                     {v.name}
@@ -182,11 +181,11 @@ export const UiComponentDetailPage: React.FC = () => {
             )}
 
             {/* Viewport Switcher */}
-            <div className="flex items-center gap-1 p-1 bg-white border border-black rounded-xl">
+            <div className="flex items-center gap-1 p-1 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-xl">
               <button
                 onClick={() => setPreviewViewport('desktop')}
                 className={`p-1.5 rounded-lg transition cursor-pointer ${
-                  previewViewport === 'desktop' ? 'bg-[#FACC15] text-black border border-black' : 'text-neutral-500'
+                  previewViewport === 'desktop' ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)]' : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)]'
                 }`}
                 title="Desktop View (100%)"
               >
@@ -195,7 +194,7 @@ export const UiComponentDetailPage: React.FC = () => {
               <button
                 onClick={() => setPreviewViewport('tablet')}
                 className={`p-1.5 rounded-lg transition cursor-pointer ${
-                  previewViewport === 'tablet' ? 'bg-[#FACC15] text-black border border-black' : 'text-neutral-500'
+                  previewViewport === 'tablet' ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)]' : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)]'
                 }`}
                 title="Tablet View (768px)"
               >
@@ -204,7 +203,7 @@ export const UiComponentDetailPage: React.FC = () => {
               <button
                 onClick={() => setPreviewViewport('mobile')}
                 className={`p-1.5 rounded-lg transition cursor-pointer ${
-                  previewViewport === 'mobile' ? 'bg-[#FACC15] text-black border border-black' : 'text-neutral-500'
+                  previewViewport === 'mobile' ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)]' : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)]'
                 }`}
                 title="Mobile View (375px)"
               >
@@ -215,7 +214,7 @@ export const UiComponentDetailPage: React.FC = () => {
         </div>
 
         {/* Live Canvas Area */}
-        <div className="p-8 md:p-14 bg-[#F5F2EB] flex items-center justify-center min-h-[320px] overflow-x-auto">
+        <div className="p-8 md:p-14 bg-[var(--theme-canvas)] flex items-center justify-center min-h-[320px] overflow-x-auto">
           <ComponentPreviewRenderer
             itemId={item.id}
             itemType={type}
@@ -226,15 +225,15 @@ export const UiComponentDetailPage: React.FC = () => {
 
         {/* Variation Subtitle if present */}
         {currentVariation?.description && (
-          <div className="px-6 py-3 bg-[#FAF7F2] border-t-2 border-black text-xs font-bold text-neutral-600">
-            <span className="font-black text-black">Active Variation: </span>
+          <div className="px-6 py-3 bg-[var(--theme-surface-raised)] border-t border-[var(--theme-gray-border)] text-xs font-bold text-[var(--theme-gray-muted)]">
+            <span className="font-bold text-[var(--theme-dirty-white)]">Active Variation: </span>
             {currentVariation.description}
           </div>
         )}
       </section>
 
       {/* Code Snippets Section */}
-      <section className="bg-neutral-900 text-neutral-100 rounded-3xl border-2 border-black shadow-[5px_5px_0px_#000] overflow-hidden">
+      <section className="bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] rounded-3xl border border-[var(--theme-gray-border)] shadow-xs overflow-hidden">
         <div className="px-6 py-3.5 bg-neutral-950 border-b border-neutral-800 flex flex-wrap justify-between items-center gap-4">
           <div className="flex items-center gap-2">
             <Code2 className="w-4 h-4 text-yellow-400" />
@@ -246,7 +245,7 @@ export const UiComponentDetailPage: React.FC = () => {
                   onClick={() => setCodeTab(tab)}
                   className={`px-3 py-1 rounded-lg text-xs font-mono font-bold uppercase transition cursor-pointer ${
                     codeTab === tab
-                      ? 'bg-yellow-400 text-black'
+                      ? 'bg-yellow-400 text-slate-100'
                       : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
                   }`}
                 >
@@ -258,9 +257,9 @@ export const UiComponentDetailPage: React.FC = () => {
 
           <button
             onClick={handleCopyCode}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-white hover:bg-neutral-100 text-black font-black text-xs rounded-xl border border-black shadow-[2px_2px_0px_#000] hover:-translate-y-0.5 active:translate-y-0.5 transition cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] font-bold text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 transition cursor-pointer"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{copied ? 'Copied to Clipboard!' : 'Copy Code'}</span>
           </button>
         </div>
@@ -271,50 +270,50 @@ export const UiComponentDetailPage: React.FC = () => {
       </section>
 
       {/* Beginner-Friendly Learning Information */}
-      <section className="bg-white p-6 md:p-8 rounded-3xl border-2 border-black shadow-[5px_5px_0px_#000] space-y-6">
-        <div className="flex items-center gap-2 border-b-2 border-black pb-4">
-          <BookOpen className="w-5 h-5 text-indigo-600" />
-          <h2 className="text-xl font-black text-black">Design & Learning Guide</h2>
+      <section className="bg-[var(--theme-surface)] p-6 md:p-8 rounded-3xl border border-[var(--theme-gray-border)] shadow-xs space-y-6">
+        <div className="flex items-center gap-2 border-b border-[var(--theme-gray-border)] pb-4">
+          <BookOpen className="w-5 h-5 text-[var(--theme-dirty-white)]" />
+          <h2 className="text-xl font-bold text-[var(--theme-dirty-white)]">Design & Learning Guide</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed">
           {/* What is it? */}
-          <div className="p-4 bg-[#FAF7F2] rounded-2xl border-2 border-black space-y-1.5">
-            <h3 className="font-black text-sm text-black">What is it?</h3>
-            <p className="text-neutral-700 font-medium">
+          <div className="p-4 bg-[var(--theme-surface-raised)] rounded-2xl border border-[var(--theme-gray-border)] space-y-1.5">
+            <h3 className="font-bold text-sm text-[var(--theme-dirty-white)]">What is it?</h3>
+            <p className="text-[var(--theme-gray-muted)] font-normal">
               {compItem?.whatIsIt || item.description}
             </p>
           </div>
 
           {/* What is it used for? */}
-          <div className="p-4 bg-[#FAF7F2] rounded-2xl border-2 border-black space-y-1.5">
-            <h3 className="font-black text-sm text-black">What is it used for?</h3>
-            <p className="text-neutral-700 font-medium">
+          <div className="p-4 bg-[var(--theme-surface-raised)] rounded-2xl border border-[var(--theme-gray-border)] space-y-1.5">
+            <h3 className="font-bold text-sm text-[var(--theme-dirty-white)]">What is it used for?</h3>
+            <p className="text-[var(--theme-gray-muted)] font-normal">
               {compItem?.whatIsItUsedFor || (item as { useCase?: string }).useCase || 'Core structural component in modern web applications.'}
             </p>
           </div>
 
           {/* Where should you use it? */}
-          <div className="p-4 bg-[#FAF7F2] rounded-2xl border-2 border-black space-y-1.5">
-            <h3 className="font-black text-sm text-black">Where should you use it?</h3>
-            <p className="text-neutral-700 font-medium">
+          <div className="p-4 bg-[var(--theme-surface-raised)] rounded-2xl border border-[var(--theme-gray-border)] space-y-1.5">
+            <h3 className="font-bold text-sm text-[var(--theme-dirty-white)]">Where should you use it?</h3>
+            <p className="text-[var(--theme-gray-muted)] font-normal">
               {compItem?.whereToUse || (item as { bestFor?: string }).bestFor || 'Everywhere clean user interface hierarchy is needed.'}
             </p>
           </div>
 
           {/* Key Advantages */}
-          <div className="p-4 bg-[#FAF7F2] rounded-2xl border-2 border-black space-y-2">
-            <h3 className="font-black text-sm text-black">Key Advantages</h3>
-            <ul className="space-y-1 text-neutral-700 font-medium">
+          <div className="p-4 bg-[var(--theme-surface-raised)] rounded-2xl border border-[var(--theme-gray-border)] space-y-2">
+            <h3 className="font-bold text-sm text-[var(--theme-dirty-white)]">Key Advantages</h3>
+            <ul className="space-y-1 text-[var(--theme-gray-muted)] font-normal">
               {compItem?.advantages?.map((adv, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="text-emerald-600 font-black">✓</span>
+                  <span className="text-emerald-400 font-bold">✓</span>
                   <span>{adv}</span>
                 </li>
               )) ||
                 (item as { characteristics?: string[] }).characteristics?.map((c, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className="text-emerald-600 font-black">✓</span>
+                    <span className="text-emerald-400 font-bold">✓</span>
                     <span>{c}</span>
                   </li>
                 )) || (
@@ -326,14 +325,14 @@ export const UiComponentDetailPage: React.FC = () => {
 
         {/* Related Components */}
         {compItem?.relatedComponents && compItem.relatedComponents.length > 0 && (
-          <div className="pt-4 border-t-2 border-black/10 space-y-3">
-            <h4 className="font-black text-xs uppercase tracking-wider text-neutral-500">Related Components</h4>
+          <div className="pt-4 border-t border-[var(--theme-gray-border)] space-y-3">
+            <h4 className="font-bold text-xs uppercase tracking-wider text-[var(--theme-gray-muted)]">Related Components</h4>
             <div className="flex flex-wrap gap-2">
               {compItem.relatedComponents.map((relId) => (
                 <Link
                   key={relId}
                   to={`/ui-library/component/${relId}`}
-                  className="px-3 py-1.5 bg-[#FAF7F2] hover:bg-[#FACC15] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000] hover:-translate-y-0.5 transition cursor-pointer capitalize"
+                  className="px-3 py-1.5 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-dirty-white)] hover:text-[var(--theme-canvas)] text-[var(--theme-dirty-white)] font-bold text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-xs hover:-translate-y-0.5 transition cursor-pointer capitalize"
                 >
                   {relId.replace(/-/g, ' ')} →
                 </Link>

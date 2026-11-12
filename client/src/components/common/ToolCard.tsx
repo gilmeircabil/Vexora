@@ -28,64 +28,36 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool }) => {
     toggleFavorite(tool.id);
   };
 
-  const getCategoryTheme = () => {
-    if (tool.slug === 'smart-image-studio') {
-      return {
-        badgeBg: 'bg-[#FACC15]',
-        iconBg: 'bg-[#FACC15]',
-        label: '★ Flagship Studio',
-      };
-    }
-
-    switch (unifiedCategory) {
-      case 'Image':
-        return { badgeBg: 'bg-[#4ADE80]', iconBg: 'bg-[#4ADE80]', label: 'Image' };
-      case 'PDF':
-        return { badgeBg: 'bg-[#FACC15]', iconBg: 'bg-[#FACC15]', label: 'PDF' };
-      case 'Developer':
-        return { badgeBg: 'bg-[#A78BFA]', iconBg: 'bg-[#A78BFA]', label: 'Developer' };
-      case 'Text':
-        return { badgeBg: 'bg-[#38BDF8]', iconBg: 'bg-[#38BDF8]', label: 'Text' };
-      case 'Productivity':
-        return { badgeBg: 'bg-[#F472B6]', iconBg: 'bg-[#F472B6]', label: 'Productivity' };
-      case 'Media':
-        return { badgeBg: 'bg-[#FB923C]', iconBg: 'bg-[#FB923C]', label: 'Media' };
-      case 'Design':
-        return { badgeBg: 'bg-[#FACC15]', iconBg: 'bg-[#FACC15]', label: 'Design' };
-      default:
-        return {
-          badgeBg: 'bg-neutral-100',
-          iconBg: 'bg-neutral-100',
-          label: unifiedCategory || 'Other',
-        };
-    }
-  };
-
-  const theme = getCategoryTheme();
+  const isFlagship = tool.slug === 'smart-image-studio';
+  const categoryLabel = isFlagship ? 'Flagship Studio' : (unifiedCategory || 'Utility');
 
   return (
     <Link
       to={route}
-      className="group flex flex-col justify-between bg-white border-2 border-black rounded-2xl p-5 shadow-[3px_3px_0px_#000000] hover:shadow-[5px_5px_0px_#000000] hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#000000] transition-all text-left relative"
+      className="group flex flex-col justify-between bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[var(--theme-gray-subtle)] hover:-translate-y-0.5 active:scale-[0.99] transition-all text-left relative overflow-hidden"
     >
       <div>
-        {/* Top Header: Category pill & AI badge */}
+        {/* Top Header: Category pill & AI badge (Soft Black, Dirty White, Gray System) */}
         <div className="flex items-center justify-between gap-2 mb-3">
           <span
-            className={`inline-flex items-center px-2.5 py-0.5 rounded-lg border border-black font-black text-[10px] uppercase tracking-wider text-black ${theme.badgeBg}`}
+            className={`inline-flex items-center px-3 py-1 rounded-full border font-bold text-[10px] uppercase tracking-wider ${
+              isFlagship
+                ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)]'
+                : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)]'
+            }`}
           >
-            {theme.label}
+            {categoryLabel}
           </span>
 
           <div className="flex items-center gap-1.5">
             {tool.isExternal && (
-              <span className="inline-flex items-center gap-1 bg-[#38BDF8] border border-black text-black px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider">
+              <span className="inline-flex items-center gap-1 bg-[var(--theme-canvas)] text-[var(--theme-gray-muted)] px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border border-[var(--theme-gray-border)]">
                 External Tool
               </span>
             )}
             {isAi && (
-              <span className="inline-flex items-center gap-1 bg-[#F472B6] border border-black text-black px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider">
-                <Sparkles className="w-3 h-3 stroke-[2.5]" />
+              <span className="inline-flex items-center gap-1 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                <Sparkles className="w-3 h-3 stroke-[2.2]" />
                 <span>AI</span>
               </span>
             )}
@@ -96,15 +68,15 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool }) => {
                 isFav ? `Remove ${tool.name} from favorites` : `Add ${tool.name} to favorites`
               }
               title={isFav ? 'Remove from favorites' : 'Add to favorites'}
-              className={`p-1.5 rounded-lg transition-all flex items-center justify-center cursor-pointer ${
+              className={`p-1.5 rounded-full transition-all flex items-center justify-center cursor-pointer ${
                 isFav
-                  ? 'bg-[#FFD21A] text-black border-2 border-black shadow-[1.5px_1.5px_0px_#000000] hover:scale-110 active:scale-95'
-                  : 'bg-white border border-black/20 text-neutral-400 hover:text-black hover:border-black hover:bg-neutral-100 hover:scale-110 active:scale-95'
+                  ? 'bg-amber-950/60 text-amber-400 border border-amber-700 shadow-xs hover:scale-110 active:scale-95'
+                  : 'bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:border-[var(--theme-gray-subtle)] hover:bg-[var(--theme-surface)] hover:scale-110 active:scale-95'
               }`}
             >
               <Star
                 className={`w-3.5 h-3.5 stroke-[2.2] transition-colors ${
-                  isFav ? 'fill-black text-black' : 'fill-transparent'
+                  isFav ? 'fill-amber-400 text-amber-400' : 'fill-transparent'
                 }`}
               />
             </button>
@@ -114,28 +86,34 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool }) => {
         {/* Tool Icon + Title & Tagline */}
         <div className="flex items-start gap-3.5 mb-2">
           <div
-            className={`w-10 h-10 rounded-xl border-2 border-black flex items-center justify-center shrink-0 text-black shadow-[1.5px_1.5px_0px_#000000] ${theme.iconBg}`}
+            className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 shadow-xs transition-colors ${
+              isFlagship
+                ? 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)]'
+                : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] group-hover:bg-[var(--theme-surface)] group-hover:border-[var(--theme-gray-subtle)]'
+            }`}
           >
             <Icon name={tool.iconName} className="w-5 h-5 stroke-[2.2]" />
           </div>
 
           <div className="min-w-0 flex-1">
-            <h3 className="font-black text-base text-black group-hover:underline decoration-2 underline-offset-2 truncate">
+            <h3 className="font-bold text-base text-[var(--theme-dirty-white)] group-hover:text-white transition-colors truncate">
               {tool.name}
             </h3>
-            <p className="text-xs font-semibold text-neutral-600 line-clamp-2 mt-0.5 leading-relaxed">
+            <p className="text-xs font-normal text-[var(--theme-gray-muted)] line-clamp-2 mt-0.5 leading-relaxed">
               {tool.tagline}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Footer: Open Tool Action */}
-      <div className="mt-3 pt-3 border-t border-neutral-200 flex items-center justify-between">
-        <span className="text-[11px] font-black uppercase tracking-wider text-neutral-800 group-hover:text-black group-hover:underline">
+      {/* Footer: Open Tool Action with Circular Arrow */}
+      <div className="mt-4 pt-3 border-t border-[var(--theme-gray-border)] flex items-center justify-between">
+        <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--theme-gray-muted)] group-hover:text-[var(--theme-dirty-white)] transition-colors">
           {tool.isExternal ? 'View External Tool' : 'Open Tool'}
         </span>
-        <ArrowUpRight className="w-4 h-4 text-black stroke-[2.5] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+        <span className="w-8 h-8 rounded-full bg-[var(--theme-dirty-white)] group-hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] flex items-center justify-center font-bold text-xs transition-transform group-hover:rotate-45 shadow-xs">
+          ↗
+        </span>
       </div>
     </Link>
   );

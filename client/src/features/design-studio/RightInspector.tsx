@@ -777,7 +777,7 @@ export const RightInspector: React.FC<RightInspectorProps> = ({
                   <button
                     type="button"
                     onClick={onOpenAITools}
-                    className="flex items-center gap-1 text-[11px] font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 px-2.5 py-1 rounded-lg shadow-xs transition-all cursor-pointer"
+                    className="flex items-center gap-1 text-[11px] font-bold text-[var(--theme-canvas)] bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] px-2.5 py-1 rounded-lg shadow-xs transition-all cursor-pointer"
                     title="Enhance image with AI"
                   >
                     <Sparkles className="w-3 h-3 text-amber-300" />

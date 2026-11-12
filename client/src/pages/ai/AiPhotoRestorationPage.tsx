@@ -78,22 +78,22 @@ export const AiPhotoRestorationPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] py-8 px-4 sm:px-8">
+    <div className="min-h-screen bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] py-8 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto">
         <Link
           to="/tools"
-          className="inline-flex items-center gap-2 text-sm font-mono font-bold text-black hover:underline mb-6"
+          className="inline-flex items-center gap-2 text-sm font-mono font-bold text-[var(--theme-dirty-white)] hover:underline mb-6"
         >
           <ArrowLeft className="w-4 h-4" /> Back to All Tools
         </Link>
 
-        <div className="border-2 border-black bg-white p-6 sm:p-8 shadow-[4px_4px_0px_#000] mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-black pb-4 mb-6">
+        <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] rounded-2xl p-6 sm:p-8 shadow-sm mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--theme-gray-border)] pb-4 mb-6">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-black">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--theme-dirty-white)]">
                 AI Old Photo Restoration
               </h1>
-              <p className="text-sm text-gray-700 mt-1 font-medium">
+              <p className="text-sm text-[var(--theme-gray-muted)] mt-1 font-medium">
                 Repair scratch marks, eliminate grain and dust, recover faded contrast, and restore
                 vintage photographs.
               </p>
@@ -103,12 +103,12 @@ export const AiPhotoRestorationPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="space-y-6">
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                <label className="block font-mono text-xs font-bold text-[var(--theme-dirty-white)] uppercase mb-2">
                   Upload Photo
                 </label>
-                <label className="border-2 border-dashed border-black bg-[#FAF7F2] p-5 flex flex-col items-center justify-center cursor-pointer hover:bg-yellow-50 transition-colors">
-                  <UploadCloud className="w-7 h-7 text-black mb-1" />
-                  <span className="text-xs font-bold text-black">Upload vintage image</span>
+                <label className="border-2 border-dashed border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] rounded-xl p-5 flex flex-col items-center justify-center cursor-pointer hover:bg-[var(--theme-surface)] transition-colors">
+                  <UploadCloud className="w-7 h-7 text-[var(--theme-dirty-white)] mb-1" />
+                  <span className="text-xs font-bold text-[var(--theme-dirty-white)]">Upload vintage image</span>
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
@@ -144,7 +144,7 @@ export const AiPhotoRestorationPage: React.FC = () => {
                 />
                 <label
                   htmlFor="colorizeToggle"
-                  className="text-xs font-mono font-bold text-black cursor-pointer"
+                  className="text-xs font-mono font-bold text-slate-100 cursor-pointer"
                 >
                   Vibrancy & Color Recovery
                 </label>
@@ -153,7 +153,7 @@ export const AiPhotoRestorationPage: React.FC = () => {
               <button
                 onClick={handleRestore}
                 disabled={!selectedFile || isProcessing}
-                className="w-full py-3 bg-black text-white font-mono text-sm font-bold border-2 border-black hover:bg-[#FACC15] hover:text-black transition-all shadow-[3px_3px_0px_#000] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-mono text-sm font-bold border border-[var(--theme-gray-border)] rounded-xl transition-all shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isProcessing ? (
                   <>
@@ -170,28 +170,28 @@ export const AiPhotoRestorationPage: React.FC = () => {
             </div>
 
             <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="border-2 border-black bg-gray-50 p-4 flex flex-col justify-between">
-                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">
+              <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] rounded-2xl p-4 flex flex-col justify-between">
+                <span className="font-mono text-xs font-bold text-[var(--theme-gray-muted)] uppercase mb-2">
                   Original Vintage
                 </span>
-                <div className="flex-1 flex items-center justify-center min-h-[260px] bg-white border border-gray-200 overflow-hidden">
+                <div className="flex-1 flex items-center justify-center min-h-[260px] bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-xl overflow-hidden">
                   {previewUrl ? (
                     <img src={previewUrl} alt="Vintage" className="max-h-[360px] object-contain" />
                   ) : (
-                    <span className="text-xs font-mono text-gray-400">No image uploaded</span>
+                    <span className="text-xs font-mono text-[var(--theme-gray-muted)]">No image uploaded</span>
                   )}
                 </div>
               </div>
 
-              <div className="border-2 border-black bg-gray-50 p-4 flex flex-col justify-between">
-                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">
+              <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] rounded-2xl p-4 flex flex-col justify-between">
+                <span className="font-mono text-xs font-bold text-[var(--theme-gray-muted)] uppercase mb-2">
                   Restored Result
                 </span>
-                <div className="flex-1 flex items-center justify-center min-h-[260px] bg-white border border-gray-200 overflow-hidden">
+                <div className="flex-1 flex items-center justify-center min-h-[260px] bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-xl overflow-hidden">
                   {resultUrl ? (
                     <img src={resultUrl} alt="Restored" className="max-h-[360px] object-contain" />
                   ) : (
-                    <span className="text-xs font-mono text-gray-400">
+                    <span className="text-xs font-mono text-[var(--theme-gray-muted)]">
                       Restored photo will appear here
                     </span>
                   )}
@@ -200,7 +200,7 @@ export const AiPhotoRestorationPage: React.FC = () => {
                   <a
                     href={resultUrl}
                     download="restored-photo.png"
-                    className="mt-3 w-full py-2 bg-[#FACC15] text-black font-mono text-xs font-bold border border-black flex items-center justify-center gap-2 hover:bg-yellow-400"
+                    className="mt-3 w-full py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-mono text-xs font-bold border border-[var(--theme-gray-border)] rounded-xl flex items-center justify-center gap-2 cursor-pointer transition shadow-xs"
                   >
                     <Download className="w-4 h-4" /> Download Restored Photo
                   </a>

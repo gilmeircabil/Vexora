@@ -77,22 +77,22 @@ export const AiBackgroundRemoverPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] py-8 px-4 sm:px-8">
+    <div className="min-h-screen bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] py-8 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto">
         <Link
           to="/tools"
-          className="inline-flex items-center gap-2 text-sm font-mono font-bold text-black hover:underline mb-6"
+          className="inline-flex items-center gap-2 text-sm font-mono font-bold text-[var(--theme-dirty-white)] hover:underline mb-6"
         >
           <ArrowLeft className="w-4 h-4" /> Back to All Tools
         </Link>
 
-        <div className="border-2 border-black bg-white p-6 sm:p-8 shadow-[4px_4px_0px_#000] mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-black pb-4 mb-6">
+        <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] rounded-2xl p-6 sm:p-8 shadow-sm mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--theme-gray-border)] pb-4 mb-6">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-black">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--theme-dirty-white)]">
                 AI Background Remover
               </h1>
-              <p className="text-sm text-gray-700 mt-1 font-medium">
+              <p className="text-sm text-[var(--theme-gray-muted)] mt-1 font-medium">
                 Automatically isolate foreground subjects and export crisp transparent PNGs or
                 custom color backgrounds.
               </p>
@@ -102,13 +102,13 @@ export const AiBackgroundRemoverPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="space-y-6">
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                <label className="block font-mono text-xs font-bold text-[var(--theme-dirty-white)] uppercase mb-2">
                   Upload Image
                 </label>
-                <label className="border-2 border-dashed border-black bg-[#FAF7F2] p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-yellow-50 transition-colors">
-                  <UploadCloud className="w-8 h-8 text-black mb-2" />
-                  <span className="text-xs font-bold text-black">Upload photo</span>
-                  <span className="text-[11px] text-gray-500 font-mono mt-1">PNG, JPG, WebP</span>
+                <label className="border-2 border-dashed border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-[var(--theme-surface)] transition-colors">
+                  <UploadCloud className="w-8 h-8 text-[var(--theme-dirty-white)] mb-2" />
+                  <span className="text-xs font-bold text-[var(--theme-dirty-white)]">Upload photo</span>
+                  <span className="text-[11px] text-[var(--theme-gray-muted)] font-mono mt-1">PNG, JPG, WebP</span>
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
@@ -119,32 +119,36 @@ export const AiBackgroundRemoverPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                <label className="block font-mono text-xs font-bold text-[var(--theme-dirty-white)] uppercase mb-2">
                   Background Finish
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   <button
                     onClick={() => setBgColor('transparent')}
-                    className={`py-2 px-1 text-xs font-mono font-bold border-2 border-black ${
+                    className={`py-2 px-1 text-xs font-mono font-bold rounded-lg border border-[var(--theme-gray-border)] transition ${
                       bgColor === 'transparent'
-                        ? 'bg-[#FACC15] shadow-[2px_2px_0px_#000]'
-                        : 'bg-white'
+                        ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                        : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)]'
                     }`}
                   >
                     Transparent
                   </button>
                   <button
                     onClick={() => setBgColor('#FFFFFF')}
-                    className={`py-2 px-1 text-xs font-mono font-bold border-2 border-black ${
-                      bgColor === '#FFFFFF' ? 'bg-[#FACC15] shadow-[2px_2px_0px_#000]' : 'bg-white'
+                    className={`py-2 px-1 text-xs font-mono font-bold rounded-lg border border-[var(--theme-gray-border)] transition ${
+                      bgColor === '#FFFFFF'
+                        ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                        : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)]'
                     }`}
                   >
                     White
                   </button>
                   <button
                     onClick={() => setBgColor('custom')}
-                    className={`py-2 px-1 text-xs font-mono font-bold border-2 border-black ${
-                      bgColor === 'custom' ? 'bg-[#FACC15] shadow-[2px_2px_0px_#000]' : 'bg-white'
+                    className={`py-2 px-1 text-xs font-mono font-bold rounded-lg border border-[var(--theme-gray-border)] transition ${
+                      bgColor === 'custom'
+                        ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                        : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)]'
                     }`}
                   >
                     Custom Hex
@@ -156,13 +160,13 @@ export const AiBackgroundRemoverPage: React.FC = () => {
                       type="color"
                       value={customHex}
                       onChange={(e) => setCustomHex(e.target.value)}
-                      className="w-10 h-10 border border-black cursor-pointer"
+                      className="w-10 h-10 border border-[var(--theme-gray-border)] rounded-md cursor-pointer"
                     />
                     <input
                       type="text"
                       value={customHex}
                       onChange={(e) => setCustomHex(e.target.value)}
-                      className="flex-1 px-3 py-2 border border-black font-mono text-xs uppercase"
+                      className="flex-1 px-3 py-2 border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] rounded-md font-mono text-xs uppercase"
                     />
                   </div>
                 )}
@@ -171,7 +175,7 @@ export const AiBackgroundRemoverPage: React.FC = () => {
               <button
                 onClick={handleProcess}
                 disabled={!selectedFile || isProcessing}
-                className="w-full py-3 bg-black text-white font-mono text-sm font-bold border-2 border-black hover:bg-[#FACC15] hover:text-black transition-all shadow-[3px_3px_0px_#000] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-mono text-sm font-bold rounded-xl border border-[var(--theme-gray-border)] transition-all shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isProcessing ? (
                   <>
@@ -188,7 +192,7 @@ export const AiBackgroundRemoverPage: React.FC = () => {
             </div>
 
             <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="border-2 border-black bg-gray-50 p-4 flex flex-col justify-between">
+              <div className="border border-slate-800 bg-gray-50 p-4 flex flex-col justify-between">
                 <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">
                   Original
                 </span>
@@ -201,7 +205,7 @@ export const AiBackgroundRemoverPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="border-2 border-black bg-gray-50 p-4 flex flex-col justify-between">
+              <div className="border border-slate-800 bg-gray-50 p-4 flex flex-col justify-between">
                 <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">
                   Background Removed
                 </span>
@@ -231,7 +235,7 @@ export const AiBackgroundRemoverPage: React.FC = () => {
                   <a
                     href={resultUrl}
                     download="background-removed.png"
-                    className="mt-3 w-full py-2 bg-[#FACC15] text-black font-mono text-xs font-bold border border-black flex items-center justify-center gap-2 hover:bg-yellow-400"
+                    className="mt-3 w-full py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-mono text-xs font-bold rounded-xl border border-[var(--theme-gray-border)] flex items-center justify-center gap-2 cursor-pointer transition shadow-xs"
                   >
                     <Download className="w-4 h-4" /> Download Transparent PNG
                   </a>

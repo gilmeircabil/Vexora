@@ -21,15 +21,18 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-black rounded-xl border-2 border-black transition-all select-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-[3px_3px_0px_#000000] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#000000]';
+      'inline-flex items-center justify-center font-bold rounded-xl transition-all select-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]';
 
     const variants = {
-      primary: 'bg-[#FACC15] text-black hover:bg-[#EAB308]',
-      secondary: 'bg-white text-black hover:bg-neutral-100',
-      outline: 'bg-transparent text-black hover:bg-black/5',
+      primary:
+        'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-dirty-white)] shadow-xs',
+      secondary:
+        'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)] shadow-xs',
+      outline:
+        'bg-transparent text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface)]',
       ghost:
-        'border-transparent shadow-none hover:shadow-none hover:translate-x-0 hover:translate-y-0 bg-transparent text-black hover:bg-black/10',
-      danger: 'bg-[#F472B6] text-black hover:bg-[#E11D48] hover:text-white',
+        'border-transparent shadow-none hover:shadow-none bg-transparent text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)]',
+      danger: 'bg-red-950/60 text-red-300 border border-red-800 hover:bg-red-900 hover:text-white shadow-xs',
     };
 
     const sizes = {

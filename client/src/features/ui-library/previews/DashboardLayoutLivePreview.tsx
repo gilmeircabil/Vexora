@@ -251,12 +251,12 @@ export const DashboardLayoutLivePreview: React.FC<Props> = ({ dashboardId }) => 
           </div>
           <div className="p-3 bg-[#FACC15] border-2 border-black rounded-2xl shadow-[2px_2px_0px_#000]">
             <p className="text-[10px] font-bold">Daily Streak</p>
-            <p className="text-xl font-black">14 Days 🔥</p>
+            <p className="text-xl font-black">14 Days</p>
           </div>
           <div className="flex justify-around border-t-2 border-black pt-2 text-[10px] font-bold">
-            <span>⌂ Home</span>
-            <span>📊 Stats</span>
-            <span>⚙ Settings</span>
+            <span>Home</span>
+            <span>Stats</span>
+            <span>Settings</span>
           </div>
         </div>
       );

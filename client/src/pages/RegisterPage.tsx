@@ -24,7 +24,6 @@ import { useToast } from '../context/ToastContext.js';
 import { TurnstileWidget } from '../components/auth/TurnstileWidget.js';
 import { MathVerificationModal } from '../components/auth/MathVerificationModal.js';
 import { SocialAuthButtons } from '../components/auth/SocialAuthButtons.js';
-import { FallingStarsBackground } from '../components/common/FallingStarsBackground.js';
 import { BrandLogo } from '../components/common/BrandLogo.js';
 
 export const RegisterPage: React.FC = () => {
@@ -194,9 +193,7 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-10">
-      <FallingStarsBackground />
-
+    <div className="min-h-screen bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] relative overflow-x-hidden flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-10">
       {/* Human Brain Check Verification Modal */}
       <MathVerificationModal
         isOpen={showMathModal}
@@ -208,30 +205,30 @@ export const RegisterPage: React.FC = () => {
 
       {/* Recovery Code Security Modal */}
       {recoveryModalData && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-white border-4 border-black rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-[8px_8px_0px_#000000] space-y-6">
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+          <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-6 text-[var(--theme-dirty-white)]">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-[#FACC15] border-2 border-black flex items-center justify-center text-black shrink-0 shadow-[2px_2px_0px_#000]">
-                <KeyRound className="w-6 h-6 stroke-[2.5]" />
+              <div className="w-12 h-12 rounded-2xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center text-[var(--theme-dirty-white)] shrink-0 shadow-sm">
+                <KeyRound className="w-6 h-6 stroke-[2]" />
               </div>
               <div>
-                <h3 className="text-xl font-black text-black">Save Your Recovery Code</h3>
-                <p className="text-xs font-bold text-neutral-600">
+                <h3 className="text-xl font-bold text-[var(--theme-dirty-white)]">Save Your Recovery Code</h3>
+                <p className="text-xs font-normal text-[var(--theme-gray-muted)]">
                   This code is displayed once and will never be shown again.
                 </p>
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-amber-50 border-2 border-black space-y-2">
-              <p className="text-xs font-bold text-black leading-relaxed">
+            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-2">
+              <p className="text-xs font-normal text-amber-300 leading-relaxed">
                 Because VexoraMods does not use emails, this{' '}
-                <strong>Emergency Recovery Code</strong> is the <em>only</em> way to recover your
+                <strong className="text-white">Emergency Recovery Code</strong> is the <em>only</em> way to recover your
                 account if you forget your password.
               </p>
             </div>
 
             <div className="space-y-2">
-              <label className="block text-[11px] font-mono font-black uppercase text-neutral-600">
+              <label className="block text-[11px] font-mono font-medium uppercase text-[var(--theme-gray-muted)]">
                 Your Single-Use Recovery Code:
               </label>
               <div className="flex items-center gap-2">
@@ -239,21 +236,21 @@ export const RegisterPage: React.FC = () => {
                   type="text"
                   readOnly
                   value={recoveryModalData.recoveryCode}
-                  className="flex-1 px-4 py-3 bg-[#FAF7F2] border-2 border-black rounded-xl font-mono text-sm sm:text-base font-black tracking-wider text-black select-all"
+                  className="flex-1 px-4 py-3 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-sm sm:text-base font-bold tracking-wider text-[var(--theme-dirty-white)] select-all"
                 />
                 <button
                   type="button"
                   onClick={handleCopyCode}
-                  className="px-4 py-3 bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black rounded-xl font-black text-xs text-black shadow-[2px_2px_0px_#000] flex items-center gap-1.5 cursor-pointer shrink-0"
+                  className="px-4 py-3 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] rounded-xl font-semibold text-xs text-[var(--theme-canvas)] shadow-sm flex items-center gap-1.5 cursor-pointer shrink-0"
                 >
                   {copiedCode ? (
                     <>
-                      <Check className="w-4 h-4 stroke-[2.5]" />
+                      <Check className="w-4 h-4 stroke-[2]" />
                       <span>Copied!</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-4 h-4 stroke-[2.5]" />
+                      <Copy className="w-4 h-4 stroke-[2]" />
                       <span>Copy</span>
                     </>
                   )}
@@ -261,14 +258,14 @@ export const RegisterPage: React.FC = () => {
               </div>
             </div>
 
-            <label className="flex items-start gap-2.5 cursor-pointer p-3 bg-neutral-50 rounded-xl border-2 border-black/20 hover:border-black">
+            <label className="flex items-start gap-2.5 cursor-pointer p-3 bg-[var(--theme-surface-raised)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-gray-subtle)]">
               <input
                 type="checkbox"
                 checked={confirmedSaved}
                 onChange={(e) => setConfirmedSaved(e.target.checked)}
-                className="w-4 h-4 mt-0.5 accent-black rounded"
+                className="w-4 h-4 mt-0.5 rounded border-[var(--theme-gray-border)] bg-[var(--theme-surface)]"
               />
-              <span className="text-xs font-bold text-black select-none">
+              <span className="text-xs font-normal text-[var(--theme-gray-muted)] select-none">
                 I have written down or safely stored my recovery code in a secure location.
               </span>
             </label>
@@ -277,10 +274,10 @@ export const RegisterPage: React.FC = () => {
               type="button"
               disabled={!confirmedSaved}
               onClick={handleFinishRegistration}
-              className="w-full py-3.5 px-4 bg-[#22C55E] hover:bg-[#16A34A] disabled:opacity-40 disabled:hover:bg-[#22C55E] border-2 border-black rounded-xl text-white font-black text-xs shadow-[3px_3px_0px_#000] flex items-center justify-center gap-2 cursor-pointer transition-all"
+              className="w-full py-3.5 px-4 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] disabled:opacity-40 rounded-xl text-[var(--theme-canvas)] font-semibold text-xs shadow-sm flex items-center justify-center gap-2 cursor-pointer transition-all"
             >
               <span>Continue to VexoraMods</span>
-              <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+              <ArrowRight className="w-4 h-4 stroke-[2]" />
             </button>
           </div>
         </div>
@@ -291,9 +288,9 @@ export const RegisterPage: React.FC = () => {
           <Link
             to="/"
             aria-label="Back to Homepage"
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white hover:bg-neutral-100 border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_#000000] transition-colors"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] border border-[var(--theme-gray-border)] text-xs font-semibold text-[var(--theme-dirty-white)] shadow-sm transition-colors"
           >
-            <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
+            <ArrowLeft className="w-4 h-4 stroke-[2]" />
             <span>Back</span>
           </Link>
         </div>
@@ -306,21 +303,21 @@ export const RegisterPage: React.FC = () => {
             </Link>
 
             <div className="space-y-3 max-w-xl">
-              <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-black leading-[1.08]">
+              <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-[var(--theme-dirty-white)] leading-[1.08]">
                 Create Your Account. Start Building.
               </h1>
-              <p className="text-sm sm:text-lg font-semibold text-neutral-700 leading-relaxed">
+              <p className="text-sm sm:text-lg font-normal text-[var(--theme-gray-muted)] leading-relaxed">
                 Join VexoraMods in seconds. Pick a username and password to create studio graphics,
                 save quiz sets, and publish tutorials.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#FACC15] border-2 border-black shadow-[4px_4px_0px_#000] space-y-2 max-w-lg">
-              <div className="flex items-center gap-2 font-black text-black text-sm">
-                <ShieldCheck className="w-5 h-5 stroke-[2.5]" />
+            <div className="p-5 rounded-2xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] space-y-2 max-w-lg">
+              <div className="flex items-center gap-2 font-bold text-[var(--theme-dirty-white)] text-sm">
+                <ShieldCheck className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
                 <span>Zero Email Hassle &amp; Privacy First</span>
               </div>
-              <p className="text-xs font-bold text-neutral-800 leading-relaxed">
+              <p className="text-xs font-normal text-[var(--theme-gray-muted)] leading-relaxed">
                 No email verification links, no promotional emails, and no tracking cookies. You
                 control your username and secure recovery code.
               </p>
@@ -329,10 +326,10 @@ export const RegisterPage: React.FC = () => {
 
           {/* Right Column: Registration Card */}
           <div className="lg:col-span-5">
-            <div className="bg-white rounded-3xl border-2 border-black p-7 sm:p-9 shadow-[6px_6px_0px_#000000]">
+            <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] p-7 sm:p-9 shadow-xl text-[var(--theme-dirty-white)]">
               <div className="mb-6">
-                <h2 className="text-2xl font-black text-black">Create Your Account</h2>
-                <p className="text-xs font-bold text-neutral-600 mt-1">
+                <h2 className="text-2xl font-bold text-[var(--theme-dirty-white)]">Create Your Account</h2>
+                <p className="text-xs font-normal text-[var(--theme-gray-muted)] mt-1">
                   Choose a unique username and strong password.
                 </p>
               </div>
@@ -340,9 +337,9 @@ export const RegisterPage: React.FC = () => {
               {formError && (
                 <div
                   role="alert"
-                  className="mb-4 p-3 rounded-xl bg-amber-50 border-2 border-black text-xs font-bold text-black flex items-start gap-2"
+                  className="mb-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs font-medium text-amber-400 flex items-start gap-2"
                 >
-                  <AlertCircle className="w-4 h-4 text-black shrink-0 mt-0.5 stroke-[2.5]" />
+                  <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5 stroke-[2]" />
                   <span>{formError}</span>
                 </div>
               )}
@@ -371,12 +368,12 @@ export const RegisterPage: React.FC = () => {
                     >
                       Username
                     </label>
-                    <span className="text-[10px] font-mono font-bold text-neutral-500">
+                    <span className="text-[10px] font-mono font-medium text-slate-400">
                       3-20 chars (a-z, 0-9, _)
                     </span>
                   </div>
                   <div className="relative">
-                    <User className="w-4 h-4 text-black stroke-[2.5] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <User className="w-4 h-4 text-slate-400 stroke-[2] absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input
                       id="reg-username"
                       type="text"
@@ -386,12 +383,12 @@ export const RegisterPage: React.FC = () => {
                       autoComplete="username"
                       autoCapitalize="none"
                       autoCorrect="off"
-                      className="w-full pl-10 pr-3.5 py-3 rounded-xl border-2 border-black bg-white text-xs font-bold text-black placeholder:text-neutral-400 shadow-[2.5px_2.5px_0px_#000000] focus:shadow-[4px_4px_0px_#000000] focus:outline-none transition-all"
+                      className="w-full pl-10 pr-3.5 py-3 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-xs font-medium text-[var(--theme-dirty-white)] placeholder:[var(--theme-gray-dim)] focus:border-[var(--theme-dirty-white)] focus:outline-none transition-all"
                       required
                     />
                   </div>
                   {username.length > 0 && !isUsernameValid && (
-                    <p className="text-[11px] font-bold text-red-600 mt-1">
+                    <p className="text-[11px] font-medium text-rose-400 mt-1">
                       Must be 3-20 characters: letters, numbers, and underscores only.
                     </p>
                   )}
@@ -401,10 +398,10 @@ export const RegisterPage: React.FC = () => {
                 <div>
                   <label
                     htmlFor="reg-name"
-                    className="block font-black text-black text-xs uppercase tracking-wider mb-1.5"
+                    className="block font-semibold text-slate-200 text-xs uppercase tracking-wider mb-1.5"
                   >
                     Display Name{' '}
-                    <span className="text-neutral-500 font-normal lowercase">(optional)</span>
+                    <span className="text-slate-400 font-normal lowercase">(optional)</span>
                   </label>
                   <input
                     id="reg-name"
@@ -413,7 +410,7 @@ export const RegisterPage: React.FC = () => {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your Public Name or Handle"
                     autoComplete="name"
-                    className="w-full px-3.5 py-3 rounded-xl border-2 border-black bg-white text-xs font-bold text-black placeholder:text-neutral-400 shadow-[2.5px_2.5px_0px_#000000] focus:shadow-[4px_4px_0px_#000000] focus:outline-none transition-all"
+                    className="w-full px-3.5 py-3 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-xs font-medium text-[var(--theme-dirty-white)] placeholder:[var(--theme-gray-dim)] focus:border-[var(--theme-dirty-white)] focus:outline-none transition-all"
                   />
                 </div>
 
@@ -421,12 +418,12 @@ export const RegisterPage: React.FC = () => {
                 <div>
                   <label
                     htmlFor="reg-password"
-                    className="block font-black text-black text-xs uppercase tracking-wider mb-1.5"
+                    className="block font-semibold text-slate-200 text-xs uppercase tracking-wider mb-1.5"
                   >
                     Password
                   </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 text-black stroke-[2.5] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <Lock className="w-4 h-4 text-slate-400 stroke-[2] absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input
                       id="reg-password"
                       type={showPassword ? 'text' : 'password'}
@@ -434,7 +431,7 @@ export const RegisterPage: React.FC = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="At least 8 characters"
                       autoComplete="new-password"
-                      className="w-full pl-10 pr-10 py-3 rounded-xl border-2 border-black bg-white text-xs font-bold text-black placeholder:text-neutral-400 shadow-[2.5px_2.5px_0px_#000000] focus:shadow-[4px_4px_0px_#000000] focus:outline-none transition-all"
+                      className="w-full pl-10 pr-10 py-3 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-xs font-medium text-[var(--theme-dirty-white)] placeholder:[var(--theme-gray-dim)] focus:border-[var(--theme-dirty-white)] focus:outline-none transition-all"
                       required
                     />
                     <button
@@ -502,12 +499,12 @@ export const RegisterPage: React.FC = () => {
                 <div>
                   <label
                     htmlFor="reg-confirm-password"
-                    className="block font-black text-black text-xs uppercase tracking-wider mb-1.5"
+                    className="block font-semibold text-slate-200 text-xs uppercase tracking-wider mb-1.5"
                   >
                     Confirm Password
                   </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 text-black stroke-[2.5] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <Lock className="w-4 h-4 text-slate-400 stroke-[2] absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input
                       id="reg-confirm-password"
                       type={showConfirmPassword ? 'text' : 'password'}
@@ -515,7 +512,7 @@ export const RegisterPage: React.FC = () => {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="Repeat your password"
                       autoComplete="new-password"
-                      className="w-full pl-10 pr-10 py-3 rounded-xl border-2 border-black bg-white text-xs font-bold text-black placeholder:text-neutral-400 shadow-[2.5px_2.5px_0px_#000000] focus:shadow-[4px_4px_0px_#000000] focus:outline-none transition-all"
+                      className="w-full pl-10 pr-10 py-3 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-xs font-medium text-[var(--theme-dirty-white)] placeholder:[var(--theme-gray-dim)] focus:border-[var(--theme-dirty-white)] focus:outline-none transition-all"
                       required
                     />
                     <button
@@ -524,17 +521,17 @@ export const RegisterPage: React.FC = () => {
                       aria-label={
                         showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'
                       }
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-600 hover:text-black cursor-pointer"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 cursor-pointer"
                     >
                       {showConfirmPassword ? (
-                        <EyeOff className="w-4 h-4 stroke-[2.5]" />
+                        <EyeOff className="w-4 h-4 stroke-[2]" />
                       ) : (
-                        <Eye className="w-4 h-4 stroke-[2.5]" />
+                        <Eye className="w-4 h-4 stroke-[2]" />
                       )}
                     </button>
                   </div>
                   {confirmPassword.length > 0 && !passwordsMatch && (
-                    <p className="text-[11px] font-bold text-red-600 mt-1">
+                    <p className="text-[11px] font-medium text-rose-400 mt-1">
                       Passwords do not match.
                     </p>
                   )}
@@ -542,17 +539,17 @@ export const RegisterPage: React.FC = () => {
 
                 {/* Study Space Role Selection */}
                 <div>
-                  <label className="block font-black text-black text-xs uppercase tracking-wider mb-1.5">
+                  <label className="block font-semibold text-slate-200 text-xs uppercase tracking-wider mb-1.5">
                     Study Space Account Role
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
                       onClick={() => setEducationRole('student')}
-                      className={`p-2.5 rounded-xl border-2 border-black flex items-center justify-center gap-2 text-xs font-black transition-all cursor-pointer ${
+                      className={`p-2.5 rounded-xl border flex items-center justify-center gap-2 text-xs font-semibold transition-all cursor-pointer ${
                         educationRole === 'student'
-                          ? 'bg-[#FFD21A] text-black shadow-[2px_2px_0px_#000]'
-                          : 'bg-white text-neutral-600 hover:bg-neutral-50 shadow-[1px_1px_0px_#000]'
+                          ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)] shadow-sm'
+                          : 'bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface)]'
                       }`}
                     >
                       <BookOpen className="w-3.5 h-3.5" />
@@ -561,10 +558,10 @@ export const RegisterPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setEducationRole('teacher')}
-                      className={`p-2.5 rounded-xl border-2 border-black flex items-center justify-center gap-2 text-xs font-black transition-all cursor-pointer ${
+                      className={`p-2.5 rounded-xl border flex items-center justify-center gap-2 text-xs font-semibold transition-all cursor-pointer ${
                         educationRole === 'teacher'
-                          ? 'bg-[#FFD21A] text-black shadow-[2px_2px_0px_#000]'
-                          : 'bg-white text-neutral-600 hover:bg-neutral-50 shadow-[1px_1px_0px_#000]'
+                          ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)] shadow-sm'
+                          : 'bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface)]'
                       }`}
                     >
                       <School className="w-3.5 h-3.5" />
@@ -574,13 +571,12 @@ export const RegisterPage: React.FC = () => {
                 </div>
 
                 {/* Security & Bot Protection Notice */}
-                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-amber-50/70 border-2 border-black text-black text-xs font-bold shadow-[2px_2px_0px_#000]">
-                  <div className="w-6 h-6 rounded-lg bg-[#FACC15] border border-black flex items-center justify-center shrink-0">
-                    <ShieldCheck className="w-3.5 h-3.5 stroke-[2.5]" />
+                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-gray-muted)] text-xs font-medium">
+                  <div className="w-6 h-6 rounded-lg bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-3.5 h-3.5 stroke-[2]" />
                   </div>
                   <span>
-                    Protected by <strong>Human Brain Check</strong> &amp; Turnstile bot
-                    verification.
+                    Protected by <strong>Human Verification Check</strong> &amp; Turnstile security verification.
                   </span>
                 </div>
 
@@ -595,30 +591,30 @@ export const RegisterPage: React.FC = () => {
                   disabled={
                     isLoading || !isUsernameValid || (password.length > 0 && !passwordsMatch)
                   }
-                  className="w-full py-3.5 px-4 rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-black font-black text-xs shadow-[3px_3px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_#000000] flex items-center justify-center gap-2 transition-all mt-4 cursor-pointer disabled:opacity-60"
+                  className="w-full py-3.5 px-4 rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-bold text-xs shadow-sm active:translate-y-0.5 flex items-center justify-center gap-2 transition-all mt-4 cursor-pointer disabled:opacity-60"
                 >
                   {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin stroke-[2.5]" />
+                    <Loader2 className="w-4 h-4 animate-spin stroke-[2]" />
                   ) : (
                     <>
                       <span>Create Account</span>
-                      <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                      <ArrowRight className="w-4 h-4 stroke-[2]" />
                     </>
                   )}
                 </button>
 
-                <p className="text-[11px] font-bold text-neutral-500 text-center leading-relaxed mt-2.5">
+                <p className="text-[11px] font-normal text-[var(--theme-gray-muted)] text-center leading-relaxed mt-2.5">
                   By creating an account, you agree to our{' '}
                   <Link
                     to="/terms"
-                    className="text-black font-black underline hover:text-neutral-700"
+                    className="text-[var(--theme-dirty-white)] font-medium underline hover:text-[var(--theme-dirty-white-muted)]"
                   >
                     Terms of Use
                   </Link>{' '}
                   and acknowledge our{' '}
                   <Link
                     to="/privacy"
-                    className="text-black font-black underline hover:text-neutral-700"
+                    className="text-[var(--theme-dirty-white)] font-medium underline hover:text-[var(--theme-dirty-white-muted)]"
                   >
                     Privacy Policy
                   </Link>
@@ -628,11 +624,11 @@ export const RegisterPage: React.FC = () => {
 
               <SocialAuthButtons mode="register" />
 
-              <div className="mt-6 pt-5 border-t-2 border-black/10 text-center text-xs font-bold text-neutral-600">
+              <div className="mt-6 pt-5 border-t border-[var(--theme-gray-border)] text-center text-xs font-normal text-[var(--theme-gray-muted)]">
                 Already have an account?{' '}
                 <Link
                   to={`/login?redirect=${redirect}`}
-                  className="text-black font-black underline hover:text-neutral-700 ml-1"
+                  className="text-[var(--theme-dirty-white)] font-semibold underline hover:text-[var(--theme-dirty-white-muted)] ml-1"
                 >
                   Log in
                 </Link>

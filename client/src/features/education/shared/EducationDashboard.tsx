@@ -116,7 +116,7 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
       desc: 'Formed flashcard decks',
       unlocked: stats.deckCount > 0,
       icon: Layers,
-      color: 'bg-[#FFD21A]',
+      color: 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]',
     },
     {
       id: 'badge-3',
@@ -124,7 +124,7 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
       desc: 'Logged Pomodoro focus sessions',
       unlocked: stats.totalStudyMinutes >= 25,
       icon: Clock,
-      color: 'bg-[#38BDF8]',
+      color: 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]',
     },
     {
       id: 'badge-4',
@@ -160,7 +160,7 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
       desc: 'Generated printable worksheets',
       unlocked: (stats.worksheetCount ?? 0) > 0 || stats.deckCount > 0,
       icon: FileText,
-      color: 'bg-[#FFD21A]',
+      color: 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]',
     },
     {
       id: 'teacher-badge-3',
@@ -168,7 +168,7 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
       desc: 'Formed test assessments & keys',
       unlocked: (stats.examCount ?? 0) > 0 || stats.recentAttempts?.length > 0,
       icon: FileCode,
-      color: 'bg-[#38BDF8]',
+      color: 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]',
     },
     {
       id: 'teacher-badge-4',
@@ -193,25 +193,25 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
   return (
     <div className="space-y-5">
       {/* Top Header: Minimal Hero Strip */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/90 backdrop-blur-xs p-4 sm:p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-4 sm:p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#FFD21A] border border-black text-black">
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)]">
               Zero-Cost Education Suite
             </span>
-            <span className="text-[11px] font-bold text-neutral-600">
+            <span className="text-[11px] font-bold text-[var(--theme-gray-muted)]">
               Workspace:{' '}
-              <strong className="text-black capitalize">
+              <strong className="text-[var(--theme-dirty-white)] capitalize">
                 {currentWorkspace === 'teacher' ? 'Teacher' : 'Student'}
               </strong>
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black text-black tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-black text-[var(--theme-dirty-white)] tracking-tight">
             {currentWorkspace === 'teacher'
               ? `Teacher Workspace Dashboard${user ? `, ${user.name.split(' ')[0]}` : ''}`
               : `Student Workspace Dashboard${user ? `, ${user.name.split(' ')[0]}` : ''}`}
           </h2>
-          <p className="text-xs text-neutral-600 font-medium max-w-xl">
+          <p className="text-xs text-[var(--theme-gray-muted)] font-medium max-w-xl">
             {currentWorkspace === 'teacher'
               ? 'Curriculum design, automated exam builder, printable student worksheets, rubric builder, and gradebook tracking.'
               : 'Active recall, weighted GPA calculations, schedules, flashcard decks, and learning goals.'}
@@ -219,39 +219,39 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono font-black px-3 py-1.5 rounded-xl border-2 border-black bg-[#FAF7F2] text-black shadow-[1.5px_1.5px_0px_#000]">
-            {currentWorkspace === 'teacher' ? '👨‍🏫 Teacher Mode Active' : '🎓 Student Mode Active'}
+          <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] shadow-xs">
+            {currentWorkspace === 'teacher' ? 'Teacher Mode Active' : 'Student Mode Active'}
           </span>
         </div>
       </div>
 
       {/* KPI Overview: Workspace Specific Telemetry Strip */}
       {currentWorkspace === 'teacher' ? (
-        <div className="bg-white/90 backdrop-blur-xs rounded-2xl border-2 border-black p-4 shadow-[3px_3px_0px_#000000] grid grid-cols-2 lg:grid-cols-4 gap-4 divide-y sm:divide-y-0 sm:divide-x-2 sm:divide-black/10">
+        <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] p-4 shadow-sm grid grid-cols-2 lg:grid-cols-4 gap-4 divide-y sm:divide-y-0 sm:divide-x sm:divide-[var(--theme-gray-border)]">
           <div
             onClick={() => onSelectTool('lesson-plans')}
             className="cursor-pointer hover:opacity-80 transition-opacity"
           >
-            <span className="text-[10px] font-mono font-bold uppercase text-neutral-500 block">
+            <span className="text-[10px] font-mono font-bold uppercase text-[var(--theme-gray-muted)] block">
               Lesson Plans
             </span>
-            <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">
+            <div className="text-2xl sm:text-3xl font-black text-[var(--theme-dirty-white)] mt-0.5">
               {stats.lessonPlanCount ?? stats.pendingTasks}
             </div>
-            <span className="text-[11px] text-amber-600 font-bold">Curriculum design &rarr;</span>
+            <span className="text-[11px] text-amber-400 font-bold">Curriculum design &rarr;</span>
           </div>
 
           <div
             onClick={() => onSelectTool('worksheets')}
             className="pt-3 sm:pt-0 sm:pl-5 cursor-pointer hover:opacity-80 transition-opacity"
           >
-            <span className="text-[10px] font-mono font-bold uppercase text-neutral-500 block">
+            <span className="text-[10px] font-mono font-bold uppercase text-[var(--theme-gray-muted)] block">
               Worksheets
             </span>
-            <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">
+            <div className="text-2xl sm:text-3xl font-black text-[var(--theme-dirty-white)] mt-0.5">
               {stats.worksheetCount ?? stats.deckCount}
             </div>
-            <span className="text-[11px] text-indigo-600 font-bold">
+            <span className="text-[11px] text-[var(--theme-dirty-white)] font-bold">
               Printable activities &rarr;
             </span>
           </div>
@@ -260,41 +260,41 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
             onClick={() => onSelectTool('exams')}
             className="pt-3 sm:pt-0 sm:pl-5 cursor-pointer hover:opacity-80 transition-opacity"
           >
-            <span className="text-[10px] font-mono font-bold uppercase text-neutral-500 block">
+            <span className="text-[10px] font-mono font-bold uppercase text-[var(--theme-gray-muted)] block">
               Exams & Tests
             </span>
-            <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">
+            <div className="text-2xl sm:text-3xl font-black text-[var(--theme-dirty-white)] mt-0.5">
               {stats.examCount ?? stats.noteCount}
             </div>
-            <span className="text-[11px] text-emerald-600 font-bold">Build assessments &rarr;</span>
+            <span className="text-[11px] text-emerald-400 font-bold">Build assessments &rarr;</span>
           </div>
 
           <div
             onClick={() => onSelectTool('gradebook')}
             className="pt-3 sm:pt-0 sm:pl-5 cursor-pointer hover:opacity-80 transition-opacity"
           >
-            <span className="text-[10px] font-mono font-bold uppercase text-neutral-500 block">
+            <span className="text-[10px] font-mono font-bold uppercase text-[var(--theme-gray-muted)] block">
               Gradebook Ledger
             </span>
-            <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">
+            <div className="text-2xl sm:text-3xl font-black text-[var(--theme-dirty-white)] mt-0.5">
               {stats.gradebookCount ?? (stats.totalStudyMinutes > 0 ? 1 : 0)}
             </div>
-            <span className="text-[11px] text-purple-600 font-bold">Scores & mastery &rarr;</span>
+            <span className="text-[11px] text-purple-400 font-bold">Scores & mastery &rarr;</span>
           </div>
         </div>
       ) : (
-        <div className="bg-white/90 backdrop-blur-xs rounded-2xl border-2 border-black p-4 shadow-[3px_3px_0px_#000000] grid grid-cols-2 lg:grid-cols-4 gap-4 divide-y sm:divide-y-0 sm:divide-x-2 sm:divide-black/10">
+        <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] p-4 shadow-sm grid grid-cols-2 lg:grid-cols-4 gap-4 divide-y sm:divide-y-0 sm:divide-x sm:divide-[var(--theme-gray-border)]">
           <div
             onClick={() => onSelectTool('study-planner')}
             className="cursor-pointer hover:opacity-80 transition-opacity"
           >
-            <span className="text-[10px] font-mono font-bold uppercase text-neutral-500 block">
+            <span className="text-[10px] font-mono font-bold uppercase text-[var(--theme-gray-muted)] block">
               Pending Tasks
             </span>
-            <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">
+            <div className="text-2xl sm:text-3xl font-black text-[var(--theme-dirty-white)] mt-0.5">
               {stats.pendingTasks}
             </div>
-            <span className="text-[11px] text-neutral-500 font-medium">
+            <span className="text-[11px] text-[var(--theme-gray-muted)] font-medium">
               {stats.completedTasks} completed
             </span>
           </div>
@@ -303,39 +303,39 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
             onClick={() => onSelectTool('flashcards')}
             className="pt-3 sm:pt-0 sm:pl-5 cursor-pointer hover:opacity-80 transition-opacity"
           >
-            <span className="text-[10px] font-mono font-bold uppercase text-neutral-500 block">
+            <span className="text-[10px] font-mono font-bold uppercase text-[var(--theme-gray-muted)] block">
               Flashcard Decks
             </span>
-            <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">
+            <div className="text-2xl sm:text-3xl font-black text-[var(--theme-dirty-white)] mt-0.5">
               {stats.deckCount}
             </div>
-            <span className="text-[11px] text-indigo-600 font-bold">Study & Review &rarr;</span>
+            <span className="text-[11px] text-[var(--theme-dirty-white)] font-bold">Study & Review &rarr;</span>
           </div>
 
           <div
             onClick={() => onSelectTool('smart-notes')}
             className="pt-3 sm:pt-0 sm:pl-5 cursor-pointer hover:opacity-80 transition-opacity"
           >
-            <span className="text-[10px] font-mono font-bold uppercase text-neutral-500 block">
+            <span className="text-[10px] font-mono font-bold uppercase text-[var(--theme-gray-muted)] block">
               Study Notes
             </span>
-            <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">
+            <div className="text-2xl sm:text-3xl font-black text-[var(--theme-dirty-white)] mt-0.5">
               {stats.noteCount}
             </div>
-            <span className="text-[11px] text-emerald-600 font-bold">Capture notes &rarr;</span>
+            <span className="text-[11px] text-emerald-400 font-bold">Capture notes &rarr;</span>
           </div>
 
           <div
             onClick={() => onSelectTool('pomodoro')}
             className="pt-3 sm:pt-0 sm:pl-5 cursor-pointer hover:opacity-80 transition-opacity"
           >
-            <span className="text-[10px] font-mono font-bold uppercase text-neutral-500 block">
+            <span className="text-[10px] font-mono font-bold uppercase text-[var(--theme-gray-muted)] block">
               Total Focus Time
             </span>
-            <div className="text-2xl sm:text-3xl font-black text-black mt-0.5">
+            <div className="text-2xl sm:text-3xl font-black text-[var(--theme-dirty-white)] mt-0.5">
               {stats.totalStudyMinutes}m
             </div>
-            <span className="text-[11px] text-amber-600 font-bold">Pomodoro timer &rarr;</span>
+            <span className="text-[11px] text-amber-400 font-bold">Pomodoro timer &rarr;</span>
           </div>
         </div>
       )}
@@ -343,10 +343,10 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
       {/* Quick Tool Launchpad: Minimal Compact Tiles */}
       <div className="space-y-2.5">
         <div className="flex items-center justify-between px-1">
-          <h3 className="text-xs font-black text-black uppercase tracking-wider">
+          <h3 className="text-xs font-bold text-[var(--theme-dirty-white)] uppercase tracking-wider">
             {currentWorkspace === 'teacher' ? 'Teacher Curriculum Launchpad' : 'Quick Launchpad'}
           </h3>
-          <span className="text-[11px] text-neutral-500 font-bold">
+          <span className="text-[11px] text-[var(--theme-gray-muted)] font-bold">
             {currentWorkspace === 'teacher' ? '8 Tools' : '9 Tools'}
           </span>
         </div>
@@ -355,105 +355,105 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             <button
               onClick={() => onSelectTool('lesson-plans')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-amber-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <FileCheck className="w-4 h-4 text-amber-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-amber-400">
+                <FileCheck className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Lesson Plans</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Curriculum Design</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Lesson Plans</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Curriculum Design</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('worksheets')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <FileText className="w-4 h-4 text-indigo-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-[var(--theme-dirty-white)]">
+                <FileText className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Worksheets</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Printable Activities</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Worksheets</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Printable Activities</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('exams')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <FileCode className="w-4 h-4 text-emerald-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-emerald-400">
+                <FileCode className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Exam Builder</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Tests & Keys</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Exam Builder</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Tests & Keys</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('attendance')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-sky-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <Users className="w-4 h-4 text-sky-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-[var(--theme-dirty-white)]">
+                <Users className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Attendance</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Rosters & Roll</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Attendance</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Rosters & Roll</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('gradebook')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-purple-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <GraduationCap className="w-4 h-4 text-purple-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-purple-400">
+                <GraduationCap className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Gradebook</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Scores & Mastery</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Gradebook</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Scores & Mastery</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('rubrics')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-rose-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <Table className="w-4 h-4 text-rose-500" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-rose-400">
+                <Table className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Rubrics</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Scoring Guides</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Rubrics</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Scoring Guides</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('certificates')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-[#FFD21A] border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <Award className="w-4 h-4 text-black" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-amber-400">
+                <Award className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Certificates</h4>
-                <p className="text-[10px] text-neutral-500 truncate">PDF Diplomas</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Certificates</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">PDF Diplomas</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('backup')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-emerald-400">
+                <ShieldCheck className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Data Backup</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Export & Purge</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Data Backup</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Export & Purge</p>
               </div>
             </button>
           </div>
@@ -461,118 +461,118 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             <button
               onClick={() => onSelectTool('study-planner')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <Calendar className="w-4 h-4 text-indigo-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-[var(--theme-dirty-white)]">
+                <Calendar className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Study Planner</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Tasks & Deadlines</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Study Planner</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Tasks & Deadlines</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('flashcards')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-amber-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <Layers className="w-4 h-4 text-amber-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-amber-400">
+                <Layers className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Flashcard Maker</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Leitner System</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Flashcard Maker</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Leitner System</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('quizzes')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <HelpCircle className="w-4 h-4 text-emerald-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-emerald-400">
+                <HelpCircle className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Practice Tests</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Instant Grading</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Practice Tests</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Instant Grading</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('doc-quiz')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-sky-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <FileQuestion className="w-4 h-4 text-sky-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-[var(--theme-dirty-white)]">
+                <FileQuestion className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Doc to Quiz</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Auto-generate tests</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Doc to Quiz</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Auto-generate tests</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('grade-calculator')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-purple-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <TrendingUp className="w-4 h-4 text-purple-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-purple-400">
+                <TrendingUp className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">GPA Calculator</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Weighted Grades</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">GPA Calculator</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Weighted Grades</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('citations')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-rose-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <Quote className="w-4 h-4 text-rose-500" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-rose-400">
+                <Quote className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Citations</h4>
-                <p className="text-[10px] text-neutral-500 truncate">APA, MLA, IEEE</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Citations</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">APA, MLA, IEEE</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('timetable')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-cyan-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <Calendar className="w-4 h-4 text-cyan-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-cyan-400">
+                <Calendar className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Timetable</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Weekly Schedule</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Timetable</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Weekly Schedule</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('goals')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-amber-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <Target className="w-4 h-4 text-amber-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-amber-400">
+                <Target className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Goals Tracker</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Milestones</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Goals Tracker</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Milestones</p>
               </div>
             </button>
 
             <button
               onClick={() => onSelectTool('backup')}
-              className="flex items-center gap-2.5 p-2.5 bg-white rounded-xl border border-black/30 hover:border-black hover:bg-[#FAF7F2] hover:shadow-[2px_2px_0px_#000000] text-left transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 p-2.5 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] hover:border-[var(--theme-dirty-white)]/40 hover:bg-[var(--theme-surface-raised)] hover:shadow-xs text-left transition-all cursor-pointer group"
             >
-              <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-black/20 flex items-center justify-center shrink-0 group-hover:border-black">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 text-emerald-400">
+                <ShieldCheck className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-black text-xs text-black truncate">Data Backup</h4>
-                <p className="text-[10px] text-neutral-500 truncate">Export & Purge</p>
+                <h4 className="font-bold text-xs text-[var(--theme-dirty-white)] group-hover:text-white truncate">Data Backup</h4>
+                <p className="text-[10px] text-[var(--theme-gray-muted)] truncate">Export & Purge</p>
               </div>
             </button>
           </div>
@@ -580,15 +580,15 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
       </div>
 
       {/* Learning / Curriculum Achievements: Minimal Inline Badges */}
-      <div className="bg-white/90 backdrop-blur-xs p-4 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000000] space-y-3">
+      <div className="bg-[var(--theme-surface)] p-4 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-black text-black flex items-center gap-1.5 uppercase tracking-wider">
+          <h3 className="text-xs font-bold text-[var(--theme-dirty-white)] flex items-center gap-1.5 uppercase tracking-wider">
             <Award className="w-4 h-4 text-amber-500" />
             <span>
               {currentWorkspace === 'teacher' ? 'Curriculum Milestones' : 'Learning Milestones'}
             </span>
           </h3>
-          <span className="text-[11px] font-bold text-neutral-500">
+          <span className="text-[11px] font-bold text-[var(--theme-gray-muted)]">
             {activeAchievements.filter((a) => a.unlocked).length} of {activeAchievements.length}{' '}
             Unlocked
           </span>
@@ -602,18 +602,18 @@ export const EducationDashboard: React.FC<EducationDashboardProps> = ({
                 key={badge.id}
                 className={`flex items-center gap-2 p-2 rounded-xl border transition-all ${
                   badge.unlocked
-                    ? 'border-black bg-[#FAF7F2] shadow-[1.5px_1.5px_0px_#000000]'
-                    : 'border-neutral-200 bg-neutral-50 opacity-40 grayscale'
+                    ? 'border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] shadow-xs'
+                    : 'border-[var(--theme-gray-border)] bg-[var(--theme-surface)] opacity-40 grayscale'
                 }`}
               >
                 <div
-                  className={`w-7 h-7 rounded-lg border border-black flex items-center justify-center shrink-0 ${badge.color}`}
+                  className={`w-7 h-7 rounded-lg border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0 ${badge.color}`}
                 >
-                  <Icon className="w-3.5 h-3.5 text-black" />
+                  <Icon className="w-3.5 h-3.5 text-[var(--theme-dirty-white)]" />
                 </div>
                 <div className="min-w-0">
-                  <h4 className="font-black text-[11px] text-black truncate">{badge.title}</h4>
-                  <span className="text-[9px] font-bold text-neutral-500 block truncate">
+                  <h4 className="font-bold text-[11px] text-[var(--theme-dirty-white)] truncate">{badge.title}</h4>
+                  <span className="text-[9px] font-medium text-[var(--theme-gray-muted)] block truncate">
                     {badge.unlocked ? 'Unlocked' : 'In Progress'}
                   </span>
                 </div>

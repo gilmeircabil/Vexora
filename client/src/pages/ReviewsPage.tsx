@@ -64,11 +64,11 @@ export const ReviewsPage: React.FC = () => {
   return (
     <div className="space-y-10 pb-12">
       {/* Open Editorial Header & Rating Breakdown */}
-      <div className="border-b-2 border-black pb-8 space-y-6">
+      <div className="border-b border-[var(--theme-gray-border)] pb-8 space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-xs font-mono font-black uppercase text-black hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)]"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Home</span>
@@ -77,28 +77,28 @@ export const ReviewsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsWriteModalOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-xs font-black uppercase tracking-wider text-black shadow-[3px_3px_0px_#000000] cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold uppercase tracking-wider text-[var(--theme-canvas)] shadow-sm cursor-pointer transition-transform hover:-translate-y-0.5"
           >
-            <PenSquare className="w-4 h-4 stroke-[2.5]" />
+            <PenSquare className="w-4 h-4 stroke-[2.2]" />
             <span>Write a Review</span>
           </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-5 space-y-2">
-            <h1 className="text-3xl sm:text-4xl font-black text-black">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-[var(--theme-dirty-white)]">
               What People Say About VexoraMods
             </h1>
-            <p className="text-sm font-semibold text-neutral-700 leading-relaxed">
+            <p className="text-sm font-normal text-[var(--theme-gray-muted)] leading-relaxed">
               Your feedback helps us improve and build better tools for everyone. Every rating and
               review below comes directly from registered VexoraMods members.
             </p>
           </div>
 
           {/* Open Summary & 5-Star Distribution */}
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-12 gap-6 items-center lg:border-l-2 lg:border-black/15 lg:pl-8">
-            <div className="sm:col-span-5 text-center sm:border-r-2 sm:border-black/15 sm:pr-4 space-y-1.5">
-              <div className="text-4xl sm:text-5xl font-black text-black">
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-12 gap-6 items-center lg:border-l lg:border-[var(--theme-gray-border)] lg:pl-8">
+            <div className="sm:col-span-5 text-center sm:border-r sm:border-[var(--theme-gray-border)] sm:pr-4 space-y-1.5">
+              <div className="text-4xl sm:text-5xl font-extrabold text-[var(--theme-dirty-white)]">
                 {summary.totalApproved > 0 ? summary.averageRating.toFixed(1) : '0.0'}
               </div>
               <div className="flex items-center justify-center gap-1">
@@ -108,12 +108,12 @@ export const ReviewsPage: React.FC = () => {
                     className={`w-4 h-4 ${
                       summary.totalApproved > 0 && star <= Math.round(summary.averageRating)
                         ? 'text-amber-500 fill-amber-400'
-                        : 'text-neutral-300'
+                        : 'text-[var(--theme-gray-dim)]'
                     }`}
                   />
                 ))}
               </div>
-              <p className="text-xs font-mono font-bold text-neutral-600">
+              <p className="text-xs font-mono font-medium text-[var(--theme-gray-muted)]">
                 {summary.totalApproved}{' '}
                 {summary.totalApproved === 1 ? 'approved review' : 'approved reviews'}
               </p>
@@ -127,19 +127,19 @@ export const ReviewsPage: React.FC = () => {
                 return (
                   <div
                     key={star}
-                    className="flex items-center gap-2.5 text-xs font-mono font-bold text-black"
+                    className="flex items-center gap-2.5 text-xs font-mono font-medium text-[var(--theme-dirty-white-muted)]"
                   >
                     <span className="w-10 shrink-0 flex items-center gap-1">
                       <span>{star}</span>
                       <Star className="w-3 h-3 text-amber-500 fill-amber-400" />
                     </span>
-                    <div className="flex-1 h-2 rounded-full bg-black/10 overflow-hidden">
+                    <div className="flex-1 h-2 rounded-full bg-[var(--theme-surface-raised)] overflow-hidden">
                       <div
-                        className="h-full bg-black transition-all duration-300"
+                        className="h-full bg-[var(--theme-dirty-white)] transition-all duration-300"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span className="w-8 text-right text-neutral-600">{count}</span>
+                    <span className="w-8 text-right text-[var(--theme-gray-muted)]">{count}</span>
                   </div>
                 );
               })}
@@ -149,19 +149,19 @@ export const ReviewsPage: React.FC = () => {
       </div>
 
       {/* Filters & Sort Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b-2 border-black/15">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[var(--theme-gray-border)]">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="inline-flex items-center gap-1.5 text-xs font-mono font-black uppercase text-black mr-1">
+          <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase text-[var(--theme-gray-muted)] mr-1">
             <Filter className="w-3.5 h-3.5" />
             <span>Filter:</span>
           </span>
           <button
             type="button"
             onClick={() => setSelectedStar(undefined)}
-            className={`px-3 py-1 rounded-xl text-xs font-black border-2 transition-all cursor-pointer ${
+            className={`px-3 py-1 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
               selectedStar === undefined
-                ? 'bg-[#FACC15] border-black text-black shadow-[2px_2px_0px_#000000]'
-                : 'bg-[#FAF7F2] border-black/30 text-neutral-700 hover:border-black'
+                ? 'bg-[var(--theme-dirty-white)] border-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                : 'bg-[var(--theme-surface)] border-[var(--theme-gray-border)] text-[var(--theme-gray-muted)] hover:border-[var(--theme-gray-subtle)] hover:text-[var(--theme-dirty-white)]'
             }`}
           >
             All Ratings
@@ -171,10 +171,10 @@ export const ReviewsPage: React.FC = () => {
               key={star}
               type="button"
               onClick={() => setSelectedStar(star)}
-              className={`inline-flex items-center gap-1 px-3 py-1 rounded-xl text-xs font-black border-2 transition-all cursor-pointer ${
+              className={`inline-flex items-center gap-1 px-3 py-1 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                 selectedStar === star
-                  ? 'bg-[#FACC15] border-black text-black shadow-[2px_2px_0px_#000000]'
-                  : 'bg-[#FAF7F2] border-black/30 text-neutral-700 hover:border-black'
+                  ? 'bg-[var(--theme-dirty-white)] border-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                  : 'bg-[var(--theme-surface)] border-[var(--theme-gray-border)] text-[var(--theme-gray-muted)] hover:border-[var(--theme-gray-subtle)] hover:text-[var(--theme-dirty-white)]'
               }`}
             >
               <span>{star}</span>
@@ -186,7 +186,7 @@ export const ReviewsPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <label
             htmlFor="reviews-sort-select"
-            className="text-xs font-mono font-black uppercase text-black"
+            className="text-xs font-mono font-bold uppercase text-[var(--theme-gray-muted)]"
           >
             Sort:
           </label>
@@ -194,7 +194,7 @@ export const ReviewsPage: React.FC = () => {
             id="reviews-sort-select"
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value as 'newest' | 'highest' | 'lowest')}
-            className="px-3 py-1.5 rounded-xl bg-[#FAF7F2] border-2 border-black text-xs font-black text-black focus:outline-none"
+            className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-xs font-bold text-[var(--theme-dirty-white)] focus:outline-none focus:border-[var(--theme-dirty-white)]"
           >
             <option value="newest">Most Recent</option>
             <option value="highest">Highest Rated</option>
@@ -209,26 +209,26 @@ export const ReviewsPage: React.FC = () => {
           {[1, 2, 3, 4, 5, 6].map((n) => (
             <div
               key={n}
-              className="h-44 rounded-2xl bg-white border-2 border-black p-5 animate-pulse shadow-[4px_4px_0px_#000000]"
+              className="h-44 rounded-2xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] p-5 animate-pulse shadow-sm"
             />
           ))}
         </div>
       ) : error ? (
-        <div className="bg-red-50 border-2 border-black rounded-2xl p-6 text-center space-y-2 shadow-[4px_4px_0px_#000000]">
-          <AlertCircle className="w-6 h-6 text-red-600 mx-auto" />
-          <p className="text-sm font-black text-black">{error}</p>
+        <div className="bg-red-950/40 border border-red-800 rounded-2xl p-6 text-center space-y-2 shadow-sm">
+          <AlertCircle className="w-6 h-6 text-red-400 mx-auto" />
+          <p className="text-sm font-bold text-red-200">{error}</p>
         </div>
       ) : reviews.length === 0 ? (
-        <div className="bg-white border-2 border-black rounded-2xl p-10 text-center space-y-4 shadow-[4px_4px_0px_#000000]">
-          <p className="text-lg font-black text-black">Be the first to review VexoraMods.</p>
-          <p className="text-xs font-semibold text-neutral-600 max-w-md mx-auto">
+        <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-2xl p-10 text-center space-y-4 shadow-sm">
+          <p className="text-lg font-bold text-[var(--theme-dirty-white)]">Be the first to review VexoraMods.</p>
+          <p className="text-xs font-normal text-[var(--theme-gray-muted)] max-w-md mx-auto">
             Share your thoughts on our tools, Studio design editor, or Learning Hub to help guide
             future improvements.
           </p>
           <button
             type="button"
             onClick={() => setIsWriteModalOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black text-xs font-black uppercase text-black shadow-[3px_3px_0px_#000000] cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold uppercase text-[var(--theme-canvas)] shadow-sm cursor-pointer"
           >
             <PenSquare className="w-4 h-4" />
             <span>Write a Review</span>
@@ -248,18 +248,18 @@ export const ReviewsPage: React.FC = () => {
                 type="button"
                 disabled={pagination.page <= 1}
                 onClick={() => loadReviews(pagination.page - 1)}
-                className="px-4 py-2 rounded-xl bg-white border-2 border-black text-xs font-black uppercase disabled:opacity-40 cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-xs font-bold uppercase text-slate-100 disabled:opacity-40 hover:bg-slate-800 cursor-pointer"
               >
                 Previous
               </button>
-              <span className="text-xs font-mono font-black text-black">
+              <span className="text-xs font-mono font-medium text-slate-400">
                 Page {pagination.page} of {pagination.totalPages}
               </span>
               <button
                 type="button"
                 disabled={pagination.page >= pagination.totalPages}
                 onClick={() => loadReviews(pagination.page + 1)}
-                className="px-4 py-2 rounded-xl bg-white border-2 border-black text-xs font-black uppercase disabled:opacity-40 cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-xs font-bold uppercase text-slate-100 disabled:opacity-40 hover:bg-slate-800 cursor-pointer"
               >
                 Next
               </button>

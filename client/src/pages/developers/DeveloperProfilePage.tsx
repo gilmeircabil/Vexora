@@ -115,8 +115,8 @@ export const DeveloperProfilePage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] py-20 flex flex-col items-center justify-center space-y-3">
-        <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-[var(--theme-canvas)] text-slate-100 py-20 flex flex-col items-center justify-center space-y-3">
+        <div className="w-10 h-10 border border-[var(--theme-gray-border)] border-t-transparent rounded-full animate-spin" />
         <span className="font-mono text-xs font-bold">Loading developer portfolio...</span>
       </div>
     );
@@ -124,16 +124,16 @@ export const DeveloperProfilePage: React.FC = () => {
 
   if (error || !data) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] py-20 px-4">
-        <div className="max-w-xl mx-auto bg-white border-2 border-black rounded-2xl p-8 shadow-[6px_6px_0px_#000] text-center space-y-4">
+      <div className="min-h-screen bg-[var(--theme-canvas)] text-slate-100 py-20 px-4">
+        <div className="max-w-xl mx-auto bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-2xl p-8 shadow-sm text-center space-y-4">
           <AlertCircle className="w-10 h-10 text-red-600 mx-auto" />
-          <h2 className="text-xl font-black text-black">Developer Profile Not Available</h2>
-          <p className="text-xs font-semibold text-neutral-600">
+          <h2 className="text-xl font-black text-slate-100">Developer Profile Not Available</h2>
+          <p className="text-xs font-semibold text-slate-400">
             {error || 'This developer profile does not exist or has been hidden.'}
           </p>
           <Link
             to="/developers"
-            className="inline-flex px-4 py-2 bg-[#FACC15] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[2px_2px_0px_#000]"
+            className="inline-flex px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs font-black shadow-sm"
           >
             &larr; Back to Developer Directory
           </Link>
@@ -145,22 +145,22 @@ export const DeveloperProfilePage: React.FC = () => {
   const { profile, projects, isOwner } = data;
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[var(--theme-canvas)] text-slate-100 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto space-y-8">
         {/* Profile Card with Cover Photo */}
-        <div className="bg-white border-2 border-black rounded-3xl shadow-[6px_6px_0px_#000] overflow-hidden">
+        <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-3xl shadow-sm overflow-hidden">
           {/* Cover Banner */}
-          <div className="h-44 sm:h-60 bg-[#FACC15] border-b-2 border-black relative overflow-hidden">
+          <div className="h-44 sm:h-60 bg-[#181b19] border-b border-[var(--theme-gray-border)] relative overflow-hidden">
             {profile.coverImage ? (
               <img src={profile.coverImage} alt="Cover" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full bg-gradient-to-r from-[#FACC15] via-[#FB923C] to-[#F472B6]" />
+              <div className="w-full h-full bg-[#181b19]" />
             )}
 
             {isOwner && (
               <Link
                 to="/developers/profile/edit"
-                className="absolute top-4 right-4 px-3 py-1.5 bg-white border-2 border-black rounded-xl font-mono text-xs font-black shadow-[2px_2px_0px_#000] flex items-center gap-1.5 hover:bg-neutral-100"
+                className="absolute top-4 right-4 px-3 py-1.5 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-xl font-mono text-xs font-black shadow-sm flex items-center gap-1.5 hover:bg-neutral-100"
               >
                 <Edit className="w-3.5 h-3.5" />
                 <span>Edit Profile</span>
@@ -172,7 +172,7 @@ export const DeveloperProfilePage: React.FC = () => {
           <div className="p-6 sm:p-8 relative pt-0">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-16 sm:-mt-20 mb-6">
               {/* Avatar */}
-              <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl bg-[#FAF7F2] border-3 border-black overflow-hidden shadow-[4px_4px_0px_#000] flex items-center justify-center font-black text-3xl shrink-0">
+              <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl bg-slate-900/60 border border-[var(--theme-gray-border)] overflow-hidden shadow-sm flex items-center justify-center font-black text-3xl shrink-0">
                 {profile.profileImage ? (
                   <img
                     src={profile.profileImage}
@@ -188,10 +188,10 @@ export const DeveloperProfilePage: React.FC = () => {
               <div className="flex items-center gap-2 flex-wrap">
                 <button
                   onClick={() => setIsReportOpen(true)}
-                  className="p-2 bg-white hover:bg-neutral-100 border-2 border-black rounded-xl shadow-[2px_2px_0px_#000] cursor-pointer"
+                  className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 rounded-xl shadow-sm cursor-pointer"
                   title="Report Profile"
                 >
-                  <Flag className="w-4 h-4 text-neutral-600" />
+                  <Flag className="w-4 h-4 text-slate-400" />
                 </button>
               </div>
             </div>
@@ -200,12 +200,12 @@ export const DeveloperProfilePage: React.FC = () => {
             <div className="space-y-4">
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="text-2xl sm:text-3xl font-black text-black">
+                  <h1 className="text-2xl sm:text-3xl font-black text-slate-100">
                     {profile.displayName}
                   </h1>
-                  <span className="text-sm font-mono text-neutral-500">@{profile.username}</span>
+                  <span className="text-sm font-mono text-slate-400">@{profile.username}</span>
                   {profile.isFeatured && (
-                    <span className="px-2 py-0.5 rounded-md bg-[#FACC15] border border-black font-mono text-[10px] font-bold">
+                    <span className="px-2 py-0.5 rounded-md bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-black font-mono text-[10px] font-bold">
                       Featured Builder
                     </span>
                   )}
@@ -216,7 +216,7 @@ export const DeveloperProfilePage: React.FC = () => {
                 </p>
 
                 {profile.location && (
-                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600 mt-2">
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-slate-400 mt-2">
                     <MapPin className="w-3.5 h-3.5" />
                     <span>{profile.location}</span>
                   </div>
@@ -224,20 +224,14 @@ export const DeveloperProfilePage: React.FC = () => {
               </div>
 
               {/* Badges Strip */}
-              <div className="flex flex-wrap gap-2 text-xs font-mono font-bold">
-                <span className="px-3 py-1 rounded-xl bg-neutral-100 border border-black text-black capitalize">
+              <div className="flex flex-wrap gap-2 text-xs font-mono font-medium">
+                <span className="px-3 py-1 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] capitalize">
                   {profile.experienceLevel} Level
                 </span>
-                <span className="px-3 py-1 rounded-xl bg-[#38BDF8]/20 border border-black text-neutral-900 capitalize">
+                <span className="px-3 py-1 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] capitalize">
                   {profile.remotePreference}
                 </span>
-                <span
-                  className={`px-3 py-1 rounded-xl border ${
-                    profile.availability === 'available'
-                      ? 'bg-[#4ADE80]/30 border-green-800 text-green-950'
-                      : 'bg-neutral-100 border-black text-neutral-800'
-                  }`}
-                >
+                <span className="px-3 py-1 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)]">
                   ●{' '}
                   {profile.availability === 'available'
                     ? 'Available for work'
@@ -246,17 +240,17 @@ export const DeveloperProfilePage: React.FC = () => {
               </div>
 
               {/* Social / Portfolio Links */}
-              <div className="flex flex-wrap gap-2 pt-2 border-t border-black/10">
+              <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--theme-gray-border)]">
                 {profile.portfolioUrl && (
                   <a
                     href={profile.portfolioUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FAF7F2] hover:bg-neutral-200 border border-black rounded-xl text-xs font-mono font-bold"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-xl text-xs font-mono font-medium text-[var(--theme-dirty-white)]"
                   >
                     <Globe className="w-3.5 h-3.5" />
                     <span>Portfolio</span>
-                    <ExternalLink className="w-3 h-3 text-neutral-500" />
+                    <ExternalLink className="w-3 h-3 text-[var(--theme-gray-muted)]" />
                   </a>
                 )}
                 {profile.githubUrl && (
@@ -264,11 +258,11 @@ export const DeveloperProfilePage: React.FC = () => {
                     href={profile.githubUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FAF7F2] hover:bg-neutral-200 border border-black rounded-xl text-xs font-mono font-bold"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-xl text-xs font-mono font-medium text-[var(--theme-dirty-white)]"
                   >
                     <GithubIcon className="w-3.5 h-3.5" />
                     <span>GitHub</span>
-                    <ExternalLink className="w-3 h-3 text-neutral-500" />
+                    <ExternalLink className="w-3 h-3 text-[var(--theme-gray-muted)]" />
                   </a>
                 )}
                 {profile.linkedinUrl && (
@@ -276,11 +270,11 @@ export const DeveloperProfilePage: React.FC = () => {
                     href={profile.linkedinUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FAF7F2] hover:bg-neutral-200 border border-black rounded-xl text-xs font-mono font-bold"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-xl text-xs font-mono font-medium text-[var(--theme-dirty-white)]"
                   >
-                    <LinkedinIcon className="w-3.5 h-3.5 text-blue-700" />
+                    <LinkedinIcon className="w-3.5 h-3.5 text-[var(--theme-dirty-white)]" />
                     <span>LinkedIn</span>
-                    <ExternalLink className="w-3 h-3 text-neutral-500" />
+                    <ExternalLink className="w-3 h-3 text-[var(--theme-gray-muted)]" />
                   </a>
                 )}
                 {profile.websiteUrl && (
@@ -288,11 +282,11 @@ export const DeveloperProfilePage: React.FC = () => {
                     href={profile.websiteUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FAF7F2] hover:bg-neutral-200 border border-black rounded-xl text-xs font-mono font-bold"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900/60 hover:bg-neutral-200 border border-black rounded-xl text-xs font-mono font-bold"
                   >
                     <Globe className="w-3.5 h-3.5" />
                     <span>Website</span>
-                    <ExternalLink className="w-3 h-3 text-neutral-500" />
+                    <ExternalLink className="w-3 h-3 text-slate-400" />
                   </a>
                 )}
               </div>
@@ -305,8 +299,8 @@ export const DeveloperProfilePage: React.FC = () => {
           {/* Left Column: Bio & Services (7 cols) */}
           <div className="md:col-span-7 space-y-6">
             {profile.biography && (
-              <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-[4px_4px_0px_#000] space-y-3">
-                <h2 className="text-base font-black text-black font-mono uppercase">About Me</h2>
+              <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-2xl p-6 shadow-sm space-y-3">
+                <h2 className="text-base font-black text-slate-100 font-mono uppercase">About Me</h2>
                 <div className="text-xs sm:text-sm font-medium text-neutral-800 leading-relaxed whitespace-pre-line">
                   {profile.biography}
                 </div>
@@ -314,8 +308,8 @@ export const DeveloperProfilePage: React.FC = () => {
             )}
 
             {profile.services && profile.services.length > 0 && (
-              <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-[4px_4px_0px_#000] space-y-3">
-                <h2 className="text-base font-black text-black font-mono uppercase flex items-center gap-2">
+              <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-2xl p-6 shadow-sm space-y-3">
+                <h2 className="text-base font-black text-slate-100 font-mono uppercase flex items-center gap-2">
                   <Briefcase className="w-4 h-4" />
                   <span>Services Offered</span>
                 </h2>
@@ -323,7 +317,7 @@ export const DeveloperProfilePage: React.FC = () => {
                   {profile.services.map((svc: string) => (
                     <div
                       key={svc}
-                      className="p-2.5 bg-[#FAF7F2] border border-black rounded-xl text-xs font-bold text-black flex items-center gap-2"
+                      className="p-2.5 bg-slate-900/60 border border-black rounded-xl text-xs font-bold text-slate-100 flex items-center gap-2"
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
                       <span>{svc}</span>
@@ -336,22 +330,22 @@ export const DeveloperProfilePage: React.FC = () => {
 
           {/* Right Column: Skills & Tech (5 cols) */}
           <div className="md:col-span-5 space-y-6">
-            <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-[4px_4px_0px_#000] space-y-4">
-              <h2 className="text-base font-black text-black font-mono uppercase flex items-center gap-2">
+            <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-2xl p-6 shadow-sm space-y-4">
+              <h2 className="text-base font-black text-slate-100 font-mono uppercase flex items-center gap-2">
                 <Code2 className="w-4 h-4" />
                 <span>Skills & Tech Stack</span>
               </h2>
 
               {profile.skills && profile.skills.length > 0 && (
                 <div className="space-y-2">
-                  <span className="text-[11px] font-mono font-bold text-neutral-500 uppercase">
+                  <span className="text-[11px] font-mono font-bold text-slate-400 uppercase">
                     Core Skills:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {profile.skills.map((s: string) => (
                       <span
                         key={s}
-                        className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-[#FAF7F2] border border-black"
+                        className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-slate-900/60 border border-black"
                       >
                         {s}
                       </span>
@@ -362,7 +356,7 @@ export const DeveloperProfilePage: React.FC = () => {
 
               {profile.technologies && profile.technologies.length > 0 && (
                 <div className="space-y-2 pt-2 border-t border-black/10">
-                  <span className="text-[11px] font-mono font-bold text-neutral-500 uppercase">
+                  <span className="text-[11px] font-mono font-bold text-slate-400 uppercase">
                     Technologies:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
@@ -383,16 +377,16 @@ export const DeveloperProfilePage: React.FC = () => {
 
         {/* Published Projects Showcase */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between border-b-2 border-black pb-3">
-            <h2 className="text-xl font-black text-black flex items-center gap-2 font-mono uppercase">
-              <FolderGit2 className="w-5 h-5 text-black" />
+          <div className="flex items-center justify-between border-b border-[var(--theme-gray-border)] pb-3">
+            <h2 className="text-xl font-black text-slate-100 flex items-center gap-2 font-mono uppercase">
+              <FolderGit2 className="w-5 h-5 text-slate-100" />
               <span>Project Portfolio ({projects?.length || 0})</span>
             </h2>
 
             {isOwner && (
               <Link
                 to="/developers/projects/manage"
-                className="px-3 py-1.5 bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[2px_2px_0px_#000]"
+                className="px-3 py-1.5 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs font-black shadow-sm"
               >
                 + Manage Projects
               </Link>
@@ -405,10 +399,10 @@ export const DeveloperProfilePage: React.FC = () => {
                 <Link
                   key={proj._id}
                   to={`/developers/projects/${proj.slug}`}
-                  className="bg-white border-2 border-black rounded-2xl overflow-hidden shadow-[4px_4px_0px_#000] hover:shadow-[6px_6px_0px_#000] hover:-translate-y-0.5 transition-all flex flex-col justify-between group"
+                  className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-sm hover:-translate-y-0.5 transition-all flex flex-col justify-between group"
                 >
                   <div>
-                    <div className="h-44 bg-[#FAF7F2] border-b-2 border-black relative overflow-hidden flex items-center justify-center">
+                    <div className="h-44 bg-slate-900/60 border-b border-[var(--theme-gray-border)] relative overflow-hidden flex items-center justify-center">
                       {proj.coverImage ? (
                         <img
                           src={proj.coverImage}
@@ -416,7 +410,7 @@ export const DeveloperProfilePage: React.FC = () => {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         />
                       ) : (
-                        <div className="text-4xl font-mono font-black text-black/20">{'</>'}</div>
+                        <div className="text-4xl font-mono font-black text-slate-100/20">{'</>'}</div>
                       )}
                       <span className="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-white border border-black text-[10px] font-mono font-black uppercase">
                         {proj.category}
@@ -424,10 +418,10 @@ export const DeveloperProfilePage: React.FC = () => {
                     </div>
 
                     <div className="p-5 space-y-2">
-                      <h3 className="font-black text-base text-black group-hover:underline">
+                      <h3 className="font-black text-base text-slate-100 group-hover:underline">
                         {proj.title}
                       </h3>
-                      <p className="text-xs font-semibold text-neutral-600 line-clamp-2 leading-relaxed">
+                      <p className="text-xs font-semibold text-slate-400 line-clamp-2 leading-relaxed">
                         {proj.description}
                       </p>
                     </div>
@@ -438,7 +432,7 @@ export const DeveloperProfilePage: React.FC = () => {
                       {(proj.technologies || []).slice(0, 3).map((t: string) => (
                         <span
                           key={t}
-                          className="text-[10px] font-mono font-bold px-2 py-0.5 bg-[#FAF7F2] border border-black rounded-md"
+                          className="text-[10px] font-mono font-bold px-2 py-0.5 bg-slate-900/60 border border-black rounded-md"
                         >
                           {t}
                         </span>
@@ -446,8 +440,8 @@ export const DeveloperProfilePage: React.FC = () => {
                     </div>
 
                     <div className="pt-3 border-t border-black/10 flex items-center justify-between text-xs font-mono font-bold">
-                      <span className="text-neutral-500">{proj.viewCount || 0} views</span>
-                      <span className="text-black flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                      <span className="text-slate-400">{proj.viewCount || 0} views</span>
+                      <span className="text-slate-100 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
                         Explore &rarr;
                       </span>
                     </div>
@@ -456,12 +450,12 @@ export const DeveloperProfilePage: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="p-12 text-center bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000] space-y-3">
-              <p className="text-sm font-black text-black">No published projects yet.</p>
+            <div className="p-12 text-center bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-2xl shadow-sm space-y-3">
+              <p className="text-sm font-black text-slate-100">No published projects yet.</p>
               {isOwner && (
                 <Link
                   to="/developers/projects/manage"
-                  className="inline-block px-4 py-2 bg-[#FACC15] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[2px_2px_0px_#000]"
+                  className="inline-block px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs font-black shadow-sm"
                 >
                   Publish Your First Project
                 </Link>
@@ -473,9 +467,9 @@ export const DeveloperProfilePage: React.FC = () => {
         {/* Report Modal */}
         {isReportOpen && (
           <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white border-2 border-black rounded-3xl max-w-md w-full p-6 shadow-[8px_8px_0px_#000] space-y-4">
-              <div className="flex items-center justify-between border-b-2 border-black pb-3">
-                <h3 className="font-black text-base text-black flex items-center gap-2">
+            <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-3xl max-w-md w-full p-6 shadow-sm space-y-4">
+              <div className="flex items-center justify-between border-b border-[var(--theme-gray-border)] pb-3">
+                <h3 className="font-black text-base text-slate-100 flex items-center gap-2">
                   <Flag className="w-4 h-4 text-red-600" />
                   <span>Report Profile</span>
                 </h3>
@@ -492,7 +486,7 @@ export const DeveloperProfilePage: React.FC = () => {
                   <select
                     value={reportReason}
                     onChange={(e) => setReportReason(e.target.value)}
-                    className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold"
+                    className="w-full p-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold"
                   >
                     <option value="spam">Spam or Fake Listing</option>
                     <option value="inappropriate">Inappropriate Content</option>
@@ -512,14 +506,14 @@ export const DeveloperProfilePage: React.FC = () => {
                     value={reportDescription}
                     onChange={(e) => setReportDescription(e.target.value)}
                     placeholder="Please explain the issue..."
-                    className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-medium"
+                    className="w-full p-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmittingReport}
-                  className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white border-2 border-black rounded-xl font-mono text-xs font-black shadow-[3px_3px_0px_#000]"
+                  className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs font-black shadow-sm"
                 >
                   {isSubmittingReport ? 'Submitting...' : 'Submit Report'}
                 </button>

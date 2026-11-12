@@ -581,7 +581,7 @@ export const AdminDashboardPage: React.FC = () => {
 
   if (authLoading || isLoading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-20 text-center text-xs text-neutral-500 font-mono">
+      <div className="max-w-7xl mx-auto px-4 py-20 text-center text-xs text-slate-400 font-mono">
         Loading admin console...
       </div>
     );
@@ -594,17 +594,17 @@ export const AdminDashboardPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Admin Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b-2 border-black/10">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-[var(--theme-gray-border)]">
         <div>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#FACC15] border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_#000]">
-              <ShieldCheck className="w-5 h-5 text-black stroke-[2.5]" />
+            <div className="w-10 h-10 rounded-xl bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] flex items-center justify-center shadow-sm">
+              <ShieldCheck className="w-5 h-5 text-slate-100 stroke-[2.5]" />
             </div>
-            <h1 className="text-2xl sm:text-4xl font-black text-black">
+            <h1 className="text-2xl sm:text-4xl font-black text-slate-100">
               Admin Moderation &amp; Governance
             </h1>
           </div>
-          <p className="text-xs sm:text-sm font-bold text-neutral-600 mt-1">
+          <p className="text-xs sm:text-sm font-bold text-slate-400 mt-1">
             Manage Learning Hub posts &amp; comments, Community donations &amp; webhooks, user
             accounts, and Homepage configuration.
           </p>
@@ -612,7 +612,7 @@ export const AdminDashboardPage: React.FC = () => {
 
         <button
           onClick={fetchAdminData}
-          className="p-2.5 text-xs font-black rounded-xl border-2 border-black bg-white hover:bg-neutral-100 text-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
+          className="p-2.5 text-xs font-bold rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
         >
           <RefreshCw className="w-3.5 h-3.5 stroke-[2.5]" />
           <span>Refresh</span>
@@ -620,31 +620,31 @@ export const AdminDashboardPage: React.FC = () => {
       </div>
 
       {/* Inline Telemetry Bar (Consolidated Summary) */}
-      <div className="border-y-2 border-black py-4 grid grid-cols-2 md:grid-cols-4 gap-4 md:divide-x-2 md:divide-black/15">
+      <div className="border-y border-[var(--theme-gray-border)] py-4 grid grid-cols-2 md:grid-cols-4 gap-4 md:divide-x-2 md:divide-black/15">
         <div>
-          <span className="text-[11px] text-neutral-600 font-black uppercase tracking-wider block">
+          <span className="text-[11px] text-slate-400 font-black uppercase tracking-wider block">
             Registered Users
           </span>
-          <div className="text-2xl font-black font-mono text-black mt-1">
+          <div className="text-2xl font-black font-mono text-slate-100 mt-1">
             {stats?.totalUsers || users.length}
           </div>
         </div>
         <div className="md:pl-6">
-          <span className="text-[11px] text-neutral-600 font-black uppercase tracking-wider block">
+          <span className="text-[11px] text-slate-400 font-black uppercase tracking-wider block">
             Learning Hub Posts
           </span>
-          <div className="text-2xl font-black font-mono text-black mt-1">
+          <div className="text-2xl font-black font-mono text-slate-100 mt-1">
             {learningPosts.length}
           </div>
         </div>
         <div className="md:pl-6">
-          <span className="text-[11px] text-neutral-600 font-black uppercase tracking-wider block">
+          <span className="text-[11px] text-slate-400 font-black uppercase tracking-wider block">
             Donations Recorded
           </span>
-          <div className="text-2xl font-black font-mono text-black mt-1">{donations.length}</div>
+          <div className="text-2xl font-black font-mono text-slate-100 mt-1">{donations.length}</div>
         </div>
         <div className="md:pl-6">
-          <span className="text-[11px] text-neutral-600 font-black uppercase tracking-wider block">
+          <span className="text-[11px] text-slate-400 font-black uppercase tracking-wider block">
             Open Reports
           </span>
           <div className="text-2xl font-black font-mono mt-1 text-red-600">{openReportsCount}</div>
@@ -652,7 +652,7 @@ export const AdminDashboardPage: React.FC = () => {
       </div>
 
       {/* Navigation Tab Bar */}
-      <div className="flex border-b-2 border-black overflow-x-auto text-xs font-black uppercase tracking-wider gap-2">
+      <div className="flex border-b border-[var(--theme-gray-border)] overflow-x-auto text-xs font-black uppercase tracking-wider gap-2">
         {[
           {
             id: 'announcements' as AdminTab,
@@ -695,8 +695,8 @@ export const AdminDashboardPage: React.FC = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`pb-3 px-4 transition-all border-b-4 flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
                 active
-                  ? 'border-black text-black'
-                  : 'border-transparent text-neutral-500 hover:text-black'
+                  ? 'border-black text-slate-100'
+                  : 'border-transparent text-slate-400 hover:text-slate-100'
               }`}
             >
               <IconComp className="w-4 h-4" />
@@ -711,35 +711,35 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="space-y-8">
           {/* Top Stat Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000]">
-              <span className="text-[11px] font-black uppercase text-neutral-600 block">
+            <div className="bg-[var(--theme-surface-raised)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-xs">
+              <span className="text-[11px] font-bold uppercase text-[var(--theme-gray-muted)] block">
                 Total Broadcasts
               </span>
-              <div className="text-3xl font-black font-mono mt-1 text-black">
+              <div className="text-3xl font-bold font-mono mt-1 text-[var(--theme-dirty-white)]">
                 {announcements.length}
               </div>
             </div>
-            <div className="bg-white p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000]">
-              <span className="text-[11px] font-black uppercase text-neutral-600 block">
+            <div className="bg-[var(--theme-surface-raised)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-xs">
+              <span className="text-[11px] font-bold uppercase text-[var(--theme-gray-muted)] block">
                 Active Broadcasts
               </span>
-              <div className="text-3xl font-black font-mono mt-1 text-[#4ADE80]">
+              <div className="text-3xl font-bold font-mono mt-1 text-[var(--theme-dirty-white)]">
                 {announcements.filter((a) => a.status === 'active').length}
               </div>
             </div>
-            <div className="bg-white p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000]">
-              <span className="text-[11px] font-black uppercase text-neutral-600 block">
+            <div className="bg-[var(--theme-surface-raised)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-xs">
+              <span className="text-[11px] font-bold uppercase text-[var(--theme-gray-muted)] block">
                 Total Views
               </span>
-              <div className="text-3xl font-black font-mono mt-1 text-[#38BDF8]">
+              <div className="text-3xl font-bold font-mono mt-1 text-[var(--theme-dirty-white)]">
                 {announcements.reduce((acc, curr) => acc + (curr.viewCount || 0), 0)}
               </div>
             </div>
-            <div className="bg-white p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000]">
-              <span className="text-[11px] font-black uppercase text-neutral-600 block">
+            <div className="bg-[var(--theme-surface-raised)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-xs">
+              <span className="text-[11px] font-bold uppercase text-[var(--theme-gray-muted)] block">
                 User Dismissals
               </span>
-              <div className="text-3xl font-black font-mono mt-1 text-[#FACC15]">
+              <div className="text-3xl font-bold font-mono mt-1 text-[var(--theme-dirty-white-muted)]">
                 {announcements.reduce((acc, curr) => acc + (curr.dismissedCount || 0), 0)}
               </div>
             </div>
@@ -748,14 +748,14 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Main Grid: Compose Form + Live Preview */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Compose Card */}
-            <div className="lg:col-span-7 bg-white rounded-3xl border-2 border-black p-6 sm:p-8 shadow-[5px_5px_0px_#000000] space-y-6">
-              <div className="border-b-2 border-black pb-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FACC15] border-2 border-black font-mono text-xs font-black shadow-[2px_2px_0px_#000] mb-2 rounded-lg">
-                  <Megaphone className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+            <div className="lg:col-span-7 bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] p-6 sm:p-8 shadow-xs space-y-6">
+              <div className="border-b border-[var(--theme-gray-border)] pb-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] font-mono text-xs font-black shadow-sm mb-2 rounded-lg">
+                  <Megaphone className="w-3.5 h-3.5 text-slate-100 stroke-[2.5]" />
                   <span>GLOBAL BROADCAST SYSTEM</span>
                 </div>
-                <h3 className="text-2xl font-black text-black">Compose New Announcement</h3>
-                <p className="text-xs font-bold text-neutral-600 mt-1">
+                <h3 className="text-2xl font-black text-slate-100">Compose New Announcement</h3>
+                <p className="text-xs font-bold text-slate-400 mt-1">
                   Send a real-time toast notification to every active visitor across all pages on
                   Vexora.
                 </p>
@@ -775,10 +775,10 @@ export const AdminDashboardPage: React.FC = () => {
                 {/* Title */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-xs font-black uppercase text-black">
+                    <label className="text-xs font-black uppercase text-slate-100">
                       Announcement Title *
                     </label>
-                    <span className="text-[11px] font-mono text-neutral-500">
+                    <span className="text-[11px] font-mono text-slate-400">
                       {announcementTitle.length}/120
                     </span>
                   </div>
@@ -788,17 +788,17 @@ export const AdminDashboardPage: React.FC = () => {
                     value={announcementTitle}
                     onChange={(e) => setAnnouncementTitle(e.target.value)}
                     placeholder="e.g. Scheduled System Upgrade Tonight at 10 PM"
-                    className="w-full px-4 py-3 bg-[#FAF7F2] border-2 border-black rounded-xl font-bold text-sm focus:outline-none focus:bg-white transition-all shadow-[2px_2px_0px_#000]"
+                    className="w-full px-4 py-3 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl font-bold text-sm focus:outline-none focus:bg-[var(--theme-surface-raised)] transition-all shadow-sm"
                   />
                 </div>
 
                 {/* Message */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-xs font-black uppercase text-black">
+                    <label className="text-xs font-black uppercase text-slate-100">
                       Announcement Message *
                     </label>
-                    <span className="text-[11px] font-mono text-neutral-500">
+                    <span className="text-[11px] font-mono text-slate-400">
                       {announcementMessage.length}/1000
                     </span>
                   </div>
@@ -808,19 +808,19 @@ export const AdminDashboardPage: React.FC = () => {
                     value={announcementMessage}
                     onChange={(e) => setAnnouncementMessage(e.target.value)}
                     placeholder="Write your announcement details here. It will display inside a non-intrusive toast notification on the side of the screen..."
-                    className="w-full px-4 py-3 bg-[#FAF7F2] border-2 border-black rounded-xl font-medium text-sm focus:outline-none focus:bg-white transition-all shadow-[2px_2px_0px_#000] resize-y"
+                    className="w-full px-4 py-3 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl font-medium text-sm focus:outline-none focus:bg-[var(--theme-surface-raised)] transition-all shadow-sm resize-y"
                   />
                 </div>
 
                 {/* Type Selection */}
                 <div>
-                  <label className="block text-xs font-black uppercase text-black mb-2">
+                  <label className="block text-xs font-black uppercase text-slate-100 mb-2">
                     Notification Type
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                     {(
                       [
-                        { id: 'info', label: 'Information', color: 'bg-[#38BDF8]', icon: Info },
+                        { id: 'info', label: 'Information', color: 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)]', icon: Info },
                         {
                           id: 'success',
                           label: 'Success',
@@ -848,10 +848,10 @@ export const AdminDashboardPage: React.FC = () => {
                           key={t.id}
                           type="button"
                           onClick={() => setAnnouncementType(t.id)}
-                          className={`p-2.5 rounded-xl border-2 border-black text-xs font-black flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                          className={`p-2.5 rounded-xl border border-[var(--theme-gray-border)] text-xs font-black flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                             selected
-                              ? `${t.color} shadow-[2.5px_2.5px_0px_#000] scale-[1.02]`
-                              : 'bg-white hover:bg-neutral-100 text-black'
+                              ? `${t.color} shadow-sm scale-[1.02]`
+                              : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]'
                           }`}
                         >
                           <IconComp className="w-4 h-4 stroke-[2.5]" />
@@ -864,13 +864,13 @@ export const AdminDashboardPage: React.FC = () => {
 
                 {/* Expiration Dropdown */}
                 <div>
-                  <label className="block text-xs font-black uppercase text-black mb-1.5">
+                  <label className="block text-xs font-black uppercase text-slate-100 mb-1.5">
                     Expiration Duration
                   </label>
                   <select
                     value={announcementExpiry}
                     onChange={(e) => setAnnouncementExpiry(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl font-bold text-sm focus:outline-none shadow-[2px_2px_0px_#000]"
+                    className="w-full px-4 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl font-bold text-sm focus:outline-none shadow-sm"
                   >
                     <option value="none">No specific expiry (Stays active for 7 days)</option>
                     <option value="1h">1 Hour (Quick alert)</option>
@@ -886,7 +886,7 @@ export const AdminDashboardPage: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isBroadcasting}
-                    className="w-full py-3.5 px-6 bg-[#FFD21A] hover:bg-[#EAB308] border-2 border-black rounded-2xl font-black text-sm uppercase tracking-wider text-black shadow-[4px_4px_0px_#000] flex items-center justify-center gap-2 transition-all cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+                    className="w-full py-3.5 px-6 bg-[#FFD21A] hover:bg-[#EAB308] border border-[var(--theme-gray-border)] rounded-2xl font-black text-sm uppercase tracking-wider text-slate-100 shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
                   >
                     <Send className="w-4 h-4 stroke-[2.5]" />
                     <span>Broadcast Announcement to All Users</span>
@@ -897,63 +897,63 @@ export const AdminDashboardPage: React.FC = () => {
 
             {/* Live Interactive Preview */}
             <div className="lg:col-span-5 space-y-4">
-              <div className="bg-[#FAF7F2] p-5 rounded-3xl border-2 border-black shadow-[4px_4px_0px_#000]">
-                <div className="flex items-center gap-2 mb-3 pb-2 border-b-2 border-black">
-                  <Eye className="w-4 h-4 text-black stroke-[2.5]" />
-                  <span className="text-xs font-black uppercase text-black">
+              <div className="bg-slate-900/60 p-5 rounded-3xl border border-[var(--theme-gray-border)] shadow-sm">
+                <div className="flex items-center gap-2 mb-3 pb-2 border-b border-[var(--theme-gray-border)]">
+                  <Eye className="w-4 h-4 text-slate-100 stroke-[2.5]" />
+                  <span className="text-xs font-black uppercase text-slate-100">
                     Live Toast Preview (User Screen)
                   </span>
                 </div>
-                <p className="text-xs font-bold text-neutral-600 mb-4 leading-relaxed">
+                <p className="text-xs font-bold text-slate-400 mb-4 leading-relaxed">
                   This is exactly how connected users on any page (Tools, Studio, Learning,
                   Dashboard, etc.) will see this toast in the upper-right corner:
                 </p>
 
                 {/* Render Simulated Toast Card */}
-                <div className="relative w-full overflow-hidden rounded-2xl border-2 border-black bg-white p-4 shadow-[4px_4px_0px_#000000]">
+                <div className="relative w-full overflow-hidden rounded-2xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] p-4 shadow-sm text-[var(--theme-dirty-white)]">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2 min-w-0">
                       <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg border-2 border-black text-[11px] font-mono font-black ${
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg border border-[var(--theme-gray-border)] text-[11px] font-mono font-black ${
                           announcementType === 'important'
                             ? 'bg-[#F43F5E] text-white'
                             : announcementType === 'warning'
-                              ? 'bg-[#FACC15] text-black'
+                              ? 'bg-[#FACC15] text-slate-100'
                               : announcementType === 'success'
-                                ? 'bg-[#4ADE80] text-black'
-                                : 'bg-[#38BDF8] text-black'
-                        } shadow-[1.5px_1.5px_0px_#000] shrink-0`}
+                                ? 'bg-[#4ADE80] text-slate-100'
+                                : 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]'
+                        } shadow-sm shrink-0`}
                       >
                         <Megaphone className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
                         <span className="capitalize">{announcementType}</span>
                       </span>
 
-                      <span className="text-[11px] font-mono font-bold text-neutral-500">
+                      <span className="text-[11px] font-mono font-bold text-slate-400">
                         Just now
                       </span>
                     </div>
 
                     <button
                       type="button"
-                      className="p-1 rounded-lg border border-black/40 bg-[#FAF7F0] text-black shrink-0 pointer-events-none"
+                      className="p-1 rounded-lg border border-black/40 bg-slate-900/60 text-slate-100 shrink-0 pointer-events-none"
                     >
                       <X className="w-3.5 h-3.5 stroke-[2.5]" />
                     </button>
                   </div>
 
                   <div className="mt-2.5 space-y-1">
-                    <h4 className="text-sm font-black text-black leading-snug break-words">
+                    <h4 className="text-sm font-black text-slate-100 leading-snug break-words">
                       {announcementTitle.trim() || 'Your Announcement Title Here'}
                     </h4>
-                    <p className="text-xs font-medium text-neutral-700 leading-relaxed whitespace-pre-wrap break-words">
+                    <p className="text-xs font-medium text-slate-300 leading-relaxed whitespace-pre-wrap break-words">
                       {announcementMessage.trim() ||
                         'Your announcement message will appear here. Users can read it smoothly and dismiss it, or let it auto-disappear after 9 seconds.'}
                     </p>
                   </div>
 
-                  <div className="mt-2.5 pt-2 border-t border-black/10 flex items-center justify-between text-[10px] font-mono text-neutral-500">
+                  <div className="mt-2.5 pt-2 border-t border-black/10 flex items-center justify-between text-[10px] font-mono text-slate-400">
                     <span>By {user?.name || 'Administrator'}</span>
-                    <span className="font-bold text-black font-sans">Hover to Pause</span>
+                    <span className="font-bold text-slate-100 font-sans">Hover to Pause</span>
                   </div>
 
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-neutral-200">
@@ -965,13 +965,13 @@ export const AdminDashboardPage: React.FC = () => {
                             ? 'bg-[#FACC15]'
                             : announcementType === 'success'
                               ? 'bg-[#4ADE80]'
-                              : 'bg-[#38BDF8]'
+                              : 'bg-[var(--theme-dirty-white)]'
                       }`}
                     />
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-black/15 text-[11px] font-mono font-bold text-neutral-600 space-y-1">
+                <div className="mt-4 pt-3 border-t border-black/15 text-[11px] font-mono font-bold text-slate-400 space-y-1">
                   <div>&bull; Max simultaneous toasts: 2 (queue handles the rest)</div>
                   <div>&bull; Auto-dismiss: 9 seconds (paused on hover)</div>
                   <div>&bull; Zero paid third-party dependencies (Native SSE)</div>
@@ -981,18 +981,18 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
 
           {/* Announcements History & Management Table */}
-          <div className="bg-white rounded-3xl border-2 border-black overflow-hidden shadow-[5px_5px_0px_#000000]">
-            <div className="p-4 bg-[#FAF7F2] border-b-2 border-black flex items-center justify-between">
+          <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] overflow-hidden shadow-xs">
+            <div className="p-4 bg-slate-900/60 border-b border-[var(--theme-gray-border)] flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Radio className="w-4 h-4 text-black stroke-[2.5]" />
-                <h3 className="font-black text-sm uppercase text-black">
+                <Radio className="w-4 h-4 text-slate-100 stroke-[2.5]" />
+                <h3 className="font-black text-sm uppercase text-slate-100">
                   Broadcast History ({announcements.length})
                 </h3>
               </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-bold">
-                <thead className="bg-[#FAF7F2] border-b-2 border-black text-black uppercase text-[11px] font-black">
+                <thead className="bg-slate-900/60 border-b border-[var(--theme-gray-border)] text-slate-100 uppercase text-[11px] font-black">
                   <tr>
                     <th className="py-3 px-4">Type</th>
                     <th className="py-3 px-4">Title & Message</th>
@@ -1005,7 +1005,7 @@ export const AdminDashboardPage: React.FC = () => {
                 <tbody className="divide-y-2 divide-black/10">
                   {announcements.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-8 text-center text-neutral-500 font-bold">
+                      <td colSpan={6} className="py-8 text-center text-slate-400 font-bold">
                         No announcements broadcasted yet. Compose your first message above!
                       </td>
                     </tr>
@@ -1018,27 +1018,27 @@ export const AdminDashboardPage: React.FC = () => {
                               ann.type === 'important'
                                 ? 'bg-[#F43F5E] text-white'
                                 : ann.type === 'warning'
-                                  ? 'bg-[#FACC15] text-black'
+                                  ? 'bg-[#FACC15] text-slate-100'
                                   : ann.type === 'success'
-                                    ? 'bg-[#4ADE80] text-black'
-                                    : 'bg-[#38BDF8] text-black'
+                                    ? 'bg-[#4ADE80] text-slate-100'
+                                    : 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]'
                             }`}
                           >
                             {ann.type}
                           </span>
                         </td>
                         <td className="py-3.5 px-4 align-top max-w-xs sm:max-w-md">
-                          <div className="font-black text-sm text-black">{ann.title}</div>
-                          <div className="text-xs text-neutral-600 line-clamp-2 mt-0.5 font-medium">
+                          <div className="font-black text-sm text-slate-100">{ann.title}</div>
+                          <div className="text-xs text-slate-400 line-clamp-2 mt-0.5 font-medium">
                             {ann.message}
                           </div>
                         </td>
-                        <td className="py-3.5 px-4 align-top whitespace-nowrap text-neutral-600 font-mono text-[11px]">
+                        <td className="py-3.5 px-4 align-top whitespace-nowrap text-slate-400 font-mono text-[11px]">
                           {new Date(ann.publishedAt || ann.createdAt || '').toLocaleString()}
                         </td>
                         <td className="py-3.5 px-4 align-top whitespace-nowrap font-mono text-[11px]">
                           <div>Views: {ann.viewCount || 0}</div>
-                          <div className="text-neutral-500">
+                          <div className="text-slate-400">
                             Dismissed: {ann.dismissedCount || 0}
                           </div>
                         </td>
@@ -1046,8 +1046,8 @@ export const AdminDashboardPage: React.FC = () => {
                           <span
                             className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border border-black ${
                               ann.status === 'active'
-                                ? 'bg-[#4ADE80] text-black'
-                                : 'bg-neutral-200 text-neutral-700'
+                                ? 'bg-[#4ADE80] text-slate-100'
+                                : 'bg-neutral-200 text-slate-300'
                             }`}
                           >
                             {ann.status}
@@ -1084,38 +1084,38 @@ export const AdminDashboardPage: React.FC = () => {
 
           {/* Broadcast Confirmation Modal */}
           {showConfirmModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-              <div className="bg-white rounded-3xl border-2 border-black p-6 sm:p-8 max-w-md w-full shadow-[6px_6px_0px_#000] space-y-5 animate-in zoom-in-95 duration-200">
-                <div className="flex items-center gap-3 text-red-600">
-                  <div className="p-3 bg-red-100 border-2 border-black rounded-2xl">
-                    <Megaphone className="w-6 h-6 text-black stroke-[2.5]" />
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+              <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] p-6 sm:p-8 max-w-md w-full shadow-xl space-y-5 animate-in zoom-in-95 duration-200 text-[var(--theme-dirty-white)]">
+                <div className="flex items-center gap-3 text-amber-400">
+                  <div className="p-3 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl">
+                    <Megaphone className="w-6 h-6 text-[var(--theme-dirty-white)] stroke-[2.5]" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-black text-black">Confirm Broadcast</h3>
-                    <p className="text-xs font-bold text-neutral-600">Send to all online users?</p>
+                    <h3 className="text-xl font-bold text-[var(--theme-dirty-white)]">Confirm Broadcast</h3>
+                    <p className="text-xs font-semibold text-[var(--theme-gray-muted)]">Send to all online users?</p>
                   </div>
                 </div>
 
-                <div className="p-4 bg-[#FAF7F2] border-2 border-black rounded-2xl space-y-2">
-                  <div className="text-xs font-mono font-black uppercase text-neutral-500">
+                <div className="p-4 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl space-y-2">
+                  <div className="text-xs font-mono font-bold uppercase text-[var(--theme-gray-muted)]">
                     Preview Title
                   </div>
-                  <div className="text-sm font-black text-black">{announcementTitle}</div>
-                  <div className="text-xs text-neutral-700 font-medium line-clamp-3">
+                  <div className="text-sm font-bold text-[var(--theme-dirty-white)]">{announcementTitle}</div>
+                  <div className="text-xs text-[var(--theme-dirty-white-muted)] font-normal line-clamp-3">
                     {announcementMessage}
                   </div>
                 </div>
 
-                <p className="text-xs font-bold text-neutral-700 leading-relaxed">
+                <p className="text-xs font-normal text-[var(--theme-gray-muted)] leading-relaxed">
                   This will immediately push this notification to all connected sessions and any
                   users who visit while it remains active.
                 </p>
 
-                <div className="flex items-center justify-end gap-3 pt-2 border-t-2 border-black/10">
+                <div className="flex items-center justify-end gap-3 pt-2 border-t border-[var(--theme-gray-border)]">
                   <button
                     type="button"
                     onClick={() => setShowConfirmModal(false)}
-                    className="px-4 py-2.5 bg-white hover:bg-neutral-100 border-2 border-black rounded-xl text-xs font-black cursor-pointer shadow-[2px_2px_0px_#000]"
+                    className="px-4 py-2.5 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-xl text-xs font-bold cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -1123,7 +1123,7 @@ export const AdminDashboardPage: React.FC = () => {
                     type="button"
                     onClick={handleBroadcastSubmit}
                     disabled={isBroadcasting}
-                    className="px-5 py-2.5 bg-[#FFD21A] hover:bg-[#EAB308] border-2 border-black rounded-xl text-xs font-black text-black cursor-pointer shadow-[3px_3px_0px_#000] flex items-center gap-2"
+                    className="px-5 py-2.5 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold text-[var(--theme-canvas)] cursor-pointer shadow-xs flex items-center gap-2"
                   >
                     <Send className="w-4 h-4 stroke-[2.5]" />
                     <span>{isBroadcasting ? 'Broadcasting...' : 'Yes, Broadcast to All'}</span>
@@ -1141,68 +1141,68 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Top Status Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div
-              className={`p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000] ${
-                maintenanceForm.global ? 'bg-red-50' : 'bg-white'
+              className={`p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-xs ${
+                maintenanceForm.global ? 'bg-red-500/10' : 'bg-[var(--theme-surface-raised)]'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-black uppercase text-neutral-600 block">
+                <span className="text-[11px] font-bold uppercase text-[var(--theme-gray-muted)] block">
                   Global Maintenance
                 </span>
                 {maintenanceForm.global ? (
-                  <AlertTriangle className="w-5 h-5 text-red-600 stroke-[2.5]" />
+                  <AlertTriangle className="w-5 h-5 text-red-400 stroke-[2.5]" />
                 ) : (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600 stroke-[2.5]" />
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 stroke-[2.5]" />
                 )}
               </div>
               <div
-                className={`text-xl font-black font-mono mt-2 ${
-                  maintenanceForm.global ? 'text-red-600' : 'text-emerald-700'
+                className={`text-xl font-bold font-mono mt-2 ${
+                  maintenanceForm.global ? 'text-red-400' : 'text-emerald-400'
                 }`}
               >
                 {maintenanceForm.global ? 'ACTIVE (SITE OFFLINE)' : 'INACTIVE (ONLINE)'}
               </div>
-              <p className="text-[11px] font-bold text-neutral-500 mt-1">
+              <p className="text-[11px] font-medium text-[var(--theme-gray-muted)] mt-1">
                 {maintenanceForm.global
                   ? 'All public routes are currently locked'
                   : 'Site accessible to all visitors'}
               </p>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000]">
-              <span className="text-[11px] font-black uppercase text-neutral-600 block">
+            <div className="bg-[var(--theme-surface-raised)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-xs">
+              <span className="text-[11px] font-bold uppercase text-[var(--theme-gray-muted)] block">
                 Workspaces in Maintenance
               </span>
-              <div className="text-3xl font-black font-mono mt-1 text-black">
+              <div className="text-3xl font-bold font-mono mt-1 text-[var(--theme-dirty-white)]">
                 {Object.values(maintenanceForm.pages).filter(Boolean).length} /{' '}
                 {PAGE_LOCK_ITEMS.length}
               </div>
-              <p className="text-[11px] font-bold text-neutral-500 mt-1">
+              <p className="text-[11px] font-medium text-[var(--theme-gray-muted)] mt-1">
                 Individual sections locked
               </p>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000]">
-              <span className="text-[11px] font-black uppercase text-neutral-600 block">
+            <div className="bg-[var(--theme-surface-raised)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-xs">
+              <span className="text-[11px] font-bold uppercase text-[var(--theme-gray-muted)] block">
                 Admin Bypass Mode
               </span>
-              <div className="text-xl font-black font-mono mt-2 text-blue-600 flex items-center gap-1.5">
+              <div className="text-xl font-bold font-mono mt-2 text-[var(--theme-dirty-white)] flex items-center gap-1.5">
                 <ShieldCheck className="w-5 h-5 stroke-[2.5]" />
                 <span>ACTIVE</span>
               </div>
-              <p className="text-[11px] font-bold text-neutral-500 mt-1">
+              <p className="text-[11px] font-medium text-[var(--theme-gray-muted)] mt-1">
                 Admins see floating banner with edit access
               </p>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000]">
-              <span className="text-[11px] font-black uppercase text-neutral-600 block">
+            <div className="bg-[var(--theme-surface-raised)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-xs">
+              <span className="text-[11px] font-bold uppercase text-[var(--theme-gray-muted)] block">
                 Estimated Completion
               </span>
-              <div className="text-lg font-black font-mono mt-2 text-neutral-800 truncate">
+              <div className="text-lg font-bold font-mono mt-2 text-[var(--theme-dirty-white)] truncate">
                 {maintenanceForm.estimatedReturn || 'None specified'}
               </div>
-              <p className="text-[11px] font-bold text-neutral-500 mt-1">
+              <p className="text-[11px] font-medium text-[var(--theme-gray-muted)] mt-1">
                 Displayed in visitor notice
               </p>
             </div>
@@ -1210,17 +1210,17 @@ export const AdminDashboardPage: React.FC = () => {
 
           {/* Master Global Switch Card */}
           <div
-            className={`p-6 rounded-3xl border-3 border-black shadow-[5px_5px_0px_#000] transition-colors ${
+            className={`p-6 rounded-3xl border border-[var(--theme-gray-border)] shadow-sm transition-colors ${
               maintenanceForm.global ? 'bg-red-100' : 'bg-amber-100'
             }`}
           >
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
               <div className="space-y-1.5 max-w-2xl">
                 <div className="flex items-center gap-2">
-                  <span className="p-2 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000]">
-                    <Wrench className="w-5 h-5 text-black stroke-[2.5]" />
+                  <span className="p-2 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 shadow-sm">
+                    <Wrench className="w-5 h-5 text-slate-100 stroke-[2.5]" />
                   </span>
-                  <h3 className="text-lg font-black text-black uppercase tracking-tight">
+                  <h3 className="text-lg font-black text-slate-100 uppercase tracking-tight">
                     Global Platform Maintenance Switch
                   </h3>
                 </div>
@@ -1235,15 +1235,15 @@ export const AdminDashboardPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleToggleGlobalMaintenance}
-                  className={`px-6 py-3.5 rounded-2xl border-2 border-black font-black text-xs sm:text-sm uppercase tracking-wider cursor-pointer shadow-[3px_3px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-2.5 ${
+                  className={`px-6 py-3.5 rounded-2xl border border-[var(--theme-gray-border)] font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer shadow-xs active:translate-y-0.5 transition-all flex items-center gap-2.5 ${
                     maintenanceForm.global
                       ? 'bg-red-600 text-white hover:bg-red-700 ring-2 ring-red-400'
-                      : 'bg-white hover:bg-neutral-50 text-black'
+                      : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]'
                   }`}
                 >
                   <span
                     className={`w-3 h-3 rounded-full ${
-                      maintenanceForm.global ? 'bg-white animate-ping' : 'bg-neutral-400'
+                      maintenanceForm.global ? 'bg-[var(--theme-dirty-white)] animate-ping' : 'bg-[var(--theme-gray-muted)]'
                     }`}
                   />
                   <span>
@@ -1259,20 +1259,20 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Notice Configuration & Live Preview Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Notice Customizer Form */}
-            <div className="lg:col-span-7 bg-white rounded-3xl border-2 border-black p-6 sm:p-7 shadow-[5px_5px_0px_#000] space-y-5">
+            <div className="lg:col-span-7 bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] p-6 sm:p-7 shadow-xs space-y-5">
               <div>
-                <h3 className="text-base font-black text-black uppercase tracking-tight flex items-center gap-2">
+                <h3 className="text-base font-black text-slate-100 uppercase tracking-tight flex items-center gap-2">
                   <Megaphone className="w-4 h-4 stroke-[2.5]" />
                   <span>Customize Maintenance Notice</span>
                 </h3>
-                <p className="text-xs text-neutral-600 font-medium mt-0.5">
+                <p className="text-xs text-slate-400 font-medium mt-0.5">
                   This text appears inside the maintenance modal seen by visitors on locked pages.
                 </p>
               </div>
 
               {/* Quick Presets */}
               <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span className="text-[11px] font-black uppercase text-neutral-500 mr-1">
+                <span className="text-[11px] font-black uppercase text-slate-400 mr-1">
                   Presets:
                 </span>
                 <button
@@ -1286,7 +1286,7 @@ export const AdminDashboardPage: React.FC = () => {
                       estimatedReturn: 'In 30 minutes',
                     }))
                   }
-                  className="px-2.5 py-1 rounded-lg bg-[#FAF7F2] hover:bg-neutral-100 border border-black text-[11px] font-bold text-neutral-700 cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-slate-900/60 hover:bg-neutral-100 border border-black text-[11px] font-bold text-slate-300 cursor-pointer"
                 >
                   Routine Maintenance
                 </button>
@@ -1301,7 +1301,7 @@ export const AdminDashboardPage: React.FC = () => {
                       estimatedReturn: '11:00 PM UTC',
                     }))
                   }
-                  className="px-2.5 py-1 rounded-lg bg-[#FAF7F2] hover:bg-neutral-100 border border-black text-[11px] font-bold text-neutral-700 cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-slate-900/60 hover:bg-neutral-100 border border-black text-[11px] font-bold text-slate-300 cursor-pointer"
                 >
                   System Upgrade
                 </button>
@@ -1316,7 +1316,7 @@ export const AdminDashboardPage: React.FC = () => {
                       estimatedReturn: 'Shortly',
                     }))
                   }
-                  className="px-2.5 py-1 rounded-lg bg-[#FAF7F2] hover:bg-neutral-100 border border-black text-[11px] font-bold text-neutral-700 cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-slate-900/60 hover:bg-neutral-100 border border-black text-[11px] font-bold text-slate-300 cursor-pointer"
                 >
                   Emergency Fix
                 </button>
@@ -1324,7 +1324,7 @@ export const AdminDashboardPage: React.FC = () => {
 
               {/* Notice Title */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-black uppercase text-black">
+                <label className="block text-xs font-black uppercase text-slate-100">
                   Notice Header Title
                 </label>
                 <input
@@ -1333,13 +1333,13 @@ export const AdminDashboardPage: React.FC = () => {
                   value={maintenanceForm.title}
                   onChange={(e) => setMaintenanceForm((p) => ({ ...p, title: e.target.value }))}
                   placeholder="e.g. Scheduled Maintenance"
-                  className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#FFD21A] shadow-[2px_2px_0px_#000]"
+                  className="w-full px-3.5 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#FFD21A] shadow-sm"
                 />
               </div>
 
               {/* Notice Message */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-black uppercase text-black">
+                <label className="block text-xs font-black uppercase text-slate-100">
                   Detailed Notice Message
                 </label>
                 <textarea
@@ -1348,13 +1348,13 @@ export const AdminDashboardPage: React.FC = () => {
                   value={maintenanceForm.message}
                   onChange={(e) => setMaintenanceForm((p) => ({ ...p, message: e.target.value }))}
                   placeholder="Explain what is happening and when the feature will return..."
-                  className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-semibold text-black focus:outline-none focus:ring-2 focus:ring-[#FFD21A] shadow-[2px_2px_0px_#000]"
+                  className="w-full px-3.5 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-semibold text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#FFD21A] shadow-sm"
                 />
               </div>
 
               {/* Estimated Return Time */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-black uppercase text-black">
+                <label className="block text-xs font-black uppercase text-slate-100">
                   Estimated Completion / Return Time (Optional)
                 </label>
                 <input
@@ -1365,52 +1365,52 @@ export const AdminDashboardPage: React.FC = () => {
                     setMaintenanceForm((p) => ({ ...p, estimatedReturn: e.target.value }))
                   }
                   placeholder="e.g. 10:30 PM UTC or In 45 minutes"
-                  className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl text-xs font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#FFD21A] shadow-[2px_2px_0px_#000]"
+                  className="w-full px-3.5 py-2.5 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#FFD21A] shadow-sm"
                 />
               </div>
             </div>
 
             {/* Live Interactive Preview Card */}
-            <div className="lg:col-span-5 bg-white rounded-3xl border-2 border-black p-6 shadow-[5px_5px_0px_#000] space-y-4">
+            <div className="lg:col-span-5 bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] p-6 shadow-xs space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Eye className="w-4 h-4 text-black stroke-[2.5]" />
-                  <h4 className="text-xs font-black uppercase tracking-wider text-black">
+                  <Eye className="w-4 h-4 text-[var(--theme-dirty-white)] stroke-[2.5]" />
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--theme-dirty-white)]">
                     Live Visitor Modal Preview
                   </h4>
                 </div>
-                <span className="text-[10px] font-mono font-bold bg-neutral-100 px-2 py-0.5 rounded border border-black">
+                <span className="text-[10px] font-mono font-bold bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] px-2 py-0.5 rounded border border-[var(--theme-gray-border)]">
                   Realtime
                 </span>
               </div>
 
               {/* Render Preview Modal Replica */}
-              <div className="bg-[#FAF7F2] border-2 border-black rounded-2xl p-6 text-center space-y-4 shadow-[4px_4px_0px_#000]">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-200 border-2 border-black text-[10px] font-black uppercase tracking-wider text-black shadow-[1.5px_1.5px_0px_#000]">
-                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+              <div className="bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl p-6 text-center space-y-4 shadow-xs">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-[10px] font-bold uppercase tracking-wider text-amber-300">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                   <span>Under Maintenance</span>
                 </div>
 
-                <div className="w-14 h-14 rounded-2xl border-2 border-black bg-amber-400 flex items-center justify-center mx-auto shadow-[3px_3px_0px_#000]">
-                  <Wrench className="w-7 h-7 text-black stroke-[2.5]" />
+                <div className="w-14 h-14 rounded-2xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] flex items-center justify-center mx-auto shadow-xs text-[var(--theme-dirty-white)]">
+                  <Wrench className="w-7 h-7 stroke-[2]" />
                 </div>
 
                 <div className="space-y-1">
-                  <h4 className="text-lg font-black text-black">
+                  <h4 className="text-lg font-bold text-[var(--theme-dirty-white)]">
                     {maintenanceForm.title || 'Scheduled Maintenance'}
                   </h4>
-                  <p className="text-[11px] font-mono font-bold uppercase text-neutral-500">
+                  <p className="text-[11px] font-mono font-medium uppercase text-[var(--theme-gray-muted)]">
                     Workspace: Preview Mode
                   </p>
-                  <p className="text-xs font-semibold text-neutral-700 leading-relaxed">
+                  <p className="text-xs font-normal text-[var(--theme-dirty-white-muted)] leading-relaxed">
                     {maintenanceForm.message ||
                       'This section is currently undergoing maintenance and improvements. Please check back shortly.'}
                   </p>
                 </div>
 
                 {maintenanceForm.estimatedReturn && (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000] text-[11px] font-bold text-neutral-800">
-                    <Clock className="w-3.5 h-3.5 text-amber-600 stroke-[2.5]" />
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] shadow-xs text-[11px] font-medium">
+                    <Clock className="w-3.5 h-3.5 text-amber-400 stroke-[2]" />
                     <span>
                       Estimated completion: <strong>{maintenanceForm.estimatedReturn}</strong>
                     </span>
@@ -1418,7 +1418,7 @@ export const AdminDashboardPage: React.FC = () => {
                 )}
 
                 <div className="pt-2">
-                  <div className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#FFD21A] border-2 border-black text-black font-black text-xs shadow-[2px_2px_0px_#000]">
+                  <div className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-bold text-xs shadow-xs">
                     <span>Return to Homepage</span>
                   </div>
                 </div>
@@ -1427,14 +1427,14 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
 
           {/* Individual Per-Page Toggles Grid */}
-          <div className="bg-white rounded-3xl border-2 border-black p-6 sm:p-7 shadow-[5px_5px_0px_#000] space-y-6">
+          <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] p-6 sm:p-7 shadow-xs space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h3 className="text-base font-black text-black uppercase tracking-tight flex items-center gap-2">
+                <h3 className="text-base font-black text-slate-100 uppercase tracking-tight flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
                   <span>Individual Workspace & Page Locks</span>
                 </h3>
-                <p className="text-xs text-neutral-600 font-medium mt-0.5">
+                <p className="text-xs text-slate-400 font-medium mt-0.5">
                   Toggle individual workspaces into maintenance without taking the rest of the site
                   offline.
                 </p>
@@ -1450,7 +1450,7 @@ export const AdminDashboardPage: React.FC = () => {
                     });
                     setMaintenanceForm((p) => ({ ...p, pages: { ...p.pages, ...allLocked } }));
                   }}
-                  className="px-3 py-1.5 rounded-xl bg-[#FAF7F2] hover:bg-neutral-100 border border-black text-[11px] font-black text-black cursor-pointer shadow-[1.5px_1.5px_0px_#000]"
+                  className="px-3 py-1.5 rounded-xl bg-slate-900/60 hover:bg-neutral-100 border border-black text-[11px] font-black text-slate-100 cursor-pointer shadow-sm"
                 >
                   Lock All Pages
                 </button>
@@ -1463,7 +1463,7 @@ export const AdminDashboardPage: React.FC = () => {
                     });
                     setMaintenanceForm((p) => ({ ...p, pages: { ...p.pages, ...allUnlocked } }));
                   }}
-                  className="px-3 py-1.5 rounded-xl bg-[#FAF7F2] hover:bg-neutral-100 border border-black text-[11px] font-black text-black cursor-pointer shadow-[1.5px_1.5px_0px_#000]"
+                  className="px-3 py-1.5 rounded-xl bg-slate-900/60 hover:bg-neutral-100 border border-black text-[11px] font-black text-slate-100 cursor-pointer shadow-sm"
                 >
                   Unlock All Pages
                 </button>
@@ -1479,8 +1479,8 @@ export const AdminDashboardPage: React.FC = () => {
                 return (
                   <div
                     key={item.key}
-                    className={`p-4 rounded-2xl border-2 border-black transition-all shadow-[3px_3px_0px_#000] flex flex-col justify-between gap-3 ${
-                      isUnderGlobal || isPageLocked ? 'bg-amber-50/60' : 'bg-[#FAF7F2]'
+                    className={`p-4 rounded-2xl border border-[var(--theme-gray-border)] transition-all shadow-sm flex flex-col justify-between gap-3 ${
+                      isUnderGlobal || isPageLocked ? 'bg-amber-50/60' : 'bg-slate-900/60'
                     }`}
                   >
                     <div className="space-y-1.5">
@@ -1490,7 +1490,7 @@ export const AdminDashboardPage: React.FC = () => {
                             style={{ backgroundColor: item.accentColor }}
                             className="w-3 h-3 rounded-full border border-black"
                           />
-                          <h4 className="font-black text-sm text-black">{item.label}</h4>
+                          <h4 className="font-black text-sm text-slate-100">{item.label}</h4>
                         </div>
                         <span
                           className={`px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase border border-black ${
@@ -1504,28 +1504,28 @@ export const AdminDashboardPage: React.FC = () => {
                           {isUnderGlobal ? 'Global Lock' : isPageLocked ? 'Maintenance' : 'Online'}
                         </span>
                       </div>
-                      <p className="text-xs font-semibold text-neutral-600 leading-snug">
+                      <p className="text-xs font-semibold text-slate-400 leading-snug">
                         {item.description}
                       </p>
-                      <div className="text-[10px] font-mono text-neutral-500 pt-1">
+                      <div className="text-[10px] font-mono text-slate-400 pt-1">
                         Paths: {item.paths.join(', ')}
                       </div>
                     </div>
 
                     <div className="pt-2 border-t border-black/10 flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-neutral-700">
+                      <span className="text-[11px] font-bold text-slate-300">
                         {isPageLocked ? 'Lock active' : 'Accessible to users'}
                       </span>
                       <button
                         type="button"
                         onClick={() => handleTogglePageMaintenance(item.key)}
                         disabled={isUnderGlobal}
-                        className={`px-3 py-1.5 rounded-xl border-2 border-black font-black text-xs cursor-pointer shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all ${
+                        className={`px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] font-black text-xs cursor-pointer shadow-sm active:translate-x-0.5 active:translate-y-0.5 transition-all ${
                           isUnderGlobal
-                            ? 'bg-neutral-200 text-neutral-400 cursor-not-allowed border-neutral-400 shadow-none'
+                            ? 'bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] cursor-not-allowed border-[var(--theme-gray-border)] shadow-none'
                             : isPageLocked
-                              ? 'bg-white hover:bg-neutral-100 text-black'
-                              : 'bg-[#FFD21A] hover:bg-yellow-400 text-black'
+                              ? 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]'
+                              : 'bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)]'
                         }`}
                       >
                         {isPageLocked ? 'Set Online' : 'Put in Maintenance'}
@@ -1538,14 +1538,14 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
 
           {/* Action Bar (Save & Reset) */}
-          <div className="sticky bottom-4 z-30 p-4 bg-white/95 backdrop-blur-md rounded-2xl border-3 border-black shadow-[6px_6px_0px_#000] flex flex-wrap items-center justify-between gap-4">
+          <div className="sticky bottom-4 z-30 p-4 bg-[var(--theme-surface)]/95 backdrop-blur-md rounded-2xl border border-[var(--theme-gray-border)] shadow-xs flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <span className="p-2 rounded-xl bg-[#4ADE80] border-2 border-black shadow-[2px_2px_0px_#000]">
-                <CheckCircle2 className="w-5 h-5 text-black stroke-[2.5]" />
+              <span className="p-2 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] shadow-xs">
+                <CheckCircle2 className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2.5]" />
               </span>
               <div>
-                <p className="text-xs sm:text-sm font-black text-black">Ready to apply changes?</p>
-                <p className="text-[11px] font-bold text-neutral-600">
+                <p className="text-xs sm:text-sm font-bold text-[var(--theme-dirty-white)]">Ready to apply changes?</p>
+                <p className="text-[11px] font-normal text-[var(--theme-gray-muted)]">
                   Settings are saved to the database and sync instantly with all visitor sessions.
                 </p>
               </div>
@@ -1555,7 +1555,7 @@ export const AdminDashboardPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleResetMaintenanceDefaults}
-                className="px-4 py-2.5 bg-white hover:bg-neutral-100 border-2 border-black rounded-xl text-xs font-black cursor-pointer shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                className="px-4 py-2.5 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-xl text-xs font-bold cursor-pointer shadow-xs active:translate-y-0.5 transition-all"
               >
                 Reset to Defaults
               </button>
@@ -1564,7 +1564,7 @@ export const AdminDashboardPage: React.FC = () => {
                 type="button"
                 onClick={handleSaveMaintenance}
                 disabled={isSavingMaintenance}
-                className="px-6 py-2.5 bg-[#4ADE80] hover:bg-emerald-400 border-2 border-black rounded-xl text-xs sm:text-sm font-black text-black cursor-pointer shadow-[3px_3px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-2"
+                className="px-6 py-2.5 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl text-xs sm:text-sm font-bold text-[var(--theme-canvas)] cursor-pointer shadow-xs active:translate-y-0.5 transition-all flex items-center gap-2"
               >
                 {isSavingMaintenance ? (
                   <>
@@ -1587,15 +1587,15 @@ export const AdminDashboardPage: React.FC = () => {
       {activeTab === 'learning' && (
         <div className="space-y-8">
           {/* Learning Posts Table */}
-          <div className="bg-white rounded-3xl border-2 border-black overflow-hidden shadow-[5px_5px_0px_#000000]">
-            <div className="p-4 bg-[#FAF7F2] border-b-2 border-black flex items-center justify-between">
-              <h3 className="font-black text-sm uppercase text-black">
+          <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] overflow-hidden shadow-xs">
+            <div className="p-4 bg-slate-900/60 border-b border-[var(--theme-gray-border)] flex items-center justify-between">
+              <h3 className="font-black text-sm uppercase text-slate-100">
                 Learning Hub Posts ({learningPosts.length})
               </h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-bold">
-                <thead className="bg-[#FAF7F2] border-b-2 border-black text-black uppercase text-[11px] font-black">
+                <thead className="bg-slate-900/60 border-b border-[var(--theme-gray-border)] text-slate-100 uppercase text-[11px] font-black">
                   <tr>
                     <th className="py-3 px-4">Post Title</th>
                     <th className="py-3 px-4">Author</th>
@@ -1608,7 +1608,7 @@ export const AdminDashboardPage: React.FC = () => {
                 <tbody className="divide-y-2 divide-black/10">
                   {learningPosts.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-8 text-center text-neutral-500">
+                      <td colSpan={6} className="py-8 text-center text-slate-400">
                         No Learning Hub posts found.
                       </td>
                     </tr>
@@ -1616,15 +1616,15 @@ export const AdminDashboardPage: React.FC = () => {
                     learningPosts.map((post) => (
                       <tr key={post._id} className="hover:bg-neutral-50">
                         <td className="py-3 px-4">
-                          <div className="font-black text-black">{post.title}</div>
-                          <div className="text-[10px] font-mono text-neutral-500">
+                          <div className="font-black text-slate-100">{post.title}</div>
+                          <div className="text-[10px] font-mono text-slate-400">
                             /learning/{post.slug}
                           </div>
                         </td>
                         <td className="py-3 px-4">{post.authorName}</td>
                         <td className="py-3 px-4 font-mono text-[11px]">{post.category}</td>
                         <td className="py-3 px-4 font-mono text-[11px]">
-                          ❤️ {post.likesCount || 0} · 💬 {post.commentsCount || 0}
+                          Likes: {post.likesCount || 0} · Comments: {post.commentsCount || 0}
                         </td>
                         <td className="py-3 px-4 space-x-1">
                           <span
@@ -1639,7 +1639,7 @@ export const AdminDashboardPage: React.FC = () => {
                             {post.status}
                           </span>
                           {post.isFeatured && (
-                            <span className="px-1.5 py-0.5 rounded bg-[#FACC15] border border-black text-[10px] font-mono">
+                            <span className="px-1.5 py-0.5 rounded bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-black text-[10px] font-mono">
                               Featured
                             </span>
                           )}
@@ -1651,7 +1651,7 @@ export const AdminDashboardPage: React.FC = () => {
                                 isFeatured: !post.isFeatured,
                               })
                             }
-                            className="px-2 py-1 bg-[#FAF7F2] hover:bg-[#FACC15] border border-black rounded text-[10px] font-mono font-bold"
+                            className="px-2 py-1 bg-slate-900/60 hover:bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-black rounded text-[10px] font-mono font-bold"
                           >
                             {post.isFeatured ? 'Unfeature' : 'Feature'}
                           </button>
@@ -1681,16 +1681,16 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
 
           {/* Learning Comments Moderation Table */}
-          <div className="bg-white rounded-3xl border-2 border-black overflow-hidden shadow-[5px_5px_0px_#000000]">
-            <div className="p-4 bg-[#FAF7F2] border-b-2 border-black flex items-center gap-2">
-              <MessageSquare className="w-4 h-4 text-black" />
-              <h3 className="font-black text-sm uppercase text-black">
+          <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] overflow-hidden shadow-xs">
+            <div className="p-4 bg-slate-900/60 border-b border-[var(--theme-gray-border)] flex items-center gap-2">
+              <MessageSquare className="w-4 h-4 text-slate-100" />
+              <h3 className="font-black text-sm uppercase text-slate-100">
                 Recent Learning Hub Comments ({learningComments.length})
               </h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-bold">
-                <thead className="bg-[#FAF7F2] border-b-2 border-black text-black uppercase text-[11px] font-black">
+                <thead className="bg-slate-900/60 border-b border-[var(--theme-gray-border)] text-slate-100 uppercase text-[11px] font-black">
                   <tr>
                     <th className="py-3 px-4">Author</th>
                     <th className="py-3 px-4">Comment Content</th>
@@ -1702,21 +1702,21 @@ export const AdminDashboardPage: React.FC = () => {
                 <tbody className="divide-y-2 divide-black/10">
                   {learningComments.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="py-8 text-center text-neutral-500">
+                      <td colSpan={5} className="py-8 text-center text-slate-400">
                         No Learning Hub comments recorded yet.
                       </td>
                     </tr>
                   ) : (
                     learningComments.map((c) => (
                       <tr key={c._id} className="hover:bg-neutral-50">
-                        <td className="py-3 px-4 font-black text-black">{c.authorName}</td>
+                        <td className="py-3 px-4 font-black text-slate-100">{c.authorName}</td>
                         <td className="py-3 px-4 max-w-md truncate">{c.content}</td>
                         <td className="py-3 px-4">
                           <span className="px-2 py-0.5 rounded bg-neutral-100 border border-black/30 text-[10px] font-mono uppercase">
                             {c.status}
                           </span>
                         </td>
-                        <td className="py-3 px-4 font-mono text-[11px] text-neutral-500">
+                        <td className="py-3 px-4 font-mono text-[11px] text-slate-400">
                           {new Date(c.createdAt).toLocaleDateString()}
                         </td>
                         <td className="py-3 px-4 text-right space-x-1.5">
@@ -1751,15 +1751,15 @@ export const AdminDashboardPage: React.FC = () => {
       {/* 2. Community & Donations Tab (Donations + Webhooks) */}
       {activeTab === 'donations' && (
         <div className="space-y-8">
-          <div className="bg-white rounded-3xl border-2 border-black overflow-hidden shadow-[5px_5px_0px_#000000]">
-            <div className="p-4 bg-[#FAF7F2] border-b-2 border-black">
-              <h3 className="font-black text-sm uppercase text-black">
+          <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] overflow-hidden shadow-xs">
+            <div className="p-4 bg-slate-900/60 border-b border-[var(--theme-gray-border)]">
+              <h3 className="font-black text-sm uppercase text-slate-100">
                 Verified &amp; Pending Donations ({donations.length})
               </h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono">
-                <thead className="bg-[#FAF7F2] border-b-2 border-black text-black uppercase text-[11px] font-black">
+                <thead className="bg-slate-900/60 border-b border-[var(--theme-gray-border)] text-slate-100 uppercase text-[11px] font-black">
                   <tr>
                     <th className="py-3.5 px-4">Tx ID</th>
                     <th className="py-3.5 px-4">Donor &amp; Message</th>
@@ -1773,30 +1773,30 @@ export const AdminDashboardPage: React.FC = () => {
                 <tbody className="divide-y-2 divide-black/10">
                   {donations.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="py-8 text-center text-neutral-500 font-bold">
+                      <td colSpan={7} className="py-8 text-center text-slate-400 font-bold">
                         No donation transactions recorded yet.
                       </td>
                     </tr>
                   ) : (
                     donations.map((d) => (
                       <tr key={d._id} className="hover:bg-neutral-50">
-                        <td className="py-3 px-4 font-bold text-neutral-600 truncate max-w-[120px]">
+                        <td className="py-3 px-4 font-bold text-slate-400 truncate max-w-[120px]">
                           {d.providerTransactionId}
                         </td>
                         <td className="py-3 px-4">
-                          <div className="font-black text-black">
+                          <div className="font-black text-slate-100">
                             {d.moderatedDisplayName || d.displayName}
                           </div>
                           {d.isAnonymous && (
-                            <span className="text-[9px] uppercase px-1 rounded bg-neutral-100 text-neutral-500 border border-neutral-300">
+                            <span className="text-[9px] uppercase px-1 rounded bg-neutral-100 text-slate-400 border border-neutral-300">
                               Anonymous
                             </span>
                           )}
                           {d.message && (
-                            <div className="text-[10px] text-neutral-600 italic">"{d.message}"</div>
+                            <div className="text-[10px] text-slate-400 italic">"{d.message}"</div>
                           )}
                         </td>
-                        <td className="py-3 px-4 font-black text-black text-sm">
+                        <td className="py-3 px-4 font-black text-slate-100 text-sm">
                           ₱{Number(d.amount).toLocaleString()} {d.currency}
                         </td>
                         <td className="py-3 px-4 uppercase text-[10px] font-bold">
@@ -1815,7 +1815,7 @@ export const AdminDashboardPage: React.FC = () => {
                             {d.paymentStatus}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-neutral-500">
+                        <td className="py-3 px-4 text-slate-400">
                           {new Date(d.createdAt).toLocaleDateString()}
                         </td>
                         <td className="py-3 px-4 text-right space-x-1.5">
@@ -1823,13 +1823,13 @@ export const AdminDashboardPage: React.FC = () => {
                             onClick={() =>
                               handleModerateDonor(d._id, d.moderatedDisplayName || d.displayName)
                             }
-                            className="px-2 py-1 bg-[#FAF7F2] hover:bg-neutral-200 border border-black rounded text-[10px] font-bold"
+                            className="px-2 py-1 bg-slate-900/60 hover:bg-neutral-200 border border-black rounded text-[10px] font-bold"
                           >
                             Moderate Name
                           </button>
                           <button
                             onClick={() => handleModerateDonorMessage(d._id, d.message || '')}
-                            className="px-2 py-1 bg-[#FAF7F2] hover:bg-neutral-200 border border-black rounded text-[10px] font-bold"
+                            className="px-2 py-1 bg-slate-900/60 hover:bg-neutral-200 border border-black rounded text-[10px] font-bold"
                           >
                             Edit Message
                           </button>
@@ -1843,16 +1843,16 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
 
           {/* Payment Webhook Audit Log */}
-          <div className="bg-white rounded-3xl border-2 border-black overflow-hidden shadow-[5px_5px_0px_#000000]">
-            <div className="p-4 bg-[#FAF7F2] border-b-2 border-black flex items-center gap-2">
-              <Webhook className="w-4 h-4 text-black" />
-              <h3 className="font-black text-sm uppercase text-black">
+          <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] overflow-hidden shadow-xs">
+            <div className="p-4 bg-slate-900/60 border-b border-[var(--theme-gray-border)] flex items-center gap-2">
+              <Webhook className="w-4 h-4 text-slate-100" />
+              <h3 className="font-black text-sm uppercase text-slate-100">
                 Payment Webhook Events ({webhookEvents.length})
               </h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono">
-                <thead className="bg-[#FAF7F2] border-b-2 border-black text-black uppercase text-[11px] font-black">
+                <thead className="bg-slate-900/60 border-b border-[var(--theme-gray-border)] text-slate-100 uppercase text-[11px] font-black">
                   <tr>
                     <th className="py-3 px-4">Event ID</th>
                     <th className="py-3 px-4">Type</th>
@@ -1864,7 +1864,7 @@ export const AdminDashboardPage: React.FC = () => {
                 <tbody className="divide-y-2 divide-black/10">
                   {webhookEvents.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="py-6 text-center text-neutral-500">
+                      <td colSpan={5} className="py-6 text-center text-slate-400">
                         No payment webhook events logged yet.
                       </td>
                     </tr>
@@ -1875,7 +1875,7 @@ export const AdminDashboardPage: React.FC = () => {
                         <td className="py-2.5 px-4">{ev.eventType}</td>
                         <td className="py-2.5 px-4 uppercase">{ev.provider}</td>
                         <td className="py-2.5 px-4">{ev.processingStatus || 'processed'}</td>
-                        <td className="py-2.5 px-4 text-neutral-500">
+                        <td className="py-2.5 px-4 text-slate-400">
                           {new Date(ev.createdAt).toLocaleString()}
                         </td>
                       </tr>
@@ -1890,10 +1890,10 @@ export const AdminDashboardPage: React.FC = () => {
 
       {/* 3. Users Tab (with Account Suspension) */}
       {activeTab === 'users' && (
-        <div className="bg-white rounded-3xl border-2 border-black overflow-hidden shadow-[5px_5px_0px_#000000]">
+        <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-bold">
-              <thead className="bg-[#FAF7F2] border-b-2 border-black text-black uppercase text-[11px] font-black">
+              <thead className="bg-slate-900/60 border-b border-[var(--theme-gray-border)] text-slate-100 uppercase text-[11px] font-black">
                 <tr>
                   <th className="py-3.5 px-4">Name</th>
                   <th className="py-3.5 px-4">Email</th>
@@ -1906,8 +1906,8 @@ export const AdminDashboardPage: React.FC = () => {
               <tbody className="divide-y-2 divide-black/10">
                 {users.map((u) => (
                   <tr key={u._id} className="hover:bg-neutral-50">
-                    <td className="py-3 px-4 font-black text-black">{u.name}</td>
-                    <td className="py-3 px-4 text-neutral-700">{u.email}</td>
+                    <td className="py-3 px-4 font-black text-slate-100">{u.name}</td>
+                    <td className="py-3 px-4 text-slate-300">{u.email}</td>
                     <td className="py-3 px-4 uppercase text-[10px] font-mono font-bold">
                       {u.role}
                     </td>
@@ -1922,7 +1922,7 @@ export const AdminDashboardPage: React.FC = () => {
                         </span>
                       )}
                     </td>
-                    <td className="py-3 px-4 text-neutral-600">
+                    <td className="py-3 px-4 text-slate-400">
                       {new Date(u.createdAt).toLocaleDateString()}
                     </td>
                     <td className="py-3 px-4 text-right">
@@ -1952,9 +1952,9 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <form
             onSubmit={handleSavePlatformConfig}
-            className="bg-white rounded-3xl border-2 border-black p-6 shadow-[5px_5px_0px_#000000] space-y-4"
+            className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] p-6 shadow-xs space-y-4"
           >
-            <h3 className="text-lg font-black text-black border-b-2 border-black pb-2">
+            <h3 className="text-lg font-black text-slate-100 border-b border-[var(--theme-gray-border)] pb-2">
               Homepage &amp; Contact Configuration
             </h3>
 
@@ -1968,7 +1968,7 @@ export const AdminDashboardPage: React.FC = () => {
                 onChange={(e) =>
                   setPlatformConfig({ ...platformConfig, heroHeadline: e.target.value })
                 }
-                className="w-full p-2.5 text-xs font-bold bg-[#FAF7F2] border-2 border-black rounded-xl"
+                className="w-full p-2.5 text-xs font-bold bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl"
               />
             </div>
 
@@ -1985,7 +1985,7 @@ export const AdminDashboardPage: React.FC = () => {
                     heroDescription: e.target.value,
                   })
                 }
-                className="w-full p-2.5 text-xs font-medium bg-[#FAF7F2] border-2 border-black rounded-xl"
+                className="w-full p-2.5 text-xs font-medium bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl"
               />
             </div>
 
@@ -2000,7 +2000,7 @@ export const AdminDashboardPage: React.FC = () => {
                   setPlatformConfig({ ...platformConfig, contactEmail: e.target.value })
                 }
                 placeholder="Optional public contact email"
-                className="w-full p-2.5 text-xs font-bold bg-[#FAF7F2] border-2 border-black rounded-xl"
+                className="w-full p-2.5 text-xs font-bold bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl"
               />
             </div>
 
@@ -2015,7 +2015,7 @@ export const AdminDashboardPage: React.FC = () => {
                   setPlatformConfig({ ...platformConfig, githubUrl: e.target.value })
                 }
                 placeholder="https://github.com/..."
-                className="w-full p-2.5 text-xs font-bold bg-[#FAF7F2] border-2 border-black rounded-xl"
+                className="w-full p-2.5 text-xs font-bold bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl"
               />
             </div>
 
@@ -2033,25 +2033,25 @@ export const AdminDashboardPage: React.FC = () => {
                   })
                 }
                 placeholder="smart-image-studio, ai-image-enhancer, pdf-merger"
-                className="w-full p-2.5 text-xs font-mono bg-[#FAF7F2] border-2 border-black rounded-xl"
+                className="w-full p-2.5 text-xs font-mono bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl"
               />
             </div>
 
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-xl bg-[#FACC15] border-2 border-black text-xs font-black uppercase shadow-[3px_3px_0px_#000000]"
+              className="px-5 py-2.5 rounded-xl bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] text-xs font-black uppercase shadow-sm"
             >
               Save Platform Configuration
             </button>
           </form>
 
           {/* Submitted Contact Inquiries */}
-          <div className="bg-white rounded-3xl border-2 border-black p-6 shadow-[5px_5px_0px_#000000] space-y-4">
-            <h3 className="text-lg font-black text-black border-b-2 border-black pb-2">
+          <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] p-6 shadow-xs space-y-4">
+            <h3 className="text-lg font-black text-slate-100 border-b border-[var(--theme-gray-border)] pb-2">
               Submitted Contact Inquiries ({contactInquiries.length})
             </h3>
             {contactInquiries.length === 0 ? (
-              <p className="text-xs font-semibold text-neutral-500 py-8 text-center">
+              <p className="text-xs font-semibold text-slate-400 py-8 text-center">
                 No contact inquiries received yet.
               </p>
             ) : (
@@ -2059,15 +2059,15 @@ export const AdminDashboardPage: React.FC = () => {
                 {contactInquiries.map((inq: any) => (
                   <div
                     key={inq._id}
-                    className="p-3.5 rounded-2xl bg-[#FAF7F2] border-2 border-black space-y-1"
+                    className="p-3.5 rounded-2xl bg-slate-900/60 border border-[var(--theme-gray-border)] space-y-1"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-black text-xs text-black">{inq.subject}</span>
-                      <span className="text-[10px] font-mono text-neutral-500">
+                      <span className="font-black text-xs text-slate-100">{inq.subject}</span>
+                      <span className="text-[10px] font-mono text-slate-400">
                         {new Date(inq.createdAt).toLocaleDateString()}
                       </span>
                     </div>
-                    <div className="text-[11px] font-mono text-neutral-600">
+                    <div className="text-[11px] font-mono text-slate-400">
                       From: {inq.name} ({inq.email})
                     </div>
                     <p className="text-xs font-medium text-neutral-800 pt-1">{inq.message}</p>
@@ -2082,15 +2082,15 @@ export const AdminDashboardPage: React.FC = () => {
       {/* 5. Reports Tab (Combined Learning Hub + Legacy Reports) */}
       {activeTab === 'reports' && (
         <div className="space-y-6">
-          <div className="bg-white rounded-3xl border-2 border-black overflow-hidden shadow-[5px_5px_0px_#000000]">
-            <div className="p-4 bg-[#FAF7F2] border-b-2 border-black">
-              <h3 className="font-black text-sm uppercase text-black">
+          <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] overflow-hidden shadow-xs">
+            <div className="p-4 bg-slate-900/60 border-b border-[var(--theme-gray-border)]">
+              <h3 className="font-black text-sm uppercase text-slate-100">
                 Learning Hub Moderation Reports ({learningReports.length})
               </h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-bold">
-                <thead className="bg-[#FAF7F2] border-b-2 border-black text-black uppercase text-[11px] font-black">
+                <thead className="bg-slate-900/60 border-b border-[var(--theme-gray-border)] text-slate-100 uppercase text-[11px] font-black">
                   <tr>
                     <th className="py-3.5 px-4">Target</th>
                     <th className="py-3.5 px-4">Reason</th>
@@ -2102,7 +2102,7 @@ export const AdminDashboardPage: React.FC = () => {
                 <tbody className="divide-y-2 divide-black/10">
                   {learningReports.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="py-8 text-center text-neutral-500">
+                      <td colSpan={5} className="py-8 text-center text-slate-400">
                         No Learning Hub reports pending.
                       </td>
                     </tr>
@@ -2140,9 +2140,9 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
 
           {reports.length > 0 && (
-            <div className="bg-white rounded-3xl border-2 border-black overflow-hidden shadow-[5px_5px_0px_#000000]">
-              <div className="p-4 bg-[#FAF7F2] border-b-2 border-black">
-                <h3 className="font-black text-sm uppercase text-black">
+            <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] overflow-hidden shadow-xs">
+              <div className="p-4 bg-slate-900/60 border-b border-[var(--theme-gray-border)]">
+                <h3 className="font-black text-sm uppercase text-slate-100">
                   Legacy Community Reports ({reports.length})
                 </h3>
               </div>
@@ -2176,10 +2176,10 @@ export const AdminDashboardPage: React.FC = () => {
 
       {/* 6. Tools Tab */}
       {activeTab === 'tools' && (
-        <div className="bg-white rounded-3xl border-2 border-black overflow-hidden shadow-[5px_5px_0px_#000000]">
+        <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-bold">
-              <thead className="bg-[#FAF7F2] border-b-2 border-black text-black uppercase text-[11px] font-black">
+              <thead className="bg-slate-900/60 border-b border-[var(--theme-gray-border)] text-slate-100 uppercase text-[11px] font-black">
                 <tr>
                   <th className="py-3.5 px-4">Tool Name</th>
                   <th className="py-3.5 px-4">Tool ID</th>
@@ -2191,15 +2191,15 @@ export const AdminDashboardPage: React.FC = () => {
               <tbody className="divide-y-2 divide-black/10">
                 {tools.map((t) => (
                   <tr key={t.toolId} className="hover:bg-neutral-50">
-                    <td className="py-3 px-4 font-black text-black">{t.name}</td>
-                    <td className="py-3 px-4 font-mono text-[11px] text-neutral-600">{t.toolId}</td>
+                    <td className="py-3 px-4 font-black text-slate-100">{t.name}</td>
+                    <td className="py-3 px-4 font-mono text-[11px] text-slate-400">{t.toolId}</td>
                     <td className="py-3 px-4 font-mono font-black text-green-700">100% Free</td>
                     <td className="py-3 px-4">
                       <span
                         className={`inline-block px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase border border-black ${
                           t.isEnabled
-                            ? 'bg-[#4ADE80] text-black'
-                            : 'bg-neutral-200 text-neutral-600'
+                            ? 'bg-[#4ADE80] text-slate-100'
+                            : 'bg-neutral-200 text-slate-400'
                         }`}
                       >
                         {t.isEnabled ? 'Active' : 'Disabled'}
@@ -2208,7 +2208,7 @@ export const AdminDashboardPage: React.FC = () => {
                     <td className="py-3 px-4 text-right">
                       <button
                         onClick={() => handleToggleTool(t)}
-                        className="text-xs font-black text-black underline hover:text-neutral-700 cursor-pointer"
+                        className="text-xs font-black text-slate-100 underline hover:text-slate-300 cursor-pointer"
                       >
                         {t.isEnabled ? 'Disable' : 'Enable'}
                       </button>

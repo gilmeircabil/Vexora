@@ -54,20 +54,20 @@ export const ProjectsDirectoryPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[var(--theme-canvas)] text-slate-100 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-10">
         {/* Header Strip */}
-        <div className="border-b-2 border-black pb-8 space-y-4">
+        <div className="border-b border-[var(--theme-gray-border)] pb-8 space-y-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FACC15] border-2 border-black font-mono text-xs font-black shadow-[2px_2px_0px_#000] mb-2 rounded-lg">
-                <FolderGit2 className="w-3.5 h-3.5 text-black" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] font-mono text-xs font-black shadow-sm mb-2 rounded-lg">
+                <FolderGit2 className="w-3.5 h-3.5 text-slate-100" />
                 <span>COMMUNITY PROJECT SHOWCASE</span>
               </div>
-              <h1 className="text-3xl sm:text-5xl font-black text-black tracking-tight">
+              <h1 className="text-3xl sm:text-5xl font-black text-slate-100 tracking-tight">
                 Explore Community Projects
               </h1>
-              <p className="text-sm sm:text-base font-bold text-neutral-700 max-w-2xl mt-2 leading-relaxed">
+              <p className="text-sm sm:text-base font-bold text-slate-300 max-w-2xl mt-2 leading-relaxed">
                 Discover applications, developer tools, machine learning experiments, and
                 open-source software built by VexoraMods creators.
               </p>
@@ -76,7 +76,7 @@ export const ProjectsDirectoryPage: React.FC = () => {
             <div className="flex items-center gap-3 shrink-0">
               <Link
                 to="/developers"
-                className="px-4 py-2.5 bg-white hover:bg-neutral-100 border-2 border-black rounded-xl font-mono text-xs font-black shadow-[2.5px_2.5px_0px_#000]"
+                className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 rounded-xl font-mono text-xs font-black shadow-sm"
               >
                 &larr; Developers Directory
               </Link>
@@ -84,7 +84,7 @@ export const ProjectsDirectoryPage: React.FC = () => {
               {isAuthenticated ? (
                 <Link
                   to="/developers/projects/manage"
-                  className="px-4 py-2.5 bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[2.5px_2.5px_0px_#000] flex items-center gap-1.5"
+                  className="px-4 py-2.5 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs font-black shadow-sm flex items-center gap-1.5"
                 >
                   <Plus className="w-4 h-4 stroke-[2.5]" />
                   <span>Publish Project</span>
@@ -92,7 +92,7 @@ export const ProjectsDirectoryPage: React.FC = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="px-4 py-2.5 bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[2.5px_2.5px_0px_#000]"
+                  className="px-4 py-2.5 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs font-black shadow-sm"
                 >
                   Sign In to Publish
                 </Link>
@@ -102,11 +102,11 @@ export const ProjectsDirectoryPage: React.FC = () => {
         </div>
 
         {/* Filter & Search Bar */}
-        <div className="bg-white border-2 border-black rounded-2xl p-5 sm:p-6 shadow-[5px_5px_0px_#000] space-y-4">
+        <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
           <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
             {/* Search Input */}
             <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 stroke-[2.5]" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 stroke-[2.5]" />
               <input
                 type="text"
                 value={searchQuery}
@@ -115,12 +115,12 @@ export const ProjectsDirectoryPage: React.FC = () => {
                   setCurrentPage(1);
                 }}
                 placeholder="Search projects by title, description, or tech stack..."
-                className="w-full pl-10 pr-9 py-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#FACC15]"
+                className="w-full pl-10 pr-9 py-2.5 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl font-medium text-xs sm:text-sm text-[var(--theme-dirty-white)] focus:outline-none focus:border-[var(--theme-dirty-white)]"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-black hover:scale-110"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-slate-100 hover:scale-110"
                 >
                   <X className="w-4 h-4 stroke-[2.5]" />
                 </button>
@@ -141,8 +141,8 @@ export const ProjectsDirectoryPage: React.FC = () => {
                   }}
                   className={`px-3 py-1.5 rounded-xl border-2 font-mono text-xs font-black transition-all ${
                     active
-                      ? 'bg-[#FACC15] border-black text-black shadow-[2px_2px_0px_#000] -translate-y-0.5'
-                      : 'bg-[#FAF7F2] border-black/20 hover:border-black text-neutral-700'
+                      ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border-black text-slate-100 shadow-sm -translate-y-0.5'
+                      : 'bg-slate-900/60 border-black/20 hover:border-black text-slate-300'
                   }`}
                 >
                   {cat.label}
@@ -155,14 +155,14 @@ export const ProjectsDirectoryPage: React.FC = () => {
         {/* Projects Grid */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-xs font-bold text-neutral-600">
+            <span className="font-mono text-xs font-bold text-slate-400">
               Showing {projects.length} of {totalCount} published community projects
             </span>
           </div>
 
           {isLoading ? (
             <div className="p-16 flex flex-col items-center justify-center space-y-3">
-              <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin" />
+              <div className="w-8 h-8 border border-[var(--theme-gray-border)] border-t-transparent rounded-full animate-spin" />
               <span className="font-mono text-xs font-bold">Loading community projects...</span>
             </div>
           ) : projects.length > 0 ? (
@@ -170,11 +170,11 @@ export const ProjectsDirectoryPage: React.FC = () => {
               {projects.map((proj) => (
                 <div
                   key={proj._id}
-                  className="bg-white border-2 border-black rounded-2xl overflow-hidden shadow-[4px_4px_0px_#000] hover:shadow-[6px_6px_0px_#000] hover:-translate-y-0.5 transition-all flex flex-col justify-between group"
+                  className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-sm hover:-translate-y-0.5 transition-all flex flex-col justify-between group"
                 >
                   <div>
                     {/* Cover Image */}
-                    <div className="h-48 bg-[#FAF7F2] border-b-2 border-black relative overflow-hidden flex items-center justify-center">
+                    <div className="h-48 bg-slate-900/60 border-b border-[var(--theme-gray-border)] relative overflow-hidden flex items-center justify-center">
                       {proj.coverImage ? (
                         <img
                           src={proj.coverImage}
@@ -182,7 +182,7 @@ export const ProjectsDirectoryPage: React.FC = () => {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         />
                       ) : (
-                        <div className="text-4xl font-mono font-black text-black/20">{'</>'}</div>
+                        <div className="text-4xl font-mono font-black text-slate-100/20">{'</>'}</div>
                       )}
                       <span className="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-white border border-black text-[10px] font-mono font-black uppercase">
                         {proj.category}
@@ -191,11 +191,11 @@ export const ProjectsDirectoryPage: React.FC = () => {
 
                     <div className="p-5 space-y-2">
                       <Link to={`/developers/projects/${proj.slug}`}>
-                        <h3 className="font-black text-base text-black group-hover:underline">
+                        <h3 className="font-black text-base text-slate-100 group-hover:underline">
                           {proj.title}
                         </h3>
                       </Link>
-                      <p className="text-xs font-semibold text-neutral-600 line-clamp-2 leading-relaxed">
+                      <p className="text-xs font-semibold text-slate-400 line-clamp-2 leading-relaxed">
                         {proj.description}
                       </p>
                     </div>
@@ -207,7 +207,7 @@ export const ProjectsDirectoryPage: React.FC = () => {
                       {(proj.technologies || []).slice(0, 4).map((tech: string) => (
                         <span
                           key={tech}
-                          className="text-[10px] font-mono font-bold px-2 py-0.5 bg-[#FAF7F2] border border-black rounded-md"
+                          className="text-[10px] font-mono font-bold px-2 py-0.5 bg-slate-900/60 border border-black rounded-md"
                         >
                           {tech}
                         </span>
@@ -221,7 +221,7 @@ export const ProjectsDirectoryPage: React.FC = () => {
                           to={`/developers/profile/${proj.profileId.username}`}
                           className="flex items-center gap-2 group/author"
                         >
-                          <div className="w-6 h-6 rounded-md bg-[#FAF7F2] border border-black overflow-hidden flex items-center justify-center text-[10px] font-bold">
+                          <div className="w-6 h-6 rounded-md bg-slate-900/60 border border-black overflow-hidden flex items-center justify-center text-[10px] font-bold">
                             {proj.profileId.profileImage ? (
                               <img
                                 src={proj.profileId.profileImage}
@@ -237,12 +237,12 @@ export const ProjectsDirectoryPage: React.FC = () => {
                           </span>
                         </Link>
                       ) : (
-                        <span className="text-xs font-mono text-neutral-500">Developer</span>
+                        <span className="text-xs font-mono text-slate-400">Developer</span>
                       )}
 
                       <Link
                         to={`/developers/projects/${proj.slug}`}
-                        className="inline-flex items-center gap-1 text-xs font-mono font-black text-black group-hover:translate-x-0.5 transition-transform"
+                        className="inline-flex items-center gap-1 text-xs font-mono font-black text-slate-100 group-hover:translate-x-0.5 transition-transform"
                       >
                         <span>Details</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -253,8 +253,8 @@ export const ProjectsDirectoryPage: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="p-16 text-center bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000] space-y-4">
-              <p className="font-black text-base text-black">
+            <div className="p-16 text-center bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-2xl shadow-sm space-y-4">
+              <p className="font-black text-base text-slate-100">
                 No projects found matching your query.
               </p>
               <button
@@ -262,7 +262,7 @@ export const ProjectsDirectoryPage: React.FC = () => {
                   setSearchQuery('');
                   setSelectedCategory('');
                 }}
-                className="px-4 py-2 bg-[#FACC15] border-2 border-black rounded-xl font-mono text-xs font-black shadow-[2px_2px_0px_#000]"
+                className="px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs font-black shadow-sm"
               >
                 Reset Filters
               </button>
@@ -275,7 +275,7 @@ export const ProjectsDirectoryPage: React.FC = () => {
               <button
                 disabled={currentPage <= 1}
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                className="px-3 py-1.5 bg-white border-2 border-black rounded-xl font-mono text-xs font-black disabled:opacity-50"
+                className="px-3 py-1.5 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-xl font-mono text-xs font-black disabled:opacity-50"
               >
                 &larr; Prev
               </button>
@@ -285,7 +285,7 @@ export const ProjectsDirectoryPage: React.FC = () => {
               <button
                 disabled={currentPage >= totalPages}
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                className="px-3 py-1.5 bg-white border-2 border-black rounded-xl font-mono text-xs font-black disabled:opacity-50"
+                className="px-3 py-1.5 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 rounded-xl font-mono text-xs font-black disabled:opacity-50"
               >
                 Next &rarr;
               </button>

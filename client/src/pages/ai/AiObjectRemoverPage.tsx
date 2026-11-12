@@ -218,22 +218,22 @@ export const AiObjectRemoverPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] py-8 px-4 sm:px-8">
+    <div className="min-h-screen bg-[var(--theme-canvas)] text-[var(--theme-dirty-white)] py-8 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto">
         <Link
           to="/tools"
-          className="inline-flex items-center gap-2 text-sm font-mono font-bold text-black hover:underline mb-6"
+          className="inline-flex items-center gap-2 text-sm font-mono font-bold text-[var(--theme-dirty-white)] hover:underline mb-6"
         >
           <ArrowLeft className="w-4 h-4" /> Back to All Tools
         </Link>
 
-        <div className="border-2 border-black bg-white p-6 sm:p-8 shadow-[4px_4px_0px_#000] mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-black pb-4 mb-6">
+        <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] rounded-2xl p-6 sm:p-8 shadow-sm mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--theme-gray-border)] pb-4 mb-6">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-black">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--theme-dirty-white)]">
                 AI Object Remover (Inpainting)
               </h1>
-              <p className="text-sm text-gray-700 mt-1 font-medium">
+              <p className="text-sm text-[var(--theme-gray-muted)] mt-1 font-medium">
                 Highlight people, objects, text, or photobombers with the brush to seamlessly erase
                 them.
               </p>
@@ -243,12 +243,12 @@ export const AiObjectRemoverPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="space-y-6">
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                <label className="block font-mono text-xs font-bold text-[var(--theme-dirty-white)] uppercase mb-2">
                   1. Upload Image
                 </label>
-                <label className="border-2 border-dashed border-black bg-[#FAF7F2] p-5 flex flex-col items-center justify-center cursor-pointer hover:bg-yellow-50 transition-colors">
-                  <UploadCloud className="w-6 h-6 text-black mb-1" />
-                  <span className="text-xs font-bold text-black">Choose photo</span>
+                <label className="border-2 border-dashed border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] rounded-xl p-5 flex flex-col items-center justify-center cursor-pointer hover:bg-[var(--theme-surface)] transition-colors">
+                  <UploadCloud className="w-6 h-6 text-[var(--theme-dirty-white)] mb-1" />
+                  <span className="text-xs font-bold text-[var(--theme-dirty-white)]">Choose photo</span>
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
@@ -259,32 +259,32 @@ export const AiObjectRemoverPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-mono text-xs font-bold text-black uppercase mb-2">
+                <label className="block font-mono text-xs font-bold text-[var(--theme-dirty-white)] uppercase mb-2">
                   2. Brush Tools
                 </label>
                 <div className="flex gap-2 mb-3">
                   <button
                     onClick={() => setIsErasing(false)}
-                    className={`flex-1 py-2 font-mono text-xs font-bold border border-black flex items-center justify-center gap-1.5 ${
-                      !isErasing ? 'bg-[#FACC15]' : 'bg-white'
+                    className={`flex-1 py-2 font-mono text-xs font-bold rounded-lg border border-[var(--theme-gray-border)] flex items-center justify-center gap-1.5 transition ${
+                      !isErasing ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs' : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)]'
                     }`}
                   >
                     <Brush className="w-3.5 h-3.5" /> Paint Mask
                   </button>
                   <button
                     onClick={() => setIsErasing(true)}
-                    className={`flex-1 py-2 font-mono text-xs font-bold border border-black flex items-center justify-center gap-1.5 ${
-                      isErasing ? 'bg-[#FACC15]' : 'bg-white'
+                    className={`flex-1 py-2 font-mono text-xs font-bold rounded-lg border border-[var(--theme-gray-border)] flex items-center justify-center gap-1.5 transition ${
+                      isErasing ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs' : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)]'
                     }`}
                   >
                     <Eraser className="w-3.5 h-3.5" /> Eraser
                   </button>
                   <button
                     onClick={clearMask}
-                    className="p-2 border border-black bg-gray-100 hover:bg-red-100 transition-colors"
+                    className="p-2 border border-[var(--theme-gray-border)] rounded-lg bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-red-950/60 transition-colors"
                     title="Clear All Mask"
                   >
-                    <Trash2 className="w-4 h-4 text-black" />
+                    <Trash2 className="w-4 h-4 text-slate-100" />
                   </button>
                 </div>
 
@@ -307,7 +307,7 @@ export const AiObjectRemoverPage: React.FC = () => {
               <button
                 onClick={handleInpaint}
                 disabled={!selectedFile || isProcessing}
-                className="w-full py-3 bg-black text-white font-mono text-sm font-bold border-2 border-black hover:bg-[#FACC15] hover:text-black transition-all shadow-[3px_3px_0px_#000] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-mono text-sm font-bold border border-[var(--theme-gray-border)] rounded-xl transition-all shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isProcessing ? (
                   <>
@@ -324,7 +324,7 @@ export const AiObjectRemoverPage: React.FC = () => {
             </div>
 
             <div className="lg:col-span-2 space-y-4">
-              <div className="border-2 border-black bg-gray-100 p-4 min-h-[380px] flex flex-col items-center justify-center overflow-auto">
+              <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] rounded-2xl p-4 min-h-[380px] flex flex-col items-center justify-center overflow-auto">
                 {imageObj ? (
                   <canvas
                     ref={canvasRef}
@@ -332,25 +332,25 @@ export const AiObjectRemoverPage: React.FC = () => {
                     onMouseUp={stopDrawing}
                     onMouseLeave={stopDrawing}
                     onMouseMove={draw}
-                    className="border-2 border-black cursor-crosshair shadow-[2px_2px_0px_#000] max-w-full"
+                    className="border border-[var(--theme-gray-border)] rounded-xl cursor-crosshair shadow-xs max-w-full"
                   />
                 ) : (
-                  <div className="text-center font-mono text-xs text-gray-400">
+                  <div className="text-center font-mono text-xs text-[var(--theme-gray-muted)]">
                     Upload a photograph to paint over unwanted objects
                   </div>
                 )}
               </div>
 
               {resultUrl && (
-                <div className="border-2 border-black bg-white p-4 shadow-[3px_3px_0px_#000]">
+                <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] rounded-2xl p-4 shadow-xs">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-mono text-xs font-bold text-green-700 uppercase">
+                    <span className="font-mono text-xs font-bold text-emerald-400 uppercase">
                       Inpainted Output
                     </span>
                     <a
                       href={resultUrl}
                       download="inpainted-image.png"
-                      className="px-3 py-1 bg-[#FACC15] text-black font-mono text-xs font-bold border border-black flex items-center gap-1.5"
+                      className="px-3 py-1 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-mono text-xs font-bold border border-[var(--theme-gray-border)] rounded-lg flex items-center gap-1.5 transition"
                     >
                       <Download className="w-3.5 h-3.5" /> Download Result
                     </a>
@@ -358,7 +358,7 @@ export const AiObjectRemoverPage: React.FC = () => {
                   <img
                     src={resultUrl}
                     alt="Inpainted"
-                    className="max-h-[400px] mx-auto border border-black object-contain"
+                    className="max-h-[400px] mx-auto border border-[var(--theme-gray-border)] rounded-xl object-contain"
                   />
                 </div>
               )}

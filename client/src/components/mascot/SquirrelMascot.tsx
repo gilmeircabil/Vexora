@@ -128,8 +128,8 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
           <stop offset="100%" stopColor="#ff5533" stopOpacity="0" />
         </radialGradient>
         <radialGradient id={blueGlowId} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.5" />
-          <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
+          <stop offset="0%" stopColor="#d4d4ce" stopOpacity="0.5" />
+          <stop offset="100%" stopColor="#d4d4ce" stopOpacity="0" />
         </radialGradient>
         <linearGradient id={capGradId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#452715" />
@@ -141,7 +141,7 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
         </linearGradient>
         <linearGradient id={laptopGradId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#334155" />
-          <stop offset="100%" stopColor="#1e293b" />
+          <stop offset="100%" stopColor="#18181b" />
         </linearGradient>
       </defs>
 
@@ -378,7 +378,7 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
           <polygon
             points="68,156 132,156 138,164 62,164"
             fill={isCrunch ? '#7f1d1d' : '#0f172a'}
-            stroke={isCrunch ? '#ef4444' : '#38bdf8'}
+            stroke={isCrunch ? '#ef4444' : '#8e8e93'}
             strokeWidth="1"
             opacity="0.9"
           />
@@ -403,7 +403,7 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
           {/* Laptop Lid/Screen (Angled upward towards squirrel) */}
           <polygon
             points="70,126 130,126 138,154 62,154"
-            fill="#1e293b"
+            fill="#18181b"
             stroke="#0f172a"
             strokeWidth="3.5"
             strokeLinejoin="round"
@@ -541,7 +541,7 @@ export const SquirrelMascot: React.FC<SquirrelMascotProps> = ({
               className="sparkle"
               style={{ animationDelay: '0.8s' }}
               d="M 172 110 L 174 116 L 180 118 L 174 120 L 172 126 L 170 120 L 164 118 L 170 116 Z"
-              fill="#38bdf8"
+              fill="#f4f4f0"
             />
           </g>
         )}

@@ -72,22 +72,22 @@ export const MathVerificationChallenge: React.FC<MathVerificationChallengeProps>
   };
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-[#FFFDF7] border-2 border-black shadow-[4px_4px_0px_#000000] space-y-4">
+    <div className="p-4 sm:p-5 rounded-2xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] shadow-sm space-y-4 text-[var(--theme-dirty-white)]">
       {/* Header */}
-      <div className="flex items-center justify-between gap-2 border-b-2 border-black/10 pb-3">
+      <div className="flex items-center justify-between gap-2 border-b border-[var(--theme-gray-border)] pb-3">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-[#FACC15] border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000]">
-            <Brain className="w-4 h-4 stroke-[2.5]" />
+          <div className="w-8 h-8 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center text-[var(--theme-dirty-white)] shadow-sm">
+            <Brain className="w-4 h-4 stroke-[2]" />
           </div>
           <div>
-            <h4 className="font-black text-black text-xs sm:text-sm tracking-tight flex items-center gap-1.5">
-              <span>Human Brain Check</span>
-              <span className="text-[10px] font-mono font-black uppercase px-1.5 py-0.5 rounded bg-yellow-200 border border-black">
-                Fun Captcha
+            <h4 className="font-bold text-[var(--theme-dirty-white)] text-xs sm:text-sm tracking-tight flex items-center gap-1.5">
+              <span>Human Verification Check</span>
+              <span className="text-[10px] font-mono font-medium uppercase px-1.5 py-0.5 rounded bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-gray-muted)]">
+                Security
               </span>
             </h4>
-            <p className="text-[11px] font-bold text-neutral-600">
-              Solve these 3 quick 2-digit math problems to verify you are human! 🎯
+            <p className="text-[11px] font-normal text-[var(--theme-gray-muted)]">
+              Solve these 3 quick math problems to verify you are human.
             </p>
           </div>
         </div>
@@ -96,9 +96,9 @@ export const MathVerificationChallenge: React.FC<MathVerificationChallengeProps>
           type="button"
           onClick={handleRefresh}
           title="Get new math problems"
-          className="p-1.5 rounded-lg border-2 border-black bg-white hover:bg-neutral-100 text-black shadow-[1.5px_1.5px_0px_#000] active:translate-y-0.5 cursor-pointer flex items-center gap-1 text-[11px] font-black shrink-0"
+          className="p-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] active:translate-y-0.5 cursor-pointer flex items-center gap-1 text-[11px] font-medium shrink-0"
         >
-          <RefreshCw className="w-3.5 h-3.5 stroke-[2.5]" />
+          <RefreshCw className="w-3.5 h-3.5 stroke-[2]" />
           <span className="hidden sm:inline">New</span>
         </button>
       </div>
@@ -112,17 +112,17 @@ export const MathVerificationChallenge: React.FC<MathVerificationChallengeProps>
           return (
             <div
               key={p.id}
-              className={`flex items-center justify-between gap-3 p-2.5 rounded-xl border-2 transition-all ${
+              className={`flex items-center justify-between gap-3 p-2.5 rounded-xl border transition-all ${
                 isCorrect
-                  ? 'bg-emerald-50 border-emerald-600 shadow-[2px_2px_0px_#059669]'
+                  ? 'bg-emerald-950/40 border-emerald-600/60'
                   : hasInput
-                    ? 'bg-amber-50 border-black shadow-[2px_2px_0px_#000]'
-                    : 'bg-white border-black shadow-[2px_2px_0px_#000]'
+                    ? 'bg-[var(--theme-surface-raised)] border-[var(--theme-gray-border)]'
+                    : 'bg-[var(--theme-surface-raised)]/50 border-[var(--theme-gray-border)]'
               }`}
             >
               {/* Question label */}
-              <div className="flex items-center gap-2 font-mono font-black text-xs sm:text-sm text-black">
-                <span className="w-5 h-5 rounded-md bg-neutral-100 border border-black/40 flex items-center justify-center text-[10px] text-neutral-600">
+              <div className="flex items-center gap-2 font-mono font-semibold text-xs sm:text-sm text-[var(--theme-dirty-white)]">
+                <span className="w-5 h-5 rounded-md bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] flex items-center justify-center text-[10px] text-[var(--theme-gray-muted)]">
                   #{idx + 1}
                 </span>
                 <span className="tracking-wide">
@@ -140,20 +140,20 @@ export const MathVerificationChallenge: React.FC<MathVerificationChallengeProps>
                   onChange={(e) => handleInputChange(p.id, e.target.value)}
                   placeholder="?"
                   maxLength={4}
-                  className={`w-16 px-2 py-1.5 text-center font-mono font-black text-xs sm:text-sm rounded-lg border-2 text-black focus:outline-none transition-all ${
+                  className={`w-16 px-2 py-1.5 text-center font-mono font-bold text-xs sm:text-sm rounded-lg border focus:outline-none transition-all ${
                     isCorrect
-                      ? 'bg-emerald-100 border-emerald-700 text-emerald-900'
-                      : 'bg-white border-black focus:shadow-[2px_2px_0px_#000]'
+                      ? 'bg-emerald-900/60 border-emerald-500 text-emerald-200'
+                      : 'bg-[var(--theme-canvas)] border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] focus:border-[var(--theme-dirty-white)]'
                   }`}
                 />
 
                 <div className="w-6 flex items-center justify-center">
                   {isCorrect ? (
-                    <div className="w-5 h-5 rounded-full bg-emerald-500 border border-black flex items-center justify-center text-white">
+                    <div className="w-5 h-5 rounded-full bg-emerald-500 border border-emerald-400 flex items-center justify-center text-slate-950">
                       <Check className="w-3.5 h-3.5 stroke-[3]" />
                     </div>
                   ) : (
-                    <span className="text-[11px] font-bold text-neutral-400 font-mono">--</span>
+                    <span className="text-[11px] font-medium text-[var(--theme-gray-muted)] font-mono">--</span>
                   )}
                 </div>
               </div>
@@ -165,17 +165,17 @@ export const MathVerificationChallenge: React.FC<MathVerificationChallengeProps>
       {/* Progress & Human Verified Celebration */}
       <div className="pt-1">
         {isFullySolved ? (
-          <div className="p-2.5 rounded-xl bg-[#4ADE80] border-2 border-black text-black font-black text-xs flex items-center justify-center gap-2 shadow-[2px_2px_0px_#000] animate-in zoom-in-95 duration-150">
-            <Award className="w-4 h-4 stroke-[2.5]" />
-            <span>3/3 Solved! Human Brain Verified 🧠🎉</span>
+          <div className="p-2.5 rounded-xl bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-bold text-xs flex items-center justify-center gap-2 shadow-sm animate-in zoom-in-95 duration-150">
+            <Award className="w-4 h-4 stroke-[2]" />
+            <span>3/3 Solved! Human Verification Confirmed</span>
           </div>
         ) : (
-          <div className="flex items-center justify-between text-[11px] font-black text-neutral-600 px-1">
+          <div className="flex items-center justify-between text-[11px] font-medium text-[var(--theme-gray-muted)] px-1">
             <span className="flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <Sparkles className="w-3.5 h-3.5 text-[var(--theme-dirty-white)]" />
               <span>Progress: {solvedCount} of 3 solved</span>
             </span>
-            <span className="font-mono text-neutral-500">
+            <span className="font-mono text-slate-500">
               {solvedCount === 0 && 'Answer all 3 to proceed'}
               {solvedCount === 1 && '2 more to go!'}
               {solvedCount === 2 && 'Almost there! 1 left!'}

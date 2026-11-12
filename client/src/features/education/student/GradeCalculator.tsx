@@ -196,20 +196,20 @@ export const GradeCalculator: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div>
           <h2 className="text-xl font-black flex items-center gap-2">
-            <Calculator className="w-5 h-5 text-indigo-600" />
+            <Calculator className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             Grade & Weighted GPA Calculator
           </h2>
-          <p className="text-xs text-neutral-600 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Calculate accurate semester GPA, weighted course standings, and required final exam
             targets.
           </p>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex items-center gap-1.5 bg-[#FAF7F2] px-3 py-1.5 rounded-xl border border-black text-xs font-bold">
+          <div className="flex items-center gap-1.5 bg-[var(--theme-surface-raised)] px-3 py-1.5 rounded-xl border border-black text-xs font-bold">
             <span>Scale:</span>
             <select
               value={scaleType}
@@ -224,7 +224,7 @@ export const GradeCalculator: React.FC = () => {
 
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-white text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-[var(--theme-surface)] text-slate-100 font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
           >
             <Printer className="w-4 h-4" />
             Print Report
@@ -233,25 +233,25 @@ export const GradeCalculator: React.FC = () => {
       </div>
 
       {/* GPA Summary: Minimal Divided Row */}
-      <div className="bg-white rounded-xl border-2 border-black p-4 shadow-[2px_2px_0px_#000000] grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x-2 md:divide-black/10 gap-3 md:gap-0">
+      <div className="bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] p-4 shadow-sm grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x-2 md:divide-[var(--theme-gray-border)] gap-3 md:gap-0">
         <div className="md:pr-5 flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
               Cumulative GPA ({scaleType})
             </span>
-            <p className="text-2xl font-black mt-0.5 text-black">{overallGpa}</p>
+            <p className="text-2xl font-black mt-0.5 text-slate-100">{overallGpa}</p>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-[#FFD21A] border-2 border-black flex items-center justify-center font-black text-base shadow-[1.5px_1.5px_0px_#000000]">
+          <div className="w-10 h-10 rounded-lg bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-gray-border)] flex items-center justify-center font-black text-base shadow-sm">
             {getLetterGradeAndPoints(overallGpa * 25, scaleType).letter}
           </div>
         </div>
 
         <div className="pt-3 md:pt-0 md:px-5 flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
               Total Credits Enrolled
             </span>
-            <p className="text-2xl font-black mt-0.5 text-black">
+            <p className="text-2xl font-black mt-0.5 text-slate-100">
               {subjects.reduce((acc, s) => acc + (s.credits || 0), 0)}
             </p>
           </div>
@@ -260,14 +260,14 @@ export const GradeCalculator: React.FC = () => {
 
         <div className="pt-3 md:pt-0 md:pl-5 flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
               Active Courses
             </span>
-            <p className="text-2xl font-black mt-0.5 text-indigo-600">{subjects.length}</p>
+            <p className="text-2xl font-black mt-0.5 text-[var(--theme-dirty-white)]">{subjects.length}</p>
           </div>
           <button
             onClick={handleAddSubject}
-            className="flex items-center gap-1 text-xs font-black bg-[#4ADE80] text-black px-2.5 py-1 rounded-lg border border-black shadow-[1.5px_1.5px_0px_#000000] hover:scale-105 transition-all cursor-pointer"
+            className="flex items-center gap-1 text-xs font-black bg-[#4ADE80] text-slate-100 px-2.5 py-1 rounded-lg border border-black shadow-sm hover:scale-105 transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5 stroke-[3]" />
             Add Course
@@ -288,8 +288,8 @@ export const GradeCalculator: React.FC = () => {
               onClick={() => setActiveSubjectId(sub.id)}
               className={`px-4 py-2 rounded-xl border-2 text-xs font-black shrink-0 transition-all flex items-center gap-2 cursor-pointer ${
                 isActive
-                  ? 'border-black bg-[#FFD21A] shadow-[3px_3px_0px_#000000]'
-                  : 'border-neutral-300 bg-white hover:border-black'
+                  ? 'border-black bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-sm'
+                  : 'border-neutral-300 bg-[var(--theme-surface)] hover:border-black'
               }`}
             >
               <span>{sub.name}</span>
@@ -303,8 +303,8 @@ export const GradeCalculator: React.FC = () => {
 
       {/* Active Subject Assessment Table */}
       {activeSubject && (
-        <div className="bg-white p-6 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000] space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black/10 pb-4">
+        <div className="bg-[var(--theme-surface)] p-6 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--theme-gray-border)] pb-4">
             <div className="flex items-center gap-3">
               <input
                 type="text"
@@ -317,7 +317,7 @@ export const GradeCalculator: React.FC = () => {
                 }}
                 className="font-black text-lg border-b border-dashed border-neutral-400 focus:outline-none focus:border-black"
               />
-              <div className="flex items-center gap-1 text-xs font-bold text-neutral-600">
+              <div className="flex items-center gap-1 text-xs font-bold text-slate-400">
                 <span>Credits:</span>
                 <input
                   type="number"
@@ -338,9 +338,9 @@ export const GradeCalculator: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <span className="text-sm font-bold text-neutral-600">
+              <span className="text-sm font-bold text-slate-400">
                 Current Standing:{' '}
-                <strong className="text-black text-base">
+                <strong className="text-slate-100 text-base">
                   {activeSubjectCurrentPct}% (
                   {getLetterGradeAndPoints(activeSubjectCurrentPct, scaleType).letter})
                 </strong>
@@ -360,7 +360,7 @@ export const GradeCalculator: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b-2 border-black text-neutral-500 uppercase tracking-wider font-black">
+                <tr className="border-b border-[var(--theme-gray-border)] text-slate-400 uppercase tracking-wider font-black">
                   <th className="py-2.5 px-3">Assessment Name</th>
                   <th className="py-2.5 px-3">Score</th>
                   <th className="py-2.5 px-3">Max Score</th>
@@ -433,12 +433,12 @@ export const GradeCalculator: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
             <button
               onClick={handleAddAssessment}
-              className="px-4 py-2 bg-white text-black font-black text-xs rounded-xl border-2 border-black hover:bg-neutral-50 shadow-[2px_2px_0px_#000000] self-start"
+              className="px-4 py-2 bg-[var(--theme-surface)] text-slate-100 font-black text-xs rounded-xl border border-[var(--theme-gray-border)] hover:bg-neutral-50 shadow-sm self-start"
             >
               + Add Assessment Item
             </button>
 
-            <div className="text-xs font-bold text-neutral-600">
+            <div className="text-xs font-bold text-slate-400">
               Total Assessed Weight:{' '}
               <span
                 className={`font-black ${
@@ -454,19 +454,19 @@ export const GradeCalculator: React.FC = () => {
       )}
 
       {/* Target Grade Calculator */}
-      <div className="bg-[#FAF7F2] p-6 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000] space-y-4">
+      <div className="bg-[var(--theme-surface-raised)] p-6 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-4">
         <h3 className="text-base font-black flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-amber-500 fill-amber-300" />
           Target Grade Calculator for {activeSubject?.name || 'Current Course'}
         </h3>
-        <p className="text-xs text-neutral-600">
+        <p className="text-xs text-slate-400">
           Find out what grade you need on your remaining final assignment or exam to achieve your
           desired course score.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+            <label className="block text-xs font-black uppercase text-slate-300 mb-1">
               Desired Target Grade (%)
             </label>
             <input
@@ -475,12 +475,12 @@ export const GradeCalculator: React.FC = () => {
               max="100"
               value={targetGoal}
               onChange={(e) => setTargetGoal(Number(e.target.value) || 90)}
-              className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-black bg-white"
+              className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-black bg-[var(--theme-surface)]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+            <label className="block text-xs font-black uppercase text-slate-300 mb-1">
               Final Exam / Remaining Weight (%)
             </label>
             <input
@@ -489,21 +489,21 @@ export const GradeCalculator: React.FC = () => {
               max="100"
               value={finalWeight}
               onChange={(e) => setFinalWeight(Number(e.target.value) || 30)}
-              className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-black bg-white"
+              className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-black bg-[var(--theme-surface)]"
             />
           </div>
 
-          <div className="bg-white p-3 rounded-xl border-2 border-black flex flex-col justify-center text-center">
-            <span className="text-[10px] font-bold uppercase text-neutral-500">
+          <div className="bg-[var(--theme-surface)] p-3 rounded-xl border border-[var(--theme-gray-border)] flex flex-col justify-center text-center">
+            <span className="text-[10px] font-bold uppercase text-slate-400">
               Required Score on Final
             </span>
-            <span className="text-2xl font-black text-black mt-0.5">
+            <span className="text-2xl font-black text-slate-100 mt-0.5">
               {Number(neededFinalScore) > 100 ? (
                 <span className="text-red-600">{neededFinalScore}% (High)</span>
               ) : Number(neededFinalScore) <= 0 ? (
                 <span className="text-emerald-600">Already Met! (0%)</span>
               ) : (
-                <span className="text-indigo-600">{neededFinalScore}%</span>
+                <span className="text-[var(--theme-dirty-white)]">{neededFinalScore}%</span>
               )}
             </span>
           </div>

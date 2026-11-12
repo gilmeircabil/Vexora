@@ -89,7 +89,7 @@ describe('MaintenanceModal & Dynamic Page Locks Suite', () => {
           description="This section is currently undergoing updates. Please check back shortly."
           pageTitle="Design Studio"
           estimatedReturn="11:00 PM UTC"
-          accentColor="#38BDF8"
+          accentColor="#d4d4ce"
         />
       </BrowserRouter>,
     );

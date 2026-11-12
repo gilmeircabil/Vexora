@@ -115,10 +115,10 @@ export const FileDropZone: React.FC<FileDropZoneProps> = ({
         onDrop={handleDrop}
         aria-label="File upload dropzone"
         className={cn(
-          'relative border-2 border-black rounded-2xl p-8 text-center transition-all flex flex-col items-center justify-center gap-3 cursor-pointer select-none bg-white shadow-[4px_4px_0px_#000000] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0px_#000000]',
+          'relative border border-[var(--theme-gray-border)] rounded-2xl p-8 text-center transition-all flex flex-col items-center justify-center gap-3 cursor-pointer select-none bg-[var(--theme-surface)] shadow-sm hover:-translate-y-0.5 hover:border-[var(--theme-gray-subtle)] hover:shadow-md text-[var(--theme-dirty-white)]',
           isDragging
-            ? 'border-solid bg-[#FACC15]/20 scale-[0.99]'
-            : 'border-dashed hover:bg-[#FAF7F2]',
+            ? 'border-solid bg-[var(--theme-surface-raised)] border-[var(--theme-gray-subtle)] scale-[0.99]'
+            : 'border-dashed hover:bg-[var(--theme-surface-raised)]',
           disabled && 'opacity-50 cursor-not-allowed pointer-events-none',
         )}
       >
@@ -133,13 +133,13 @@ export const FileDropZone: React.FC<FileDropZoneProps> = ({
           tabIndex={-1}
         />
 
-        <div className="w-14 h-14 rounded-2xl bg-[#FACC15] border-2 border-black text-black shadow-[2px_2px_0px_#000000] flex items-center justify-center">
+        <div className="w-14 h-14 rounded-2xl bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-gray-border)] shadow-sm flex items-center justify-center">
           <UploadCloud className="w-7 h-7 stroke-[2.3]" />
         </div>
 
         <div>
-          <p className="text-sm font-black text-black">{description}</p>
-          <p className="text-xs font-semibold text-neutral-600 mt-1">
+          <p className="text-sm font-black text-slate-100">{description}</p>
+          <p className="text-xs font-semibold text-slate-400 mt-1">
             {multiple ? 'Select one or more files' : 'Single file upload'}
             {maxBytes ? ` · up to ${Math.round(maxBytes / (1024 * 1024))} MB` : ''}
           </p>
@@ -149,11 +149,11 @@ export const FileDropZone: React.FC<FileDropZoneProps> = ({
       {validationError && (
         <div
           role="alert"
-          className="flex items-start gap-2 p-3 text-xs rounded-xl bg-[#F472B6]/20 text-black border-2 border-black shadow-[2px_2px_0px_#000000] font-bold"
+          className="flex items-start gap-2 p-3 text-xs rounded-xl bg-[#F472B6]/20 text-slate-100 border border-slate-800 shadow-sm font-bold"
         >
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 stroke-[2.5]" />
           <span className="flex-1">{validationError}</span>
-          <button onClick={() => setValidationError(null)} className="text-black hover:scale-110">
+          <button onClick={() => setValidationError(null)} className="text-slate-100 hover:scale-110">
             <X className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>
@@ -170,14 +170,14 @@ export const FileInfoCard: React.FC<{
   const dimensions = 'dimensions' in file ? file.dimensions : undefined;
 
   return (
-    <div className="flex items-center justify-between p-3.5 rounded-xl border-2 border-black bg-white text-sm shadow-[3px_3px_0px_#000000]">
+    <div className="flex items-center justify-between p-3.5 rounded-xl border border-slate-800 bg-white text-sm shadow-sm">
       <div className="flex items-center gap-3 min-w-0">
-        <div className="w-9 h-9 rounded-lg border-2 border-black bg-[#FACC15] text-black flex items-center justify-center shrink-0">
+        <div className="w-9 h-9 rounded-lg border border-slate-800 bg-[#FACC15] text-slate-100 flex items-center justify-center shrink-0">
           <FileIcon className="w-4 h-4 stroke-[2.5]" />
         </div>
         <div className="min-w-0">
-          <p className="font-black text-black truncate text-sm">{rawFile.name}</p>
-          <p className="text-xs font-bold text-neutral-600">
+          <p className="font-black text-slate-100 truncate text-sm">{rawFile.name}</p>
+          <p className="text-xs font-bold text-slate-400">
             {formatBytes(rawFile.size)}
             {dimensions && ` · ${dimensions.width} × ${dimensions.height} px`}
           </p>

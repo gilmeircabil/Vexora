@@ -39,14 +39,14 @@ describe('Mascot Integration', () => {
     // Hero speech bubble displays initial idle greeting
     const speechBubble = screen.getByTestId('mascot-speech-bubble');
     expect(speechBubble).toBeDefined();
-    expect(speechBubble.textContent).toContain('Hi! Click me to high-five! 🌰');
+    expect(speechBubble.textContent).toContain('Hi! Click me to high-five!');
 
     // Clicking mascot triggers celebrate state
     await act(async () => {
       fireEvent.click(heroMascot);
     });
     expect(heroMascot.getAttribute('data-state')).toBe('celebrate');
-    expect(speechBubble.textContent).toContain('Woohoo! Sparkle power! 🌰✨');
+    expect(speechBubble.textContent).toContain('Woohoo! Sparkle power!');
   });
 
   it('renders floating mascot widget inside layout with MascotProvider', () => {

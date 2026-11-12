@@ -5,34 +5,34 @@ import type { BroadcastAnnouncement } from '../../services/announcementApi.js';
 
 const TYPE_CONFIG = {
   info: {
-    bg: 'bg-[#FAF7F0]',
-    accentBg: 'bg-[#38BDF8]',
-    accentText: 'text-black',
-    border: 'border-black',
+    bg: 'bg-[var(--theme-surface)]',
+    accentBg: 'bg-[var(--theme-surface-raised)]',
+    accentText: 'text-[var(--theme-dirty-white)]',
+    border: 'border-[var(--theme-gray-border)]',
     label: 'Announcement',
     icon: Info,
   },
   success: {
-    bg: 'bg-[#FAF7F0]',
-    accentBg: 'bg-[#4ADE80]',
-    accentText: 'text-black',
-    border: 'border-black',
+    bg: 'bg-[var(--theme-surface)]',
+    accentBg: 'bg-emerald-600/20',
+    accentText: 'text-emerald-400',
+    border: 'border-slate-800',
     label: 'Update',
     icon: CheckCircle2,
   },
   warning: {
-    bg: 'bg-[#FAF7F0]',
-    accentBg: 'bg-[#FACC15]',
-    accentText: 'text-black',
-    border: 'border-black',
+    bg: 'bg-[var(--theme-surface)]',
+    accentBg: 'bg-amber-600/20',
+    accentText: 'text-amber-400',
+    border: 'border-slate-800',
     label: 'Notice',
     icon: AlertTriangle,
   },
   important: {
-    bg: 'bg-[#FAF7F0]',
-    accentBg: 'bg-[#F43F5E]',
-    accentText: 'text-white',
-    border: 'border-black',
+    bg: 'bg-[var(--theme-surface)]',
+    accentBg: 'bg-rose-600/20',
+    accentText: 'text-rose-400',
+    border: 'border-slate-800',
     label: 'Urgent',
     icon: Megaphone,
   },
@@ -92,19 +92,19 @@ export const BroadcastToastCard: React.FC<ToastCardProps> = ({ announcement, onD
       aria-live="polite"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className="pointer-events-auto relative w-full overflow-hidden rounded-2xl border-2 border-black bg-white p-4 shadow-[4px_4px_0px_#000000] transition-all hover:-translate-y-0.5 animate-in slide-in-from-right-4 duration-300"
+      className="pointer-events-auto relative w-full overflow-hidden rounded-2xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] p-4 shadow-xl transition-all hover:-translate-y-0.5 animate-in slide-in-from-right-4 duration-300 text-[var(--theme-dirty-white)]"
     >
       {/* Top Header Row */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
           <span
-            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg border-2 border-black text-[11px] font-mono font-black ${config.accentBg} ${config.accentText} shadow-[1.5px_1.5px_0px_#000] shrink-0`}
+            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg border border-slate-700 text-[11px] font-mono font-bold ${config.accentBg} ${config.accentText} shrink-0`}
           >
-            <Icon className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
+            <Icon className="w-3.5 h-3.5 shrink-0 stroke-[2]" />
             <span>{config.label}</span>
           </span>
 
-          <span className="text-[11px] font-mono font-bold text-neutral-500 truncate">
+          <span className="text-[11px] font-mono font-medium text-slate-400 truncate">
             {formatRelativeTime(announcement.publishedAt || announcement.createdAt)}
           </span>
         </div>
@@ -113,41 +113,41 @@ export const BroadcastToastCard: React.FC<ToastCardProps> = ({ announcement, onD
           type="button"
           onClick={() => onDismiss(announcement._id)}
           aria-label="Dismiss announcement"
-          className="p-1 rounded-lg border border-black/40 hover:border-black bg-[#FAF7F0] hover:bg-neutral-200 text-black transition-all cursor-pointer shrink-0"
+          className="p-1 rounded-lg border border-slate-700 hover:border-slate-600 bg-slate-800 text-slate-400 hover:text-slate-100 transition-all cursor-pointer shrink-0"
         >
-          <X className="w-3.5 h-3.5 stroke-[2.5]" />
+          <X className="w-3.5 h-3.5 stroke-[2]" />
         </button>
       </div>
 
       {/* Title & Body */}
       <div className="mt-2.5 space-y-1">
-        <h4 className="text-sm font-black text-black leading-snug break-words">
+        <h4 className="text-sm font-bold text-slate-100 leading-snug break-words">
           {announcement.title}
         </h4>
-        <p className="text-xs font-medium text-neutral-700 leading-relaxed max-h-36 overflow-y-auto whitespace-pre-wrap break-words">
+        <p className="text-xs font-normal text-slate-300 leading-relaxed max-h-36 overflow-y-auto whitespace-pre-wrap break-words">
           {announcement.message}
         </p>
       </div>
 
       {/* Sender metadata if available */}
       {announcement.createdByName && (
-        <div className="mt-2.5 pt-2 border-t border-black/10 flex items-center justify-between text-[10px] font-mono text-neutral-500">
+        <div className="mt-2.5 pt-2 border-t border-slate-800 flex items-center justify-between text-[10px] font-mono text-slate-400">
           <span>By {announcement.createdByName}</span>
-          {isPaused && <span className="font-bold text-black font-sans">Paused</span>}
+          {isPaused && <span className="font-semibold text-slate-200 font-sans">Paused</span>}
         </div>
       )}
 
       {/* Auto-Dismiss Progress Bar */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-neutral-200">
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-800">
         <div
           className={`h-full transition-[width] ease-linear duration-100 ${
             announcement.type === 'important'
-              ? 'bg-[#F43F5E]'
+              ? 'bg-rose-500'
               : announcement.type === 'warning'
-                ? 'bg-[#FACC15]'
+                ? 'bg-amber-400'
                 : announcement.type === 'success'
-                  ? 'bg-[#4ADE80]'
-                  : 'bg-[#38BDF8]'
+                  ? 'bg-emerald-500'
+                  : 'bg-[var(--theme-dirty-white)]'
           }`}
           style={{ width: `${progress}%` }}
         />

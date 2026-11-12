@@ -63,7 +63,7 @@ export const TextReverserTool: React.FC = () => {
             rows={10}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Type or paste text here (supports emojis: 👩🏽‍💻, 🚀, etc.)..."
+            placeholder="Type or paste text here to reverse..."
             className="w-full p-3 text-sm bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-indigo-500 font-sans leading-relaxed"
           />
         </Card>

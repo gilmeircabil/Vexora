@@ -13,18 +13,18 @@ export const FloatingMascotWidget: React.FC = () => {
   }
 
   const handleMascotClick = () => {
-    setCustomQuote('Woohoo! Sparkle power! 🌰✨');
+    setCustomQuote('Woohoo! Sparkle power!');
     triggerMood('celebrate', 2500);
   };
 
   const getSpeechText = () => {
     if (mood === 'celebrate') {
-      return customQuote || 'Sparkle power! You got this! 🌰✨';
+      return customQuote || 'Sparkle power! You got this!';
     }
     if (mood === 'crunch') {
-      return 'Crunching code! High focus! 🔥';
+      return 'Crunching code! High focus!';
     }
-    return 'Hi! Ready to build something cool? 🌰';
+    return 'Hi! Ready to build something cool?';
   };
 
   // Do not render floating mascot on full-screen Studio Editor canvas
@@ -76,7 +76,7 @@ export const FloatingMascotWidget: React.FC = () => {
       >
         <div className="flex items-start justify-between gap-1 mb-1">
           <span className="font-bold text-[10px] tracking-wider uppercase text-amber-600 dark:text-amber-400">
-            🌰 Vexora Mascot
+            Vexora Mascot
           </span>
           <button
             onClick={() => setIsMinimized(true)}

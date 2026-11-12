@@ -708,15 +708,15 @@ export const DATA_DISPLAY_COMPONENTS: UIComponentItem[] = [
         codeReact: `export const ListGroupPreview = () => (
   <div className="w-full max-w-xs bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] overflow-hidden divide-y-2 divide-black text-xs font-black">
     <div className="p-3 flex items-center justify-between hover:bg-neutral-50 cursor-pointer">
-      <div className="flex items-center gap-2"><span>🔔</span><span>Notifications</span></div>
+      <div className="flex items-center gap-2"><span className="font-mono text-neutral-400">•</span><span>Notifications</span></div>
       <span className="px-1.5 py-0.5 bg-[#FACC15] text-[10px] rounded border border-black">3</span>
     </div>
     <div className="p-3 flex items-center justify-between hover:bg-neutral-50 cursor-pointer">
-      <div className="flex items-center gap-2"><span>🛡️</span><span>Security & 2FA</span></div>
+      <div className="flex items-center gap-2"><span className="font-mono text-neutral-400">•</span><span>Security & 2FA</span></div>
       <span>›</span>
     </div>
     <div className="p-3 flex items-center justify-between hover:bg-neutral-50 cursor-pointer">
-      <div className="flex items-center gap-2"><span>💳</span><span>Billing Methods</span></div>
+      <div className="flex items-center gap-2"><span className="font-mono text-neutral-400">•</span><span>Billing Methods</span></div>
       <span>›</span>
     </div>
   </div>

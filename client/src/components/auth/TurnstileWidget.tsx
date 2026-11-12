@@ -177,7 +177,7 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({
   }, [siteKey, resetKey]);
 
   return (
-    <div className="rounded-xl border-2 border-black bg-[#FAF7F2] px-3.5 py-2.5 flex items-center justify-between gap-3 shadow-[1.5px_1.5px_0px_#000]">
+    <div className="rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] px-3.5 py-2.5 flex items-center justify-between gap-3 shadow-sm text-[var(--theme-dirty-white)]">
       <div ref={containerRef} className={usingFallback ? 'hidden' : 'block'} />
 
       {usingFallback && (
@@ -190,27 +190,27 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({
             aria-label="Verify you are human"
           >
             <div
-              className={`w-5 h-5 rounded border-2 border-black flex items-center justify-center transition-all ${
+              className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${
                 verified
-                  ? 'bg-black text-white shadow-[1px_1px_0px_#000]'
+                  ? 'bg-[var(--theme-dirty-white)] border-[var(--theme-dirty-white)] text-[var(--theme-canvas)]'
                   : isVerifying
-                    ? 'bg-yellow-200'
-                    : 'bg-white hover:bg-neutral-100 shadow-[1px_1px_0px_#000]'
+                    ? 'bg-[var(--theme-surface-raised)] border-[var(--theme-gray-subtle)]'
+                    : 'bg-[var(--theme-surface-raised)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface)]'
               }`}
             >
               {isVerifying ? (
-                <RefreshCw className="w-3 h-3 animate-spin text-black" />
+                <RefreshCw className="w-3 h-3 animate-spin text-[var(--theme-dirty-white)]" />
               ) : verified ? (
-                <Check className="w-3.5 h-3.5 stroke-[3] text-white" />
+                <Check className="w-3.5 h-3.5 stroke-[3] text-[var(--theme-canvas)]" />
               ) : null}
             </div>
-            <span className="text-xs font-black text-black">
+            <span className="text-xs font-semibold text-[var(--theme-dirty-white)]">
               {isVerifying ? 'Verifying...' : verified ? 'Verified human' : 'Verify you are human'}
             </span>
           </button>
 
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-neutral-600 shrink-0">
-            <ShieldCheck className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+          <div className="flex items-center gap-1.5 text-[11px] font-medium text-[var(--theme-gray-muted)] shrink-0">
+            <ShieldCheck className="w-3.5 h-3.5 text-[var(--theme-dirty-white)] stroke-[2]" />
             <span>Cloudflare Turnstile</span>
           </div>
         </>

@@ -4,33 +4,33 @@ import { ShieldCheck, HardDrive, EyeOff, Lock, AlertTriangle } from 'lucide-reac
 
 export const PrivacyPage: React.FC = () => {
   return (
-    <div className="max-w-3xl mx-auto space-y-10">
+    <div className="max-w-3xl mx-auto space-y-10 text-slate-100">
       <div className="space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#4ADE80] border-2 border-black text-black text-xs font-black shadow-[2px_2px_0px_#000]">
-          <ShieldCheck className="w-3.5 h-3.5 stroke-[2.5]" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
+          <ShieldCheck className="w-3.5 h-3.5 stroke-[2]" />
           <span>Verified Local-First Architecture</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-black">
+        <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-100">
           Privacy Policy & Architecture
         </h1>
-        <p className="text-base font-bold text-neutral-700 leading-relaxed">
+        <p className="text-base font-normal text-slate-400 leading-relaxed">
           How VexoraMods processes your data, why your files never leave your device, and our
           commitment to transparency.
         </p>
       </div>
 
-      <div className="space-y-6 text-sm text-neutral-800 leading-relaxed font-semibold">
+      <div className="space-y-6 text-sm text-[var(--theme-dirty-white-muted)] leading-relaxed font-normal">
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
-            <HardDrive className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">1. Where Your Files Are Processed</h2>
+            <HardDrive className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">1. Where Your Files Are Processed</h2>
           </div>
           <p>
             Every currently published tool on VexoraMods operates{' '}
-            <strong>entirely inside your browser</strong>. When you drop a PDF, image, or text
+            <strong className="text-[var(--theme-dirty-white)]">entirely inside your browser</strong>. When you drop a PDF, image, or text
             snippet into a tool:
           </p>
-          <ul className="list-disc list-inside space-y-1 text-xs font-semibold">
+          <ul className="list-disc list-inside space-y-1 text-xs font-normal text-[var(--theme-dirty-white-muted)]">
             <li>
               The file is loaded directly into your device's RAM via browser File and Blob APIs.
             </li>
@@ -43,7 +43,7 @@ export const PrivacyPage: React.FC = () => {
               that are revoked immediately after use.
             </li>
             <li>
-              <strong>
+              <strong className="text-[var(--theme-dirty-white)]">
                 Zero file bytes, metadata, or logs are transmitted over the network or saved to our
                 servers.
               </strong>
@@ -53,8 +53,8 @@ export const PrivacyPage: React.FC = () => {
 
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
-            <EyeOff className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">2. Analytics & Tracking</h2>
+            <EyeOff className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">2. Analytics & Tracking</h2>
           </div>
           <p>
             VexoraMods does not use Google Analytics, Facebook Pixels, user fingerprinting, or
@@ -69,16 +69,16 @@ export const PrivacyPage: React.FC = () => {
 
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
-            <Lock className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">3. Passwords & Cryptographic Keys</h2>
+            <Lock className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">3. Passwords & Cryptographic Keys</h2>
           </div>
           <p>
             The Password Generator and UUID Generator use the standard{' '}
-            <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+            <code className="bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] px-1 py-0.5 rounded border border-[var(--theme-gray-border)] font-mono">
               crypto.getRandomValues()
             </code>{' '}
             and{' '}
-            <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+            <code className="bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] px-1 py-0.5 rounded border border-[var(--theme-gray-border)] font-mono">
               crypto.randomUUID()
             </code>{' '}
             Web Crypto APIs. Generated passwords are never stored in localStorage, sessionStorage,
@@ -89,8 +89,8 @@ export const PrivacyPage: React.FC = () => {
 
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
-            <Lock className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
+            <Lock className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">
               4. Optional Accounts &amp; Cloud Studio Storage
             </h2>
           </div>
@@ -98,7 +98,7 @@ export const PrivacyPage: React.FC = () => {
             Account registration on VexoraMods is completely optional. If you choose to create an
             account:
           </p>
-          <ul className="list-disc list-inside space-y-1 text-xs font-semibold">
+          <ul className="list-disc list-inside space-y-1 text-xs font-normal text-[var(--theme-dirty-white-muted)]">
             <li>
               We store your name, email address, and a securely salted bcrypt password hash in our
               database. Plaintext passwords are never stored or logged.
@@ -109,7 +109,7 @@ export const PrivacyPage: React.FC = () => {
             </li>
             <li>
               Session continuity is maintained using a secure, HTTP-only cookie ({' '}
-              <code className="bg-[#FACC15]/30 px-1 py-0.5 rounded border border-black font-mono">
+              <code className="bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] px-1 py-0.5 rounded border border-[var(--theme-gray-border)] font-mono">
                 refreshToken
               </code>
               ). We do not store tokens in unencrypted local storage.
@@ -119,8 +119,8 @@ export const PrivacyPage: React.FC = () => {
 
         <Card className="space-y-3">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black text-black">
+            <ShieldCheck className="w-5 h-5 text-[var(--theme-dirty-white)] stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">
               5. Bot Protection &amp; Spam Defense
             </h2>
           </div>
@@ -132,14 +132,14 @@ export const PrivacyPage: React.FC = () => {
           </p>
         </Card>
 
-        <Card className="space-y-3 bg-[#FACC15]/20">
-          <div className="flex items-center gap-2 text-black">
-            <AlertTriangle className="w-5 h-5 text-black stroke-[2.5]" />
-            <h2 className="text-base font-black">
+        <Card className="space-y-3 bg-[var(--theme-surface-raised)] border-[var(--theme-gray-border)]">
+          <div className="flex items-center gap-2 text-[var(--theme-dirty-white)]">
+            <AlertTriangle className="w-5 h-5 stroke-[2]" />
+            <h2 className="text-base font-bold text-[var(--theme-dirty-white)]">
               6. Honest Security Boundaries &amp; Data Rights
             </h2>
           </div>
-          <p className="text-xs text-neutral-800 font-semibold">
+          <p className="text-xs text-slate-300 font-normal">
             You have full control over your data. You may export your Design Studio projects at any
             time in PNG, SVG, or JSON format. If you wish to delete your account or any personal
             data, you can do so directly from your dashboard or by contacting the maintainers. While

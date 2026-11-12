@@ -173,7 +173,7 @@ export const ColorConverterTool: React.FC = () => {
                   max="360"
                   value={hsl.h}
                   onChange={(e) => handleHslChange(parseInt(e.target.value, 10), hsl.s, hsl.l)}
-                  className="w-full accent-indigo-600"
+                  className="w-full accent-[var(--theme-dirty-white)]"
                 />
               </div>
               <div>
@@ -184,7 +184,7 @@ export const ColorConverterTool: React.FC = () => {
                   max="100"
                   value={hsl.s}
                   onChange={(e) => handleHslChange(hsl.h, parseInt(e.target.value, 10), hsl.l)}
-                  className="w-full accent-indigo-600"
+                  className="w-full accent-[var(--theme-dirty-white)]"
                 />
               </div>
               <div>
@@ -195,7 +195,7 @@ export const ColorConverterTool: React.FC = () => {
                   max="100"
                   value={hsl.l}
                   onChange={(e) => handleHslChange(hsl.h, hsl.s, parseInt(e.target.value, 10))}
-                  className="w-full accent-indigo-600"
+                  className="w-full accent-[var(--theme-dirty-white)]"
                 />
               </div>
             </div>

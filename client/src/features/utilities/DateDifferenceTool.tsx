@@ -27,7 +27,7 @@ export const DateDifferenceTool: React.FC = () => {
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 text-sm bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:border-[var(--theme-dirty-white)]"
             />
           </div>
 
@@ -39,7 +39,7 @@ export const DateDifferenceTool: React.FC = () => {
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 text-sm bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:border-[var(--theme-dirty-white)]"
             />
           </div>
         </div>
@@ -50,7 +50,7 @@ export const DateDifferenceTool: React.FC = () => {
               type="checkbox"
               checked={inclusive}
               onChange={(e) => setInclusive(e.target.checked)}
-              className="rounded accent-indigo-600"
+              className="rounded accent-[var(--theme-dirty-white)]"
             />
             <span>Include end day in count (+1 day)</span>
           </label>
@@ -67,7 +67,7 @@ export const DateDifferenceTool: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <Card className="text-center p-4">
               <span className="text-xs text-neutral-500">Total Calendar Days</span>
-              <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mt-1">
+              <p className="text-3xl font-bold text-[var(--theme-dirty-white)] mt-1">
                 {result.value.totalDays}
               </p>
             </Card>
@@ -95,7 +95,7 @@ export const DateDifferenceTool: React.FC = () => {
           </div>
 
           <div className="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 border border-neutral-200/60 dark:border-neutral-800 text-xs text-neutral-500 flex items-start gap-2.5">
-            <Info className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+            <Info className="w-4 h-4 text-[var(--theme-dirty-white)] shrink-0 mt-0.5" />
             <div>
               <p className="font-medium text-neutral-700 dark:text-neutral-300">
                 Calculation Methodology

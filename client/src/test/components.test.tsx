@@ -6,6 +6,7 @@ import { Button } from '../components/common/Button.js';
 import { CopyButton } from '../components/common/CopyButton.js';
 import { Card } from '../components/common/Card.js';
 import { ToolCard } from '../components/common/ToolCard.js';
+import { BrandLogo } from '../components/common/BrandLogo.js';
 import { ToastProvider } from '../context/ToastContext.js';
 import { TOOL_CATALOG } from '../tools/catalog.js';
 import { useFullscreenMode } from '../features/education/shared/useFullscreenMode.js';
@@ -69,6 +70,17 @@ describe('Common UI Components', () => {
     expect(screen.getByText(tool.name)).toBeInTheDocument();
     expect(screen.getByText(tool.tagline)).toBeInTheDocument();
     expect(screen.getByRole('link')).toHaveAttribute('href', `/tools/${tool.slug}`);
+  });
+
+  it('renders BrandLogo with high-contrast dirty-white emblem badge and dark icon', () => {
+    render(<BrandLogo size="md" showTagline />);
+    const emblem = screen.getByTestId('brand-emblem');
+    expect(emblem).toBeInTheDocument();
+    expect(emblem).toHaveClass('bg-[var(--theme-dirty-white)]');
+    expect(emblem).toHaveClass('text-[var(--theme-canvas)]');
+    expect(screen.getByText('Vexora')).toBeInTheDocument();
+    expect(screen.getByText('Mods')).toBeInTheDocument();
+    expect(screen.getByText('Everything You Need. One Platform. Free.')).toBeInTheDocument();
   });
 
   describe('useFullscreenMode Hook', () => {

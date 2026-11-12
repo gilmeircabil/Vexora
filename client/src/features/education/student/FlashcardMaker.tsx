@@ -203,10 +203,10 @@ export const FlashcardMaker: React.FC = () => {
     return (
       <div className="space-y-6 max-w-2xl mx-auto">
         {/* Study Header */}
-        <div className="flex items-center justify-between bg-white p-4 rounded-xl border-2 border-black shadow-[3px_3px_0px_#000000]">
+        <div className="flex items-center justify-between bg-[var(--theme-surface)] p-4 rounded-xl border border-[var(--theme-gray-border)] shadow-sm">
           <button
             onClick={() => setIsStudying(false)}
-            className="flex items-center gap-1.5 text-xs font-bold text-neutral-600 hover:text-black cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-slate-100 cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             Exit Study Mode
@@ -230,7 +230,7 @@ export const FlashcardMaker: React.FC = () => {
         {/* Progress Bar */}
         <div className="w-full bg-neutral-200 h-2.5 rounded-full border border-black overflow-hidden">
           <div
-            className="h-full bg-[#FFD21A] transition-all duration-300"
+            className="h-full bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -238,23 +238,23 @@ export const FlashcardMaker: React.FC = () => {
         {/* Interactive Flip Card */}
         <div
           onClick={() => setIsFlipped(!isFlipped)}
-          className={`min-h-[280px] p-8 rounded-2xl border-4 border-black bg-white cursor-pointer select-none transition-all flex flex-col justify-between ${
+          className={`min-h-[280px] p-8 rounded-2xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] cursor-pointer select-none transition-all flex flex-col justify-between ${
             isFlipped
-              ? 'bg-[#FAF7F2] shadow-[6px_6px_0px_#38BDF8]'
-              : 'shadow-[6px_6px_0px_#FFD21A] hover:-translate-y-1'
+              ? 'bg-[var(--theme-surface)] shadow-[4px_4px_0px_var(--theme-gray-border)]'
+              : 'shadow-[4px_4px_0px_var(--theme-gray-border)] hover:-translate-y-1'
           }`}
         >
           <div className="flex items-center justify-between text-xs font-bold text-neutral-400">
-            <span className="uppercase tracking-widest text-[10px] text-neutral-500 font-black">
+            <span className="uppercase tracking-widest text-[10px] text-slate-400 font-black">
               {isFlipped ? 'ANSWER (CLICK TO FLIP)' : 'QUESTION (CLICK TO FLIP)'}
             </span>
-            <span className="px-2 py-0.5 rounded bg-black/5 text-neutral-700">
+            <span className="px-2 py-0.5 rounded bg-black/5 text-slate-300">
               Box {currentCard.box || 1}
             </span>
           </div>
 
           <div className="text-center py-6">
-            <p className="text-xl sm:text-2xl font-black text-black leading-relaxed">
+            <p className="text-xl sm:text-2xl font-black text-slate-100 leading-relaxed">
               {isFlipped ? currentCard.answer : currentCard.question}
             </p>
             {!isFlipped && showHint && currentCard.hint && (
@@ -272,7 +272,7 @@ export const FlashcardMaker: React.FC = () => {
                   e.stopPropagation();
                   setShowHint(!showHint);
                 }}
-                className="text-indigo-600 hover:underline flex items-center gap-1 font-bold text-xs"
+                className="text-[var(--theme-dirty-white)] hover:text-[var(--theme-dirty-white-muted)] hover:underline flex items-center gap-1 font-bold text-xs"
               >
                 <HelpCircle className="w-3.5 h-3.5" />
                 {showHint ? 'Hide Hint' : 'Show Hint'}
@@ -280,7 +280,7 @@ export const FlashcardMaker: React.FC = () => {
             ) : (
               <span />
             )}
-            <span className="flex items-center gap-1 font-bold text-neutral-500">
+            <span className="flex items-center gap-1 font-bold text-slate-400">
               <RotateCw className="w-3 h-3" /> Click card to flip
             </span>
           </div>
@@ -290,7 +290,7 @@ export const FlashcardMaker: React.FC = () => {
         <div className="grid grid-cols-2 gap-4">
           <button
             onClick={() => handleReviewAction(false)}
-            className="py-3 px-4 bg-white hover:bg-red-50 text-red-600 font-black text-sm rounded-xl border-2 border-black shadow-[3px_3px_0px_#000000] flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-transform"
+            className="py-3 px-4 bg-[var(--theme-surface)] hover:bg-red-50 text-red-600 font-black text-sm rounded-xl border border-[var(--theme-gray-border)] shadow-sm flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-transform"
           >
             <X className="w-5 h-5 stroke-[3]" />
             Still Learning
@@ -298,7 +298,7 @@ export const FlashcardMaker: React.FC = () => {
 
           <button
             onClick={() => handleReviewAction(true)}
-            className="py-3 px-4 bg-[#4ADE80] text-black font-black text-sm rounded-xl border-2 border-black shadow-[3px_3px_0px_#000000] flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-transform"
+            className="py-3 px-4 bg-[#4ADE80] text-slate-100 font-black text-sm rounded-xl border border-[var(--theme-gray-border)] shadow-sm flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-transform"
           >
             <Check className="w-5 h-5 stroke-[3]" />
             Got It!
@@ -312,30 +312,30 @@ export const FlashcardMaker: React.FC = () => {
   if (activeDeck) {
     return (
       <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
           <div>
             <button
               onClick={() => setActiveDeck(null)}
-              className="flex items-center gap-1 text-xs font-bold text-neutral-500 hover:text-black mb-1 cursor-pointer"
+              className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-slate-100 mb-1 cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Back to all decks
             </button>
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-black uppercase px-2 py-0.5 rounded bg-[#FAF7F2] border border-black/20">
+              <span className="text-[11px] font-black uppercase px-2 py-0.5 rounded bg-[var(--theme-surface-raised)] border border-black/20">
                 {activeDeck.subject}
               </span>
               <h2 className="text-xl font-black">{activeDeck.title}</h2>
             </div>
             {activeDeck.description && (
-              <p className="text-xs text-neutral-600 mt-1">{activeDeck.description}</p>
+              <p className="text-xs text-slate-400 mt-1">{activeDeck.description}</p>
             )}
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsCardModalOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-white text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-[var(--theme-surface)] text-slate-100 font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
             >
               <Plus className="w-4 h-4" />
               Add Card
@@ -343,7 +343,7 @@ export const FlashcardMaker: React.FC = () => {
             <button
               onClick={() => startStudy(activeDeck)}
               disabled={activeDeck.cards.length === 0}
-              className="flex items-center gap-1.5 px-4 py-2 bg-[#FFD21A] disabled:opacity-50 text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] disabled:opacity-50 text-slate-100 font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
             >
               <Sparkles className="w-4 h-4 fill-black" />
               Study Now ({activeDeck.cards.length})
@@ -353,15 +353,15 @@ export const FlashcardMaker: React.FC = () => {
 
         {/* Cards Grid */}
         {activeDeck.cards.length === 0 ? (
-          <div className="bg-white p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
+          <div className="bg-[var(--theme-surface)] p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
             <Layers className="w-12 h-12 text-neutral-300 mx-auto mb-2" />
-            <h4 className="font-bold text-neutral-700">No cards in this deck yet</h4>
-            <p className="text-xs text-neutral-500 mt-1">
+            <h4 className="font-bold text-slate-300">No cards in this deck yet</h4>
+            <p className="text-xs text-slate-400 mt-1">
               Add flashcard questions and answers to begin studying.
             </p>
             <button
               onClick={() => setIsCardModalOpen(true)}
-              className="mt-4 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border border-black shadow-[2px_2px_0px_#000000]"
+              className="mt-4 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-black shadow-sm"
             >
               Add First Card
             </button>
@@ -371,12 +371,12 @@ export const FlashcardMaker: React.FC = () => {
             {activeDeck.cards.map((c, i) => (
               <div
                 key={c.id || i}
-                className="bg-white p-4 rounded-xl border-2 border-black shadow-[3px_3px_0px_#000000] flex flex-col justify-between"
+                className="bg-[var(--theme-surface)] p-4 rounded-xl border border-[var(--theme-gray-border)] shadow-sm flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between text-[11px] font-bold text-neutral-400 mb-2">
                     <span>Card #{i + 1}</span>
-                    <span className="bg-[#FAF7F2] px-2 py-0.5 rounded border border-black/20 text-neutral-700">
+                    <span className="bg-[var(--theme-surface-raised)] px-2 py-0.5 rounded border border-black/20 text-slate-300">
                       Box {c.box || 1}
                     </span>
                   </div>
@@ -386,7 +386,7 @@ export const FlashcardMaker: React.FC = () => {
                     </span>
                     {c.question}
                   </p>
-                  <p className="text-xs text-neutral-600 border-t border-neutral-100 pt-2">
+                  <p className="text-xs text-slate-400 border-t border-neutral-100 pt-2">
                     <span className="text-[10px] font-black uppercase text-emerald-600 block mb-0.5">
                       A:
                     </span>
@@ -416,11 +416,11 @@ export const FlashcardMaker: React.FC = () => {
         {/* Add Card Modal */}
         {isCardModalOpen && (
           <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0px_#000000] w-full max-w-md p-6">
+            <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] shadow-sm w-full max-w-md p-6">
               <h3 className="text-lg font-black mb-4">Add Card to {activeDeck.title}</h3>
               <form onSubmit={handleAddCard} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Question / Prompt *
                   </label>
                   <textarea
@@ -429,12 +429,12 @@ export const FlashcardMaker: React.FC = () => {
                     placeholder="Enter front-of-card question"
                     value={newCard.question}
                     onChange={(e) => setNewCard({ ...newCard, question: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Answer *
                   </label>
                   <textarea
@@ -443,12 +443,12 @@ export const FlashcardMaker: React.FC = () => {
                     placeholder="Enter back-of-card answer"
                     value={newCard.answer}
                     onChange={(e) => setNewCard({ ...newCard, answer: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Hint (Optional)
                   </label>
                   <input
@@ -456,7 +456,7 @@ export const FlashcardMaker: React.FC = () => {
                     placeholder="Helpful clue or memory hook"
                     value={newCard.hint}
                     onChange={(e) => setNewCard({ ...newCard, hint: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none"
                   />
                 </div>
 
@@ -464,13 +464,13 @@ export const FlashcardMaker: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setIsCardModalOpen(false)}
-                    className="px-4 py-2 border-2 border-black rounded-xl text-xs font-bold hover:bg-neutral-100"
+                    className="px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold hover:bg-neutral-100"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000]"
+                    className="px-5 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm"
                   >
                     Add Card
                   </button>
@@ -486,20 +486,20 @@ export const FlashcardMaker: React.FC = () => {
   // Decks Overview List
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div>
           <h2 className="text-xl font-black flex items-center gap-2">
-            <Layers className="w-5 h-5 text-indigo-600" />
+            <Layers className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             Flashcard Maker & Spaced Repetition
           </h2>
-          <p className="text-xs text-neutral-600 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Boost memory retention with Leitner active-recall decks and scheduled review.
           </p>
         </div>
 
         <button
           onClick={() => setIsDeckModalOpen(true)}
-          className="flex items-center gap-1.5 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all self-start sm:self-auto"
+          className="flex items-center gap-1.5 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all self-start sm:self-auto"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           Create Deck
@@ -507,19 +507,19 @@ export const FlashcardMaker: React.FC = () => {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12 font-bold text-neutral-500">
+        <div className="text-center py-12 font-bold text-slate-400">
           Loading flashcard decks...
         </div>
       ) : decks.length === 0 ? (
-        <div className="bg-white p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
+        <div className="bg-[var(--theme-surface)] p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
           <BookOpen className="w-12 h-12 text-neutral-300 mx-auto mb-2" />
-          <h3 className="font-bold text-neutral-700">No flashcard decks yet</h3>
-          <p className="text-xs text-neutral-500 mt-1">
+          <h3 className="font-bold text-slate-300">No flashcard decks yet</h3>
+          <p className="text-xs text-slate-400 mt-1">
             Create your first deck to start practicing with spaced repetition.
           </p>
           <button
             onClick={() => setIsDeckModalOpen(true)}
-            className="mt-4 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border border-black shadow-[2px_2px_0px_#000000]"
+            className="mt-4 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-black shadow-sm"
           >
             Create First Deck
           </button>
@@ -530,11 +530,11 @@ export const FlashcardMaker: React.FC = () => {
             <div
               key={deck._id}
               onClick={() => setActiveDeck(deck)}
-              className="bg-white p-4 rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all cursor-pointer flex flex-col justify-between"
+              className="bg-[var(--theme-surface)] p-4 rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#FAF7F2] border border-black/20 text-neutral-700">
+                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[var(--theme-surface-raised)] border border-black/20 text-slate-300">
                     {deck.subject}
                   </span>
                   <button
@@ -545,17 +545,17 @@ export const FlashcardMaker: React.FC = () => {
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
-                <h3 className="font-black text-base text-black">{deck.title}</h3>
+                <h3 className="font-black text-base text-slate-100">{deck.title}</h3>
                 {deck.description && (
-                  <p className="text-xs text-neutral-600 mt-1 line-clamp-2">{deck.description}</p>
+                  <p className="text-xs text-slate-400 mt-1 line-clamp-2">{deck.description}</p>
                 )}
               </div>
 
               <div className="pt-4 mt-4 border-t border-neutral-100 flex items-center justify-between">
-                <span className="text-xs font-bold text-neutral-500">
+                <span className="text-xs font-bold text-slate-400">
                   {deck.cards?.length || 0} cards
                 </span>
-                <span className="text-xs font-black text-indigo-600 hover:underline">
+                <span className="text-xs font-black text-[var(--theme-dirty-white)] hover:underline">
                   Study & Manage &rarr;
                 </span>
               </div>
@@ -567,11 +567,11 @@ export const FlashcardMaker: React.FC = () => {
       {/* Create Deck Modal */}
       {isDeckModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0px_#000000] w-full max-w-md p-6">
+          <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] shadow-sm w-full max-w-md p-6">
             <h3 className="text-lg font-black mb-4">Create New Flashcard Deck</h3>
             <form onSubmit={handleCreateDeck} className="space-y-4">
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Subject *
                 </label>
                 <input
@@ -580,12 +580,12 @@ export const FlashcardMaker: React.FC = () => {
                   placeholder="e.g. Biology, History, Computer Science"
                   value={newDeck.subject}
                   onChange={(e) => setNewDeck({ ...newDeck, subject: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Deck Title *
                 </label>
                 <input
@@ -594,12 +594,12 @@ export const FlashcardMaker: React.FC = () => {
                   placeholder="e.g. Cell Organelles & Functions"
                   value={newDeck.title}
                   onChange={(e) => setNewDeck({ ...newDeck, title: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD21A]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Description
                 </label>
                 <textarea
@@ -607,7 +607,7 @@ export const FlashcardMaker: React.FC = () => {
                   placeholder="Optional overview or course unit"
                   value={newDeck.description}
                   onChange={(e) => setNewDeck({ ...newDeck, description: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none"
                 />
               </div>
 
@@ -619,7 +619,7 @@ export const FlashcardMaker: React.FC = () => {
                   onChange={(e) => setNewDeck({ ...newDeck, isPublic: e.target.checked })}
                   className="rounded border-black"
                 />
-                <label htmlFor="deckPublic" className="text-xs font-bold text-neutral-700">
+                <label htmlFor="deckPublic" className="text-xs font-bold text-slate-300">
                   Make this deck publicly accessible for other learners
                 </label>
               </div>
@@ -628,13 +628,13 @@ export const FlashcardMaker: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsDeckModalOpen(false)}
-                  className="px-4 py-2 border-2 border-black rounded-xl text-xs font-bold hover:bg-neutral-100"
+                  className="px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold hover:bg-neutral-100"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000]"
+                  className="px-5 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm"
                 >
                   Create Deck
                 </button>

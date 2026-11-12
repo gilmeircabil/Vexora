@@ -76,10 +76,10 @@ export const ComponentLivePreview: React.FC<Props> = ({ componentId, variationId
             <span>⌂</span><span>Dashboard</span>
           </div>
           <div className="p-2 hover:bg-neutral-800 rounded-xl flex items-center gap-2 text-neutral-400 hover:text-white transition cursor-pointer">
-            <span>📁</span><span>Projects</span>
+            <span className="font-mono text-neutral-400">/</span><span>Projects</span>
           </div>
           <div className="p-2 hover:bg-neutral-800 rounded-xl flex items-center gap-2 text-neutral-400 hover:text-white transition cursor-pointer">
-            <span>⚙</span><span>Settings</span>
+            <span className="font-mono text-neutral-400">/</span><span>Settings</span>
           </div>
         </div>
       </aside>
@@ -160,9 +160,9 @@ export const ComponentLivePreview: React.FC<Props> = ({ componentId, variationId
   if (componentId === 'bottom-navigation' || componentId === 'floating-navigation') {
     return (
       <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border-2 border-black rounded-full shadow-[3px_3px_0px_#000] text-xs font-black">
-        <button className="p-2 hover:bg-neutral-100 rounded-full cursor-pointer">🏠 Home</button>
-        <button className="p-2 bg-[#FACC15] rounded-full border border-black cursor-pointer">🔍 Search</button>
-        <button className="p-2 hover:bg-neutral-100 rounded-full cursor-pointer">⭐ Saved</button>
+        <button className="p-2 hover:bg-neutral-100 rounded-full cursor-pointer">Home</button>
+        <button className="p-2 bg-[#FACC15] rounded-full border border-black cursor-pointer">Search</button>
+        <button className="p-2 hover:bg-neutral-100 rounded-full cursor-pointer">Saved</button>
       </div>
     );
   }
@@ -229,8 +229,8 @@ export const ComponentLivePreview: React.FC<Props> = ({ componentId, variationId
 
   if (componentId === 'icon-button') {
     return (
-      <button className="w-9 h-9 rounded-xl bg-[#FACC15] border-2 border-black shadow-[2px_2px_0px_#000] flex items-center justify-center text-sm font-black hover:-translate-y-0.5 active:translate-y-0.5 transition cursor-pointer">
-        ⚡
+      <button className="w-9 h-9 rounded-xl bg-[#FACC15] border-2 border-black shadow-[2px_2px_0px_#000] flex items-center justify-center text-xs font-mono font-black hover:-translate-y-0.5 active:translate-y-0.5 transition cursor-pointer">
+        &gt;
       </button>
     );
   }
@@ -301,7 +301,7 @@ export const ComponentLivePreview: React.FC<Props> = ({ componentId, variationId
           copied ? 'bg-[#4ADE80] text-black shadow-none' : 'bg-white text-black shadow-[2px_2px_0px_#000] hover:-translate-y-0.5'
         }`}
       >
-        <span>{copied ? '✓' : '📋'}</span>
+        <span>{copied ? '✓' : ''}</span>
         <span>{copied ? 'Copied to Clipboard!' : 'Copy Snippet'}</span>
       </button>
     );
@@ -314,7 +314,7 @@ export const ComponentLivePreview: React.FC<Props> = ({ componentId, variationId
           <span>G</span> Continue with Google
         </button>
         <button className="flex items-center justify-center gap-2 py-2 px-3 bg-black text-white font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000] hover:-translate-y-0.5 transition cursor-pointer">
-          <span>🐙</span> Continue with GitHub
+          <span className="font-mono">GH</span> Continue with GitHub
         </button>
       </div>
     );
@@ -347,8 +347,8 @@ export const ComponentLivePreview: React.FC<Props> = ({ componentId, variationId
   if (componentId === 'product-card') {
     return (
       <div className="max-w-xs bg-white rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000] overflow-hidden text-xs">
-        <div className="h-28 bg-[#FFE4E6] border-b-2 border-black flex items-center justify-center text-3xl font-black">
-          👟
+        <div className="h-28 bg-[#FFE4E6] border-b-2 border-black flex items-center justify-center font-black">
+          <span className="font-mono text-sm tracking-wider">PREVIEW</span>
         </div>
         <div className="p-3 space-y-2">
           <div className="flex justify-between items-center font-black">
@@ -428,7 +428,7 @@ export const ComponentLivePreview: React.FC<Props> = ({ componentId, variationId
   if (componentId === 'search-input') {
     return (
       <div className="w-full max-w-xs relative text-xs">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400">🔍</span>
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 font-mono text-xs">&gt;</span>
         <input
           type="text"
           placeholder="Search components..."
@@ -662,7 +662,7 @@ export const ComponentLivePreview: React.FC<Props> = ({ componentId, variationId
   // Fallback for any other component
   return (
     <div className="p-4 bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_#000] text-center space-y-1">
-      <span className="text-xl">✨</span>
+      <span className="w-6 h-6 mx-auto rounded bg-[#FAF7F2] border border-black flex items-center justify-center font-mono text-[10px] font-bold">UI</span>
       <p className="font-black text-xs capitalize">{componentId.replace(/-/g, ' ')}</p>
       <p className="text-[10px] text-neutral-500 font-mono">Live Interactive Preview</p>
     </div>

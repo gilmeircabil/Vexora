@@ -55,7 +55,7 @@ export const PercentageCalculatorTool: React.FC = () => {
           />
           <span className="text-sm font-bold text-neutral-700 dark:text-neutral-300">=</span>
           <div className="flex items-center gap-2">
-            <span className="text-lg font-bold font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-3 py-1 rounded-lg border border-indigo-200/60 dark:border-indigo-900">
+            <span className="text-lg font-bold font-mono text-[var(--theme-dirty-white)] bg-[var(--theme-surface-raised)] px-3 py-1 rounded-lg border border-[var(--theme-gray-border)]">
               {formatNumber(c1Result)}
             </span>
             <CopyButton value={String(c1Result)} label="Copy" size="sm" />
@@ -91,7 +91,7 @@ export const PercentageCalculatorTool: React.FC = () => {
           />
           <span className="text-sm font-bold text-neutral-700 dark:text-neutral-300">=</span>
           <div className="flex items-center gap-2">
-            <span className="text-lg font-bold font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-3 py-1 rounded-lg border border-indigo-200/60 dark:border-indigo-900">
+            <span className="text-lg font-bold font-mono text-[var(--theme-dirty-white)] bg-[var(--theme-surface-raised)] px-3 py-1 rounded-lg border border-[var(--theme-gray-border)]">
               {c2Result.ok ? `${formatNumber(c2Result.value)}%` : 'Error'}
             </span>
             {c2Result.ok && <CopyButton value={`${c2Result.value}%`} label="Copy" size="sm" />}

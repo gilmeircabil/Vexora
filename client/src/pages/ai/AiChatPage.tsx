@@ -125,7 +125,7 @@ export const FREE_AI_MODELS: AIModelOption[] = [
     id: 'openai/gpt-oss-120b',
     name: 'GPT-OSS 120B (Groq LPU)',
     provider: 'groq',
-    badge: '⚡ 800 tps',
+    badge: '800 tps',
     description: 'High-throughput 120B flagship reasoning on Groq LPUs',
     speed: 'Instant',
   },
@@ -133,7 +133,7 @@ export const FREE_AI_MODELS: AIModelOption[] = [
     id: 'qwen/qwen3.8-27b',
     name: 'Qwen 3.8 27B (Groq LPU)',
     provider: 'groq',
-    badge: '⚡ 15ms',
+    badge: '15ms',
     description: 'Sub-20ms instant TTFT coding and conversation on Groq',
     speed: 'Ultra-Fast',
   },
@@ -141,7 +141,7 @@ export const FREE_AI_MODELS: AIModelOption[] = [
     id: 'openai/gpt-oss-20b',
     name: 'GPT-OSS 20B (Groq LPU)',
     provider: 'groq',
-    badge: '⚡ Light LPU',
+    badge: 'Light LPU',
     description: 'Instant lightweight conversational LPU model for rapid Q&A',
     speed: 'Instant',
   },
@@ -149,7 +149,7 @@ export const FREE_AI_MODELS: AIModelOption[] = [
     id: 'allam-2-7b',
     name: 'Allam 2 7B (Groq LPU)',
     provider: 'groq',
-    badge: '⚡ Specialized',
+    badge: 'Specialized',
     description: 'Fast analytical reasoning and bilingual support on Groq',
     speed: 'Ultra-Fast',
   },
@@ -461,9 +461,9 @@ const MarkdownRenderer: React.FC<{ content: string; isStreaming?: boolean }> = (
         return (
           <div
             key={index}
-            className="my-3 rounded-xl border-2 border-black overflow-hidden bg-[#1E1E1E] text-white font-mono text-xs shadow-[2px_2px_0px_#000]"
+            className="my-3 rounded-xl border border-[var(--theme-gray-border)] overflow-hidden bg-[#1E1E1E] text-white font-mono text-xs shadow-xs"
           >
-            <div className="px-4 py-2 bg-[#2D2D2D] border-b border-black flex items-center justify-between text-[11px] text-neutral-300">
+            <div className="px-4 py-2 bg-[#2D2D2D] border-b border-[var(--theme-gray-border)] flex items-center justify-between text-[11px] text-neutral-300">
               <span className="font-bold uppercase tracking-wider text-neutral-400 font-mono">
                 {language || 'code'}
               </span>
@@ -501,7 +501,7 @@ const MarkdownRenderer: React.FC<{ content: string; isStreaming?: boolean }> = (
                 return (
                   <h2
                     key={bIdx}
-                    className="text-lg font-black text-black pt-3 pb-1 border-b border-black/10"
+                    className="text-lg font-bold text-[var(--theme-dirty-white)] pt-3 pb-1 border-b border-[var(--theme-gray-border)]"
                   >
                     {renderInlineFormatting(block.text || '')}
                   </h2>
@@ -509,13 +509,13 @@ const MarkdownRenderer: React.FC<{ content: string; isStreaming?: boolean }> = (
               }
               if (block.level === 2) {
                 return (
-                  <h3 key={bIdx} className="text-base font-black text-black pt-2.5 pb-0.5">
+                  <h3 key={bIdx} className="text-base font-bold text-[var(--theme-dirty-white)] pt-2.5 pb-0.5">
                     {renderInlineFormatting(block.text || '')}
                   </h3>
                 );
               }
               return (
-                <h4 key={bIdx} className="text-sm font-black text-black pt-2 pb-0.5">
+                <h4 key={bIdx} className="text-sm font-bold text-[var(--theme-dirty-white)] pt-2 pb-0.5">
                   {renderInlineFormatting(block.text || '')}
                 </h4>
               );
@@ -525,7 +525,7 @@ const MarkdownRenderer: React.FC<{ content: string; isStreaming?: boolean }> = (
               return (
                 <blockquote
                   key={bIdx}
-                  className="my-2 pl-3 py-1.5 border-l-4 border-[#FACC15] bg-amber-50/70 rounded-r-xl text-neutral-800 font-medium italic text-xs leading-relaxed"
+                  className="my-2 pl-3 py-1.5 border-l-2 border-[var(--theme-dirty-white)] bg-[var(--theme-surface-raised)] rounded-r-xl text-[var(--theme-dirty-white-muted)] font-normal italic text-xs leading-relaxed"
                 >
                   {renderInlineFormatting(block.text || '')}
                 </blockquote>
@@ -537,7 +537,7 @@ const MarkdownRenderer: React.FC<{ content: string; isStreaming?: boolean }> = (
                 return (
                   <ol
                     key={bIdx}
-                    className="space-y-1.5 my-2 pl-5 list-decimal text-neutral-900 font-medium"
+                    className="space-y-1.5 my-2 pl-5 list-decimal text-[var(--theme-dirty-white)] font-normal"
                   >
                     {block.items.map((item, iIdx) => (
                       <li key={iIdx} className="leading-relaxed">
@@ -550,7 +550,7 @@ const MarkdownRenderer: React.FC<{ content: string; isStreaming?: boolean }> = (
               return (
                 <ul
                   key={bIdx}
-                  className="space-y-1.5 my-2 pl-5 list-disc text-neutral-900 font-medium"
+                  className="space-y-1.5 my-2 pl-5 list-disc text-[var(--theme-dirty-white)] font-normal"
                 >
                   {block.items.map((item, iIdx) => (
                     <li key={iIdx} className="leading-relaxed">
@@ -562,7 +562,7 @@ const MarkdownRenderer: React.FC<{ content: string; isStreaming?: boolean }> = (
             }
 
             return (
-              <p key={bIdx} className="leading-relaxed text-black font-medium">
+              <p key={bIdx} className="leading-relaxed text-[var(--theme-dirty-white)] font-normal">
                 {renderInlineFormatting(block.text || '')}
               </p>
             );
@@ -573,10 +573,10 @@ const MarkdownRenderer: React.FC<{ content: string; isStreaming?: boolean }> = (
   }, [content, copiedIndex]);
 
   return (
-    <div className="space-y-2 text-sm leading-relaxed">
+    <div className="space-y-2 text-sm leading-relaxed text-[var(--theme-dirty-white)]">
       {elements}
       {isStreaming && (
-        <span className="inline-block w-2 h-4 bg-black animate-pulse ml-0.5 align-middle" />
+        <span className="inline-block w-2 h-4 bg-[var(--theme-dirty-white)] animate-pulse ml-0.5 align-middle" />
       )}
     </div>
   );
@@ -589,7 +589,7 @@ function renderInlineFormatting(text: string) {
       return (
         <code
           key={i}
-          className="px-1.5 py-0.5 mx-0.5 rounded bg-black/10 font-mono text-[11px] font-bold text-black border border-black/20"
+          className="px-1.5 py-0.5 mx-0.5 rounded bg-[var(--theme-surface-raised)] font-mono text-[11px] font-bold text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)]"
         >
           {seg.slice(1, -1)}
         </code>
@@ -597,14 +597,14 @@ function renderInlineFormatting(text: string) {
     }
     if (seg.startsWith('**') && seg.endsWith('**') && seg.length > 4) {
       return (
-        <strong key={i} className="font-black text-black">
+        <strong key={i} className="font-bold text-[var(--theme-dirty-white)]">
           {seg.slice(2, -2)}
         </strong>
       );
     }
     if (seg.startsWith('*') && seg.endsWith('*') && seg.length > 2 && !seg.startsWith('**')) {
       return (
-        <em key={i} className="italic text-neutral-800">
+        <em key={i} className="italic text-[var(--theme-dirty-white-muted)]">
           {seg.slice(1, -1)}
         </em>
       );
@@ -1290,7 +1290,7 @@ export const AiChatPage: React.FC = () => {
     <div
       className={`w-full ${
         isFullscreen ? 'h-screen' : 'h-[calc(100vh-4rem)]'
-      } bg-transparent text-black flex overflow-hidden font-sans select-text`}
+      } bg-transparent text-slate-100 flex overflow-hidden font-sans select-text`}
     >
       {/* Mobile Drawer Overlay */}
       {isSidebarOpen && (
@@ -1300,9 +1300,9 @@ export const AiChatPage: React.FC = () => {
         />
       )}
 
-      {/* Left Sidebar: Vexora Neo-Brutalist Theme */}
+      {/* Left Sidebar */}
       <aside
-        className={`fixed md:static top-0 bottom-0 left-0 z-50 bg-white/85 backdrop-blur-md border-r-2 border-black flex flex-col transition-all duration-200 shrink-0 ${
+        className={`fixed md:static top-0 bottom-0 left-0 z-50 bg-[var(--theme-surface)] border-r border-[var(--theme-gray-border)] flex flex-col transition-all duration-200 shrink-0 ${
           isSidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full md:translate-x-0'
         } ${
           isSidebarCollapsed
@@ -1311,12 +1311,12 @@ export const AiChatPage: React.FC = () => {
         }`}
       >
         {/* Sidebar Header */}
-        <div className="p-3.5 border-b-2 border-black flex items-center justify-between bg-white/60 backdrop-blur-xs">
+        <div className="p-3.5 border-b border-[var(--theme-gray-border)] flex items-center justify-between bg-[var(--theme-surface-raised)]">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#FACC15] border-2 border-black flex items-center justify-center text-black font-black text-xs shadow-[1.5px_1.5px_0px_#000]">
+            <div className="w-7 h-7 rounded-lg bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-gray-border)] flex items-center justify-center font-black text-xs shadow-xs">
               V
             </div>
-            <span className="font-black text-sm uppercase tracking-tight text-black">
+            <span className="font-black text-sm uppercase tracking-tight text-[var(--theme-dirty-white)]">
               Vexora AI
             </span>
           </div>
@@ -1325,7 +1325,7 @@ export const AiChatPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsSearchOpen((prev) => !prev)}
-              className="p-1.5 rounded-lg border-2 border-black bg-[#FAF7F2] hover:bg-neutral-100 text-black shadow-[1px_1px_0px_#000] cursor-pointer"
+              className="p-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] shadow-xs cursor-pointer"
               title="Search conversations"
             >
               <Search className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -1333,7 +1333,7 @@ export const AiChatPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsSidebarCollapsed(true)}
-              className="hidden md:flex p-1.5 rounded-lg border-2 border-black bg-[#FAF7F2] hover:bg-neutral-100 text-black shadow-[1px_1px_0px_#000] cursor-pointer"
+              className="hidden md:flex p-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] shadow-xs cursor-pointer"
               title="Close sidebar"
             >
               <PanelLeftClose className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -1341,7 +1341,7 @@ export const AiChatPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsSidebarOpen(false)}
-              className="md:hidden p-1.5 rounded-lg border-2 border-black bg-[#FAF7F2] text-black"
+              className="md:hidden p-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -1349,11 +1349,11 @@ export const AiChatPage: React.FC = () => {
         </div>
 
         {/* Action: New Chat */}
-        <div className="p-3 space-y-2 border-b-2 border-black bg-[#FAF7F2]">
+        <div className="p-3 space-y-2 border-b border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)]">
           <button
             type="button"
             onClick={handleCreateNewChat}
-            className="w-full py-2.5 px-3 rounded-xl bg-[#FACC15] hover:bg-yellow-400 text-black border-2 border-black font-black text-xs uppercase flex items-center justify-center gap-2 shadow-[2px_2px_0px_#000] hover:-translate-y-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+            className="w-full py-2.5 px-3 rounded-xl bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] border border-[var(--theme-gray-border)] font-black text-xs uppercase flex items-center justify-center gap-2 shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>New Conversation</span>
@@ -1366,7 +1366,7 @@ export const AiChatPage: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search conversations..."
-                className="w-full bg-white border-2 border-black rounded-xl px-2.5 py-1.5 text-xs text-black font-mono placeholder:text-neutral-500 focus:outline-none shadow-[1px_1px_0px_#000]"
+                className="w-full bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-xl px-2.5 py-1.5 text-xs font-mono placeholder:text-[var(--theme-gray-muted)] focus:outline-none shadow-xs"
               />
             </div>
           )}
@@ -1374,7 +1374,7 @@ export const AiChatPage: React.FC = () => {
 
         {/* Conversations History List */}
         <div className="flex-1 overflow-y-auto p-2 space-y-1 text-xs">
-          <div className="px-2 pt-2 pb-1 text-[10px] font-mono font-black text-neutral-500 uppercase tracking-wider">
+          <div className="px-2 pt-2 pb-1 text-[10px] font-mono font-black text-[var(--theme-gray-muted)] uppercase tracking-wider">
             Conversations
           </div>
           {filteredSessions.map((s) => {
@@ -1383,16 +1383,16 @@ export const AiChatPage: React.FC = () => {
               <div
                 key={s.id}
                 onClick={() => handleSelectSession(s.id)}
-                className={`group px-3 py-2 rounded-xl border-2 flex items-center justify-between gap-2 cursor-pointer transition-all ${
+                className={`group px-3 py-2 rounded-xl border flex items-center justify-between gap-2 cursor-pointer transition-all ${
                   isActive
-                    ? 'bg-white border-black text-black font-black shadow-[2px_2px_0px_#000]'
-                    : 'border-transparent text-neutral-700 hover:text-black hover:bg-black/5 hover:border-black/20 font-semibold'
+                    ? 'bg-[var(--theme-surface-raised)] border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] font-black shadow-xs'
+                    : 'border-transparent text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)] hover:border-[var(--theme-gray-border)] font-semibold'
                 }`}
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <MessageSquare
                     className={`w-3.5 h-3.5 shrink-0 ${
-                      isActive ? 'text-black stroke-[2.5]' : 'text-neutral-500'
+                      isActive ? 'text-[var(--theme-dirty-white)] stroke-[2.5]' : 'text-[var(--theme-gray-muted)]'
                     }`}
                   />
                   <span className="truncate flex-1 font-mono">{s.title}</span>
@@ -1400,7 +1400,7 @@ export const AiChatPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={(e) => handleDeleteSession(s.id, e)}
-                  className="opacity-0 group-hover:opacity-100 p-1 hover:text-red-600 transition-opacity"
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:text-red-400 transition-opacity"
                   title="Delete chat"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -1411,26 +1411,26 @@ export const AiChatPage: React.FC = () => {
         </div>
 
         {/* Notice Banners */}
-        <div className="px-3 py-2 space-y-2 border-t-2 border-black bg-[#FAF7F2]">
+        <div className="px-3 py-2 space-y-2 border-t border-[var(--theme-gray-border)] bg-[var(--theme-surface)]">
           {!isAuthenticated && (
-            <div className="p-2.5 rounded-xl bg-blue-50 border-2 border-black text-xs text-blue-950 shadow-[1px_1px_0px_#000]">
-              <span className="font-black block text-[10px] uppercase font-mono tracking-wide text-blue-900">
+            <div className="p-2.5 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-xs text-[var(--theme-dirty-white)] shadow-xs">
+              <span className="font-black block text-[10px] uppercase font-mono tracking-wide text-[var(--theme-dirty-white)]">
                 Cross-Device Sync
               </span>
-              <span className="text-[11px] leading-tight text-neutral-700 block mt-0.5">
+              <span className="text-[11px] leading-tight text-[var(--theme-gray-muted)] block mt-0.5">
                 Sign in to save and access your conversations across your phone, tablet, and
                 computer.
               </span>
             </div>
           )}
 
-          <div className="p-2.5 rounded-xl bg-amber-50 border-2 border-black text-xs text-amber-950 flex items-start gap-2 shadow-[1px_1px_0px_#000]">
-            <Clock className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+          <div className="p-2.5 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-xs text-[var(--theme-dirty-white)] flex items-start gap-2 shadow-xs">
+            <Clock className="w-4 h-4 text-[var(--theme-gray-muted)] shrink-0 mt-0.5" />
             <div>
-              <span className="font-black block text-[10px] uppercase font-mono tracking-wide text-amber-900">
+              <span className="font-black block text-[10px] uppercase font-mono tracking-wide text-[var(--theme-dirty-white)]">
                 12-Day Cloud Storage
               </span>
-              <span className="text-[11px] leading-tight text-neutral-700 block mt-0.5">
+              <span className="text-[11px] leading-tight text-[var(--theme-gray-muted)] block mt-0.5">
                 Inactive conversations are automatically cleared after 12 days to optimize storage.
               </span>
             </div>
@@ -1438,14 +1438,14 @@ export const AiChatPage: React.FC = () => {
         </div>
 
         {/* Sidebar Footer: User Profile Card */}
-        <div className="p-3 border-t-2 border-black bg-white/60 backdrop-blur-xs">
+        <div className="p-3 border-t border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)]">
           <Link
             to={isAuthenticated ? '/dashboard' : '/login'}
-            className="flex items-center justify-between gap-2 p-2 rounded-xl bg-[#FAF7F2] border-2 border-black shadow-[1.5px_1.5px_0px_#000] hover:bg-[#FFF9D2] hover:-translate-y-0.5 transition-all cursor-pointer block"
+            className="flex items-center justify-between gap-2 p-2 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] shadow-xs hover:bg-[var(--theme-gray-border)] hover:-translate-y-0.5 transition-all cursor-pointer block"
             title={isAuthenticated ? 'View Account Dashboard' : 'Sign In to sync your chats'}
           >
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-lg bg-[#FACC15] border-2 border-black text-black flex items-center justify-center font-black text-xs uppercase shrink-0 shadow-[1px_1px_0px_#000] overflow-hidden">
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] flex items-center justify-center font-black text-xs uppercase shrink-0 shadow-xs overflow-hidden">
                 {isAuthenticated && user?.avatarUrl ? (
                   <img src={user.avatarUrl} alt={userName} className="w-full h-full object-cover" />
                 ) : (
@@ -1454,24 +1454,18 @@ export const AiChatPage: React.FC = () => {
               </div>
               <div className="min-w-0">
                 <p
-                  className="text-xs font-black text-black truncate leading-tight"
+                  className="text-xs font-black text-[var(--theme-dirty-white)] truncate leading-tight"
                   title={userName}
                 >
                   {userName}
                 </p>
-                <p className="text-[10px] font-mono font-bold text-neutral-500 leading-tight">
+                <p className="text-[10px] font-mono font-bold text-[var(--theme-gray-muted)] leading-tight">
                   {userSubtext}
                 </p>
               </div>
             </div>
             <div
-              className={`px-2 py-0.5 rounded-md border border-black text-[9px] font-mono font-black uppercase ${
-                isAuthenticated && user?.role === 'admin'
-                  ? 'bg-[#F472B6] text-black'
-                  : isAuthenticated
-                    ? 'bg-[#4ADE80] text-black'
-                    : 'bg-neutral-200 text-neutral-700'
-              }`}
+              className="px-2 py-0.5 rounded-md border border-[var(--theme-gray-border)] text-[9px] font-mono font-black uppercase bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)]"
             >
               {userBadge}
             </div>
@@ -1482,13 +1476,13 @@ export const AiChatPage: React.FC = () => {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
         {/* Top Header Bar */}
-        <div className="h-14 border-b-2 border-black px-4 flex items-center justify-between gap-2 shrink-0 bg-white/85 backdrop-blur-md shadow-xs z-10">
+        <div className="h-14 border-b border-[var(--theme-gray-border)] px-4 flex items-center justify-between gap-2 shrink-0 bg-[var(--theme-surface)] shadow-xs z-10">
           <div className="flex items-center gap-2 min-w-0">
             {/* Mobile Open Drawer */}
             <button
               type="button"
               onClick={() => setIsSidebarOpen(true)}
-              className="md:hidden p-1.5 rounded-lg border-2 border-black bg-[#FAF7F2] text-black shadow-[1px_1px_0px_#000]"
+              className="md:hidden p-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] shadow-xs"
             >
               <Menu className="w-4 h-4 stroke-[2.5]" />
             </button>
@@ -1498,7 +1492,7 @@ export const AiChatPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsSidebarCollapsed(false)}
-                className="hidden md:flex p-1.5 rounded-lg border-2 border-black bg-[#FAF7F2] hover:bg-neutral-100 text-black shadow-[1px_1px_0px_#000] cursor-pointer"
+                className="hidden md:flex p-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] shadow-xs cursor-pointer"
                 title="Open sidebar"
               >
                 <PanelLeftOpen className="w-4 h-4 stroke-[2.5]" />
@@ -1510,20 +1504,20 @@ export const AiChatPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsModelDropdownOpen((prev) => !prev)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FAF7F2] hover:bg-neutral-100 border-2 border-black text-xs font-black text-black shadow-[1.5px_1.5px_0px_#000] transition-all cursor-pointer active:translate-y-0.5"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] border border-[var(--theme-gray-border)] text-xs font-black text-[var(--theme-dirty-white)] shadow-xs transition-all cursor-pointer active:translate-y-0.5"
               >
-                <Bot className="w-3.5 h-3.5 text-neutral-700" />
-                <span className="font-bold">
+                <Bot className="w-3.5 h-3.5 text-[var(--theme-gray-muted)]" />
+                <span className="font-bold text-[var(--theme-dirty-white)]">
                   {FREE_AI_MODELS.find((m) => m.id === selectedModelId)?.name || 'Gemini 3.5 Flash'}
                 </span>
-                <ChevronDown className="w-3.5 h-3.5 text-neutral-500" />
+                <ChevronDown className="w-3.5 h-3.5 text-[var(--theme-gray-muted)]" />
               </button>
 
               {isModelDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-80 sm:w-88 max-h-[28rem] overflow-y-auto bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_#000] p-1.5 z-50 space-y-1 animate-in fade-in zoom-in-95 duration-100">
-                  <div className="sticky top-0 bg-white/95 backdrop-blur-xs px-2.5 py-1.5 border-b border-black/10 flex items-center justify-between text-[10px] font-mono font-black uppercase text-neutral-500 z-10">
+                <div className="absolute left-0 mt-2 w-80 sm:w-88 max-h-[28rem] overflow-y-auto bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-2xl shadow-md p-1.5 z-50 space-y-1 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="sticky top-0 bg-[var(--theme-surface-raised)] backdrop-blur-xs px-2.5 py-1.5 border-b border-[var(--theme-gray-border)] flex items-center justify-between text-[10px] font-mono font-black uppercase text-[var(--theme-gray-muted)] z-10">
                     <span>Select Free Model ({FREE_AI_MODELS.length} Available)</span>
-                    <span className="text-green-700 bg-green-100 px-1.5 py-0.2 rounded border border-green-300 font-bold">
+                    <span className="text-emerald-400 bg-emerald-950/60 px-1.5 py-0.2 rounded border border-emerald-800 font-bold">
                       All 100% Free
                     </span>
                   </div>
@@ -1533,21 +1527,21 @@ export const AiChatPage: React.FC = () => {
                     const isNewProvider = !prevModel || prevModel.provider !== m.provider;
                     const providerLabel =
                       m.provider === 'auto'
-                        ? '🔀 Smart Router'
+                        ? 'Smart Router'
                         : m.provider === 'groq'
-                          ? '⚡ Groq LPU (Ultra-Fast Hardware)'
+                          ? 'Groq LPU (Ultra-Fast Hardware)'
                           : m.provider === 'gemini'
-                            ? '✨ Google Gemini'
+                            ? 'Google Gemini'
                             : m.provider === 'openrouter'
-                              ? '🌐 OpenRouter Free Network'
-                              : '🧠 NVIDIA NIM (Official)';
+                              ? 'OpenRouter Free Network'
+                              : 'NVIDIA NIM (Official)';
 
                     return (
                       <React.Fragment key={m.id}>
                         {isNewProvider && (
-                          <div className="pt-2 pb-0.5 px-2 text-[10px] font-mono font-black uppercase tracking-wider text-neutral-500 flex items-center gap-1.5">
+                          <div className="pt-2 pb-0.5 px-2 text-[10px] font-mono font-black uppercase tracking-wider text-[var(--theme-gray-muted)] flex items-center gap-1.5">
                             <span>{providerLabel}</span>
-                            <div className="flex-1 h-[1px] bg-neutral-200" />
+                            <div className="flex-1 h-[1px] bg-[var(--theme-gray-border)]" />
                           </div>
                         )}
                         <button
@@ -1559,23 +1553,23 @@ export const AiChatPage: React.FC = () => {
                           }}
                           className={`w-full text-left p-2 rounded-xl transition-all flex items-start justify-between gap-2 cursor-pointer ${
                             isSelected
-                              ? 'bg-[#FACC15] border-2 border-black shadow-[1.5px_1.5px_0px_#000]'
-                              : 'hover:bg-neutral-100 border-2 border-transparent'
+                              ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-gray-border)] shadow-xs'
+                              : 'hover:bg-[var(--theme-surface-raised)] border-2 border-transparent'
                           }`}
                         >
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-1.5">
-                              <span className="font-black text-xs text-black">{m.name}</span>
-                              <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full border border-black/30 bg-black/5 font-bold">
+                              <span className="font-black text-xs text-slate-100">{m.name}</span>
+                              <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] font-bold">
                                 {m.badge}
                               </span>
                             </div>
-                            <p className="text-[10px] text-neutral-600 font-medium truncate mt-0.5">
+                            <p className="text-[10px] text-slate-400 font-medium truncate mt-0.5">
                               {m.description}
                             </p>
                           </div>
                           {isSelected && (
-                            <Check className="w-3.5 h-3.5 text-black stroke-[3] shrink-0 mt-0.5" />
+                            <Check className="w-3.5 h-3.5 text-slate-100 stroke-[3] shrink-0 mt-0.5" />
                           )}
                         </button>
                       </React.Fragment>
@@ -1591,10 +1585,10 @@ export const AiChatPage: React.FC = () => {
             <button
               type="button"
               onClick={toggleFullscreen}
-              className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border-2 border-black text-xs font-black uppercase font-mono shadow-[1.5px_1.5px_0px_#000] transition-all cursor-pointer active:translate-y-0.5 ${
+              className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] text-xs font-black uppercase font-mono shadow-xs transition-all cursor-pointer active:translate-y-0.5 ${
                 isFullscreen
-                  ? 'bg-[#FACC15] text-black'
-                  : 'bg-[#FAF7F2] hover:bg-neutral-100 text-black'
+                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]'
+                  : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]'
               }`}
               aria-label={isFullscreen ? 'Exit Full Screen' : 'Full Screen (Focus Mode)'}
               title={isFullscreen ? 'Exit Full Screen (Esc)' : 'Enter Full Screen Focus Mode'}
@@ -1615,10 +1609,10 @@ export const AiChatPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsInspectorOpen((prev) => !prev)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-black text-xs font-black uppercase font-mono shadow-[1.5px_1.5px_0px_#000] transition-all cursor-pointer active:translate-y-0.5 ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] text-xs font-black uppercase font-mono shadow-xs transition-all cursor-pointer active:translate-y-0.5 ${
                 isInspectorOpen
-                  ? 'bg-[#FACC15] text-black'
-                  : 'bg-[#FAF7F2] hover:bg-neutral-100 text-black'
+                  ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]'
+                  : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]'
               }`}
               title="Studio model parameters"
             >
@@ -1629,7 +1623,7 @@ export const AiChatPage: React.FC = () => {
             <button
               type="button"
               onClick={handleCreateNewChat}
-              className="p-2 rounded-xl border-2 border-black bg-[#FAF7F2] hover:bg-yellow-400 text-black shadow-[1.5px_1.5px_0px_#000] cursor-pointer transition-all active:translate-y-0.5"
+              className="p-2 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-dirty-white)] hover:text-[var(--theme-canvas)] text-[var(--theme-dirty-white)] shadow-xs cursor-pointer transition-all active:translate-y-0.5"
               title="New Conversation"
             >
               <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -1648,15 +1642,15 @@ export const AiChatPage: React.FC = () => {
             >
               {currentSession.messages.length === 0 ? (
                 <div className="max-w-2xl mx-auto my-auto py-12 flex flex-col items-center text-center space-y-6 animate-in fade-in duration-150">
-                  <div className="w-12 h-12 rounded-2xl bg-[#FACC15] border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000]">
+                  <div className="w-12 h-12 rounded-2xl bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] flex items-center justify-center shadow-xs">
                     <Sparkles className="w-6 h-6 stroke-[2.5]" />
                   </div>
 
                   <div className="space-y-1.5">
-                    <h2 className="text-xl sm:text-2xl font-black text-black tracking-tight">
+                    <h2 className="text-xl sm:text-2xl font-black text-slate-100 tracking-tight">
                       What can I help you build or learn today?
                     </h2>
-                    <p className="text-xs sm:text-sm text-neutral-600 max-w-md mx-auto font-medium">
+                    <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto font-medium">
                       Powered by high-throughput multimodal AI models with zero paywalls or
                       subscriptions.
                     </p>
@@ -1671,13 +1665,13 @@ export const AiChatPage: React.FC = () => {
                           key={idx}
                           type="button"
                           onClick={() => handleSendMessage(item.prompt)}
-                          className="p-3.5 rounded-2xl border-2 border-black bg-white hover:bg-amber-50 text-left transition-all shadow-[2px_2px_0px_#000] hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer group"
+                          className="p-3.5 rounded-2xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-raised)] text-left transition-all shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer group"
                         >
                           <div className="flex items-center gap-2 mb-1">
-                            <Icon className="w-3.5 h-3.5 text-neutral-600 group-hover:text-black transition-colors stroke-[2.5]" />
-                            <span className="text-xs font-black text-black">{item.label}</span>
+                            <Icon className="w-3.5 h-3.5 text-[var(--theme-gray-muted)] group-hover:text-[var(--theme-dirty-white)] transition-colors stroke-[2.5]" />
+                            <span className="text-xs font-black text-[var(--theme-dirty-white)]">{item.label}</span>
                           </div>
-                          <p className="text-[11px] text-neutral-600 line-clamp-2 leading-relaxed font-medium">
+                          <p className="text-[11px] text-[var(--theme-gray-muted)] line-clamp-2 leading-relaxed font-medium">
                             {item.prompt}
                           </p>
                         </button>
@@ -1694,7 +1688,7 @@ export const AiChatPage: React.FC = () => {
                     if (isUser) {
                       return (
                         <div key={msg.id} className="flex flex-col items-end gap-1.5">
-                          <div className="rounded-3xl rounded-tr-xs bg-[#FACC15] text-black border-2 border-black px-5 py-3 text-sm font-semibold leading-relaxed max-w-xl shadow-[2px_2px_0px_#000]">
+                          <div className="rounded-3xl rounded-tr-xs bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] px-5 py-3 text-sm font-semibold leading-relaxed max-w-xl shadow-xs">
                             {msg.attachment && (
                               <div className="mb-2">
                                 {msg.attachment.isImage && msg.attachment.previewUrl ? (
@@ -1704,15 +1698,15 @@ export const AiChatPage: React.FC = () => {
                                     onClick={() =>
                                       setPreviewModalImage(msg.attachment?.previewUrl || null)
                                     }
-                                    className="max-h-60 max-w-full rounded-2xl border-2 border-black object-cover cursor-zoom-in hover:opacity-95 shadow-[1.5px_1.5px_0px_#000] transition-opacity"
+                                    className="max-h-60 max-w-full rounded-2xl border border-[var(--theme-gray-border)] object-cover cursor-zoom-in hover:opacity-95 shadow-xs transition-opacity"
                                   />
                                 ) : (
-                                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/10 border border-black text-xs font-mono font-bold text-black">
-                                    <FileText className="w-4 h-4 text-black shrink-0" />
+                                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-xs font-mono font-bold text-slate-100">
+                                    <FileText className="w-4 h-4 text-slate-100 shrink-0" />
                                     <span className="truncate max-w-[200px]">
                                       {msg.attachment.name}
                                     </span>
-                                    <span className="text-[10px] text-neutral-700 shrink-0">
+                                    <span className="text-[10px] text-slate-300 shrink-0">
                                       ({formatBytes(msg.attachment.size)})
                                     </span>
                                   </div>
@@ -1722,11 +1716,11 @@ export const AiChatPage: React.FC = () => {
                             <p className="whitespace-pre-wrap">{msg.content}</p>
                           </div>
 
-                          <div className="flex items-center gap-2 pr-2 text-neutral-500 text-xs font-mono">
+                          <div className="flex items-center gap-2 pr-2 text-slate-400 text-xs font-mono">
                             <button
                               type="button"
                               onClick={() => copyMessage(msg.content, msg.id)}
-                              className="p-1 hover:text-black transition-colors cursor-pointer"
+                              className="p-1 hover:text-slate-100 transition-colors cursor-pointer"
                               title="Copy prompt"
                             >
                               <Copy className="w-3.5 h-3.5" />
@@ -1739,22 +1733,22 @@ export const AiChatPage: React.FC = () => {
                     // Assistant Response Card (Neo-Brutalist Layout)
                     return (
                       <div key={msg.id} className="space-y-2">
-                        <div className="rounded-2xl bg-white border-2 border-black overflow-hidden shadow-[3px_3px_0px_#000] text-black">
+                        <div className="rounded-2xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] overflow-hidden shadow-xs">
                           {/* Card Header (Response / Writing) */}
-                          <div className="px-4 py-2 border-b-2 border-black bg-[#FAF7F2] flex items-center justify-between text-xs font-mono font-black text-black">
+                          <div className="px-4 py-2 border-b border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] flex items-center justify-between text-xs font-mono font-black text-[var(--theme-dirty-white)]">
                             <div className="flex items-center gap-1.5">
-                              <Sparkles className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+                              <Sparkles className="w-3.5 h-3.5 text-[var(--theme-dirty-white)] stroke-[2.5]" />
                               <span>VEXORA AI</span>
                             </div>
                             <div className="flex items-center gap-1">
                               <button
                                 type="button"
                                 onClick={() => copyMessage(msg.content, msg.id)}
-                                className="p-1 hover:bg-black/10 rounded transition-colors cursor-pointer"
+                                className="p-1 hover:bg-white/10 rounded transition-colors cursor-pointer"
                                 title="Copy response"
                               >
                                 {copiedMessageId === msg.id ? (
-                                  <Check className="w-3.5 h-3.5 text-green-600 stroke-[3]" />
+                                  <Check className="w-3.5 h-3.5 text-emerald-400 stroke-[3]" />
                                 ) : (
                                   <Copy className="w-3.5 h-3.5" />
                                 )}
@@ -1772,13 +1766,13 @@ export const AiChatPage: React.FC = () => {
 
                           {/* Suggested follow-up prompt pills */}
                           {isLast && !isGenerating && msg.content && (
-                            <div className="px-4 pb-3.5 pt-2 border-t-2 border-black/10 flex flex-wrap gap-2 text-xs">
+                            <div className="px-4 pb-3.5 pt-2 border-t border-[var(--theme-gray-border)] flex flex-wrap gap-2 text-xs">
                               <button
                                 type="button"
                                 onClick={() =>
                                   handleSendMessage('Make this shorter and more concise')
                                 }
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF7F2] hover:bg-[#FACC15] text-black border border-black font-mono text-xs font-bold transition-all shadow-[1px_1px_0px_#000] cursor-pointer active:translate-y-0.5"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-dirty-white)] hover:text-[var(--theme-canvas)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] font-mono text-xs font-bold transition-all shadow-xs cursor-pointer active:translate-y-0.5"
                               >
                                 <span>↳ Make this shorter and more concise</span>
                               </button>
@@ -1789,7 +1783,7 @@ export const AiChatPage: React.FC = () => {
                                     'Add practical code examples or a step-by-step breakdown',
                                   )
                                 }
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF7F2] hover:bg-[#FACC15] text-black border border-black font-mono text-xs font-bold transition-all shadow-[1px_1px_0px_#000] cursor-pointer active:translate-y-0.5"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-dirty-white)] hover:text-[var(--theme-canvas)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] font-mono text-xs font-bold transition-all shadow-xs cursor-pointer active:translate-y-0.5"
                               >
                                 <span>↳ Add practical code examples or step-by-step breakdown</span>
                               </button>
@@ -1798,14 +1792,14 @@ export const AiChatPage: React.FC = () => {
                         </div>
 
                         {/* Action Bar Below Response */}
-                        <div className="flex items-center gap-2 pl-1 text-neutral-600 text-xs">
+                        <div className="flex items-center gap-2 pl-1 text-[var(--theme-gray-muted)] text-xs">
                           <button
                             type="button"
                             onClick={() => handleToggleLike(msg.id, 'up')}
-                            className={`p-1.5 rounded-lg border border-black/20 hover:border-black bg-white transition-all shadow-[1px_1px_0px_#000] cursor-pointer ${
+                            className={`p-1.5 rounded-lg border transition-all shadow-xs cursor-pointer ${
                               likedMessages[msg.id] === 'up'
-                                ? 'bg-[#4ADE80] text-black font-bold'
-                                : 'hover:bg-neutral-100'
+                                ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800 font-bold'
+                                : 'border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-gray-border)]'
                             }`}
                             title="Helpful response"
                           >
@@ -1814,10 +1808,10 @@ export const AiChatPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => handleToggleLike(msg.id, 'down')}
-                            className={`p-1.5 rounded-lg border border-black/20 hover:border-black bg-white transition-all shadow-[1px_1px_0px_#000] cursor-pointer ${
+                            className={`p-1.5 rounded-lg border transition-all shadow-xs cursor-pointer ${
                               likedMessages[msg.id] === 'down'
-                                ? 'bg-red-200 text-black font-bold'
-                                : 'hover:bg-neutral-100'
+                                ? 'bg-red-950/60 text-red-400 border-red-800 font-bold'
+                                : 'border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-gray-border)]'
                             }`}
                             title="Unhelpful response"
                           >
@@ -1826,7 +1820,7 @@ export const AiChatPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => handleSpeech(msg.content)}
-                            className="p-1.5 rounded-lg border border-black/20 hover:border-black bg-white hover:bg-neutral-100 text-neutral-700 hover:text-black transition-all shadow-[1px_1px_0px_#000] cursor-pointer"
+                            className="p-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] transition-all shadow-xs cursor-pointer"
                             title="Read aloud"
                           >
                             <Volume2 className="w-3.5 h-3.5" />
@@ -1834,7 +1828,7 @@ export const AiChatPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => copyMessage(msg.content, msg.id)}
-                            className="p-1.5 rounded-lg border border-black/20 hover:border-black bg-white hover:bg-neutral-100 text-neutral-700 hover:text-black transition-all shadow-[1px_1px_0px_#000] cursor-pointer"
+                            className="p-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] transition-all shadow-xs cursor-pointer"
                             title="Copy response"
                           >
                             <Copy className="w-3.5 h-3.5" />
@@ -1847,7 +1841,7 @@ export const AiChatPage: React.FC = () => {
                                 .find((m) => m.role === 'user');
                               if (lastUser) handleSendMessage(lastUser.content);
                             }}
-                            className="p-1.5 rounded-lg border border-black/20 hover:border-black bg-white hover:bg-neutral-100 text-neutral-700 hover:text-black transition-all shadow-[1px_1px_0px_#000] cursor-pointer"
+                            className="p-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] transition-all shadow-xs cursor-pointer"
                             title="Regenerate response"
                           >
                             <RotateCw className="w-3.5 h-3.5" />
@@ -1867,7 +1861,7 @@ export const AiChatPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => scrollToBottom(true)}
-                className="absolute bottom-24 right-8 p-2 rounded-xl bg-white hover:bg-neutral-100 text-black border-2 border-black shadow-[2px_2px_0px_#000] cursor-pointer transition-all"
+                className="absolute bottom-24 right-8 p-2 rounded-xl bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] shadow-xs cursor-pointer transition-all"
                 title="Scroll to bottom"
               >
                 <ArrowDown className="w-4 h-4 stroke-[2.5]" />
@@ -1877,30 +1871,30 @@ export const AiChatPage: React.FC = () => {
             {/* Bottom Centered Capsule Input (ChatGPT layout + Vexora theme) */}
             <div className="max-w-3xl mx-auto w-full px-4 pb-3.5 pt-1 space-y-2">
               {attachedFile && (
-                <div className="flex items-center gap-2 p-1.5 px-3 bg-amber-50 border-2 border-black rounded-2xl w-fit max-w-full text-xs text-black shadow-[2px_2px_0px_#000]">
+                <div className="flex items-center gap-2 p-1.5 px-3 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl w-fit max-w-full text-xs text-[var(--theme-dirty-white)] shadow-xs">
                   {attachedFile.isImage && attachedFile.previewUrl ? (
                     <img
                       src={attachedFile.previewUrl}
                       alt={attachedFile.name}
-                      className="w-8 h-8 rounded-lg object-cover border border-black shrink-0"
+                      className="w-8 h-8 rounded-lg object-cover border border-[var(--theme-gray-border)] shrink-0"
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-lg bg-[#FAF7F2] border border-black flex items-center justify-center shrink-0">
-                      <FileText className="w-4 h-4 text-black" />
+                    <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0">
+                      <FileText className="w-4 h-4 text-[var(--theme-dirty-white)]" />
                     </div>
                   )}
                   <div className="min-w-0 pr-1">
-                    <div className="font-bold text-black truncate max-w-[200px] sm:max-w-xs text-xs">
+                    <div className="font-bold text-slate-100 truncate max-w-[200px] sm:max-w-xs text-xs">
                       {attachedFile.name}
                     </div>
-                    <div className="text-[10px] font-mono text-neutral-600">
+                    <div className="text-[10px] font-mono text-slate-400">
                       {formatBytes(attachedFile.size)}
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={handleClearAttachment}
-                    className="p-1 rounded-md hover:bg-black/10 text-neutral-600 hover:text-black cursor-pointer"
+                    className="p-1 rounded-md hover:bg-black/10 text-slate-400 hover:text-slate-100 cursor-pointer"
                     title="Remove attachment"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -1908,7 +1902,7 @@ export const AiChatPage: React.FC = () => {
                 </div>
               )}
 
-              <div className="relative flex items-end gap-2 bg-white border-2 border-black rounded-3xl p-2 px-3 shadow-[3px_3px_0px_#000] focus-within:shadow-[4px_4px_0px_#000] transition-all">
+              <div className="relative flex items-end gap-2 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-3xl p-2 px-3 shadow-xs focus-within:border-[var(--theme-dirty-white)] transition-all">
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -1920,7 +1914,7 @@ export const AiChatPage: React.FC = () => {
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isGenerating}
-                  className="p-2 rounded-full bg-[#FAF7F2] hover:bg-neutral-200 border-2 border-black text-black shadow-[1px_1px_0px_#000] cursor-pointer shrink-0 mb-0.5 transition-all"
+                  className="p-2 rounded-full bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] shadow-xs cursor-pointer shrink-0 mb-0.5 transition-all"
                   title="Attach file (image, PDF, code, text)"
                   aria-label="Attach file"
                 >
@@ -1934,7 +1928,7 @@ export const AiChatPage: React.FC = () => {
                   placeholder="Ask Vexora AI anything..."
                   rows={1}
                   disabled={isGenerating}
-                  className="w-full max-h-36 min-h-[38px] bg-transparent text-sm font-semibold text-black placeholder:text-neutral-500 border-0 border-none outline-none focus:outline-none focus:border-0 focus:ring-0 shadow-none resize-none px-2 py-2"
+                  className="w-full max-h-36 min-h-[38px] bg-transparent text-sm font-semibold text-[var(--theme-dirty-white)] placeholder:text-[var(--theme-gray-muted)] border-0 border-none outline-none focus:outline-none focus:border-0 focus:ring-0 shadow-none resize-none px-2 py-2"
                   style={{ border: 'none', outline: 'none', boxShadow: 'none' }}
                 />
 
@@ -1942,7 +1936,7 @@ export const AiChatPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleStopGenerating}
-                    className="p-2 rounded-full bg-red-500 hover:bg-red-600 border-2 border-black text-white shadow-[1px_1px_0px_#000] shrink-0 cursor-pointer transition-all mb-0.5"
+                    className="p-2 rounded-full bg-red-600 hover:bg-red-700 border border-[var(--theme-gray-border)] text-white shadow-xs shrink-0 cursor-pointer transition-all mb-0.5"
                     title="Stop generating"
                   >
                     <Square className="w-3.5 h-3.5 fill-current" />
@@ -1952,7 +1946,7 @@ export const AiChatPage: React.FC = () => {
                     type="button"
                     disabled={!inputMessage.trim() && !attachedFile}
                     onClick={() => handleSendMessage()}
-                    className="p-2 rounded-full bg-[#FACC15] hover:bg-yellow-400 border-2 border-black text-black shadow-[1.5px_1.5px_0px_#000] disabled:opacity-40 disabled:cursor-not-allowed shrink-0 cursor-pointer active:translate-y-0.5 transition-all mb-0.5"
+                    className="p-2 rounded-full bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)] shadow-xs disabled:opacity-40 disabled:cursor-not-allowed shrink-0 cursor-pointer active:translate-y-0.5 transition-all mb-0.5"
                     title="Send prompt"
                     aria-label="Send prompt"
                   >
@@ -1961,10 +1955,10 @@ export const AiChatPage: React.FC = () => {
                 )}
               </div>
 
-              <div className="flex items-center justify-between text-[10px] font-mono font-bold text-neutral-500 px-1 pt-0.5">
+              <div className="flex items-center justify-between text-[10px] font-mono font-bold text-slate-400 px-1 pt-0.5">
                 <span>Vexora AI can make mistakes. Verify important info.</span>
-                <span className="flex items-center gap-1 text-neutral-700">
-                  <Zap className="w-3 h-3 text-amber-500 fill-amber-500" /> Free Unlimited AI
+                <span className="flex items-center gap-1 text-[var(--theme-gray-muted)]">
+                  <Zap className="w-3 h-3 text-[var(--theme-dirty-white)] fill-[var(--theme-dirty-white)]" /> Free Unlimited AI
                 </span>
               </div>
             </div>
@@ -1972,18 +1966,18 @@ export const AiChatPage: React.FC = () => {
 
           {/* Studio Parameters Slide-Over Inspector */}
           {isInspectorOpen && (
-            <aside className="w-72 sm:w-80 border-l-2 border-black bg-white/95 backdrop-blur-md flex flex-col shrink-0 overflow-y-auto animate-in fade-in slide-in-from-right-4 duration-150">
-              <div className="p-3.5 border-b-2 border-black bg-[#FAF7F2] flex items-center justify-between">
+            <aside className="w-72 sm:w-80 border-l border-[var(--theme-gray-border)] bg-[var(--theme-surface)] flex flex-col shrink-0 overflow-y-auto animate-in fade-in slide-in-from-right-4 duration-150">
+              <div className="p-3.5 border-b border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Sliders className="w-4 h-4 stroke-[2.5] text-black" />
-                  <span className="font-mono font-black text-xs uppercase text-black">
+                  <Sliders className="w-4 h-4 stroke-[2.5] text-[var(--theme-dirty-white)]" />
+                  <span className="font-mono font-black text-xs uppercase text-[var(--theme-dirty-white)]">
                     Studio Parameters
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setIsInspectorOpen(false)}
-                  className="p-1 rounded-md hover:bg-black/10 text-neutral-600 hover:text-black cursor-pointer"
+                  className="p-1 rounded-md hover:bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] cursor-pointer"
                   title="Close parameters"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -1994,14 +1988,14 @@ export const AiChatPage: React.FC = () => {
                 {/* System Persona Instructions */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <label className="font-mono font-black text-[11px] uppercase text-black">
+                    <label className="font-mono font-black text-[11px] uppercase text-[var(--theme-dirty-white)]">
                       System Instructions
                     </label>
                     {systemPrompt && (
                       <button
                         type="button"
                         onClick={() => setSystemPrompt('')}
-                        className="text-[10px] text-red-600 hover:underline font-mono cursor-pointer"
+                        className="text-[10px] text-red-400 hover:underline font-mono cursor-pointer"
                       >
                         Reset
                       </button>
@@ -2012,7 +2006,7 @@ export const AiChatPage: React.FC = () => {
                     onChange={(e) => setSystemPrompt(e.target.value)}
                     placeholder="Define custom persona, behavior, instructions or constraints..."
                     rows={4}
-                    className="w-full text-xs font-mono bg-[#FAF7F2] border-2 border-black rounded-xl p-2.5 text-black placeholder:text-neutral-500 focus:outline-none focus:bg-white resize-none"
+                    className="w-full text-xs font-mono bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl p-2.5 text-[var(--theme-dirty-white)] placeholder:text-[var(--theme-gray-muted)] focus:outline-none focus:border-[var(--theme-dirty-white)] resize-none"
                   />
 
                   {/* Persona Presets */}
@@ -2022,10 +2016,10 @@ export const AiChatPage: React.FC = () => {
                         key={p.label}
                         type="button"
                         onClick={() => setSystemPrompt(p.prompt)}
-                        className={`px-2 py-0.5 rounded-lg border border-black font-mono text-[10px] font-bold cursor-pointer transition-colors ${
+                        className={`px-2 py-0.5 rounded-lg border border-[var(--theme-gray-border)] font-mono text-[10px] font-bold cursor-pointer transition-colors ${
                           systemPrompt === p.prompt
-                            ? 'bg-[#FACC15] text-black shadow-[1px_1px_0px_#000]'
-                            : 'bg-[#FAF7F2] hover:bg-neutral-100 text-neutral-700'
+                            ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                            : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)]'
                         }`}
                       >
                         {p.label}
@@ -2035,10 +2029,10 @@ export const AiChatPage: React.FC = () => {
                 </div>
 
                 {/* Temperature Slider */}
-                <div className="space-y-2 border-t-2 border-black/10 pt-4">
+                <div className="space-y-2 border-t border-[var(--theme-gray-border)] pt-4">
                   <div className="flex items-center justify-between font-mono text-xs">
-                    <span className="font-black uppercase text-black">Temperature</span>
-                    <span className="font-bold px-2 py-0.5 rounded bg-[#FAF7F2] border border-black text-[11px] text-black">
+                    <span className="font-black uppercase text-[var(--theme-dirty-white)]">Temperature</span>
+                    <span className="font-bold px-2 py-0.5 rounded bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[11px] text-[var(--theme-dirty-white)]">
                       {temperature.toFixed(1)}
                     </span>
                   </div>
@@ -2049,9 +2043,9 @@ export const AiChatPage: React.FC = () => {
                     step="0.1"
                     value={temperature}
                     onChange={(e) => setTemperature(parseFloat(e.target.value))}
-                    className="w-full accent-black cursor-pointer"
+                    className="w-full accent-neutral-300 cursor-pointer"
                   />
-                  <div className="flex justify-between text-[10px] font-mono text-neutral-500 font-bold">
+                  <div className="flex justify-between text-[10px] font-mono text-[var(--theme-gray-muted)] font-bold">
                     <span>Strict (0.0)</span>
                     <span>Balanced (0.7)</span>
                     <span>Creative (1.0)</span>
@@ -2059,26 +2053,26 @@ export const AiChatPage: React.FC = () => {
                 </div>
 
                 {/* Engine Runtime Specs */}
-                <div className="space-y-2 border-t-2 border-black/10 pt-4">
-                  <span className="font-mono font-black text-[11px] uppercase text-black block">
+                <div className="space-y-2 border-t border-[var(--theme-gray-border)] pt-4">
+                  <span className="font-mono font-black text-[11px] uppercase text-[var(--theme-dirty-white)] block">
                     Active Engine Specs
                   </span>
-                  <div className="p-3 bg-[#FAF7F2] border-2 border-black rounded-xl space-y-2 text-xs">
+                  <div className="p-3 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl space-y-2 text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="text-neutral-500 font-medium">Model:</span>
-                      <span className="font-mono font-bold text-[11px] text-black truncate max-w-[130px]">
+                      <span className="text-[var(--theme-gray-muted)] font-medium">Model:</span>
+                      <span className="font-mono font-bold text-[11px] text-[var(--theme-dirty-white)] truncate max-w-[130px]">
                         {selectedModelId}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-neutral-500 font-medium">Pricing:</span>
-                      <span className="text-green-700 bg-green-100 px-1.5 py-0.2 rounded border border-green-300 font-mono text-[10px] font-bold">
+                      <span className="text-[var(--theme-gray-muted)] font-medium">Pricing:</span>
+                      <span className="text-[var(--theme-dirty-white)] bg-[var(--theme-surface-raised)] px-1.5 py-0.2 rounded border border-[var(--theme-gray-border)] font-mono text-[10px] font-bold">
                         Free Unlimited
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-neutral-500 font-medium">Speed:</span>
-                      <span className="font-mono font-bold text-[11px] text-black">
+                      <span className="text-slate-400 font-medium">Speed:</span>
+                      <span className="font-mono font-bold text-[11px] text-slate-100">
                         ~700ms TTFB
                       </span>
                     </div>
@@ -2098,15 +2092,15 @@ export const AiChatPage: React.FC = () => {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative max-w-4xl max-h-[90vh] bg-white border-3 border-black rounded-2xl p-3 shadow-[8px_8px_0px_#000] flex flex-col items-center"
+            className="relative max-w-4xl max-h-[90vh] bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded-2xl p-3 shadow-md flex flex-col items-center"
           >
             <div className="w-full flex items-center justify-between pb-2 px-1">
-              <span className="text-xs font-mono font-bold text-neutral-700">Image Preview</span>
+              <span className="text-xs font-mono font-bold text-[var(--theme-dirty-white)]">Image Preview</span>
               <div className="flex items-center gap-2">
                 <a
                   href={previewModalImage}
                   download="attachment-preview"
-                  className="p-1.5 rounded-lg border-2 border-black bg-[#FAF7F2] hover:bg-neutral-100 text-black shadow-[1px_1px_0px_#000]"
+                  className="p-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] shadow-xs"
                   title="Download image"
                 >
                   <Download className="w-4 h-4 stroke-[2.5]" />
@@ -2114,7 +2108,7 @@ export const AiChatPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setPreviewModalImage(null)}
-                  className="p-1.5 rounded-lg border-2 border-black bg-[#FACC15] hover:bg-yellow-400 text-black shadow-[1px_1px_0px_#000] cursor-pointer"
+                  className="p-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] shadow-xs cursor-pointer"
                   title="Close preview"
                 >
                   <X className="w-4 h-4 stroke-[2.5]" />
@@ -2124,7 +2118,7 @@ export const AiChatPage: React.FC = () => {
             <img
               src={previewModalImage}
               alt="Full preview"
-              className="max-h-[75vh] w-auto max-w-full rounded-xl border border-black/20 object-contain"
+              className="max-h-[75vh] w-auto max-w-full rounded-xl border border-[var(--theme-gray-border)] object-contain"
             />
           </div>
         </div>

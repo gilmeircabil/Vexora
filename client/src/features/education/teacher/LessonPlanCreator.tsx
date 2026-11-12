@@ -200,13 +200,13 @@ export const LessonPlanCreator: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div>
           <h2 className="text-xl font-black flex items-center gap-2">
-            <FileCheck className="w-5 h-5 text-indigo-600" />
+            <FileCheck className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             Curriculum & Lesson Plan Creator
           </h2>
-          <p className="text-xs text-neutral-600 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Structure comprehensive instructional plans with pedagogical templates (5E, Direct,
             Inquiry) and print layouts.
           </p>
@@ -214,7 +214,7 @@ export const LessonPlanCreator: React.FC = () => {
 
         <button
           onClick={handleOpenNew}
-          className="flex items-center gap-1.5 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all self-start sm:self-auto"
+          className="flex items-center gap-1.5 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all self-start sm:self-auto"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           New Lesson Plan
@@ -225,13 +225,13 @@ export const LessonPlanCreator: React.FC = () => {
         {/* Left: Saved Plans List */}
         <div className="md:col-span-1 space-y-3 max-h-[650px] overflow-y-auto pr-1">
           {isLoading ? (
-            <div className="text-center py-8 text-xs font-bold text-neutral-500">
+            <div className="text-center py-8 text-xs font-bold text-slate-400">
               Loading lesson plans...
             </div>
           ) : plans.length === 0 ? (
-            <div className="p-8 text-center bg-white rounded-xl border-2 border-dashed border-neutral-300">
+            <div className="p-8 text-center bg-[var(--theme-surface)] rounded-xl border-2 border-dashed border-neutral-300">
               <BookOpen className="w-8 h-8 text-neutral-300 mx-auto mb-2" />
-              <p className="text-xs font-bold text-neutral-600">No lesson plans created yet</p>
+              <p className="text-xs font-bold text-slate-400">No lesson plans created yet</p>
             </div>
           ) : (
             plans.map((p) => (
@@ -243,12 +243,12 @@ export const LessonPlanCreator: React.FC = () => {
                 }}
                 className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   selectedPlan?._id === p._id
-                    ? 'border-black bg-[#FAF7F2] shadow-[3px_3px_0px_#000000]'
-                    : 'border-neutral-200 bg-white hover:border-black'
+                    ? 'border-black bg-[var(--theme-surface-raised)] shadow-sm'
+                    : 'border-neutral-200 bg-[var(--theme-surface)] hover:border-black'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-white border border-black/20 text-neutral-700">
+                  <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-[var(--theme-surface)] border border-black/20 text-slate-300">
                     {p.subject}
                   </span>
                   <button
@@ -259,7 +259,7 @@ export const LessonPlanCreator: React.FC = () => {
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
-                <h4 className="font-black text-sm text-black truncate">{p.title}</h4>
+                <h4 className="font-black text-sm text-slate-100 truncate">{p.title}</h4>
                 <div className="flex items-center gap-3 text-[11px] font-bold text-neutral-400 mt-2">
                   <span>{p.gradeLevel || 'Standard'}</span>
                   <span>•</span>
@@ -273,15 +273,15 @@ export const LessonPlanCreator: React.FC = () => {
         {/* Right: Plan Reader or Editor */}
         <div className="md:col-span-2">
           {isEditing ? (
-            <div className="bg-white p-6 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000] space-y-5">
-              <div className="flex items-center justify-between border-b-2 border-black/10 pb-3">
+            <div className="bg-[var(--theme-surface)] p-6 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-5">
+              <div className="flex items-center justify-between border-b border-[var(--theme-gray-border)] pb-3">
                 <h3 className="font-black text-base">
                   {selectedPlan ? 'Edit Lesson Plan' : 'Create New Lesson Plan'}
                 </h3>
 
                 {/* Template Preset Buttons */}
                 <div className="flex items-center gap-1.5 text-xs font-bold">
-                  <span className="text-neutral-500">Template:</span>
+                  <span className="text-slate-400">Template:</span>
                   <button
                     type="button"
                     onClick={() => handleApplyTemplate('standard')}
@@ -315,7 +315,7 @@ export const LessonPlanCreator: React.FC = () => {
               <form onSubmit={handleSave} className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                    <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                       Subject *
                     </label>
                     <input
@@ -324,12 +324,12 @@ export const LessonPlanCreator: React.FC = () => {
                       placeholder="e.g. Earth Science, Geometry"
                       value={form.subject}
                       onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                      className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                      className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                    <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                       Lesson Title *
                     </label>
                     <input
@@ -338,14 +338,14 @@ export const LessonPlanCreator: React.FC = () => {
                       placeholder="e.g. Introduction to Plate Tectonics"
                       value={form.title}
                       onChange={(e) => setForm({ ...form, title: e.target.value })}
-                      className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                      className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                    <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                       Grade Level
                     </label>
                     <input
@@ -353,12 +353,12 @@ export const LessonPlanCreator: React.FC = () => {
                       placeholder="e.g. Grade 10, AP Biology"
                       value={form.gradeLevel}
                       onChange={(e) => setForm({ ...form, gradeLevel: e.target.value })}
-                      className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                      className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                    <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                       Total Duration (Minutes)
                     </label>
                     <input
@@ -369,13 +369,13 @@ export const LessonPlanCreator: React.FC = () => {
                       onChange={(e) =>
                         setForm({ ...form, durationMinutes: Number(e.target.value) || 45 })
                       }
-                      className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                      className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Learning Objectives (One per line)
                   </label>
                   <textarea
@@ -383,12 +383,12 @@ export const LessonPlanCreator: React.FC = () => {
                     placeholder="Students will be able to explain the 3 types of plate boundaries..."
                     value={form.objectivesText}
                     onChange={(e) => setForm({ ...form, objectivesText: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Learning Materials & Resources (One per line)
                   </label>
                   <textarea
@@ -396,19 +396,19 @@ export const LessonPlanCreator: React.FC = () => {
                     placeholder="World map handouts, colored pencils, tectonic plates diagram..."
                     value={form.materialsText}
                     onChange={(e) => setForm({ ...form, materialsText: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                   />
                 </div>
 
                 {/* Activities Breakdown */}
                 <div className="space-y-2 border-t border-black/10 pt-3">
-                  <label className="block text-xs font-black uppercase text-neutral-700">
+                  <label className="block text-xs font-black uppercase text-slate-300">
                     Teaching Activities & Phases
                   </label>
                   {form.activities.map((act, i) => (
                     <div
                       key={i}
-                      className="p-3 bg-[#FAF7F2] rounded-xl border border-black/20 space-y-2"
+                      className="p-3 bg-[var(--theme-surface-raised)] rounded-xl border border-black/20 space-y-2"
                     >
                       <div className="flex items-center justify-between gap-3">
                         <input
@@ -422,7 +422,7 @@ export const LessonPlanCreator: React.FC = () => {
                               setForm({ ...form, activities: updated });
                             }
                           }}
-                          className="font-bold text-xs bg-white px-2 py-1 rounded border border-black/30 flex-1"
+                          className="font-bold text-xs bg-[var(--theme-surface)] px-2 py-1 rounded border border-black/30 flex-1"
                         />
                         <div className="flex items-center gap-1 text-xs">
                           <input
@@ -437,7 +437,7 @@ export const LessonPlanCreator: React.FC = () => {
                                 setForm({ ...form, activities: updated });
                               }
                             }}
-                            className="w-14 px-1.5 py-1 text-center font-bold bg-white rounded border border-black/30"
+                            className="w-14 px-1.5 py-1 text-center font-bold bg-[var(--theme-surface)] rounded border border-black/30"
                           />
                           <span>min</span>
                         </div>
@@ -454,7 +454,7 @@ export const LessonPlanCreator: React.FC = () => {
                             setForm({ ...form, activities: updated });
                           }
                         }}
-                        className="w-full px-2.5 py-1.5 text-xs bg-white rounded border border-black/20 focus:outline-none"
+                        className="w-full px-2.5 py-1.5 text-xs bg-[var(--theme-surface)] rounded border border-black/20 focus:outline-none"
                       />
                     </div>
                   ))}
@@ -462,7 +462,7 @@ export const LessonPlanCreator: React.FC = () => {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                    <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                       Assessment Methods
                     </label>
                     <input
@@ -470,11 +470,11 @@ export const LessonPlanCreator: React.FC = () => {
                       placeholder="e.g. Exit ticket, 3-question quiz"
                       value={form.assessmentMethods}
                       onChange={(e) => setForm({ ...form, assessmentMethods: e.target.value })}
-                      className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                      className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                    <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                       Homework / Extension
                     </label>
                     <input
@@ -482,7 +482,7 @@ export const LessonPlanCreator: React.FC = () => {
                       placeholder="e.g. Chapter 3 review questions 1-5"
                       value={form.homework}
                       onChange={(e) => setForm({ ...form, homework: e.target.value })}
-                      className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                      className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                     />
                   </div>
                 </div>
@@ -491,13 +491,13 @@ export const LessonPlanCreator: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setIsEditing(false)}
-                    className="px-4 py-2 border-2 border-black rounded-xl text-xs font-bold hover:bg-neutral-100"
+                    className="px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold hover:bg-neutral-100"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000]"
+                    className="px-6 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm"
                   >
                     Save Lesson Plan
                   </button>
@@ -505,25 +505,25 @@ export const LessonPlanCreator: React.FC = () => {
               </form>
             </div>
           ) : selectedPlan ? (
-            <div className="bg-white p-6 sm:p-8 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000] space-y-6">
+            <div className="bg-[var(--theme-surface)] p-6 sm:p-8 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-6">
               {/* Top View Bar */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black/10 pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--theme-gray-border)] pb-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#FAF7F2] border border-black/20 text-neutral-700">
+                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[var(--theme-surface-raised)] border border-black/20 text-slate-300">
                       {selectedPlan.subject}
                     </span>
-                    <span className="text-xs font-bold text-neutral-500">
+                    <span className="text-xs font-bold text-slate-400">
                       {selectedPlan.gradeLevel || 'Standard'} • {selectedPlan.durationMinutes} min
                     </span>
                   </div>
-                  <h3 className="text-xl font-black text-black">{selectedPlan.title}</h3>
+                  <h3 className="text-xl font-black text-slate-100">{selectedPlan.title}</h3>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => window.print()}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-black bg-white hover:bg-neutral-50 text-xs font-bold"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-neutral-50 text-xs font-bold"
                   >
                     <Printer className="w-3.5 h-3.5" />
                     Print
@@ -544,7 +544,7 @@ export const LessonPlanCreator: React.FC = () => {
                       });
                       setIsEditing(true);
                     }}
-                    className="px-4 py-1.5 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000]"
+                    className="px-4 py-1.5 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm"
                   >
                     Edit
                   </button>
@@ -554,10 +554,10 @@ export const LessonPlanCreator: React.FC = () => {
               {/* Objectives */}
               {selectedPlan.objectives && selectedPlan.objectives.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-black uppercase text-neutral-500 mb-2">
+                  <h4 className="text-xs font-black uppercase text-slate-400 mb-2">
                     Learning Objectives
                   </h4>
-                  <ul className="list-disc pl-5 text-xs text-neutral-800 space-y-1 font-medium">
+                  <ul className="list-disc pl-5 text-xs text-[var(--theme-dirty-white)] space-y-1 font-normal">
                     {selectedPlan.objectives.map((obj, i) => (
                       <li key={i}>{obj}</li>
                     ))}
@@ -568,10 +568,10 @@ export const LessonPlanCreator: React.FC = () => {
               {/* Materials */}
               {selectedPlan.materials && selectedPlan.materials.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-black uppercase text-neutral-500 mb-2">
+                  <h4 className="text-xs font-black uppercase text-slate-400 mb-2">
                     Materials & Resources
                   </h4>
-                  <ul className="list-disc pl-5 text-xs text-neutral-800 space-y-1 font-medium">
+                  <ul className="list-disc pl-5 text-xs text-[var(--theme-dirty-white)] space-y-1 font-normal">
                     {selectedPlan.materials.map((mat, i) => (
                       <li key={i}>{mat}</li>
                     ))}
@@ -581,20 +581,20 @@ export const LessonPlanCreator: React.FC = () => {
 
               {/* Activities Table */}
               <div>
-                <h4 className="text-xs font-black uppercase text-neutral-500 mb-2">
+                <h4 className="text-xs font-black uppercase text-slate-400 mb-2">
                   Instructional Activities
                 </h4>
                 <div className="space-y-2">
                   {selectedPlan.activities?.map((act, i) => (
                     <div
                       key={i}
-                      className="p-3 bg-[#FAF7F2] rounded-xl border border-black/15 text-xs flex flex-col sm:flex-row sm:items-start justify-between gap-3"
+                      className="p-3 bg-[var(--theme-surface-raised)] rounded-xl border border-black/15 text-xs flex flex-col sm:flex-row sm:items-start justify-between gap-3"
                     >
                       <div className="flex-1">
-                        <span className="font-black text-black block mb-0.5">{act.phase}</span>
-                        <p className="text-neutral-700 whitespace-pre-wrap">{act.description}</p>
+                        <span className="font-black text-slate-100 block mb-0.5">{act.phase}</span>
+                        <p className="text-slate-300 whitespace-pre-wrap">{act.description}</p>
                       </div>
-                      <span className="font-black text-[11px] px-2 py-0.5 rounded bg-white border border-black/20 shrink-0 self-start">
+                      <span className="font-black text-[11px] px-2 py-0.5 rounded bg-[var(--theme-surface)] border border-black/20 shrink-0 self-start">
                         {act.durationMinutes} min
                       </span>
                     </div>
@@ -606,7 +606,7 @@ export const LessonPlanCreator: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-black/10 pt-4">
                 {selectedPlan.assessmentMethods && (
                   <div>
-                    <h5 className="text-xs font-black uppercase text-neutral-500 mb-1">
+                    <h5 className="text-xs font-black uppercase text-slate-400 mb-1">
                       Assessment Methods
                     </h5>
                     <p className="text-xs text-neutral-800 font-medium">
@@ -616,7 +616,7 @@ export const LessonPlanCreator: React.FC = () => {
                 )}
                 {selectedPlan.homework && (
                   <div>
-                    <h5 className="text-xs font-black uppercase text-neutral-500 mb-1">
+                    <h5 className="text-xs font-black uppercase text-slate-400 mb-1">
                       Homework Assignment
                     </h5>
                     <p className="text-xs text-neutral-800 font-medium">{selectedPlan.homework}</p>
@@ -625,9 +625,9 @@ export const LessonPlanCreator: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-white p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
+            <div className="bg-[var(--theme-surface)] p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
               <FileCheck className="w-12 h-12 text-neutral-300 mx-auto mb-2" />
-              <p className="text-sm font-bold text-neutral-600">
+              <p className="text-sm font-bold text-slate-400">
                 Select a lesson plan to view or edit
               </p>
             </div>

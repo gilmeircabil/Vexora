@@ -373,7 +373,7 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({
         {/* AI Magic Tools */}
         <button
           onClick={onOpenAITools}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold text-xs shadow-sm hover:shadow transition-all cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-bold text-xs shadow-xs transition-all cursor-pointer"
           title="Enhance image with AI (Free & Built-in)"
         >
           <Sparkles className="w-3.5 h-3.5 text-amber-300" />

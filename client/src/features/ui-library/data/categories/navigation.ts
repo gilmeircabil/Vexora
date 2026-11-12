@@ -465,16 +465,16 @@ export const NAVIGATION_COMPONENTS: UIComponentItem[] = [
       Home
     </button>
     <button className="flex flex-col items-center gap-1 text-[10px] font-bold text-neutral-500 hover:text-black">
-      <span className="w-5 h-5 bg-neutral-100 border border-neutral-300 rounded-md flex items-center justify-center text-xs">🔍</span>
+      <span className="w-5 h-5 bg-neutral-100 border border-neutral-300 rounded-md flex items-center justify-center text-[10px] font-mono">Q</span>
       Search
     </button>
     <button className="flex flex-col items-center gap-1 text-[10px] font-bold text-neutral-500 hover:text-black relative">
-      <span className="w-5 h-5 bg-neutral-100 border border-neutral-300 rounded-md flex items-center justify-center text-xs">🔔</span>
+      <span className="w-5 h-5 bg-neutral-100 border border-neutral-300 rounded-md flex items-center justify-center text-[10px] font-mono">!</span>
       <span className="absolute top-0 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
       Alerts
     </button>
     <button className="flex flex-col items-center gap-1 text-[10px] font-bold text-neutral-500 hover:text-black">
-      <span className="w-5 h-5 bg-neutral-100 border border-neutral-300 rounded-md flex items-center justify-center text-xs">👤</span>
+      <span className="w-5 h-5 bg-neutral-100 border border-neutral-300 rounded-md flex items-center justify-center text-[10px] font-mono">U</span>
       Profile
     </button>
   </div>
@@ -549,7 +549,7 @@ export const NAVIGATION_COMPONENTS: UIComponentItem[] = [
         codeReact: `export const CommandPalettePreview = () => (
   <div className="w-full max-w-md bg-white border-2 border-black rounded-2xl shadow-[6px_6px_0px_#000] overflow-hidden">
     <div className="p-3 border-b-2 border-black flex items-center gap-2">
-      <span className="text-sm font-bold text-neutral-400">🔍</span>
+      <span className="text-xs font-mono font-bold text-neutral-400">&gt;</span>
       <input type="text" placeholder="Type a command or search..." className="w-full text-xs font-bold outline-none" readOnly value="Go to " />
       <span className="px-1.5 py-0.5 text-[10px] font-mono border border-black rounded bg-neutral-100">ESC</span>
     </div>
@@ -696,9 +696,9 @@ export const NAVIGATION_COMPONENTS: UIComponentItem[] = [
         description: 'Centered bottom floating pill with subtle hover magnification and tooltip hints.',
         codeReact: `export const FloatingNavPreview = () => (
   <div className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-900/90 backdrop-blur-md text-white rounded-full border border-neutral-700 shadow-2xl">
-    {['🏠', '📁', '🎨', '⚙️'].map((icon, idx) => (
-      <button key={idx} className="w-9 h-9 rounded-full bg-neutral-800 hover:bg-neutral-700 hover:scale-110 active:scale-95 transition-all flex items-center justify-center text-sm">
-        {icon}
+    {['Home', 'Files', 'Theme', 'Prefs'].map((label, idx) => (
+      <button key={idx} className="w-9 h-9 rounded-full bg-neutral-800 hover:bg-neutral-700 hover:scale-110 active:scale-95 transition-all flex items-center justify-center text-[10px] font-mono">
+        {label[0]}
       </button>
     ))}
     <div className="w-[1px] h-6 bg-neutral-700 mx-1"></div>

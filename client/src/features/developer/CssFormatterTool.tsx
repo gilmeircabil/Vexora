@@ -129,7 +129,7 @@ export const CssFormatterTool: React.FC = () => {
           value={cssInput}
           onChange={(e) => setCssInput(e.target.value)}
           placeholder="Paste CSS stylesheet here..."
-          className="w-full p-4 font-mono text-xs bg-neutral-900 text-neutral-100 rounded-xl border border-neutral-800 focus:outline-none focus:border-indigo-500 leading-relaxed"
+          className="w-full p-4 font-mono text-xs bg-neutral-900 text-neutral-100 rounded-xl border border-neutral-800 focus:outline-none focus:border-[var(--theme-dirty-white)] leading-relaxed"
           spellCheck={false}
         />
 

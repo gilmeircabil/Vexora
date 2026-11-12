@@ -550,33 +550,33 @@ export const DesignEditorPage: React.FC = () => {
         }
         estimatedReturn={maintenance.estimatedReturn}
         pageTitle="Design Studio"
-        accentColor="#38BDF8"
+        accentColor="#f4f4f0"
       />
     );
   }
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 z-50 bg-[#FAF7F2] flex flex-col items-center justify-center gap-3">
-        <Loader2 className="w-10 h-10 animate-spin text-black" />
-        <span className="text-sm font-black text-black">Opening VexoraMods Studio...</span>
+      <div className="fixed inset-0 z-50 bg-slate-900/60 flex flex-col items-center justify-center gap-3">
+        <Loader2 className="w-10 h-10 animate-spin text-slate-100" />
+        <span className="text-sm font-black text-slate-100">Opening VexoraMods Studio...</span>
       </div>
     );
   }
 
   if (loadError || !project) {
     return (
-      <div className="fixed inset-0 z-50 bg-[#FAF7F2] flex flex-col items-center justify-center p-6 text-center">
-        <div className="max-w-md p-6 bg-white rounded-2xl border-4 border-black shadow-[8px_8px_0px_#000000] space-y-4">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto" />
-          <h2 className="text-xl font-black text-black">Design Not Found</h2>
-          <p className="text-sm font-semibold text-gray-600">
+      <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+        <div className="max-w-md p-6 bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] shadow-xl space-y-4 text-[var(--theme-dirty-white)]">
+          <AlertCircle className="w-12 h-12 text-red-400 mx-auto" />
+          <h2 className="text-xl font-bold text-[var(--theme-dirty-white)]">Design Not Found</h2>
+          <p className="text-sm font-medium text-[var(--theme-gray-muted)]">
             {loadError ||
               'The requested design project could not be found or you do not have permission.'}
           </p>
           <button
             onClick={() => navigate('/studio')}
-            className="w-full py-2.5 bg-[#FACC15] text-black font-black text-sm rounded-xl border-2 border-black shadow-[3px_3px_0px_#000000] hover:-translate-y-0.5 transition-all"
+            className="w-full py-2.5 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-bold text-sm rounded-xl border border-[var(--theme-gray-border)] shadow-xs transition-all cursor-pointer"
           >
             Back to Studio Dashboard
           </button>
@@ -586,7 +586,7 @@ export const DesignEditorPage: React.FC = () => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#FAF7F2] overflow-hidden select-none">
+    <div className="fixed inset-0 z-50 flex flex-col bg-slate-900/60 overflow-hidden select-none">
       {/* Top Toolbar */}
       <TopToolbar
         title={project.title}
@@ -655,10 +655,10 @@ export const DesignEditorPage: React.FC = () => {
           />
 
           {/* Bottom Workspace: Multi-Page Navigation & Page Management Bar */}
-          <div className="h-12 bg-white border-t border-slate-200 px-4 flex items-center justify-between gap-4 shrink-0 z-20 shadow-xs">
+          <div className="h-12 bg-[var(--theme-surface)] border-t border-[var(--theme-gray-border)] px-4 flex items-center justify-between gap-4 shrink-0 z-20 shadow-xs text-[var(--theme-dirty-white)]">
             <div className="flex items-center gap-2 overflow-x-auto py-1">
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 mr-1">
-                <Layers className="w-3.5 h-3.5 text-slate-700" />
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--theme-gray-muted)] mr-1">
+                <Layers className="w-3.5 h-3.5 text-[var(--theme-dirty-white)]" />
                 <span>Pages ({pages.length}):</span>
               </span>
 
@@ -669,10 +669,10 @@ export const DesignEditorPage: React.FC = () => {
                     key={pg.id}
                     type="button"
                     onClick={() => handleSelectPage(idx)}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer ${
                       isActive
-                        ? 'bg-purple-100 text-[#7d2ae8] border border-purple-200 shadow-xs'
-                        : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                        ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-dirty-white)] shadow-xs'
+                        : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)]'
                     }`}
                   >
                     Page {idx + 1}
@@ -683,7 +683,7 @@ export const DesignEditorPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleAddPage}
-                className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-[#7d2ae8] border border-purple-200 text-xs font-semibold shadow-xs transition-colors shrink-0 cursor-pointer"
+                className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] text-xs font-bold shadow-xs transition-colors shrink-0 cursor-pointer"
                 title="Add new page"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -698,7 +698,7 @@ export const DesignEditorPage: React.FC = () => {
                 disabled={activePageIndex === 0}
                 onClick={() => handleReorderPage(-1)}
                 aria-label="Move page earlier"
-                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 text-slate-600 cursor-pointer transition-colors"
+                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] disabled:opacity-40 text-[var(--theme-dirty-white)] cursor-pointer transition-colors"
                 title="Move page earlier"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
@@ -708,7 +708,7 @@ export const DesignEditorPage: React.FC = () => {
                 disabled={activePageIndex >= pages.length - 1}
                 onClick={() => handleReorderPage(1)}
                 aria-label="Move page later"
-                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 text-slate-600 cursor-pointer transition-colors"
+                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] disabled:opacity-40 text-[var(--theme-dirty-white)] cursor-pointer transition-colors"
                 title="Move page later"
               >
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -716,7 +716,7 @@ export const DesignEditorPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleDuplicatePage}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-xs font-bold text-[var(--theme-dirty-white)] transition-colors cursor-pointer"
                 title="Duplicate current page"
               >
                 <Copy className="w-3.5 h-3.5" />
@@ -726,7 +726,7 @@ export const DesignEditorPage: React.FC = () => {
                 type="button"
                 disabled={pages.length <= 1}
                 onClick={handleDeletePage}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 disabled:opacity-40 text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 disabled:opacity-40 text-xs font-bold text-[var(--theme-dirty-white)] transition-colors cursor-pointer"
                 title="Delete current page"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -736,17 +736,17 @@ export const DesignEditorPage: React.FC = () => {
           </div>
 
           {/* Mobile Bottom Quick Action Strip (< 1024px) */}
-          <div className="lg:hidden flex items-center justify-between gap-2 px-3 py-2 bg-white/95 backdrop-blur border-t border-slate-200 shrink-0 z-20 shadow-xs">
+          <div className="lg:hidden flex items-center justify-between gap-2 px-3 py-2 bg-[var(--theme-surface)]/95 backdrop-blur border-t border-[var(--theme-gray-border)] shrink-0 z-20 shadow-xs">
             <button
               type="button"
               onClick={() => {
                 setIsMobileLeftOpen(true);
                 setIsMobileRightOpen(false);
               }}
-              className={`flex-1 py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs active:translate-y-0.5 cursor-pointer ${
+              className={`flex-1 py-2 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs active:translate-y-0.5 cursor-pointer ${
                 isMobileLeftOpen
-                  ? 'bg-slate-900 text-white'
-                  : 'bg-[#7d2ae8] text-white hover:bg-[#6c22cf]'
+                  ? 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)]'
+                  : 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)]'
               }`}
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
@@ -759,12 +759,12 @@ export const DesignEditorPage: React.FC = () => {
                 setIsMobileRightOpen(true);
                 setIsMobileLeftOpen(false);
               }}
-              className={`flex-1 py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs active:translate-y-0.5 cursor-pointer ${
+              className={`flex-1 py-2 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs active:translate-y-0.5 cursor-pointer ${
                 isMobileRightOpen
-                  ? 'bg-slate-900 text-white'
+                  ? 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)]'
                   : activeObject
-                    ? 'bg-purple-100 text-[#7d2ae8] border border-purple-200'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]'
+                    : 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)]'
               }`}
             >
               <Sliders className="w-4 h-4" />
@@ -774,7 +774,7 @@ export const DesignEditorPage: React.FC = () => {
             <button
               type="button"
               onClick={handleZoomReset}
-              className="py-2 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 font-semibold text-xs text-slate-700 shadow-xs active:translate-y-0.5 flex items-center gap-1 cursor-pointer shrink-0"
+              className="py-2 px-3 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] font-bold text-xs text-[var(--theme-dirty-white)] shadow-xs active:translate-y-0.5 flex items-center gap-1 cursor-pointer shrink-0"
               title="Fit canvas to screen"
             >
               <Maximize2 className="w-3.5 h-3.5" />

@@ -102,7 +102,7 @@ export const PAGE_LOCK_ITEMS: PageLockMetadata[] = [
     label: 'Design Studio',
     description: 'Design Editor (/studio, /design-studio/*)',
     paths: ['/studio', '/design-studio'],
-    accentColor: '#38BDF8',
+    accentColor: '#d4d4ce',
   },
   {
     key: 'LEARNING',
@@ -137,7 +137,7 @@ export const PAGE_LOCK_ITEMS: PageLockMetadata[] = [
     label: 'User Dashboard',
     description: 'Personal Profile & Settings (/dashboard)',
     paths: ['/dashboard'],
-    accentColor: '#38BDF8',
+    accentColor: '#d4d4ce',
   },
   {
     key: 'ABOUT',
@@ -165,7 +165,7 @@ export const PAGE_LOCK_ITEMS: PageLockMetadata[] = [
     label: 'Licenses',
     description: 'Open Source Licenses (/licenses)',
     paths: ['/licenses'],
-    accentColor: '#38BDF8',
+    accentColor: '#d4d4ce',
   },
   {
     key: 'CONTRIBUTING',
@@ -229,7 +229,7 @@ export function getRouteLockStatus(
     return {
       isLocked: Boolean(pagesMap.STUDIO),
       pageTitle: 'Design Studio',
-      accentColor: '#38BDF8',
+      accentColor: '#d4d4ce',
       key: 'STUDIO',
     };
   }
@@ -293,7 +293,7 @@ export function getRouteLockStatus(
     return {
       isLocked: Boolean(pagesMap.DASHBOARD),
       pageTitle: 'Dashboard',
-      accentColor: '#38BDF8',
+      accentColor: '#d4d4ce',
       key: 'DASHBOARD',
     };
   }
@@ -333,7 +333,7 @@ export function getRouteLockStatus(
     return {
       isLocked: Boolean(pagesMap.LICENSES),
       pageTitle: 'Licenses',
-      accentColor: '#38BDF8',
+      accentColor: '#d4d4ce',
       key: 'LICENSES',
     };
   }

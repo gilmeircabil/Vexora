@@ -14,6 +14,7 @@ import {
   Users,
   Medal,
   Crown,
+  User,
 } from 'lucide-react';
 import { donationApi } from '../../services/donationApi.js';
 import { platformApi } from '../../services/platformApi.js';
@@ -133,11 +134,8 @@ export const CommunityPage: React.FC = () => {
   };
 
   const getRankBadge = (index: number) => {
-    if (index === 0) return <span className="text-xl">🥇</span>;
-    if (index === 1) return <span className="text-xl">🥈</span>;
-    if (index === 2) return <span className="text-xl">🥉</span>;
     return (
-      <span className="w-7 h-7 rounded-lg bg-[#FAF7F2] border border-black flex items-center justify-center font-mono font-black text-xs text-black">
+      <span className="w-7 h-7 rounded-lg bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center font-mono font-bold text-xs text-[var(--theme-dirty-white)] shadow-xs">
         #{index + 1}
       </span>
     );
@@ -149,29 +147,29 @@ export const CommunityPage: React.FC = () => {
     <div className="space-y-10">
       {/* Return from Checkout Notification */}
       {checkoutStatus === 'success' && (
-        <div className="bg-[#4ADE80]/30 border-2 border-black rounded-3xl p-6 sm:p-8 shadow-[5px_5px_0px_#000000] space-y-3">
+        <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-3xl p-6 sm:p-8 shadow-sm space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-[#22C55E] border-2 border-black flex items-center justify-center text-white shadow-[2px_2px_0px_#000000]">
-              <CheckCircle2 className="w-6 h-6 stroke-[2.5]" />
+            <div className="w-11 h-11 rounded-2xl bg-[var(--theme-dirty-white)] border border-[var(--theme-dirty-white)] flex items-center justify-center text-[var(--theme-canvas)] shadow-xs">
+              <CheckCircle2 className="w-6 h-6 stroke-[2.2]" />
             </div>
             <div>
-              <h3 className="text-xl font-black text-black">
+              <h3 className="text-xl font-extrabold text-[var(--theme-dirty-white)]">
                 Thank you for supporting VexoraMods!
               </h3>
-              <p className="text-xs sm:text-sm font-bold text-neutral-800">
+              <p className="text-xs sm:text-sm font-medium text-[var(--theme-gray-muted)]">
                 Your voluntary contribution has been verified and added to the community supporter
                 hall of fame.
               </p>
             </div>
           </div>
           {verifiedDonation && (
-            <div className="p-4 bg-white border-2 border-black rounded-2xl font-mono text-xs space-y-1">
+            <div className="p-4 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl font-mono text-xs space-y-1 text-[var(--theme-dirty-white)]">
               <div>
                 Supporter: <strong>{verifiedDonation.displayName}</strong>
               </div>
               <div>
                 Verified Amount:{' '}
-                <strong>
+                <strong className="text-[var(--theme-dirty-white)]">
                   ₱{Number(verifiedDonation.amount).toLocaleString()}{' '}
                   {verifiedDonation.currency || 'PHP'}
                 </strong>
@@ -183,9 +181,9 @@ export const CommunityPage: React.FC = () => {
       )}
 
       {checkoutStatus === 'canceled' && (
-        <div className="bg-amber-100 border-2 border-black rounded-2xl p-4 shadow-[3px_3px_0px_#000000] flex items-center gap-3">
-          <AlertCircle className="w-5 h-5 text-amber-800 shrink-0" />
-          <p className="text-xs font-bold text-neutral-900">
+        <div className="bg-amber-950/40 border border-amber-800/80 rounded-2xl p-4 shadow-sm flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 text-amber-400 shrink-0" />
+          <p className="text-xs font-medium text-amber-200">
             Checkout was canceled. No charges were made.
           </p>
         </div>
@@ -194,10 +192,10 @@ export const CommunityPage: React.FC = () => {
       {/* Open Editorial Header & Single Telemetry Strip */}
       <div className="space-y-6">
         <div className="space-y-2">
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-black">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-100">
             Support VexoraMods
           </h1>
-          <p className="text-sm sm:text-base font-semibold text-neutral-700 max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base font-normal text-slate-400 max-w-3xl leading-relaxed">
             VexoraMods is built to make useful online tools, design software, and learning resources
             accessible to everyone. Your voluntary contribution helps maintain, improve, and keep
             the platform free and open source.
@@ -205,63 +203,63 @@ export const CommunityPage: React.FC = () => {
         </div>
 
         {/* Community Telemetry Strip */}
-        <div className="bg-white border-2 border-black rounded-3xl p-6 sm:p-8 shadow-[5px_5px_0px_#000000] grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:divide-x-2 lg:divide-black/15">
+        <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-3xl p-6 sm:p-8 shadow-sm grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:divide-x lg:divide-slate-800">
           <div className="lg:pr-4">
-            <div className="text-2xl sm:text-3xl font-black text-black">
+            <div className="text-2xl sm:text-3xl font-extrabold text-slate-100">
               {isLoadingBoard ? (
-                <div className="h-8 w-24 bg-black/10 rounded-lg animate-pulse my-0.5" />
+                <div className="h-8 w-24 bg-slate-800 rounded-lg animate-pulse my-0.5" />
               ) : (
                 platformStats.totalMembers.toLocaleString()
               )}
             </div>
-            <div className="text-xs font-bold text-neutral-600 mt-0.5">Community Members</div>
+            <div className="text-xs font-medium text-slate-400 mt-0.5">Community Members</div>
           </div>
 
           <div className="lg:px-5">
-            <div className="text-2xl sm:text-3xl font-black text-black">
+            <div className="text-2xl sm:text-3xl font-extrabold text-slate-100">
               {isLoadingBoard ? (
-                <div className="h-8 w-24 bg-black/10 rounded-lg animate-pulse my-0.5" />
+                <div className="h-8 w-24 bg-slate-800 rounded-lg animate-pulse my-0.5" />
               ) : (
                 platformStats.totalPublishedPosts.toLocaleString()
               )}
             </div>
-            <div className="text-xs font-bold text-neutral-600 mt-0.5">
+            <div className="text-xs font-medium text-slate-400 mt-0.5">
               Published Tutorials &amp; Posts
             </div>
           </div>
 
           <div className="lg:px-5">
-            <div className="text-2xl sm:text-3xl font-black text-black">
+            <div className="text-2xl sm:text-3xl font-extrabold text-slate-100">
               {isLoadingBoard ? (
-                <div className="h-8 w-24 bg-black/10 rounded-lg animate-pulse my-0.5" />
+                <div className="h-8 w-24 bg-slate-800 rounded-lg animate-pulse my-0.5" />
               ) : (
                 (platformStats.totalSupporters || summary?.uniqueSupporters || 0).toLocaleString()
               )}
             </div>
-            <div className="text-xs font-bold text-neutral-600 mt-0.5">Community Supporters</div>
+            <div className="text-xs font-medium text-slate-400 mt-0.5">Community Supporters</div>
           </div>
 
           <div className="col-span-2 sm:col-span-1 lg:pl-5 flex flex-col justify-center">
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-600">
-              <Crown className="w-3.5 h-3.5 text-amber-600" />
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-slate-400">
+              <Crown className="w-3.5 h-3.5 text-amber-400" />
               <span>Top Public Supporter</span>
             </div>
             {isLoadingBoard ? (
               <div className="space-y-1.5 mt-1.5">
-                <div className="h-4 w-28 bg-black/10 rounded animate-pulse" />
-                <div className="h-3 w-16 bg-black/5 rounded animate-pulse" />
+                <div className="h-4 w-28 bg-slate-800 rounded animate-pulse" />
+                <div className="h-3 w-16 bg-slate-800 rounded animate-pulse" />
               </div>
             ) : topSupporter ? (
               <div className="mt-0.5">
-                <span className="font-black text-sm text-black block truncate">
+                <span className="font-bold text-sm text-[var(--theme-dirty-white)] block truncate">
                   {topSupporter.isAnonymous ? 'Anonymous Supporter' : topSupporter.displayName}
                 </span>
-                <span className="text-xs font-mono font-bold text-neutral-600">
+                <span className="text-xs font-mono font-medium text-[var(--theme-dirty-white-muted)]">
                   ₱{Number(topSupporter.totalAmount).toLocaleString()} PHP
                 </span>
               </div>
             ) : (
-              <span className="text-xs font-black text-black underline mt-1 inline-block">
+              <span className="text-xs font-bold text-[var(--theme-dirty-white)] hover:underline mt-1 inline-block">
                 Become our first supporter
               </span>
             )}
@@ -273,13 +271,13 @@ export const CommunityPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Voluntary Donation Form & Principles */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white border-2 border-black rounded-3xl p-6 sm:p-8 shadow-[6px_6px_0px_#000000] space-y-6">
-            <div className="border-b-2 border-black pb-4">
-              <h2 className="text-xl font-black text-black flex items-center gap-2">
-                <Heart className="w-5 h-5 text-red-600 fill-red-500" />
+          <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+            <div className="border-b border-[var(--theme-gray-border)] pb-4">
+              <h2 className="text-xl font-extrabold text-[var(--theme-dirty-white)] flex items-center gap-2">
+                <Heart className="w-5 h-5 text-red-500 fill-red-500" />
                 <span>Make a Voluntary Contribution</span>
               </h2>
-              <p className="text-xs font-semibold text-neutral-600 mt-1">
+              <p className="text-xs font-normal text-[var(--theme-gray-muted)] mt-1">
                 One-time voluntary support in Philippine Pesos (PHP ₱).
               </p>
             </div>
@@ -287,12 +285,12 @@ export const CommunityPage: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Amount Input */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-mono font-black uppercase text-black">
+                <label className="block text-xs font-mono font-bold uppercase text-[var(--theme-dirty-white)]">
                   Enter Amount (PHP ₱)
                 </label>
 
                 <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-mono font-black text-base text-black">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-mono font-bold text-base text-[var(--theme-gray-muted)]">
                     ₱
                   </span>
                   <input
@@ -305,11 +303,11 @@ export const CommunityPage: React.FC = () => {
                       setAmount(e.target.value === '' ? '' : parseFloat(e.target.value))
                     }
                     placeholder="Enter PHP amount..."
-                    className="w-full pl-8 pr-4 py-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl font-mono text-sm font-black text-black shadow-[2px_2px_0px_#000000] focus:outline-none focus:bg-white"
+                    className="w-full pl-8 pr-4 py-2.5 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-sm font-bold text-[var(--theme-dirty-white)] shadow-xs focus:outline-none focus:border-[var(--theme-dirty-white)]"
                     required
                   />
                 </div>
-                <div className="flex justify-between text-[11px] font-mono text-neutral-500">
+                <div className="flex justify-between text-[11px] font-mono text-[var(--theme-gray-muted)]">
                   <span>Min: ₱20</span>
                   <span>Max: ₱500,000</span>
                 </div>
@@ -317,7 +315,7 @@ export const CommunityPage: React.FC = () => {
 
               {/* Display Name */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-mono font-black uppercase text-black">
+                <label className="block text-xs font-mono font-bold uppercase text-[var(--theme-dirty-white)]">
                   Donor Display Name (Optional)
                 </label>
                 <input
@@ -327,21 +325,21 @@ export const CommunityPage: React.FC = () => {
                   onChange={(e) => setDisplayName(e.target.value)}
                   placeholder="e.g. Alex Rivera or Team Vexora"
                   maxLength={60}
-                  className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl font-bold text-xs text-black disabled:opacity-50"
+                  className="w-full p-2.5 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl font-medium text-xs text-[var(--theme-dirty-white)] placeholder-[var(--theme-gray-dim)] disabled:opacity-50 focus:outline-none focus:border-[var(--theme-dirty-white)]"
                 />
               </div>
 
               {/* Anonymous Checkbox */}
-              <label className="flex items-start gap-3 p-3 bg-[#FAF7F2] border-2 border-black rounded-xl cursor-pointer">
+              <label className="flex items-start gap-3 p-3 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl cursor-pointer">
                 <input
                   type="checkbox"
                   checked={isAnonymous}
                   onChange={(e) => setIsAnonymous(e.target.checked)}
-                  className="mt-0.5 w-4 h-4 accent-black rounded border-2 border-black"
+                  className="mt-0.5 w-4 h-4 rounded border-[var(--theme-gray-border)] bg-[var(--theme-surface)]"
                 />
                 <div className="text-xs">
-                  <span className="font-black text-black block">Make my donation anonymous</span>
-                  <span className="font-semibold text-neutral-600 block">
+                  <span className="font-bold text-[var(--theme-dirty-white)] block">Make my donation anonymous</span>
+                  <span className="font-normal text-[var(--theme-gray-muted)] block">
                     Displays as "Anonymous Supporter" on the public leaderboard.
                   </span>
                 </div>
@@ -349,9 +347,9 @@ export const CommunityPage: React.FC = () => {
 
               {/* Support Message */}
               <div className="space-y-1.5">
-                <div className="flex justify-between text-xs font-mono font-black uppercase text-black">
+                <div className="flex justify-between text-xs font-mono font-bold uppercase text-[var(--theme-dirty-white)]">
                   <span>Support Message (Optional)</span>
-                  <span className="text-neutral-500">{message.length}/280</span>
+                  <span className="text-[var(--theme-gray-muted)]">{message.length}/280</span>
                 </div>
                 <textarea
                   value={message}
@@ -359,34 +357,34 @@ export const CommunityPage: React.FC = () => {
                   maxLength={280}
                   rows={2}
                   placeholder="Leave a message for the VexoraMods community..."
-                  className="w-full p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl font-medium text-xs text-black"
+                  className="w-full p-2.5 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl font-normal text-xs text-[var(--theme-dirty-white)] placeholder-[var(--theme-gray-dim)] focus:outline-none focus:border-[var(--theme-dirty-white)]"
                 />
               </div>
 
               {/* Clear Checkout Amount Preview Box */}
-              <div className="p-3.5 rounded-2xl bg-[#FAF7F2] border-2 border-black flex items-center justify-between">
+              <div className="p-3.5 rounded-2xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-mono font-black uppercase text-neutral-500 block">
+                  <span className="text-[10px] font-mono font-bold uppercase text-[var(--theme-gray-muted)] block">
                     Checkout Preview
                   </span>
-                  <span className="text-xs font-bold text-black">
+                  <span className="text-xs font-bold text-[var(--theme-dirty-white)]">
                     {isAnonymous
                       ? 'Anonymous Supporter'
                       : displayName.trim() || 'Community Supporter'}
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-lg font-mono font-black text-black">
+                  <span className="text-lg font-mono font-extrabold text-[var(--theme-dirty-white)]">
                     ₱{amount ? Number(amount).toLocaleString() : '0'} PHP
                   </span>
-                  <span className="block text-[10px] font-mono text-emerald-800 font-bold">
+                  <span className="block text-[10px] font-mono text-emerald-400 font-medium">
                     One-time voluntary gift
                   </span>
                 </div>
               </div>
 
               {errorMessage && (
-                <div className="p-3 bg-red-100 border-2 border-black rounded-xl text-xs font-bold text-red-800">
+                <div className="p-3 bg-red-950/40 border border-red-800 rounded-xl text-xs font-medium text-red-300">
                   {errorMessage}
                 </div>
               )}
@@ -394,9 +392,9 @@ export const CommunityPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 px-5 bg-[#FACC15] hover:bg-[#EAB308] border-2 border-black rounded-xl font-mono text-xs sm:text-sm font-black text-black shadow-[4px_4px_0px_#000000] hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="w-full py-3.5 px-5 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-dirty-white)] rounded-xl font-bold text-xs sm:text-sm text-[var(--theme-canvas)] shadow-sm hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
-                <Heart className="w-4 h-4 text-red-600 fill-red-500" />
+                <Heart className="w-4 h-4 text-[var(--theme-canvas)] fill-current" />
                 <span>
                   {isSubmitting
                     ? 'Preparing Checkout...'
@@ -407,19 +405,19 @@ export const CommunityPage: React.FC = () => {
             </form>
 
             {/* Supported Gateways */}
-            <div className="pt-4 border-t-2 border-black/10 space-y-2">
-              <div className="flex items-center gap-1.5 text-xs font-black text-black">
-                <Wallet className="w-4 h-4" />
+            <div className="pt-4 border-t border-[var(--theme-gray-border)] space-y-2">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--theme-dirty-white)]">
+                <Wallet className="w-4 h-4 text-[var(--theme-dirty-white)]" />
                 <span>Supported Payment Channels</span>
               </div>
-              <div className="grid grid-cols-4 gap-2 text-[11px] font-mono font-bold text-center">
-                <div className="py-1.5 px-2 bg-[#FAF7F2] border border-black rounded-lg">GCash</div>
-                <div className="py-1.5 px-2 bg-[#FAF7F2] border border-black rounded-lg">Maya</div>
-                <div className="py-1.5 px-2 bg-[#FAF7F2] border border-black rounded-lg flex items-center justify-center gap-1">
-                  <CreditCard className="w-3 h-3" /> Cards
+              <div className="grid grid-cols-4 gap-2 text-[11px] font-mono font-medium text-center">
+                <div className="py-1.5 px-2 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-lg text-[var(--theme-dirty-white)]">GCash</div>
+                <div className="py-1.5 px-2 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-lg text-[var(--theme-dirty-white)]">Maya</div>
+                <div className="py-1.5 px-2 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-lg flex items-center justify-center gap-1 text-[var(--theme-dirty-white)]">
+                  <CreditCard className="w-3 h-3 text-[var(--theme-dirty-white)]" /> Cards
                 </div>
-                <div className="py-1.5 px-2 bg-[#FAF7F2] border border-black rounded-lg flex items-center justify-center gap-1">
-                  <QrCode className="w-3 h-3" /> QRPh
+                <div className="py-1.5 px-2 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-lg flex items-center justify-center gap-1 text-[var(--theme-dirty-white)]">
+                  <QrCode className="w-3 h-3 text-[var(--theme-dirty-white)]" /> QRPh
                 </div>
               </div>
             </div>
@@ -427,29 +425,29 @@ export const CommunityPage: React.FC = () => {
 
           {/* Open Donation Principles List */}
           <div className="pt-2 space-y-2.5">
-            <h3 className="font-black text-xs uppercase tracking-wider text-black flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
+            <h3 className="font-bold text-xs uppercase tracking-wider text-[var(--theme-dirty-white)] flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-[var(--theme-dirty-white)] stroke-[2.2]" />
               <span>100% Voluntary Open-Source Pledge</span>
             </h3>
-            <ul className="space-y-1.5 text-xs font-semibold text-neutral-700">
+            <ul className="space-y-1.5 text-xs font-normal text-[var(--theme-gray-muted)]">
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-[var(--theme-dirty-white)] shrink-0 mt-0.5" />
                 <span>
-                  <strong>No Locked Tools:</strong> All tools, AI features, Studio templates, and
+                  <strong className="text-[var(--theme-dirty-white)]">No Locked Tools:</strong> All tools, AI features, Studio templates, and
                   Learning Hub posts are 100% free for everyone.
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-[var(--theme-dirty-white)] shrink-0 mt-0.5" />
                 <span>
-                  <strong>No Paid Subscriptions or AI Credits:</strong> Donations never gate
+                  <strong className="text-[var(--theme-dirty-white)]">No Paid Subscriptions or AI Credits:</strong> Donations never gate
                   functionality or sell usage quotas.
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-[var(--theme-dirty-white)] shrink-0 mt-0.5" />
                 <span>
-                  <strong>Strict Privacy:</strong> Private emails and gateway references are never
+                  <strong className="text-[var(--theme-dirty-white)]">Strict Privacy:</strong> Private emails and gateway references are never
                   exposed on the public leaderboard.
                 </span>
               </li>
@@ -460,26 +458,26 @@ export const CommunityPage: React.FC = () => {
         {/* Right Column: Supporter Leaderboard (7 cols — Open Layout) */}
         <div className="lg:col-span-7 space-y-5">
           <div className="space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-black pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--theme-gray-border)] pb-4">
               <div>
-                <h2 className="text-2xl font-black text-black flex items-center gap-2">
-                  <Trophy className="w-6 h-6 text-[#EAB308]" />
+                <h2 className="text-2xl font-extrabold text-slate-100 flex items-center gap-2">
+                  <Trophy className="w-6 h-6 text-amber-400" />
                   <span>Supporter Leaderboard</span>
                 </h2>
-                <p className="text-xs font-semibold text-neutral-600 mt-0.5">
+                <p className="text-xs font-normal text-slate-400 mt-0.5">
                   Verified contributors helping keep VexoraMods free and independent.
                 </p>
               </div>
 
               {/* Leaderboard Period Switcher */}
-              <div className="inline-flex items-center bg-[#FAF7F2] p-1 rounded-xl border-2 border-black self-start">
+              <div className="inline-flex items-center bg-slate-900 p-1 rounded-xl border border-[var(--theme-gray-border)] self-start">
                 <button
                   type="button"
                   onClick={() => setActiveTab('all-time')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-black transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                     activeTab === 'all-time'
-                      ? 'bg-[#FACC15] text-black border border-black'
-                      : 'text-neutral-700 hover:text-black'
+                      ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] shadow-xs'
+                      : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   All-Time
@@ -487,10 +485,10 @@ export const CommunityPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('monthly')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-black transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                     activeTab === 'monthly'
-                      ? 'bg-[#FACC15] text-black border border-black'
-                      : 'text-neutral-700 hover:text-black'
+                      ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] shadow-xs'
+                      : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   Monthly
@@ -498,10 +496,10 @@ export const CommunityPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('recent')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-black transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                     activeTab === 'recent'
-                      ? 'bg-[#FACC15] text-black border border-black'
-                      : 'text-neutral-700 hover:text-black'
+                      ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] shadow-xs'
+                      : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   Recent
@@ -510,31 +508,35 @@ export const CommunityPage: React.FC = () => {
             </div>
 
             {isLoadingBoard ? (
-              <div className="py-16 text-center font-mono text-xs font-bold text-neutral-600">
+              <div className="py-16 text-center font-mono text-xs font-medium text-slate-400">
                 Loading verified community supporter records...
               </div>
             ) : activeTab === 'recent' ? (
-              <div className="divide-y-2 divide-black/10">
+              <div className="divide-y divide-slate-800">
                 {leaderboard?.recent && leaderboard.recent.length > 0 ? (
                   leaderboard.recent.map((entry, idx) => (
                     <div key={idx} className="py-4 flex items-start justify-between gap-4">
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border-2 border-black flex items-center justify-center font-black text-sm shrink-0">
-                          {entry.isAnonymous ? '👤' : '❤️'}
+                        <div className="w-10 h-10 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center font-bold text-sm shrink-0">
+                          {entry.isAnonymous ? (
+                            <User className="w-5 h-5 text-[var(--theme-gray-muted)]" />
+                          ) : (
+                            <Heart className="w-5 h-5 text-red-500 fill-red-500" />
+                          )}
                         </div>
                         <div className="space-y-1">
-                          <div className="font-black text-sm text-black flex items-center gap-2">
+                          <div className="font-bold text-sm text-[var(--theme-dirty-white)] flex items-center gap-2">
                             <span>{entry.displayName}</span>
-                            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-black">
+                            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)]">
                               Verified
                             </span>
                           </div>
                           {entry.message && (
-                            <p className="text-xs font-medium text-neutral-700 italic bg-[#FAF7F2] p-2.5 rounded-xl border border-black/20">
+                            <p className="text-xs font-normal text-[var(--theme-dirty-white-muted)] italic bg-[var(--theme-surface-raised)] p-2.5 rounded-xl border border-[var(--theme-gray-border)]">
                               "{entry.message}"
                             </p>
                           )}
-                          <div className="text-[10px] font-mono text-neutral-500">
+                          <div className="text-[10px] font-mono text-[var(--theme-gray-muted)]">
                             {new Date(entry.verifiedAt).toLocaleDateString(undefined, {
                               month: 'short',
                               day: 'numeric',
@@ -543,13 +545,13 @@ export const CommunityPage: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="font-mono font-black text-base text-black shrink-0">
+                      <div className="font-mono font-bold text-base text-[var(--theme-dirty-white)] shrink-0">
                         ₱{Number(entry.amount).toLocaleString()}
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="py-12 text-center text-xs font-mono font-bold text-neutral-500">
+                  <div className="py-12 text-center text-xs font-mono font-medium text-[var(--theme-gray-muted)]">
                     No recent contributions recorded yet. Be the first supporter!
                   </div>
                 )}
@@ -558,14 +560,14 @@ export const CommunityPage: React.FC = () => {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs font-mono">
                   <thead>
-                    <tr className="border-b-2 border-black bg-[#FAF7F2] text-black font-black uppercase">
+                    <tr className="border-b border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] font-bold uppercase">
                       <th className="py-3 px-4 w-16">Rank</th>
                       <th className="py-3 px-4">Supporter</th>
                       <th className="py-3 px-4 text-center">Gifts</th>
                       <th className="py-3 px-4 text-right">Total Contributed</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-black/10">
+                  <tbody className="divide-y divide-[var(--theme-gray-border)]">
                     {(
                       (activeTab === 'all-time' ? leaderboard?.allTime : leaderboard?.monthly) || []
                     ).length > 0 ? (
@@ -573,37 +575,37 @@ export const CommunityPage: React.FC = () => {
                         (activeTab === 'all-time' ? leaderboard?.allTime : leaderboard?.monthly) ||
                         []
                       ).map((row: any, idx: number) => (
-                        <tr key={idx} className="hover:bg-[#FAF7F2] transition-colors">
+                        <tr key={idx} className="hover:bg-[var(--theme-surface-raised)]/40 transition-colors">
                           <td className="py-3.5 px-4 font-bold flex items-center">
                             {getRankBadge(idx)}
                           </td>
                           <td className="py-3.5 px-4">
-                            <div className="font-black text-sm text-black flex items-center gap-2">
+                            <div className="font-bold text-sm text-[var(--theme-dirty-white)] flex items-center gap-2">
                               <span>{row.displayName}</span>
                               {row.isAnonymous && (
-                                <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-neutral-100 text-neutral-600 border border-black/30">
+                                <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] border border-[var(--theme-gray-border)]">
                                   Anonymous
                                 </span>
                               )}
                             </div>
-                            <div className="text-[10px] text-neutral-500">
+                            <div className="text-[10px] text-[var(--theme-gray-muted)]">
                               Last gift:{' '}
                               {row.latestVerifiedAt
                                 ? new Date(row.latestVerifiedAt).toLocaleDateString()
                                 : 'Verified'}
                             </div>
                           </td>
-                          <td className="py-3.5 px-4 text-center font-bold text-neutral-700">
+                          <td className="py-3.5 px-4 text-center font-medium text-[var(--theme-gray-muted)]">
                             {row.donationCount}×
                           </td>
-                          <td className="py-3.5 px-4 text-right font-black text-sm text-black">
+                          <td className="py-3.5 px-4 text-right font-bold text-sm text-[var(--theme-dirty-white)]">
                             ₱{Number(row.totalAmount).toLocaleString()}
                           </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={4} className="py-12 text-center text-neutral-500 font-bold">
+                        <td colSpan={4} className="py-12 text-center text-[var(--theme-gray-muted)] font-medium">
                           No verified supporter records for this period yet.
                         </td>
                       </tr>

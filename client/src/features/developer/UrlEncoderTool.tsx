@@ -62,7 +62,7 @@ export const UrlEncoderTool: React.FC = () => {
             value={plain}
             onChange={(e) => handlePlainChange(e.target.value)}
             placeholder="Enter standard URL or query parameters..."
-            className="w-full p-3 font-mono text-xs bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-indigo-500 leading-relaxed break-all"
+            className="w-full p-3 font-mono text-xs bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-[var(--theme-dirty-white)] leading-relaxed break-all"
           />
         </Card>
 
@@ -79,7 +79,7 @@ export const UrlEncoderTool: React.FC = () => {
             value={encoded}
             onChange={(e) => handleEncodedChange(e.target.value)}
             placeholder="Enter percent-encoded URL (e.g. %20 for space)..."
-            className="w-full p-3 font-mono text-xs bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-indigo-500 leading-relaxed break-all"
+            className="w-full p-3 font-mono text-xs bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-[var(--theme-dirty-white)] leading-relaxed break-all"
           />
         </Card>
       </div>

@@ -138,11 +138,11 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* User Profile Card with Avatar Changer */}
-      <div className="bg-white rounded-3xl border-2 border-black p-6 sm:p-8 shadow-[5px_5px_0px_#000000] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="bg-[var(--theme-surface)] rounded-3xl border border-[var(--theme-gray-border)] p-6 sm:p-8 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-slate-100">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
           {/* Avatar Container */}
           <div className="relative group shrink-0">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border-2 border-black bg-[#FACC15] text-black shadow-[3px_3px_0px_#000000] overflow-hidden flex items-center justify-center font-black text-2xl sm:text-3xl uppercase">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] shadow-sm overflow-hidden flex items-center justify-center font-bold text-2xl sm:text-3xl uppercase">
               {user.avatarUrl ? (
                 <img
                   src={user.avatarUrl}
@@ -159,31 +159,31 @@ export const DashboardPage: React.FC = () => {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploadingAvatar}
-              className="absolute -bottom-1.5 -right-1.5 p-2 rounded-xl bg-white hover:bg-neutral-100 text-black border-2 border-black shadow-[2px_2px_0px_#000000] cursor-pointer hover:scale-105 active:scale-95 transition-all"
+              className="absolute -bottom-1.5 -right-1.5 p-2 rounded-xl bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] shadow-sm cursor-pointer hover:scale-105 active:scale-95 transition-all"
               title="Change Picture"
               aria-label="Upload new profile picture"
             >
               {isUploadingAvatar ? (
                 <RefreshCw className="w-4 h-4 animate-spin" />
               ) : (
-                <Camera className="w-4 h-4 stroke-[2.5]" />
+                <Camera className="w-4 h-4 stroke-[2]" />
               )}
             </button>
           </div>
 
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2.5">
-              <h1 className="text-2xl sm:text-3xl font-black text-black">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[var(--theme-dirty-white)]">
                 {user.name || user.username}
               </h1>
-              <span className="px-2.5 py-0.5 rounded-lg text-xs font-black uppercase font-mono bg-[#4ADE80] text-black border-2 border-black shadow-[1.5px_1.5px_0px_#000]">
+              <span className="px-2.5 py-0.5 rounded-lg text-xs font-semibold uppercase font-mono bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)]">
                 {user.role === 'admin' ? 'Admin' : 'Free Member'}
               </span>
             </div>
-            <p className="text-xs sm:text-sm font-mono font-bold text-neutral-600">
+            <p className="text-xs sm:text-sm font-mono font-medium text-[var(--theme-gray-muted)]">
               @{user.username} {user.email ? `• ${user.email}` : ''}
             </p>
-            <p className="text-xs text-neutral-500 font-medium">
+            <p className="text-xs text-[var(--theme-gray-muted)] font-normal">
               Personalize your account. Your profile picture appears across the site and header
               menu.
             </p>
@@ -205,7 +205,7 @@ export const DashboardPage: React.FC = () => {
             type="button"
             disabled={isUploadingAvatar}
             onClick={() => fileInputRef.current?.click()}
-            className="px-4 py-2 bg-[#FACC15] hover:bg-yellow-400 text-black font-black text-xs uppercase border-2 border-black shadow-[2px_2px_0px_#000] flex items-center gap-2 hover:-translate-y-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+            className="px-4 py-2 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-semibold text-xs uppercase rounded-xl shadow-sm flex items-center gap-2 transition-all cursor-pointer"
           >
             {isUploadingAvatar ? (
               <>
@@ -214,7 +214,7 @@ export const DashboardPage: React.FC = () => {
               </>
             ) : (
               <>
-                <Upload className="w-3.5 h-3.5 stroke-[2.5]" />
+                <Upload className="w-3.5 h-3.5 stroke-[2]" />
                 <span>{user.avatarUrl ? 'Change Picture' : 'Upload Picture'}</span>
               </>
             )}
@@ -225,7 +225,7 @@ export const DashboardPage: React.FC = () => {
               type="button"
               disabled={isRemovingAvatar || isUploadingAvatar}
               onClick={handleRemoveAvatar}
-              className="px-3.5 py-2 bg-white hover:bg-red-50 text-red-600 font-black text-xs uppercase border-2 border-black shadow-[2px_2px_0px_#000] flex items-center gap-1.5 hover:-translate-y-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+              className="px-3.5 py-2 bg-slate-800 hover:bg-rose-950/40 text-rose-400 font-semibold text-xs uppercase border border-slate-700 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer"
               title="Remove profile picture and revert to initials"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -235,45 +235,45 @@ export const DashboardPage: React.FC = () => {
 
           <Link
             to="/tools"
-            className="px-4 py-2 bg-white hover:bg-neutral-50 text-black font-black text-xs uppercase border-2 border-black shadow-[2px_2px_0px_#000] flex items-center gap-1.5 hover:-translate-y-0.5 active:translate-y-0.5 transition-all"
+            className="px-4 py-2 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] font-semibold text-xs uppercase border border-[var(--theme-gray-border)] rounded-xl flex items-center gap-1.5 transition-all"
           >
-            <Sparkles className="w-3.5 h-3.5" /> All Tools
+            <Sparkles className="w-3.5 h-3.5 text-[var(--theme-dirty-white)]" /> All Tools
           </Link>
           <Link
             to="/design-studio"
-            className="px-4 py-2 bg-white hover:bg-neutral-50 text-black font-black text-xs uppercase border-2 border-black shadow-[2px_2px_0px_#000] flex items-center gap-1.5 hover:-translate-y-0.5 active:translate-y-0.5 transition-all"
+            className="px-4 py-2 bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] font-semibold text-xs uppercase border border-[var(--theme-gray-border)] rounded-xl flex items-center gap-1.5 transition-all"
           >
-            <Layers className="w-3.5 h-3.5" /> Design Studio
+            <Layers className="w-3.5 h-3.5 text-[var(--theme-dirty-white)]" /> Design Studio
           </Link>
         </div>
       </div>
 
-      {/* Platform & Account Telemetry Strip (Single Divided Inline Summary Row) */}
-      <div className="border-y-2 border-black py-5 grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x-2 md:divide-black/15">
+      {/* Platform & Account Telemetry Strip */}
+      <div className="border-y border-[var(--theme-gray-border)] py-5 grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x md:divide-[var(--theme-gray-border)] text-[var(--theme-dirty-white)]">
         <div className="space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono font-bold uppercase text-neutral-500">
+            <span className="text-xs font-mono font-medium uppercase text-[var(--theme-gray-muted)]">
               Platform Edition
             </span>
-            <Sparkles className="w-4 h-4 text-[#FACC15]" />
+            <Sparkles className="w-4 h-4 text-[var(--theme-dirty-white)]" />
           </div>
-          <div className="text-2xl font-black text-black">100% Free Forever</div>
-          <p className="text-xs text-neutral-600 font-medium">
+          <div className="text-2xl font-bold text-[var(--theme-dirty-white)]">100% Free Forever</div>
+          <p className="text-xs text-[var(--theme-gray-muted)] font-normal">
             No subscriptions, no credits, and no daily limits. Ready out-of-the-box.
           </p>
         </div>
 
         <div className="pt-4 md:pt-0 md:pl-6 space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono font-bold uppercase text-neutral-500">
+            <span className="text-xs font-mono font-medium uppercase text-[var(--theme-gray-muted)]">
               VexoraMods Studio
             </span>
-            <Layers className="w-4 h-4 text-[#EA580C]" />
+            <Layers className="w-4 h-4 text-[var(--theme-dirty-white)]" />
           </div>
-          <div className="text-xl font-black text-black">Canva-like Design Editor</div>
+          <div className="text-xl font-bold text-[var(--theme-dirty-white)]">Design Editor</div>
           <Link
             to="/design-studio"
-            className="text-xs font-bold text-blue-700 hover:underline inline-flex items-center gap-1 mt-1"
+            className="text-xs font-semibold text-[var(--theme-dirty-white)] hover:text-[var(--theme-dirty-white-muted)] hover:underline inline-flex items-center gap-1 mt-1"
           >
             Open Design Studio <ArrowRight className="w-3 h-3" />
           </Link>
@@ -281,30 +281,30 @@ export const DashboardPage: React.FC = () => {
 
         <div className="pt-4 md:pt-0 md:pl-6 space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono font-bold uppercase text-neutral-500">
+            <span className="text-xs font-mono font-medium uppercase text-[var(--theme-gray-muted)]">
               Jobs Executed
             </span>
-            <Zap className="w-4 h-4 text-orange-500" />
+            <Zap className="w-4 h-4 text-[var(--theme-dirty-white)]" />
           </div>
-          <div className="text-2xl font-black text-black">{jobs.length} Runs</div>
-          <p className="text-xs text-neutral-600 font-medium">
+          <div className="text-2xl font-bold text-[var(--theme-dirty-white)]">{jobs.length} Runs</div>
+          <p className="text-xs text-[var(--theme-gray-muted)] font-normal">
             Saved history across AI tools and image processing pipelines.
           </p>
         </div>
       </div>
 
       {/* Processing History Table */}
-      <div className="p-6 bg-white border-2 border-black shadow-[4px_4px_0px_#000] space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b-2 border-black">
+      <div className="p-6 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-3xl shadow-sm space-y-4 text-[var(--theme-dirty-white)]">
+        <div className="flex items-center justify-between pb-3 border-b border-[var(--theme-gray-border)]">
           <div className="flex items-center gap-2">
-            <Clock className="w-5 h-5 text-black" />
-            <h2 className="text-xl font-black text-black">Processing History</h2>
+            <Clock className="w-5 h-5 text-[var(--theme-dirty-white)]" />
+            <h2 className="text-xl font-bold text-[var(--theme-dirty-white)]">Processing History</h2>
           </div>
           <button
             type="button"
             onClick={loadDashboardData}
             disabled={isLoadingData}
-            className="p-1.5 rounded bg-white hover:bg-neutral-100 border border-black shadow-[1.5px_1.5px_0px_#000] text-black"
+            className="p-1.5 rounded-lg bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] cursor-pointer"
             title="Refresh history"
           >
             <RefreshCw className={`w-4 h-4 ${isLoadingData ? 'animate-spin' : ''}`} />
@@ -312,17 +312,17 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {isLoadingData ? (
-          <div className="py-12 text-center text-xs text-neutral-500">
+          <div className="py-12 text-center text-xs text-[var(--theme-gray-muted)]">
             Loading recent processing runs...
           </div>
         ) : jobs.length === 0 ? (
-          <div className="py-12 text-center text-sm font-bold text-neutral-500">
+          <div className="py-12 text-center text-sm font-medium text-[var(--theme-gray-muted)]">
             No tools executed yet. Try out one of the{' '}
-            <Link to="/tools?type=ai" className="text-blue-700 underline">
+            <Link to="/tools?type=ai" className="text-[var(--theme-dirty-white)] underline">
               AI Tools
             </Link>{' '}
             or design on{' '}
-            <Link to="/studio" className="text-blue-700 underline">
+            <Link to="/studio" className="text-[var(--theme-dirty-white)] underline">
               Design Studio
             </Link>
             .
@@ -331,7 +331,7 @@ export const DashboardPage: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b-2 border-black font-black uppercase text-neutral-500 bg-[#FAF7F2]">
+                <tr className="border-b border-[var(--theme-gray-border)] font-semibold uppercase text-[var(--theme-gray-muted)] bg-[var(--theme-surface-raised)]">
                   <th className="py-2.5 px-3">Tool</th>
                   <th className="py-2.5 px-3">Status</th>
                   <th className="py-2.5 px-3">Input File</th>
@@ -339,21 +339,15 @@ export const DashboardPage: React.FC = () => {
                   <th className="py-2.5 px-3 text-right">Result</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-black/10 font-bold">
+              <tbody className="divide-y divide-[var(--theme-gray-border)] font-medium">
                 {jobs.map((job) => (
-                  <tr key={job._id} className="hover:bg-neutral-50 transition-colors">
-                    <td className="py-3 px-3 uppercase font-mono font-black text-neutral-800">
+                  <tr key={job._id} className="hover:bg-[var(--theme-surface-raised)] transition-colors">
+                    <td className="py-3 px-3 uppercase font-mono font-semibold text-[var(--theme-dirty-white)]">
                       {job.tool}
                     </td>
                     <td className="py-3 px-3">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-black uppercase font-mono border ${
-                          job.status === 'completed'
-                            ? 'bg-green-100 text-green-900 border-green-800'
-                            : job.status === 'failed'
-                              ? 'bg-red-100 text-red-900 border-red-800'
-                              : 'bg-yellow-100 text-yellow-900 border-yellow-800'
-                        }`}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold uppercase font-mono border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)]"
                       >
                         {job.status === 'completed' ? (
                           <CheckCircle className="w-3 h-3" />
@@ -365,10 +359,10 @@ export const DashboardPage: React.FC = () => {
                         {job.status}
                       </span>
                     </td>
-                    <td className="py-3 px-3 text-neutral-600 truncate max-w-xs">
+                    <td className="py-3 px-3 text-[var(--theme-gray-muted)] truncate max-w-xs">
                       {job.inputMetadata?.originalName || 'Direct upload'}
                     </td>
-                    <td className="py-3 px-3 text-neutral-500 font-mono">
+                    <td className="py-3 px-3 text-[var(--theme-gray-muted)] font-mono">
                       {new Date(job.createdAt).toLocaleDateString()}{' '}
                       {new Date(job.createdAt).toLocaleTimeString([], {
                         hour: '2-digit',
@@ -382,12 +376,12 @@ export const DashboardPage: React.FC = () => {
                           target="_blank"
                           rel="noreferrer"
                           download
-                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FACC15] hover:bg-yellow-400 text-black font-black text-[11px] border border-black shadow-[1.5px_1.5px_0px_#000]"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-semibold text-[11px] rounded-lg shadow-sm"
                         >
                           <Download className="w-3 h-3" /> Download
                         </a>
                       ) : (
-                        <span className="text-neutral-400 font-mono">-</span>
+                        <span className="text-[var(--theme-gray-muted)] font-mono">-</span>
                       )}
                     </td>
                   </tr>

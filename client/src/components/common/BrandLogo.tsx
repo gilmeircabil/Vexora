@@ -28,20 +28,21 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   };
 
   const badgeShadow = {
-    sm: 'shadow-[2px_2px_0px_#000000]',
-    md: 'shadow-[2.5px_2.5px_0px_#000000]',
-    lg: 'shadow-[3.5px_3.5px_0px_#000000]',
-    xl: 'shadow-[5px_5px_0px_#000000]',
+    sm: 'shadow-xs',
+    md: 'shadow-sm',
+    lg: 'shadow-md',
+    xl: 'shadow-lg',
   };
 
   return (
     <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
       {/* Visual Identity Icon: Geometric Diamond "V" Emblem */}
       <div
-        className={`${iconSizes[size]} ${badgeShadow[size]} rounded-xl border-2 border-black flex items-center justify-center font-black transition-all ${
+        data-testid="brand-emblem"
+        className={`${iconSizes[size]} ${badgeShadow[size]} rounded-xl border flex items-center justify-center font-black transition-all ${
           monochrome
-            ? 'bg-black text-white'
-            : 'bg-[#FACC15] text-black group-hover:-translate-y-0.5 group-hover:-translate-x-0.5 group-hover:shadow-[4px_4px_0px_#000000]'
+            ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)]'
+            : 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)]'
         }`}
       >
         <svg
@@ -62,12 +63,12 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       {/* Typography */}
       <div className="flex flex-col">
         <span
-          className={`${textSizes[size]} font-black tracking-tight leading-none text-black font-sans`}
+          className={`${textSizes[size]} font-black tracking-tight leading-none text-[var(--theme-dirty-white)] font-sans`}
         >
-          Vexora<span className="text-[#E11D48]">Mods</span>
+          Vexora<span className="text-[var(--theme-gray-muted)]">Mods</span>
         </span>
         {showTagline && (
-          <span className="text-[10px] font-bold text-neutral-600 tracking-wider uppercase mt-1">
+          <span className="text-[10px] font-medium text-[var(--theme-gray-muted)] tracking-wider uppercase mt-1">
             Everything You Need. One Platform. Free.
           </span>
         )}

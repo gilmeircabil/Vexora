@@ -290,11 +290,11 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
     return (
       <div className="space-y-6 max-w-3xl mx-auto">
         {/* Quiz Banner & Timer */}
-        <div className="flex items-center justify-between bg-white p-4 rounded-xl border-2 border-black shadow-[3px_3px_0px_#000000]">
+        <div className="flex items-center justify-between bg-[var(--theme-surface)] p-4 rounded-xl border border-[var(--theme-gray-border)] shadow-sm">
           <div>
             <button
               onClick={() => setIsTakingQuiz(false)}
-              className="flex items-center gap-1 text-xs font-bold text-neutral-500 hover:text-black mb-1 cursor-pointer"
+              className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-slate-100 mb-1 cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Exit Quiz
@@ -304,8 +304,8 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
 
           {!isSubmitted && (
             <div
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border-2 border-black font-black text-sm ${
-                timeLeftSeconds < 120 ? 'bg-red-100 text-red-600' : 'bg-[#FAF7F2]'
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] font-black text-sm ${
+                timeLeftSeconds < 120 ? 'bg-red-100 text-red-600' : 'bg-[var(--theme-surface-raised)]'
               }`}
             >
               <Clock className="w-4 h-4" />
@@ -318,18 +318,18 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
 
         {/* Results Screen if Submitted */}
         {isSubmitted && scoreResult && (
-          <div className="bg-white p-6 rounded-2xl border-4 border-black shadow-[6px_6px_0px_#000000] text-center space-y-4">
+          <div className="bg-[var(--theme-surface)] p-6 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm text-center space-y-4">
             <h3 className="text-2xl font-black">Quiz Completed!</h3>
-            <div className="inline-block px-6 py-3 rounded-2xl bg-[#FAF7F2] border-2 border-black shadow-[3px_3px_0px_#000000]">
-              <span className="text-4xl font-black text-black">
+            <div className="inline-block px-6 py-3 rounded-2xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] shadow-sm">
+              <span className="text-4xl font-black text-slate-100">
                 {scoreResult.score} / {scoreResult.total}
               </span>
-              <span className="block text-sm font-bold text-neutral-600 mt-1">
+              <span className="block text-sm font-bold text-slate-400 mt-1">
                 Score: {scoreResult.percentage}%
               </span>
             </div>
 
-            <p className="text-xs text-neutral-500 max-w-md mx-auto">
+            <p className="text-xs text-slate-400 max-w-md mx-auto">
               * Note: Automatically evaluated short answers are compared against target keywords.
               Subjective answers should not be taken as authoritative.
             </p>
@@ -337,14 +337,14 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
             <div className="flex items-center justify-center gap-3 pt-2">
               <button
                 onClick={() => setIsTakingQuiz(false)}
-                className="px-4 py-2 border-2 border-black rounded-xl text-xs font-bold hover:bg-neutral-100"
+                className="px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold hover:bg-neutral-100"
               >
                 Return to Quizzes
               </button>
               {scoreResult.percentage < 100 && (
                 <button
                   onClick={handleRetryIncorrect}
-                  className="px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 hover:-translate-y-0.5 transition-transform"
+                  className="px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm flex items-center gap-1.5 hover:-translate-y-0.5 transition-transform"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   Retry Incorrect Questions
@@ -365,20 +365,20 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
             return (
               <div
                 key={q.id || idx}
-                className={`p-5 bg-white rounded-2xl border-2 border-black transition-all ${
+                className={`p-5 bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] transition-all ${
                   isSubmitted
                     ? graded?.isCorrect
                       ? 'border-emerald-500 bg-emerald-50/20'
                       : 'border-red-500 bg-red-50/20'
-                    : 'shadow-[3px_3px_0px_#000000]'
+                    : 'shadow-sm'
                 }`}
               >
-                <div className="flex items-center justify-between text-xs font-bold text-neutral-500 mb-2">
+                <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-2">
                   <span>
                     Question {idx + 1} of {quizQuestions.length}
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="bg-[#FAF7F2] px-2 py-0.5 rounded border border-black/20 text-black">
+                    <span className="bg-[var(--theme-surface-raised)] px-2 py-0.5 rounded border border-black/20 text-slate-100">
                       {q.points || 1} {q.points === 1 ? 'pt' : 'pts'}
                     </span>
                     {isSubmitted && (
@@ -407,7 +407,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                         key={oIdx}
                         className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
                           userAns === opt
-                            ? 'border-black bg-[#FAF7F2] font-black'
+                            ? 'border-black bg-[var(--theme-surface-raised)] font-black'
                             : 'border-neutral-200 hover:border-black/50'
                         }`}
                       >
@@ -418,7 +418,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                           disabled={isSubmitted}
                           checked={userAns === opt}
                           onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                          className="w-4 h-4 text-black border-black"
+                          className="w-4 h-4 text-slate-100 border-black"
                         />
                         <span className="text-sm">{opt}</span>
                       </label>
@@ -437,8 +437,8 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                         onClick={() => handleAnswerChange(q.id, tf)}
                         className={`py-3 px-4 rounded-xl border-2 font-black text-sm transition-all cursor-pointer ${
                           userAns.toLowerCase() === tf.toLowerCase()
-                            ? 'border-black bg-[#FFD21A] shadow-[2px_2px_0px_#000000]'
-                            : 'border-neutral-300 bg-white hover:border-black'
+                            ? 'border-black bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-sm'
+                            : 'border-neutral-300 bg-[var(--theme-surface)] hover:border-black'
                         }`}
                       >
                         {tf}
@@ -456,20 +456,20 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                       placeholder="Type your answer here..."
                       value={userAns}
                       onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                      className="w-full px-3 py-2.5 border-2 border-black rounded-xl text-sm font-medium focus:outline-none"
+                      className="w-full px-3 py-2.5 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none"
                     />
                   </div>
                 )}
 
                 {/* Explanation on Submission */}
                 {isSubmitted && (
-                  <div className="mt-4 p-3 bg-white rounded-xl border border-black/20 text-xs space-y-1">
-                    <p className="font-bold text-neutral-700">
+                  <div className="mt-4 p-3 bg-[var(--theme-surface)] rounded-xl border border-black/20 text-xs space-y-1">
+                    <p className="font-bold text-slate-300">
                       Correct Answer:{' '}
                       <span className="font-black text-emerald-700">{q.correctAnswer}</span>
                     </p>
                     {q.explanation && (
-                      <p className="text-neutral-600">
+                      <p className="text-slate-400">
                         <span className="font-bold">Explanation:</span> {q.explanation}
                       </p>
                     )}
@@ -485,7 +485,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
           <div className="flex justify-end pt-2 pb-6">
             <button
               onClick={handleSubmitQuiz}
-              className="px-8 py-3 bg-[#FFD21A] text-black font-black text-sm rounded-xl border-2 border-black shadow-[3px_3px_0px_#000000] hover:-translate-y-0.5 transition-all"
+              className="px-8 py-3 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-sm rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
             >
               Submit & Grade Quiz
             </button>
@@ -498,25 +498,25 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div>
           <h2 className="text-xl font-black flex items-center gap-2">
-            <HelpCircle className="w-5 h-5 text-indigo-600" />
+            <HelpCircle className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             Quiz & Practice Test Maker
           </h2>
-          <p className="text-xs text-neutral-600 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Create custom timed assessments with instant automated scoring and answer explanations.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex bg-[#FAF7F2] p-1 rounded-xl border border-black text-xs font-bold">
+          <div className="flex bg-[var(--theme-surface-raised)] p-1 rounded-xl border border-black text-xs font-bold">
             <button
               onClick={() => setActiveTab('quizzes')}
               className={`px-3 py-1 rounded-lg transition-all ${
                 activeTab === 'quizzes'
                   ? 'bg-black text-white shadow-sm'
-                  : 'text-neutral-600 hover:text-black'
+                  : 'text-slate-400 hover:text-slate-100'
               }`}
             >
               Quizzes
@@ -526,7 +526,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
               className={`px-3 py-1 rounded-lg transition-all ${
                 activeTab === 'history'
                   ? 'bg-black text-white shadow-sm'
-                  : 'text-neutral-600 hover:text-black'
+                  : 'text-slate-400 hover:text-slate-100'
               }`}
             >
               Attempt History ({attempts.length})
@@ -536,7 +536,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
           {onOpenDocQuiz && (
             <button
               onClick={onOpenDocQuiz}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-[#38BDF8] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] text-[var(--theme-canvas)] font-bold text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-xs hover:-translate-y-0.5 transition-all cursor-pointer"
             >
               <FileQuestion className="w-4 h-4" />
               <span>Doc to Quiz</span>
@@ -545,7 +545,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
             New Quiz
@@ -566,17 +566,17 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
       {/* Main Content: Quizzes Tab */}
       {activeTab === 'quizzes' ? (
         isLoading ? (
-          <div className="text-center py-12 font-bold text-neutral-500">Loading quizzes...</div>
+          <div className="text-center py-12 font-bold text-slate-400">Loading quizzes...</div>
         ) : quizzes.length === 0 ? (
-          <div className="bg-white p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
+          <div className="bg-[var(--theme-surface)] p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
             <HelpCircle className="w-12 h-12 text-neutral-300 mx-auto mb-2" />
-            <h3 className="font-bold text-neutral-700">No quizzes available</h3>
-            <p className="text-xs text-neutral-500 mt-1">
+            <h3 className="font-bold text-slate-300">No quizzes available</h3>
+            <p className="text-xs text-slate-400 mt-1">
               Create your first practice test or quiz to start self-testing.
             </p>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="mt-4 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border border-black shadow-[2px_2px_0px_#000000]"
+              className="mt-4 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-black shadow-sm"
             >
               Create Quiz
             </button>
@@ -586,11 +586,11 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
             {quizzes.map((quiz) => (
               <div
                 key={quiz._id}
-                className="bg-white p-4 rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] flex flex-col justify-between"
+                className="bg-[var(--theme-surface)] p-4 rounded-xl border border-[var(--theme-gray-border)] shadow-sm flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#FAF7F2] border border-black/20 text-neutral-700">
+                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[var(--theme-surface-raised)] border border-black/20 text-slate-300">
                       {quiz.subject}
                     </span>
                     <button
@@ -601,11 +601,11 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
-                  <h3 className="font-black text-base text-black">{quiz.title}</h3>
+                  <h3 className="font-black text-base text-slate-100">{quiz.title}</h3>
                   {quiz.description && (
-                    <p className="text-xs text-neutral-600 mt-1 line-clamp-2">{quiz.description}</p>
+                    <p className="text-xs text-slate-400 mt-1 line-clamp-2">{quiz.description}</p>
                   )}
-                  <div className="flex items-center gap-3 text-xs font-bold text-neutral-500 mt-3">
+                  <div className="flex items-center gap-3 text-xs font-bold text-slate-400 mt-3">
                     <span className="flex items-center gap-1">
                       <HelpCircle className="w-3.5 h-3.5" />
                       {quiz.questions?.length || 0} questions
@@ -626,7 +626,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                   <button
                     onClick={() => handleStartQuiz(quiz)}
                     disabled={!quiz.questions || quiz.questions.length === 0}
-                    className="ml-auto px-4 py-1.5 bg-[#FFD21A] disabled:opacity-50 text-black font-black text-xs rounded-xl border border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-transform"
+                    className="ml-auto px-4 py-1.5 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] disabled:opacity-50 text-slate-100 font-black text-xs rounded-xl border border-black shadow-sm hover:-translate-y-0.5 transition-transform"
                   >
                     Start Test &rarr;
                   </button>
@@ -639,23 +639,23 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
         /* History Tab */
         <div className="space-y-3">
           {attempts.length === 0 ? (
-            <div className="bg-white p-12 text-center rounded-2xl border-2 border-neutral-200 text-neutral-500 text-sm font-bold">
+            <div className="bg-[var(--theme-surface)] p-12 text-center rounded-2xl border-2 border-neutral-200 text-slate-400 text-sm font-bold">
               No quiz attempts recorded yet.
             </div>
           ) : (
             attempts.map((att) => (
               <div
                 key={att._id}
-                className="bg-white p-4 rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                className="bg-[var(--theme-surface)] p-4 rounded-xl border border-[var(--theme-gray-border)] shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3"
               >
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#FAF7F2] border border-black/20 text-neutral-700">
+                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[var(--theme-surface-raised)] border border-black/20 text-slate-300">
                       {att.subject}
                     </span>
-                    <h4 className="font-black text-sm text-black">{att.quizTitle}</h4>
+                    <h4 className="font-black text-sm text-slate-100">{att.quizTitle}</h4>
                   </div>
-                  <span className="text-xs text-neutral-500 mt-1 block">
+                  <span className="text-xs text-slate-400 mt-1 block">
                     Completed on {new Date(att.createdAt).toLocaleDateString()} at{' '}
                     {new Date(att.createdAt).toLocaleTimeString([], {
                       hour: '2-digit',
@@ -666,7 +666,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
 
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <span className="text-lg font-black text-black">
+                    <span className="text-lg font-black text-slate-100">
                       {att.score} / {att.totalPoints}
                     </span>
                     <span className="block text-xs font-bold text-emerald-600">
@@ -683,12 +683,12 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
       {/* Create Quiz Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0px_#000000] w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 space-y-5">
+          <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] shadow-sm w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 space-y-5">
             <h3 className="text-lg font-black">Create Practice Test or Quiz</h3>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Subject *
                 </label>
                 <input
@@ -697,12 +697,12 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                   placeholder="e.g. Physics, Chemistry"
                   value={quizForm.subject}
                   onChange={(e) => setQuizForm({ ...quizForm, subject: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Quiz Title *
                 </label>
                 <input
@@ -711,14 +711,14 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                   placeholder="e.g. Midterm Practice Exam"
                   value={quizForm.title}
                   onChange={(e) => setQuizForm({ ...quizForm, title: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Duration (Minutes)
                 </label>
                 <input
@@ -729,12 +729,12 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                   onChange={(e) =>
                     setQuizForm({ ...quizForm, durationMinutes: Number(e.target.value) || 15 })
                   }
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-sm font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-sm font-medium focus:outline-none"
                 />
               </div>
 
               <div className="flex items-center pt-5">
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-neutral-700">
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-300">
                   <input
                     type="checkbox"
                     checked={quizForm.isPublic}
@@ -747,7 +747,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
             </div>
 
             {/* Questions Form Section */}
-            <div className="border-t-2 border-black/10 pt-4 space-y-4">
+            <div className="border-t border-[var(--theme-gray-border)] pt-4 space-y-4">
               <h4 className="font-black text-sm text-neutral-800 flex items-center justify-between">
                 <span>Quiz Questions ({quizForm.questions.length})</span>
               </h4>
@@ -757,7 +757,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                   {quizForm.questions.map((q, i) => (
                     <div
                       key={i}
-                      className="p-2.5 bg-[#FAF7F2] rounded-lg border border-black/20 flex items-center justify-between text-xs font-medium"
+                      className="p-2.5 bg-[var(--theme-surface-raised)] rounded-lg border border-black/20 flex items-center justify-between text-xs font-medium"
                     >
                       <span className="truncate max-w-sm">
                         <strong>Q{i + 1}:</strong> {q.prompt}
@@ -783,7 +783,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
               <div className="p-4 bg-neutral-50 rounded-xl border-2 border-dashed border-neutral-300 space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                    <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                       Question Type
                     </label>
                     <select
@@ -791,7 +791,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                       onChange={(e: any) =>
                         setNewQuestion({ ...newQuestion, type: e.target.value })
                       }
-                      className="w-full px-3 py-1.5 border border-black rounded-lg text-xs font-bold bg-white"
+                      className="w-full px-3 py-1.5 border border-black rounded-lg text-xs font-bold bg-[var(--theme-surface)]"
                     >
                       <option value="multiple_choice">Multiple Choice</option>
                       <option value="true_false">True / False</option>
@@ -800,7 +800,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                    <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                       Points
                     </label>
                     <input
@@ -810,13 +810,13 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                       onChange={(e) =>
                         setNewQuestion({ ...newQuestion, points: Number(e.target.value) || 1 })
                       }
-                      className="w-full px-3 py-1.5 border border-black rounded-lg text-xs font-medium bg-white"
+                      className="w-full px-3 py-1.5 border border-black rounded-lg text-xs font-medium bg-[var(--theme-surface)]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Question Prompt *
                   </label>
                   <input
@@ -824,7 +824,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                     placeholder="Enter question text"
                     value={newQuestion.prompt}
                     onChange={(e) => setNewQuestion({ ...newQuestion, prompt: e.target.value })}
-                    className="w-full px-3 py-2 border border-black rounded-lg text-xs font-medium bg-white"
+                    className="w-full px-3 py-2 border border-black rounded-lg text-xs font-medium bg-[var(--theme-surface)]"
                   />
                 </div>
 
@@ -841,14 +841,14 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                           updated[i] = e.target.value;
                           setNewQuestion({ ...newQuestion, options: updated });
                         }}
-                        className="px-3 py-1.5 border border-black/40 rounded-lg text-xs bg-white"
+                        className="px-3 py-1.5 border border-black/40 rounded-lg text-xs bg-[var(--theme-surface)]"
                       />
                     ))}
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Correct Answer *
                   </label>
                   <input
@@ -858,12 +858,12 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                     onChange={(e) =>
                       setNewQuestion({ ...newQuestion, correctAnswer: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-black rounded-lg text-xs font-medium bg-white"
+                    className="w-full px-3 py-2 border border-black rounded-lg text-xs font-medium bg-[var(--theme-surface)]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Explanation (Optional)
                   </label>
                   <input
@@ -873,14 +873,14 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
                     onChange={(e) =>
                       setNewQuestion({ ...newQuestion, explanation: e.target.value })
                     }
-                    className="w-full px-3 py-1.5 border border-black rounded-lg text-xs font-medium bg-white"
+                    className="w-full px-3 py-1.5 border border-black rounded-lg text-xs font-medium bg-[var(--theme-surface)]"
                   />
                 </div>
 
                 <button
                   type="button"
                   onClick={handleAddQuestionToForm}
-                  className="px-4 py-2 bg-white text-black font-black text-xs rounded-lg border-2 border-black hover:bg-neutral-100"
+                  className="px-4 py-2 bg-[var(--theme-surface)] text-slate-100 font-black text-xs rounded-lg border border-[var(--theme-gray-border)] hover:bg-neutral-100"
                 >
                   + Add Question to Quiz
                 </button>
@@ -891,14 +891,14 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 border-2 border-black rounded-xl text-xs font-bold hover:bg-neutral-100"
+                className="px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold hover:bg-neutral-100"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleSaveQuiz}
-                className="px-6 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000]"
+                className="px-6 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm"
               >
                 Save Quiz
               </button>

@@ -148,13 +148,13 @@ export const WorksheetGenerator: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div>
           <h2 className="text-xl font-black flex items-center gap-2">
-            <FileText className="w-5 h-5 text-indigo-600" />
+            <FileText className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             Classroom Worksheet Generator
           </h2>
-          <p className="text-xs text-neutral-600 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Design formatted printable student worksheets and generate separate instructor answer
             keys.
           </p>
@@ -165,10 +165,10 @@ export const WorksheetGenerator: React.FC = () => {
             <>
               <button
                 onClick={() => setShowAnswerKey(!showAnswerKey)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 border-black text-xs font-black transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border border-[var(--theme-gray-border)] text-xs font-black transition-all cursor-pointer ${
                   showAnswerKey
-                    ? 'bg-[#FFD21A] shadow-[2px_2px_0px_#000000]'
-                    : 'bg-white hover:bg-neutral-100'
+                    ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-sm'
+                    : 'bg-[var(--theme-surface)] hover:bg-neutral-100'
                 }`}
               >
                 {showAnswerKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -177,7 +177,7 @@ export const WorksheetGenerator: React.FC = () => {
 
               <button
                 onClick={() => window.print()}
-                className="flex items-center gap-1.5 px-3.5 py-2 bg-white text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+                className="flex items-center gap-1.5 px-3.5 py-2 bg-[var(--theme-surface)] text-slate-100 font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
               >
                 <Printer className="w-4 h-4" />
                 Print Worksheet
@@ -187,7 +187,7 @@ export const WorksheetGenerator: React.FC = () => {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
             New Worksheet
@@ -199,13 +199,13 @@ export const WorksheetGenerator: React.FC = () => {
         {/* Left: Worksheets Directory */}
         <div className="md:col-span-1 space-y-3 max-h-[650px] overflow-y-auto pr-1">
           {isLoading ? (
-            <div className="text-center py-8 text-xs font-bold text-neutral-500">
+            <div className="text-center py-8 text-xs font-bold text-slate-400">
               Loading worksheets...
             </div>
           ) : worksheets.length === 0 ? (
-            <div className="p-8 text-center bg-white rounded-xl border-2 border-dashed border-neutral-300">
+            <div className="p-8 text-center bg-[var(--theme-surface)] rounded-xl border-2 border-dashed border-neutral-300">
               <BookOpen className="w-8 h-8 text-neutral-300 mx-auto mb-2" />
-              <p className="text-xs font-bold text-neutral-600">No worksheets created yet</p>
+              <p className="text-xs font-bold text-slate-400">No worksheets created yet</p>
             </div>
           ) : (
             worksheets.map((ws) => (
@@ -214,12 +214,12 @@ export const WorksheetGenerator: React.FC = () => {
                 onClick={() => setActiveWorksheet(ws)}
                 className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   activeWorksheet?._id === ws._id
-                    ? 'border-black bg-[#FAF7F2] shadow-[3px_3px_0px_#000000]'
-                    : 'border-neutral-200 bg-white hover:border-black'
+                    ? 'border-black bg-[var(--theme-surface-raised)] shadow-sm'
+                    : 'border-neutral-200 bg-[var(--theme-surface)] hover:border-black'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-white border border-black/20 text-neutral-700">
+                  <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-[var(--theme-surface)] border border-black/20 text-slate-300">
                     {ws.subject}
                   </span>
                   <button
@@ -230,7 +230,7 @@ export const WorksheetGenerator: React.FC = () => {
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
-                <h4 className="font-black text-sm text-black truncate">{ws.title}</h4>
+                <h4 className="font-black text-sm text-slate-100 truncate">{ws.title}</h4>
                 <span className="text-[11px] font-bold text-neutral-400 mt-1 block">
                   {ws.questions?.length || 0} questions • {ws.gradeLevel || 'All Grades'}
                 </span>
@@ -242,21 +242,21 @@ export const WorksheetGenerator: React.FC = () => {
         {/* Right: Printable Worksheet View */}
         <div className="md:col-span-2">
           {activeWorksheet ? (
-            <div className="bg-white p-8 sm:p-10 rounded-2xl border-2 border-black shadow-[6px_6px_0px_#000000] space-y-6 print:border-none print:shadow-none print:p-0">
+            <div className="bg-[var(--theme-surface)] p-8 sm:p-10 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-6 print:border-none print:shadow-none print:p-0">
               {/* Header Box (Name, Date, Score) */}
-              <div className="border-b-2 border-black pb-4 space-y-4">
+              <div className="border-b border-[var(--theme-gray-border)] pb-4 space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-2xl font-black text-black tracking-tight uppercase">
+                    <h3 className="text-2xl font-black text-slate-100 tracking-tight uppercase">
                       {activeWorksheet.title}
                     </h3>
-                    <p className="text-xs font-bold text-neutral-500 uppercase mt-0.5">
+                    <p className="text-xs font-bold text-slate-400 uppercase mt-0.5">
                       {activeWorksheet.subject}{' '}
                       {activeWorksheet.gradeLevel && `• ${activeWorksheet.gradeLevel}`}
                     </p>
                   </div>
                   {showAnswerKey && (
-                    <span className="bg-amber-100 border-2 border-black text-black font-black text-xs px-3 py-1 rounded-xl">
+                    <span className="bg-amber-100 border border-[var(--theme-gray-border)] text-slate-100 font-black text-xs px-3 py-1 rounded-xl">
                       TEACHER ANSWER KEY
                     </span>
                   )}
@@ -278,7 +278,7 @@ export const WorksheetGenerator: React.FC = () => {
                 </div>
 
                 {activeWorksheet.instructions && (
-                  <p className="text-xs text-neutral-600 italic bg-[#FAF7F2] p-2.5 rounded-lg border border-black/10">
+                  <p className="text-xs text-slate-400 italic bg-[var(--theme-surface-raised)] p-2.5 rounded-lg border border-black/10">
                     <strong>Instructions:</strong> {activeWorksheet.instructions}
                   </p>
                 )}
@@ -394,9 +394,9 @@ export const WorksheetGenerator: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-white p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
+            <div className="bg-[var(--theme-surface)] p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
               <FileText className="w-12 h-12 text-neutral-300 mx-auto mb-2" />
-              <p className="text-sm font-bold text-neutral-600">
+              <p className="text-sm font-bold text-slate-400">
                 Select a worksheet to preview or print
               </p>
             </div>
@@ -407,12 +407,12 @@ export const WorksheetGenerator: React.FC = () => {
       {/* New Worksheet Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0px_#000000] w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 space-y-4">
+          <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] shadow-sm w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 space-y-4">
             <h3 className="text-lg font-black">Create Classroom Worksheet</h3>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Subject *
                 </label>
                 <input
@@ -421,12 +421,12 @@ export const WorksheetGenerator: React.FC = () => {
                   placeholder="e.g. World Geography"
                   value={form.subject}
                   onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Worksheet Title *
                 </label>
                 <input
@@ -435,25 +435,25 @@ export const WorksheetGenerator: React.FC = () => {
                   placeholder="e.g. European Capitals & Rivers"
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+              <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                 Student Instructions
               </label>
               <textarea
                 rows={2}
                 value={form.instructions}
                 onChange={(e) => setForm({ ...form, instructions: e.target.value })}
-                className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
               />
             </div>
 
             {/* Questions Form Section */}
-            <div className="border-t-2 border-black/10 pt-4 space-y-4">
+            <div className="border-t border-[var(--theme-gray-border)] pt-4 space-y-4">
               <h4 className="font-black text-sm text-neutral-800">
                 Worksheet Questions ({form.questions.length})
               </h4>
@@ -463,7 +463,7 @@ export const WorksheetGenerator: React.FC = () => {
                   {form.questions.map((q, i) => (
                     <div
                       key={i}
-                      className="p-2 bg-[#FAF7F2] rounded-lg border border-black/20 flex items-center justify-between text-xs"
+                      className="p-2 bg-[var(--theme-surface-raised)] rounded-lg border border-black/20 flex items-center justify-between text-xs"
                     >
                       <span className="truncate max-w-md">
                         <strong>
@@ -492,7 +492,7 @@ export const WorksheetGenerator: React.FC = () => {
               <div className="p-4 bg-neutral-50 rounded-xl border-2 border-dashed border-neutral-300 space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                    <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                       Type
                     </label>
                     <select
@@ -500,7 +500,7 @@ export const WorksheetGenerator: React.FC = () => {
                       onChange={(e: any) =>
                         setNewQuestion({ ...newQuestion, type: e.target.value })
                       }
-                      className="w-full px-3 py-1.5 border border-black rounded-lg text-xs font-bold bg-white"
+                      className="w-full px-3 py-1.5 border border-black rounded-lg text-xs font-bold bg-[var(--theme-surface)]"
                     >
                       <option value="multiple_choice">Multiple Choice</option>
                       <option value="true_false">True / False</option>
@@ -511,7 +511,7 @@ export const WorksheetGenerator: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                    <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                       Points
                     </label>
                     <input
@@ -521,13 +521,13 @@ export const WorksheetGenerator: React.FC = () => {
                       onChange={(e) =>
                         setNewQuestion({ ...newQuestion, points: Number(e.target.value) || 1 })
                       }
-                      className="w-full px-3 py-1.5 border border-black rounded-lg text-xs font-medium bg-white"
+                      className="w-full px-3 py-1.5 border border-black rounded-lg text-xs font-medium bg-[var(--theme-surface)]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Question Prompt *
                   </label>
                   <input
@@ -535,7 +535,7 @@ export const WorksheetGenerator: React.FC = () => {
                     placeholder="Enter question prompt"
                     value={newQuestion.question}
                     onChange={(e) => setNewQuestion({ ...newQuestion, question: e.target.value })}
-                    className="w-full px-3 py-2 border border-black rounded-lg text-xs font-medium bg-white"
+                    className="w-full px-3 py-2 border border-black rounded-lg text-xs font-medium bg-[var(--theme-surface)]"
                   />
                 </div>
 
@@ -552,14 +552,14 @@ export const WorksheetGenerator: React.FC = () => {
                           updated[i] = e.target.value;
                           setNewQuestion({ ...newQuestion, options: updated });
                         }}
-                        className="px-2.5 py-1.5 border border-black/40 rounded-lg text-xs bg-white"
+                        className="px-2.5 py-1.5 border border-black/40 rounded-lg text-xs bg-[var(--theme-surface)]"
                       />
                     ))}
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Correct Answer / Key
                   </label>
                   <input
@@ -567,14 +567,14 @@ export const WorksheetGenerator: React.FC = () => {
                     placeholder="Answer for teacher key"
                     value={newQuestion.answer}
                     onChange={(e) => setNewQuestion({ ...newQuestion, answer: e.target.value })}
-                    className="w-full px-3 py-2 border border-black rounded-lg text-xs font-medium bg-white"
+                    className="w-full px-3 py-2 border border-black rounded-lg text-xs font-medium bg-[var(--theme-surface)]"
                   />
                 </div>
 
                 <button
                   type="button"
                   onClick={handleAddQuestionToForm}
-                  className="px-4 py-1.5 bg-white text-black font-black text-xs rounded-lg border-2 border-black hover:bg-neutral-100"
+                  className="px-4 py-1.5 bg-[var(--theme-surface)] text-slate-100 font-black text-xs rounded-lg border border-[var(--theme-gray-border)] hover:bg-neutral-100"
                 >
                   + Add Question to Worksheet
                 </button>
@@ -585,14 +585,14 @@ export const WorksheetGenerator: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 border-2 border-black rounded-xl text-xs font-bold hover:bg-neutral-100"
+                className="px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold hover:bg-neutral-100"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleSaveWorksheet}
-                className="px-6 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000]"
+                className="px-6 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm"
               >
                 Save Worksheet
               </button>

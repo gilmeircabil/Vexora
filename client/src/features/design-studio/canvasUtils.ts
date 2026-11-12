@@ -105,7 +105,7 @@ export function addCircle(canvas: Canvas, options: Partial<any> = {}) {
     left: center.x - 100,
     top: center.y - 100,
     radius: 100,
-    fill: '#38BDF8',
+    fill: '#d4d4ce',
     stroke: '#000000',
     strokeWidth: 3,
     ...options,

@@ -104,8 +104,8 @@ export const StudySpacePage: React.FC = () => {
 
     showToast(
       newWorkspace === 'teacher'
-        ? '👨‍🏫 Switched to Teacher Workspace'
-        : '🎓 Switched to Student Workspace',
+        ? 'Switched to Teacher Workspace'
+        : 'Switched to Student Workspace',
       'info',
     );
 
@@ -147,7 +147,7 @@ export const StudySpacePage: React.FC = () => {
       }
       if (!hasNotifiedRef.current) {
         hasNotifiedRef.current = true;
-        showToast('👨‍🏫 Teacher Workspace activated', 'success');
+        showToast('Teacher Workspace activated', 'success');
       }
     }
   }, [user, searchParams, setSearchParams, showToast]);
@@ -226,7 +226,7 @@ export const StudySpacePage: React.FC = () => {
 
         {/* Dedicated Sidebar for Active Workspace */}
         <aside
-          className={`fixed md:static top-0 bottom-0 left-0 z-50 md:z-10 bg-white/80 backdrop-blur-md border-r-2 border-black flex flex-col shrink-0 transition-all duration-200 ${
+          className={`fixed md:static top-0 bottom-0 left-0 z-50 md:z-10 bg-[var(--theme-surface)] border-r border-[var(--theme-gray-border)] flex flex-col shrink-0 transition-all duration-200 ${
             isMobileNavOpen ? 'translate-x-0 w-72' : '-translate-x-full md:translate-x-0'
           } ${
             isSidebarCollapsed
@@ -235,16 +235,16 @@ export const StudySpacePage: React.FC = () => {
           }`}
         >
           {/* Mobile Drawer Header */}
-          <div className="p-3 border-b-2 border-black flex items-center justify-between md:hidden bg-[#FAF7F2]">
+          <div className="p-3 border-b border-[var(--theme-gray-border)] flex items-center justify-between md:hidden bg-[var(--theme-surface-raised)]">
             <div className="flex items-center gap-2">
-              <span className="font-black text-xs uppercase tracking-wider text-black">
+              <span className="font-bold text-xs uppercase tracking-wider text-[var(--theme-dirty-white)]">
                 {workspace === 'student' ? 'Student Menu' : 'Teacher Menu'}
               </span>
             </div>
             <button
               type="button"
               onClick={() => setIsMobileNavOpen(false)}
-              className="p-1.5 rounded-lg border-2 border-black bg-white hover:bg-neutral-100 text-black shadow-[1px_1px_0px_#000]"
+              className="p-1.5 rounded-lg border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] shadow-xs cursor-pointer"
               aria-label="Close navigation menu"
             >
               <X className="w-4 h-4 stroke-[2.5]" />
@@ -252,32 +252,32 @@ export const StudySpacePage: React.FC = () => {
           </div>
 
           {/* Workspace Identity Tag in Sidebar */}
-          <div className="p-3 border-b border-black/10 bg-[#FAF7F2]/60 flex items-center justify-between">
+          <div className="p-3 border-b border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] flex items-center justify-between">
             <div className="flex items-center gap-2">
               {workspace === 'student' ? (
-                <BookOpen className="w-4 h-4 text-black stroke-[2.5]" />
+                <BookOpen className="w-4 h-4 text-[var(--theme-dirty-white)] stroke-[2.5]" />
               ) : (
-                <School className="w-4 h-4 text-black stroke-[2.5]" />
+                <School className="w-4 h-4 text-[var(--theme-dirty-white)] stroke-[2.5]" />
               )}
-              <span className="text-xs font-black uppercase tracking-wider text-black">
+              <span className="text-xs font-bold uppercase tracking-wider text-[var(--theme-dirty-white)]">
                 {workspace === 'student' ? 'Student Workspace' : 'Teacher Workspace'}
               </span>
             </div>
-            <span className="text-[10px] font-mono font-bold bg-[#FFD21A] text-black px-1.5 py-0.5 rounded border border-black/30">
+            <span className="text-[10px] font-mono font-bold bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] px-2 py-0.5 rounded-md border border-[var(--theme-gray-border)]">
               {currentNavItems.length} Tools
             </span>
           </div>
 
           {/* Active Workspace Notification Pill */}
           {workspace === 'teacher' && isTeacherAuthorized && (
-            <div className="mx-2.5 mt-2 px-2.5 py-1.5 rounded-lg bg-emerald-50 border border-emerald-400 text-[11px] font-bold text-emerald-950 flex items-center justify-between shadow-[1px_1px_0px_#000]">
+            <div className="mx-2.5 mt-2 px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[11px] font-bold text-[var(--theme-dirty-white)] flex items-center justify-between shadow-xs">
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5] shrink-0" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 stroke-[2.5] shrink-0" />
                 <span>
                   {user?.name ? `Teacher: ${user.name.split(' ')[0]}` : 'Teacher Mode Active'}
                 </span>
               </div>
-              <span className="text-[9px] font-mono font-bold uppercase bg-emerald-200 px-1 py-0.5 rounded text-emerald-800">
+              <span className="text-[9px] font-mono font-bold uppercase bg-[var(--theme-surface)] px-1.5 py-0.5 rounded text-[var(--theme-dirty-white-muted)] border border-[var(--theme-gray-border)]">
                 Authorized
               </span>
             </div>
@@ -294,20 +294,20 @@ export const StudySpacePage: React.FC = () => {
                   onClick={() => handleSelectTool(item.id)}
                   className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     isActive
-                      ? 'bg-[#FFD21A] text-black font-black border-2 border-black shadow-[2px_2px_0px_#000]'
-                      : 'text-neutral-700 hover:bg-neutral-100 border border-transparent'
+                      ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                      : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <Icon
                       className={`w-4 h-4 shrink-0 ${
-                        isActive ? 'text-black stroke-[2.5]' : 'text-neutral-600'
+                        isActive ? 'text-[var(--theme-canvas)] stroke-[2.5]' : 'text-[var(--theme-gray-muted)]'
                       }`}
                     />
                     <span className="truncate">{item.label}</span>
                   </div>
                   {item.badge && (
-                    <span className="text-[9px] font-black bg-[#4ADE80] text-black px-1.5 py-0.2 rounded border border-black/40 shrink-0">
+                    <span className="text-[9px] font-bold bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] px-1.5 py-0.5 rounded border border-[var(--theme-gray-border)] shrink-0">
                       {item.badge}
                     </span>
                   )}
@@ -318,12 +318,12 @@ export const StudySpacePage: React.FC = () => {
 
           {/* Teacher Mode Authorization Status Bar (if in Teacher Workspace) */}
           {workspace === 'teacher' && !isTeacherAuthorized && (
-            <div className="p-3 border-t-2 border-black bg-amber-50 space-y-2">
-              <div className="flex items-center gap-1.5 text-amber-900">
-                <Lock className="w-3.5 h-3.5 shrink-0" />
-                <span className="text-[11px] font-black">Teacher Mode Required</span>
+            <div className="p-3 border-t border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] space-y-2">
+              <div className="flex items-center gap-1.5 text-[var(--theme-dirty-white)]">
+                <Lock className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+                <span className="text-[11px] font-bold">Teacher Mode Required</span>
               </div>
-              <p className="text-[10px] text-amber-800 leading-tight">
+              <p className="text-[10px] text-[var(--theme-gray-muted)] leading-tight">
                 Log in with a teacher account or enable teacher mode to create curriculum documents
                 and manage student records.
               </p>
@@ -331,7 +331,7 @@ export const StudySpacePage: React.FC = () => {
                 {!user && (
                   <Link
                     to="/login?redirect=/study?workspace=teacher"
-                    className="w-full py-1.5 px-2 bg-[#FFD21A] text-black font-black text-xs rounded-lg border-2 border-black shadow-[1.5px_1.5px_0px_#000] text-center hover:bg-yellow-400 active:translate-y-0.5 transition-all flex items-center justify-center gap-1.5"
+                    className="w-full py-1.5 px-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] font-bold text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-xs text-center transition-all flex items-center justify-center gap-1.5"
                   >
                     <School className="w-3.5 h-3.5" />
                     <span>Log In as Teacher</span>
@@ -341,7 +341,7 @@ export const StudySpacePage: React.FC = () => {
                   type="button"
                   onClick={async () => {
                     setEducationRole('teacher');
-                    showToast('👨‍🏫 Teacher Mode activated successfully!', 'success');
+                    showToast('Teacher Mode activated successfully!', 'success');
                     if (user) {
                       try {
                         await educationApi.updateEducationRole('teacher');
@@ -353,7 +353,7 @@ export const StudySpacePage: React.FC = () => {
                       }
                     }
                   }}
-                  className="w-full py-1.5 px-2 bg-white text-black font-black text-xs rounded-lg border-2 border-black shadow-[1.5px_1.5px_0px_#000] cursor-pointer hover:bg-neutral-100 active:translate-y-0.5 transition-all"
+                  className="w-full py-1.5 px-2 bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)] font-bold text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-xs cursor-pointer transition-all"
                 >
                   Enable Teacher Mode
                 </button>

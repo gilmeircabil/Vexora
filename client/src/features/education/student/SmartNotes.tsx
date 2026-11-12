@@ -161,20 +161,20 @@ export const SmartNotes: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div>
           <h2 className="text-xl font-black flex items-center gap-2">
-            <FileText className="w-5 h-5 text-indigo-600" />
+            <FileText className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             Smart Study Notes
           </h2>
-          <p className="text-xs text-neutral-600 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Capture course lectures, organize revisions by topic, and export clean Markdown notes.
           </p>
         </div>
 
         <button
           onClick={handleOpenNew}
-          className="flex items-center gap-1.5 px-4 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000] hover:-translate-y-0.5 transition-all self-start sm:self-auto"
+          className="flex items-center gap-1.5 px-4 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:-translate-y-0.5 transition-all self-start sm:self-auto"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           New Note
@@ -190,14 +190,14 @@ export const SmartNotes: React.FC = () => {
             placeholder="Search notes by title or content..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 border-2 border-black rounded-xl text-xs font-medium bg-white focus:outline-none"
+            className="w-full pl-9 pr-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium bg-[var(--theme-surface)] focus:outline-none"
           />
         </div>
 
         <select
           value={subjectFilter}
           onChange={(e) => setSubjectFilter(e.target.value)}
-          className="border-2 border-black rounded-xl px-3 py-2 text-xs font-bold bg-white focus:outline-none"
+          className="border border-[var(--theme-gray-border)] rounded-xl px-3 py-2 text-xs font-bold bg-[var(--theme-surface)] focus:outline-none"
         >
           <option value="all">All Subjects</option>
           {allSubjects.map((sub) => (
@@ -213,13 +213,13 @@ export const SmartNotes: React.FC = () => {
         {/* Note Cards List */}
         <div className="md:col-span-1 space-y-3 max-h-[650px] overflow-y-auto pr-1">
           {isLoading ? (
-            <div className="text-center py-8 text-xs font-bold text-neutral-500">
+            <div className="text-center py-8 text-xs font-bold text-slate-400">
               Loading notes...
             </div>
           ) : notes.length === 0 ? (
-            <div className="p-8 text-center bg-white rounded-xl border-2 border-dashed border-neutral-300">
+            <div className="p-8 text-center bg-[var(--theme-surface)] rounded-xl border-2 border-dashed border-neutral-300">
               <FileText className="w-8 h-8 text-neutral-300 mx-auto mb-2" />
-              <p className="text-xs font-bold text-neutral-600">No notes yet</p>
+              <p className="text-xs font-bold text-slate-400">No notes yet</p>
             </div>
           ) : (
             notes.map((note) => {
@@ -233,12 +233,12 @@ export const SmartNotes: React.FC = () => {
                   }}
                   className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                     isSelected
-                      ? 'border-black bg-[#FAF7F2] shadow-[3px_3px_0px_#000000]'
-                      : 'border-neutral-200 bg-white hover:border-black'
+                      ? 'border-black bg-[var(--theme-surface-raised)] shadow-sm'
+                      : 'border-neutral-200 bg-[var(--theme-surface)] hover:border-black'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-white border border-black/20 text-neutral-700">
+                    <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-[var(--theme-surface)] border border-black/20 text-slate-300">
                       {note.subject}
                     </span>
                     <button
@@ -246,7 +246,7 @@ export const SmartNotes: React.FC = () => {
                       className={`p-1 rounded transition-colors ${
                         note.isPinned
                           ? 'text-amber-500 fill-amber-400'
-                          : 'text-neutral-300 hover:text-black'
+                          : 'text-neutral-300 hover:text-slate-100'
                       }`}
                       title={note.isPinned ? 'Unpin Note' : 'Pin Note'}
                     >
@@ -254,8 +254,8 @@ export const SmartNotes: React.FC = () => {
                     </button>
                   </div>
 
-                  <h4 className="font-black text-sm text-black truncate">{note.title}</h4>
-                  <p className="text-xs text-neutral-500 mt-1 line-clamp-2">{note.content}</p>
+                  <h4 className="font-black text-sm text-slate-100 truncate">{note.title}</h4>
+                  <p className="text-xs text-slate-400 mt-1 line-clamp-2">{note.content}</p>
 
                   <div className="flex items-center justify-between mt-3 pt-2 border-t border-black/5 text-[10px] text-neutral-400 font-medium">
                     <span>{new Date(note.updatedAt).toLocaleDateString()}</span>
@@ -272,7 +272,7 @@ export const SmartNotes: React.FC = () => {
         {/* Note Reader / Editor Preview */}
         <div className="md:col-span-2">
           {isEditing ? (
-            <div className="bg-white p-6 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000] space-y-4">
+            <div className="bg-[var(--theme-surface)] p-6 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-4">
               <h3 className="font-black text-lg">
                 {selectedNote ? 'Edit Study Note' : 'Create Study Note'}
               </h3>
@@ -280,7 +280,7 @@ export const SmartNotes: React.FC = () => {
               <form onSubmit={handleSaveNote} className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                    <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                       Subject *
                     </label>
                     <input
@@ -289,12 +289,12 @@ export const SmartNotes: React.FC = () => {
                       placeholder="e.g. World History, Macroeconomics"
                       value={noteForm.subject}
                       onChange={(e) => setNoteForm({ ...noteForm, subject: e.target.value })}
-                      className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                      className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                    <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                       Note Title *
                     </label>
                     <input
@@ -303,13 +303,13 @@ export const SmartNotes: React.FC = () => {
                       placeholder="e.g. Industrial Revolution Summary"
                       value={noteForm.title}
                       onChange={(e) => setNoteForm({ ...noteForm, title: e.target.value })}
-                      className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                      className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Tags (comma separated)
                   </label>
                   <input
@@ -317,12 +317,12 @@ export const SmartNotes: React.FC = () => {
                     placeholder="e.g. chapter-4, exam-prep, timeline"
                     value={noteForm.tagsString}
                     onChange={(e) => setNoteForm({ ...noteForm, tagsString: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                    className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Content (Markdown Supported)
                   </label>
                   <textarea
@@ -330,12 +330,12 @@ export const SmartNotes: React.FC = () => {
                     placeholder="Write detailed study notes, outlines, key formulas, or questions..."
                     value={noteForm.content}
                     onChange={(e) => setNoteForm({ ...noteForm, content: e.target.value })}
-                    className="w-full px-3.5 py-3 border-2 border-black rounded-xl text-xs font-mono focus:outline-none leading-relaxed"
+                    className="w-full px-3.5 py-3 border border-[var(--theme-gray-border)] rounded-xl text-xs font-mono focus:outline-none leading-relaxed"
                   />
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
-                  <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-neutral-700">
+                  <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-300">
                     <input
                       type="checkbox"
                       checked={noteForm.isPinned}
@@ -349,13 +349,13 @@ export const SmartNotes: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setIsEditing(false)}
-                      className="px-4 py-2 border-2 border-black rounded-xl text-xs font-bold hover:bg-neutral-100"
+                      className="px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-bold hover:bg-neutral-100"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="px-5 py-2 bg-[#FFD21A] text-black font-black text-xs rounded-xl border-2 border-black shadow-[2px_2px_0px_#000000]"
+                      className="px-5 py-2 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm"
                     >
                       Save Note
                     </button>
@@ -364,11 +364,11 @@ export const SmartNotes: React.FC = () => {
               </form>
             </div>
           ) : selectedNote ? (
-            <div className="bg-white p-6 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000] space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black/10 pb-4">
+            <div className="bg-[var(--theme-surface)] p-6 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--theme-gray-border)] pb-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#FAF7F2] border border-black/20 text-neutral-700">
+                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[var(--theme-surface-raised)] border border-black/20 text-slate-300">
                       {selectedNote.subject}
                     </span>
                     {selectedNote.isPinned && (
@@ -377,13 +377,13 @@ export const SmartNotes: React.FC = () => {
                       </span>
                     )}
                   </div>
-                  <h3 className="text-xl font-black text-black">{selectedNote.title}</h3>
+                  <h3 className="text-xl font-black text-slate-100">{selectedNote.title}</h3>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleExportMarkdown(selectedNote)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-black bg-white hover:bg-neutral-50 text-xs font-bold"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-neutral-50 text-xs font-bold"
                     title="Export as Markdown (.md)"
                   >
                     <Download className="w-3.5 h-3.5" />
@@ -391,7 +391,7 @@ export const SmartNotes: React.FC = () => {
                   </button>
                   <button
                     onClick={() => handleOpenEdit(selectedNote)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-black bg-[#FFD21A] text-black text-xs font-bold"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] text-xs font-bold"
                   >
                     <Edit2 className="w-3.5 h-3.5" />
                     Edit
@@ -412,7 +412,7 @@ export const SmartNotes: React.FC = () => {
                   {selectedNote.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-0.5 bg-neutral-100 rounded-md text-[11px] font-bold text-neutral-600"
+                      className="px-2 py-0.5 bg-neutral-100 rounded-md text-[11px] font-bold text-slate-400"
                     >
                       #{tag}
                     </span>
@@ -428,9 +428,9 @@ export const SmartNotes: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-white p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
+            <div className="bg-[var(--theme-surface)] p-12 text-center rounded-2xl border-2 border-dashed border-neutral-300">
               <BookOpen className="w-12 h-12 text-neutral-300 mx-auto mb-2" />
-              <p className="text-sm font-bold text-neutral-600">Select a note to view or edit</p>
+              <p className="text-sm font-bold text-slate-400">Select a note to view or edit</p>
             </div>
           )}
         </div>

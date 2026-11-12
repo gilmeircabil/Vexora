@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Compass,
   Search,
-  MapPin,
   ExternalLink,
   AlertCircle,
   X,
@@ -105,36 +104,36 @@ export const DiscoverPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-black py-8 sm:py-12 px-4 sm:px-6">
+    <div className="py-8 sm:py-12 px-4 sm:px-6">
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Header Badge & Title */}
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFE600] border-2 border-black font-black uppercase text-xs tracking-wider shadow-[2px_2px_0px_#000000]">
-            <Compass className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] font-bold uppercase text-xs text-[var(--theme-dirty-white)] tracking-wider shadow-sm">
+            <Compass className="w-4 h-4 text-[var(--theme-dirty-white)]" />
             <span>Vexora Discover</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-black tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[var(--theme-dirty-white)] tracking-tight">
             Find Nearby Businesses
           </h1>
 
-          <p className="text-neutral-700 text-sm sm:text-base max-w-lg mx-auto font-medium">
+          <p className="text-[var(--theme-gray-muted)] text-sm sm:text-base max-w-lg mx-auto font-normal leading-relaxed">
             Search for shops, dining, gas stations, and essential services near you — instant Google Maps discovery with zero permission prompts.
           </p>
         </div>
 
         {/* Main Search Card */}
-        <div className="bg-white border-2 border-black rounded-2xl p-6 sm:p-8 shadow-[4px_4px_0px_#000000] space-y-6">
+        <div className="bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
           {/* 1. Keyword Search Input */}
           <div className="space-y-2">
             <label
               htmlFor="discover-keyword-input"
-              className="block font-black text-xs sm:text-sm uppercase tracking-wide text-neutral-800"
+              className="block font-bold text-xs sm:text-sm uppercase tracking-wide text-[var(--theme-dirty-white)]"
             >
               Business Keyword
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-500">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[var(--theme-gray-muted)]">
                 <Search className="w-5 h-5" />
               </div>
               <input
@@ -151,10 +150,10 @@ export const DiscoverPage: React.FC = () => {
                   }
                 }}
                 placeholder="e.g. Coffee shop, gas station, market, laundry shop, restaurant, pharmacy..."
-                className={`w-full pl-11 pr-4 py-3 bg-[#FAF7F2] border-2 rounded-xl text-black font-bold placeholder-neutral-400 focus:outline-none focus:bg-white transition-all text-sm sm:text-base ${
+                className={`w-full pl-11 pr-4 py-3 bg-[var(--theme-surface-raised)] border rounded-xl text-[var(--theme-dirty-white)] font-medium placeholder-[var(--theme-gray-dim)] focus:outline-none transition-all text-sm sm:text-base ${
                   keywordError
-                    ? 'border-red-500 ring-2 ring-red-300'
-                    : 'border-black focus:shadow-[2px_2px_0px_#000000]'
+                    ? 'border-red-500 ring-2 ring-red-500/30'
+                    : 'border-[var(--theme-gray-border)] focus:border-[var(--theme-dirty-white)] focus:ring-1 focus:ring-[var(--theme-dirty-white)]'
                 }`}
               />
               {keyword && (
@@ -162,7 +161,7 @@ export const DiscoverPage: React.FC = () => {
                   type="button"
                   onClick={() => setKeyword('')}
                   aria-label="Clear keyword"
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-neutral-400 hover:text-black"
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)]"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -173,16 +172,16 @@ export const DiscoverPage: React.FC = () => {
             {keywordError && (
               <div
                 role="alert"
-                className="flex items-center gap-2 text-xs sm:text-sm font-bold text-red-600 bg-red-50 border border-red-300 p-2.5 rounded-lg"
+                className="flex items-center gap-2 text-xs sm:text-sm font-medium text-red-300 bg-red-950/40 border border-red-800 p-2.5 rounded-lg"
               >
-                <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
                 <span>{keywordError}</span>
               </div>
             )}
 
             {/* Quick Suggestions */}
             <div className="pt-1">
-              <span className="text-xs font-bold text-neutral-500 block mb-2">
+              <span className="text-xs font-medium text-[var(--theme-gray-muted)] block mb-2">
                 Popular Searches:
               </span>
               <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -194,10 +193,10 @@ export const DiscoverPage: React.FC = () => {
                       setKeyword(suggestion);
                       if (keywordError) setKeywordError(null);
                     }}
-                    className={`px-3 py-1 rounded-lg border-2 border-black text-xs font-black transition-all ${
+                    className={`px-3 py-1 rounded-lg border text-xs font-bold transition-all cursor-pointer ${
                       keyword.toLowerCase() === suggestion.toLowerCase()
-                        ? 'bg-[#FFE600] shadow-[2px_2px_0px_#000000]'
-                        : 'bg-neutral-50 hover:bg-[#FFE600]/40 hover:shadow-[1px_1px_0px_#000000]'
+                        ? 'bg-[var(--theme-dirty-white)] border-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-xs'
+                        : 'bg-[var(--theme-surface-raised)] border-[var(--theme-gray-border)] text-[var(--theme-gray-muted)] hover:bg-[var(--theme-gray-border)] hover:text-[var(--theme-dirty-white)]'
                     }`}
                   >
                     {suggestion}
@@ -207,52 +206,34 @@ export const DiscoverPage: React.FC = () => {
             </div>
           </div>
 
-          {/* 2. Zero-Authorization Nearby Mode Badge */}
-          <div className="pt-4 border-t-2 border-black/10 space-y-3">
-            <div className="p-3.5 rounded-xl border-2 border-black bg-[#FAF7F2] space-y-1.5">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2 text-xs sm:text-sm font-black text-black">
-                  <MapPin className="w-4 h-4 text-emerald-600 fill-emerald-500/20" />
-                  <span>
-                    Search Scope:{' '}
-                    <strong className="text-emerald-700">
-                      {customLocation.trim() ? `In "${customLocation.trim()}"` : 'Nearby (Auto-detected by Google Maps)'}
-                    </strong>
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setShowCustomLocation(!showCustomLocation)}
-                  className="text-xs font-bold text-neutral-700 underline hover:text-black"
-                >
-                  {showCustomLocation ? 'Hide Specific Area' : 'Search Specific City Instead'}
-                </button>
-              </div>
-
-              <p className="text-[11px] text-neutral-600 font-medium">
-                {customLocation.trim()
-                  ? `Google Maps will look for businesses specifically in ${customLocation.trim()}.`
-                  : 'We append "nearby" directly into your Google Maps search — Google Maps uses your device location automatically with zero permission prompts required.'}
-              </p>
+          {/* 2. Optional Specific City/Area Toggle & Input */}
+          <div className="pt-2 border-t border-[var(--theme-gray-border)] space-y-3">
+            <div className="flex items-center justify-end">
+              <button
+                type="button"
+                onClick={() => setShowCustomLocation(!showCustomLocation)}
+                className="text-xs font-bold text-[var(--theme-dirty-white)] underline hover:text-[var(--theme-dirty-white-muted)] cursor-pointer"
+              >
+                {showCustomLocation ? 'Hide Specific Area' : 'Search Specific City Instead'}
+              </button>
             </div>
 
             {/* Optional Specific City/Area Input */}
             {showCustomLocation && (
-              <div className="p-3.5 bg-amber-50 border-2 border-black rounded-xl space-y-2 animate-in fade-in duration-200">
+              <div className="p-3.5 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl space-y-2 animate-in fade-in duration-200">
                 <div className="flex items-center justify-between">
                   <label
                     htmlFor="discover-manual-location"
-                    className="block text-xs font-black uppercase text-amber-950 flex items-center gap-1.5"
+                    className="block text-xs font-bold uppercase text-[var(--theme-dirty-white)] flex items-center gap-1.5"
                   >
-                    <Building2 className="w-3.5 h-3.5 text-amber-900" />
+                    <Building2 className="w-3.5 h-3.5 text-[var(--theme-dirty-white)]" />
                     <span>Search in a Specific City or Address (Optional)</span>
                   </label>
                   {customLocation && (
                     <button
                       type="button"
                       onClick={() => setCustomLocation('')}
-                      className="text-xs font-bold text-amber-900 underline"
+                      className="text-xs font-bold text-[var(--theme-dirty-white)] underline cursor-pointer"
                     >
                       Reset to "Nearby"
                     </button>
@@ -270,9 +251,9 @@ export const DiscoverPage: React.FC = () => {
                     }
                   }}
                   placeholder="e.g. Cebu City, Manila, Makati, Quezon City, Brooklyn..."
-                  className="w-full px-3.5 py-2.5 bg-white border-2 border-black rounded-lg text-black font-bold placeholder-neutral-400 text-sm focus:outline-none focus:shadow-[2px_2px_0px_#000000]"
+                  className="w-full px-3.5 py-2.5 bg-[var(--theme-canvas)] border border-[var(--theme-gray-border)] rounded-lg text-[var(--theme-dirty-white)] font-medium placeholder-[var(--theme-gray-dim)] text-sm focus:outline-none focus:border-[var(--theme-dirty-white)]"
                 />
-                <p className="text-[11px] text-neutral-600 font-medium">
+                <p className="text-[11px] text-[var(--theme-gray-muted)] font-normal">
                   Leave blank to automatically search businesses closest to you.
                 </p>
               </div>
@@ -284,22 +265,22 @@ export const DiscoverPage: React.FC = () => {
             <button
               type="button"
               onClick={handleSearch}
-              className="w-full py-3.5 sm:py-4 px-6 bg-[#FFE600] border-2 border-black rounded-xl font-black text-black text-sm sm:text-base uppercase tracking-wider shadow-[4px_4px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0px_#000000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_#000000] transition-all flex items-center justify-center gap-2"
+              className="w-full py-3.5 sm:py-4 px-6 bg-[var(--theme-dirty-white)] hover:bg-[var(--theme-dirty-white-muted)] border border-[var(--theme-dirty-white)] rounded-xl font-bold text-[var(--theme-canvas)] text-sm sm:text-base uppercase tracking-wider shadow-sm hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <Compass className="w-5 h-5 stroke-[2.5]" />
+              <Compass className="w-5 h-5 stroke-[2.2]" />
               <span>
                 Search {customLocation.trim() ? `in ${customLocation.trim()}` : 'Nearby'} on Google Maps
               </span>
-              <ExternalLink className="w-4 h-4 ml-1 opacity-70" />
+              <ExternalLink className="w-4 h-4 ml-1 opacity-80" />
             </button>
           </div>
         </div>
 
         {/* Zero-Authorization Privacy Banner */}
-        <div className="p-4 rounded-xl border border-black/15 bg-black/5 text-neutral-700 text-xs font-medium flex items-center gap-3">
-          <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+        <div className="p-4 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] text-xs font-normal flex items-center gap-3">
+          <ShieldCheck className="w-5 h-5 text-[var(--theme-dirty-white)] shrink-0" />
           <span>
-            <strong>Zero Authorization Required:</strong> No browser location permission popups.
+            <strong className="text-[var(--theme-dirty-white)]">Zero Authorization Required:</strong> No browser location permission popups.
             Google Maps opens directly in a new tab and uses your device's native navigation accuracy.
           </span>
         </div>

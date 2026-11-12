@@ -158,25 +158,25 @@ export const CitationGenerator: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--theme-surface)] p-5 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm">
         <div>
           <h2 className="text-xl font-black flex items-center gap-2">
-            <Quote className="w-5 h-5 text-indigo-600" />
+            <Quote className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             Academic Citation Generator
           </h2>
-          <p className="text-xs text-neutral-600 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Instant citations formatted in APA, MLA, IEEE, and Chicago styles.
           </p>
         </div>
 
         {/* Style selector */}
-        <div className="flex bg-[#FAF7F2] p-1 rounded-xl border border-black text-xs font-black">
+        <div className="flex bg-[var(--theme-surface-raised)] p-1 rounded-xl border border-black text-xs font-black">
           {(['apa', 'mla', 'ieee', 'chicago'] as CitationStyle[]).map((st) => (
             <button
               key={st}
               onClick={() => setStyle(st)}
               className={`px-3 py-1.5 rounded-lg uppercase tracking-wider transition-all cursor-pointer ${
-                style === st ? 'bg-black text-white shadow-sm' : 'text-neutral-600 hover:text-black'
+                style === st ? 'bg-black text-white shadow-sm' : 'text-slate-400 hover:text-slate-100'
               }`}
             >
               {st}
@@ -186,8 +186,8 @@ export const CitationGenerator: React.FC = () => {
       </div>
 
       {/* Advisory Notice */}
-      <div className="p-3.5 bg-blue-50 rounded-xl border border-blue-200 flex items-start gap-2.5 text-xs text-blue-900">
-        <AlertCircle className="w-4 h-4 shrink-0 text-blue-600 mt-0.5" />
+      <div className="p-3.5 bg-[var(--theme-surface-raised)] rounded-xl border border-[var(--theme-gray-border)] flex items-start gap-2.5 text-xs text-[var(--theme-dirty-white)]">
+        <AlertCircle className="w-4 h-4 shrink-0 text-[var(--theme-gray-muted)] mt-0.5" />
         <div>
           <span className="font-bold">Academic Style Notice:</span> Citation formatting rules vary
           by edition and university department. Always verify punctuation, capitalization, and
@@ -201,8 +201,8 @@ export const CitationGenerator: React.FC = () => {
           onClick={() => setSourceType('book')}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 text-xs font-black transition-all cursor-pointer ${
             sourceType === 'book'
-              ? 'border-black bg-[#FFD21A] shadow-[2px_2px_0px_#000000]'
-              : 'border-neutral-300 bg-white hover:border-black'
+              ? 'border-black bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-sm'
+              : 'border-neutral-300 bg-[var(--theme-surface)] hover:border-black'
           }`}
         >
           <Book className="w-4 h-4" />
@@ -213,8 +213,8 @@ export const CitationGenerator: React.FC = () => {
           onClick={() => setSourceType('journal')}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 text-xs font-black transition-all cursor-pointer ${
             sourceType === 'journal'
-              ? 'border-black bg-[#FFD21A] shadow-[2px_2px_0px_#000000]'
-              : 'border-neutral-300 bg-white hover:border-black'
+              ? 'border-black bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-sm'
+              : 'border-neutral-300 bg-[var(--theme-surface)] hover:border-black'
           }`}
         >
           <FileText className="w-4 h-4" />
@@ -225,8 +225,8 @@ export const CitationGenerator: React.FC = () => {
           onClick={() => setSourceType('website')}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 text-xs font-black transition-all cursor-pointer ${
             sourceType === 'website'
-              ? 'border-black bg-[#FFD21A] shadow-[2px_2px_0px_#000000]'
-              : 'border-neutral-300 bg-white hover:border-black'
+              ? 'border-black bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-sm'
+              : 'border-neutral-300 bg-[var(--theme-surface)] hover:border-black'
           }`}
         >
           <Globe className="w-4 h-4" />
@@ -237,39 +237,39 @@ export const CitationGenerator: React.FC = () => {
       {/* Form Fields & Output Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Input Details */}
-        <div className="bg-white p-6 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000] space-y-4">
+        <div className="bg-[var(--theme-surface)] p-6 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-4">
           <h3 className="text-sm font-black text-neutral-800 uppercase tracking-wider">
             Source Details
           </h3>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+              <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                 Author Last Name
               </label>
               <input
                 type="text"
                 value={formData.authorLast}
                 onChange={(e) => setFormData({ ...formData, authorLast: e.target.value })}
-                className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+              <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                 Author First Name
               </label>
               <input
                 type="text"
                 value={formData.authorFirst}
                 onChange={(e) => setFormData({ ...formData, authorFirst: e.target.value })}
-                className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+            <label className="block text-xs font-black uppercase text-slate-300 mb-1">
               Additional Authors (Optional)
             </label>
             <input
@@ -277,32 +277,32 @@ export const CitationGenerator: React.FC = () => {
               placeholder="e.g. Jane Doe, Alan Turing"
               value={formData.additionalAuthors}
               onChange={(e) => setFormData({ ...formData, additionalAuthors: e.target.value })}
-              className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+              className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+            <label className="block text-xs font-black uppercase text-slate-300 mb-1">
               Title of Work
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+              className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
             />
           </div>
 
           {sourceType === 'book' && (
             <div>
-              <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+              <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                 Publisher
               </label>
               <input
                 type="text"
                 value={formData.publisher}
                 onChange={(e) => setFormData({ ...formData, publisher: e.target.value })}
-                className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
               />
             </div>
           )}
@@ -310,20 +310,20 @@ export const CitationGenerator: React.FC = () => {
           {sourceType === 'journal' && (
             <>
               <div>
-                <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                   Journal / Periodical Name
                 </label>
                 <input
                   type="text"
                   value={formData.journalName}
                   onChange={(e) => setFormData({ ...formData, journalName: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                  className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Volume
                   </label>
                   <input
@@ -334,7 +334,7 @@ export const CitationGenerator: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Issue
                   </label>
                   <input
@@ -345,7 +345,7 @@ export const CitationGenerator: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+                  <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                     Pages
                   </label>
                   <input
@@ -361,26 +361,26 @@ export const CitationGenerator: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+              <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                 Publication Year
               </label>
               <input
                 type="text"
                 value={formData.year}
                 onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-black uppercase text-neutral-700 mb-1">
+              <label className="block text-xs font-black uppercase text-slate-300 mb-1">
                 URL or DOI
               </label>
               <input
                 type="text"
                 value={formData.url}
                 onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-                className="w-full px-3 py-2 border-2 border-black rounded-xl text-xs font-medium focus:outline-none"
+                className="w-full px-3 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-medium focus:outline-none"
               />
             </div>
           </div>
@@ -389,14 +389,14 @@ export const CitationGenerator: React.FC = () => {
         {/* Formatted Citation Preview */}
         <div className="space-y-4">
           {/* Full Reference Card */}
-          <div className="bg-white p-6 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000] space-y-3">
+          <div className="bg-[var(--theme-surface)] p-6 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase text-neutral-500">
+              <span className="text-xs font-black uppercase text-slate-400">
                 Bibliography / Works Cited ({style.toUpperCase()})
               </span>
               <button
                 onClick={() => handleCopy(bibliography, true)}
-                className="flex items-center gap-1 text-xs font-black bg-[#FAF7F2] hover:bg-[#FFD21A] px-2.5 py-1 rounded-lg border border-black transition-colors cursor-pointer"
+                className="flex items-center gap-1 text-xs font-black bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] px-2.5 py-1 rounded-lg border border-black transition-colors cursor-pointer"
               >
                 {copiedBib ? (
                   <Check className="w-3.5 h-3.5 text-emerald-600" />
@@ -407,20 +407,20 @@ export const CitationGenerator: React.FC = () => {
               </button>
             </div>
 
-            <div className="p-4 bg-[#FAF7F2] rounded-xl border border-black/10 font-serif text-sm leading-relaxed text-black break-words select-all">
+            <div className="p-4 bg-[var(--theme-surface-raised)] rounded-xl border border-black/10 font-serif text-sm leading-relaxed text-slate-100 break-words select-all">
               {bibliography}
             </div>
           </div>
 
           {/* In-Text Citation Card */}
-          <div className="bg-white p-6 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000000] space-y-3">
+          <div className="bg-[var(--theme-surface)] p-6 rounded-2xl border border-[var(--theme-gray-border)] shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase text-neutral-500">
+              <span className="text-xs font-black uppercase text-slate-400">
                 In-Text Citation ({style.toUpperCase()})
               </span>
               <button
                 onClick={() => handleCopy(inText, false)}
-                className="flex items-center gap-1 text-xs font-black bg-[#FAF7F2] hover:bg-[#FFD21A] px-2.5 py-1 rounded-lg border border-black transition-colors cursor-pointer"
+                className="flex items-center gap-1 text-xs font-black bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] px-2.5 py-1 rounded-lg border border-black transition-colors cursor-pointer"
               >
                 {copiedInText ? (
                   <Check className="w-3.5 h-3.5 text-emerald-600" />
@@ -431,7 +431,7 @@ export const CitationGenerator: React.FC = () => {
               </button>
             </div>
 
-            <div className="p-4 bg-[#FAF7F2] rounded-xl border border-black/10 font-mono text-sm text-black select-all">
+            <div className="p-4 bg-[var(--theme-surface-raised)] rounded-xl border border-black/10 font-mono text-sm text-slate-100 select-all">
               {inText}
             </div>
           </div>

@@ -164,4 +164,43 @@ describe('AuthContext Sign Out & Redirect Suite', () => {
     expect(localStorage.getItem('tn_token')).toBeNull();
     expect(window.location.href).toBe('/login');
   });
+
+  it('mobile dropbar button opens drawer with user profile prominently displayed at the top', async () => {
+    localStorage.setItem('tn_token', 'valid-user-token');
+
+    render(
+      <AuthProvider>
+        <MemoryRouter initialEntries={['/dashboard']}>
+          <Header />
+        </MemoryRouter>
+      </AuthProvider>,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    // Mobile dropbar toggle button
+    const mobileDropbar = await screen.findByRole('button', { name: /toggle navigation menu/i });
+    expect(mobileDropbar).toBeInTheDocument();
+
+    // Drawer is closed initially
+    expect(screen.queryByText('@testuser')).not.toBeInTheDocument();
+
+    // Click mobile dropbar
+    fireEvent.click(mobileDropbar);
+
+    // Profile card is rendered in drawer
+    expect(screen.getByText('Test User')).toBeInTheDocument();
+    expect(screen.getByText('@testuser')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /sign out/i })).toBeInTheDocument();
+
+    // Sign out from mobile drawer
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /sign out/i }));
+    });
+
+    expect(localStorage.getItem('tn_token')).toBeNull();
+    expect(window.location.href).toBe('/login');
+  });
 });

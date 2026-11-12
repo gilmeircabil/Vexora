@@ -46,17 +46,17 @@ export const WebsiteLayoutLivePreview: React.FC<Props> = ({ layoutId }) => {
           {/* Feature Grid */}
           <div className="p-4 grid grid-cols-3 gap-3">
             <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 space-y-1">
-              <span className="text-sm">⚡</span>
+              <span className="font-mono text-xs font-bold text-black">&gt;</span>
               <p className="font-black text-[11px]">Instant Previews</p>
               <p className="text-[10px] text-neutral-500">Live rendered HTML/CSS.</p>
             </div>
             <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 space-y-1">
-              <span className="text-sm">📱</span>
+              <span className="font-mono text-xs font-bold text-black">M</span>
               <p className="font-black text-[11px]">Responsive</p>
               <p className="text-[10px] text-neutral-500">Desktop, tablet, mobile.</p>
             </div>
             <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 space-y-1">
-              <span className="text-sm">📋</span>
+              <span className="font-mono text-xs font-bold text-black">C</span>
               <p className="font-black text-[11px]">1-Click Copy</p>
               <p className="text-[10px] text-neutral-500">Clean React TSX snippets.</p>
             </div>
@@ -119,11 +119,11 @@ export const WebsiteLayoutLivePreview: React.FC<Props> = ({ layoutId }) => {
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="p-2.5 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_#000] space-y-1">
-              <div className="h-14 bg-purple-100 rounded-lg flex items-center justify-center text-lg">🎨</div>
+              <div className="h-14 bg-purple-100 rounded-lg flex items-center justify-center font-bold text-xs text-purple-700 font-mono">UI</div>
               <p className="font-black text-[11px]">VexoraMods Studio</p>
             </div>
             <div className="p-2.5 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_#000] space-y-1">
-              <div className="h-14 bg-sky-100 rounded-lg flex items-center justify-center text-lg">⚡</div>
+              <div className="h-14 bg-sky-100 rounded-lg flex items-center justify-center font-bold text-xs text-sky-700 font-mono">DS</div>
               <p className="font-black text-[11px]">Design System Pro</p>
             </div>
           </div>
@@ -181,7 +181,7 @@ export const WebsiteLayoutLivePreview: React.FC<Props> = ({ layoutId }) => {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl space-y-1">
-              <div className="h-16 bg-white border border-black rounded flex items-center justify-center text-xl">👟</div>
+              <div className="h-16 bg-white border border-black rounded flex items-center justify-center font-mono text-xs text-neutral-400 font-bold">01</div>
               <p className="font-black text-xs">Neo Kicks v2</p>
               <div className="flex justify-between items-center">
                 <span className="font-black text-xs">$120</span>
@@ -189,7 +189,7 @@ export const WebsiteLayoutLivePreview: React.FC<Props> = ({ layoutId }) => {
               </div>
             </div>
             <div className="p-2.5 bg-[#FAF7F2] border-2 border-black rounded-xl space-y-1">
-              <div className="h-16 bg-white border border-black rounded flex items-center justify-center text-xl">🎒</div>
+              <div className="h-16 bg-white border border-black rounded flex items-center justify-center font-mono text-xs text-neutral-400 font-bold">02</div>
               <p className="font-black text-xs">Designer Pack</p>
               <div className="flex justify-between items-center">
                 <span className="font-black text-xs">$85</span>

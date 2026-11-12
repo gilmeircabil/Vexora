@@ -95,7 +95,7 @@ export const HtmlEntityTool: React.FC = () => {
             value={plain}
             onChange={(e) => handlePlainChange(e.target.value)}
             placeholder="Type or paste HTML markup or text with special characters..."
-            className="w-full p-3 font-mono text-xs bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-indigo-500 leading-relaxed"
+            className="w-full p-3 font-mono text-xs bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-[var(--theme-dirty-white)] leading-relaxed"
           />
         </Card>
 
@@ -112,7 +112,7 @@ export const HtmlEntityTool: React.FC = () => {
             value={encoded}
             onChange={(e) => handleEncodedChange(e.target.value)}
             placeholder="Paste HTML entities to decode..."
-            className="w-full p-3 font-mono text-xs bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-indigo-500 leading-relaxed"
+            className="w-full p-3 font-mono text-xs bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-[var(--theme-dirty-white)] leading-relaxed"
           />
         </Card>
       </div>

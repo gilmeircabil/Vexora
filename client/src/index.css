@@ -4,10 +4,44 @@
 
 @layer base {
   :root {
-    --bg-page: #faf7f2;
-    --text-primary: #000000;
-    --text-secondary: #333333;
-    --border-neo: #000000;
+    /* Main Tri-Color Theme: Soft Black, Dirty White, Gray */
+    /* Soft Black (not too black) */
+    --theme-canvas: #121214;
+    --theme-surface: #18181b;
+    --theme-surface-raised: #202024;
+
+    /* Dirty White */
+    --theme-dirty-white: #f4f4f0;
+    --theme-dirty-white-muted: #d4d4ce;
+
+    /* Gray */
+    --theme-gray-border: #27272a;
+    --theme-gray-subtle: #3f3f46;
+    --theme-gray-muted: #8e8e93;
+    --theme-gray-dim: #52525b;
+
+    /* Semantic Aliases & Backward Compatibility */
+    --theme-60-canvas: var(--theme-canvas);
+    --theme-60-surface: var(--theme-surface);
+    --theme-30-onyx: var(--theme-surface);
+    --theme-30-dark: var(--theme-canvas);
+    --theme-30-border: var(--theme-gray-border);
+    --theme-30-text: var(--theme-dirty-white);
+    --theme-10-accent: var(--theme-dirty-white);
+    --theme-10-accent-hover: var(--theme-dirty-white-muted);
+
+    --bg-page: var(--theme-canvas);
+    --text-primary: var(--theme-dirty-white);
+    --text-secondary: var(--theme-gray-muted);
+    --border-neo: var(--theme-gray-border);
+    --spaciaz-lime: var(--theme-dirty-white);
+    --spaciaz-lime-hover: var(--theme-dirty-white-muted);
+    --spaciaz-dark: var(--theme-surface);
+    --spaciaz-card-dark: var(--theme-canvas);
+    --spaciaz-muted: var(--theme-gray-muted);
+    --radius-bento: 20px;
+    --radius-hero: 24px;
+    --radius-pill: 9999px;
   }
 
   html,
@@ -34,21 +68,20 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Refined neo-brutalist scrollbar */
+  /* Subtle dark scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
   }
   ::-webkit-scrollbar-track {
-    background: #f1ede4;
+    background: var(--theme-canvas);
   }
   ::-webkit-scrollbar-thumb {
-    background: #000000;
-    border-radius: 4px;
-    border: 1px solid #f1ede4;
+    background: var(--theme-gray-border);
+    border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #333333;
+    background: var(--theme-gray-subtle);
   }
 
   /* Code & Mono typography styling */
@@ -62,9 +95,9 @@
   }
 }
 
-/* Custom Neo-brutalist accessible focus-visible styles */
+/* Accessible focus-visible styles */
 :focus-visible {
-  outline: 3px solid #000000;
+  outline: 2px solid var(--theme-dirty-white);
   outline-offset: 2px;
 }
 
@@ -76,3 +109,38 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Wind background animation (left to right) */
+@keyframes wind-gust {
+  0% {
+    transform: translate3d(-35vw, 0, 0) scaleX(0.7);
+    opacity: 0;
+  }
+  15% {
+    opacity: var(--gust-opacity, 0.7);
+  }
+  50% {
+    transform: translate3d(45vw, var(--gust-drift, 8px), 0) scaleX(1);
+    opacity: var(--gust-opacity, 0.7);
+  }
+  85% {
+    opacity: var(--gust-opacity, 0.7);
+  }
+  100% {
+    transform: translate3d(120vw, calc(var(--gust-drift, 8px) * 1.5), 0) scaleX(0.8);
+    opacity: 0;
+  }
+}
+
+.wind-gust {
+  animation: wind-gust var(--gust-duration, 8s) cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+  animation-delay: var(--gust-delay, 0s);
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wind-background {
+    display: none !important;
+  }
+}
+

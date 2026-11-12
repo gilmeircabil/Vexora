@@ -55,8 +55,8 @@ export const DesignStyleLivePreview: React.FC<Props> = ({ styleId }) => {
       return (
         <div className="w-full p-6 md:p-8 rounded-2xl bg-[#E0E5EC] flex items-center justify-center">
           <div className="p-6 rounded-3xl bg-[#E0E5EC] shadow-[8px_8px_16px_#b8b9be,-8px_-8px_16px_#ffffff] text-neutral-700 space-y-4 max-w-xs w-full text-center">
-            <div className="w-16 h-16 mx-auto rounded-full bg-[#E0E5EC] shadow-[inset_4px_4px_8px_#b8b9be,inset_-4px_-4px_8px_#ffffff] flex items-center justify-center text-xl text-blue-600">
-              💡
+            <div className="w-16 h-16 mx-auto rounded-full bg-[#E0E5EC] shadow-[inset_4px_4px_8px_#b8b9be,inset_-4px_-4px_8px_#ffffff] flex items-center justify-center text-xs font-mono font-bold text-blue-600">
+              ON
             </div>
             <div>
               <h4 className="font-bold text-sm text-neutral-800">Living Room Light</h4>
@@ -129,19 +129,19 @@ export const DesignStyleLivePreview: React.FC<Props> = ({ styleId }) => {
       return (
         <div className="w-full grid grid-cols-2 gap-3 p-4 bg-[#2C3E50] rounded-2xl text-white">
           <div className="p-4 bg-[#E74C3C] rounded-lg text-center space-y-1">
-            <span className="text-2xl">⚡</span>
+            <span className="text-sm font-mono font-bold">FAST</span>
             <h5 className="font-bold text-xs">High Speed</h5>
           </div>
           <div className="p-4 bg-[#2ECC71] rounded-lg text-center space-y-1">
-            <span className="text-2xl">🛡️</span>
+            <span className="text-sm font-mono font-bold">SAFE</span>
             <h5 className="font-bold text-xs">Secure</h5>
           </div>
           <div className="p-4 bg-[#3498DB] rounded-lg text-center space-y-1">
-            <span className="text-2xl">📱</span>
+            <span className="text-sm font-mono font-bold">MOBILE</span>
             <h5 className="font-bold text-xs">Responsive</h5>
           </div>
           <div className="p-4 bg-[#F1C40F] text-black rounded-lg text-center space-y-1">
-            <span className="text-2xl">⭐</span>
+            <span className="text-sm font-mono font-bold">TOP</span>
             <h5 className="font-bold text-xs">Simple</h5>
           </div>
         </div>
@@ -238,7 +238,7 @@ export const DesignStyleLivePreview: React.FC<Props> = ({ styleId }) => {
         <div className="w-full bg-black text-white p-6 rounded-2xl border border-neutral-800 space-y-4">
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 bg-neutral-900 border border-neutral-700 rounded-full text-[10px] font-medium text-neutral-300">
-              ⚡ Next Gen Framework
+              Next Gen Framework
             </span>
           </div>
           <h3 className="text-lg font-bold tracking-tight">The Modern SaaS Standard</h3>
@@ -260,7 +260,7 @@ export const DesignStyleLivePreview: React.FC<Props> = ({ styleId }) => {
       return (
         <div className="w-full p-6 bg-gradient-to-br from-pink-50 to-blue-50 rounded-3xl border border-white/80 space-y-3">
           <div className="p-5 bg-white/80 backdrop-blur rounded-2xl shadow-lg shadow-purple-500/5 border border-purple-100 space-y-2">
-            <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-sm">🌸</div>
+            <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-[10px] font-mono font-bold text-pink-600">01</div>
             <h4 className="font-bold text-sm text-neutral-800">Mindful Habits</h4>
             <p className="text-xs text-neutral-500">Gentle pastel tones and rounded cards create an inviting experience.</p>
           </div>
@@ -271,7 +271,7 @@ export const DesignStyleLivePreview: React.FC<Props> = ({ styleId }) => {
       return (
         <div className="w-full bg-[#C0C0C0] p-1 border-t-2 border-l-2 border-white border-b-2 border-r-2 border-black font-sans text-xs">
           <div className="bg-[#000080] text-white px-2 py-1 font-bold flex justify-between items-center mb-3">
-            <span>💾 Vexora_Studio_95.exe</span>
+            <span>Vexora_Studio_95.exe</span>
             <div className="flex gap-1">
               <button className="w-4 h-4 bg-[#C0C0C0] text-black font-bold flex items-center justify-center border-t border-l border-white border-b border-r border-black text-[10px]">_</button>
               <button className="w-4 h-4 bg-[#C0C0C0] text-black font-bold flex items-center justify-center border-t border-l border-white border-b border-r border-black text-[10px]">✕</button>

@@ -103,7 +103,7 @@ export const Base64Tool: React.FC = () => {
               value={plainText}
               onChange={(e) => handlePlainTextChange(e.target.value)}
               placeholder="Enter plain text..."
-              className="w-full p-3 font-sans text-sm bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-indigo-500 leading-relaxed"
+              className="w-full p-3 font-sans text-sm bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-[var(--theme-dirty-white)] leading-relaxed"
             />
           </Card>
 
@@ -120,7 +120,7 @@ export const Base64Tool: React.FC = () => {
               value={base64Text}
               onChange={(e) => handleBase64TextChange(e.target.value)}
               placeholder="Enter Base64 to decode..."
-              className="w-full p-3 font-mono text-xs bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-indigo-500 leading-relaxed break-all"
+              className="w-full p-3 font-mono text-xs bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-[var(--theme-dirty-white)] leading-relaxed break-all"
             />
           </Card>
         </div>
