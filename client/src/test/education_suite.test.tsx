@@ -234,8 +234,8 @@ describe('VexoraMods Zero-Cost Education Suite Tests', () => {
     });
   });
 
-  describe('6. Study Space Navigation & Role Gating', () => {
-    it('renders the Study Space page and core navigation tabs', async () => {
+  describe('6. Study Space Navigation (Student-Only Workspace)', () => {
+    it('renders the Study Space page with Student Workspace navigation tabs and no Teacher Workspace features', async () => {
       render(
         <BrowserRouter>
           <AuthProvider>
@@ -246,162 +246,77 @@ describe('VexoraMods Zero-Cost Education Suite Tests', () => {
         </BrowserRouter>,
       );
 
-      // Verify presence of Title and Workspace switchers
-      expect(screen.getAllByText(/Study Space/i).length).toBeGreaterThan(0);
       expect(screen.getAllByText(/Student Workspace/i).length).toBeGreaterThan(0);
-      expect(screen.getAllByText(/Teacher Workspace/i).length).toBeGreaterThan(0);
       expect(screen.getAllByText(/Study Planner/i).length).toBeGreaterThan(0);
       expect(screen.getAllByText(/Flashcard Maker/i).length).toBeGreaterThan(0);
       expect(screen.getAllByText(/Practice Tests & Quizzes/i).length).toBeGreaterThan(0);
+
+      // Teacher Workspace and teacher tools must not exist
+      expect(screen.queryByText(/Teacher Workspace/i)).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /lesson plan creator/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /worksheet generator/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /exam builder/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /attendance tracker/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /gradebook ledger/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /rubric builder/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /certificate generator/i })).not.toBeInTheDocument();
     });
 
-    it('renders StudySpaceHeader with Workspace Switcher and Fullscreen Toggle', () => {
-      const handleWorkspaceChange = vi.fn();
+    it('does NOT render the StudySpaceHeader strip inside StudySpacePage', () => {
+      render(
+        <BrowserRouter>
+          <AuthProvider>
+            <ToastProvider>
+              <StudySpacePage />
+            </ToastProvider>
+          </AuthProvider>
+        </BrowserRouter>,
+      );
+
+      expect(screen.queryByText('Zero-Cost Education')).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /Full Screen/i })).not.toBeInTheDocument();
+    });
+
+    it('renders StudySpaceHeader with Student Workspace badge and Fullscreen Toggle without Teacher Workspace button', () => {
       const handleToggleSidebar = vi.fn();
       const handleToggleMobileNav = vi.fn();
       const handleToggleFullscreen = vi.fn();
 
       const { rerender } = render(
-        <StudySpaceHeader
-          workspace="student"
-          onWorkspaceChange={handleWorkspaceChange}
-          activeTab="flashcards"
-          isSidebarCollapsed={false}
-          onToggleSidebar={handleToggleSidebar}
-          onToggleMobileNav={handleToggleMobileNav}
-          isFullscreen={false}
-          onToggleFullscreen={handleToggleFullscreen}
-        />,
+        <BrowserRouter>
+          <StudySpaceHeader
+            activeTab="flashcards"
+            isSidebarCollapsed={false}
+            onToggleSidebar={handleToggleSidebar}
+            onToggleMobileNav={handleToggleMobileNav}
+            isFullscreen={false}
+            onToggleFullscreen={handleToggleFullscreen}
+          />
+        </BrowserRouter>,
       );
 
-      const studentBtn = screen.getByRole('button', { name: /student workspace/i });
-      const teacherBtn = screen.getByRole('button', { name: /teacher workspace/i });
+      expect(screen.getByText(/Student Workspace/i)).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /teacher workspace/i })).not.toBeInTheDocument();
       const fullscreenBtn = screen.getByRole('button', { name: /full screen/i });
-
-      expect(studentBtn).toBeInTheDocument();
-      expect(teacherBtn).toBeInTheDocument();
       expect(fullscreenBtn).toBeInTheDocument();
 
-      // Click Teacher Workspace
-      fireEvent.click(teacherBtn);
-      expect(handleWorkspaceChange).toHaveBeenCalledWith('teacher');
-
-      // Click Fullscreen
       fireEvent.click(fullscreenBtn);
       expect(handleToggleFullscreen).toHaveBeenCalledTimes(1);
 
-      // Rerender in fullscreen mode
       rerender(
-        <StudySpaceHeader
-          workspace="teacher"
-          onWorkspaceChange={handleWorkspaceChange}
-          activeTab="lesson-plans"
-          isSidebarCollapsed={false}
-          onToggleSidebar={handleToggleSidebar}
-          onToggleMobileNav={handleToggleMobileNav}
-          isFullscreen={true}
-          onToggleFullscreen={handleToggleFullscreen}
-        />,
+        <BrowserRouter>
+          <StudySpaceHeader
+            activeTab="flashcards"
+            isSidebarCollapsed={false}
+            onToggleSidebar={handleToggleSidebar}
+            onToggleMobileNav={handleToggleMobileNav}
+            isFullscreen={true}
+            onToggleFullscreen={handleToggleFullscreen}
+          />
+        </BrowserRouter>,
       );
 
       expect(screen.getByRole('button', { name: /exit full screen/i })).toBeInTheDocument();
-    });
-
-    it('separates Student and Teacher workspaces in StudySpacePage', async () => {
-      render(
-        <BrowserRouter>
-          <AuthProvider>
-            <ToastProvider>
-              <StudySpacePage />
-            </ToastProvider>
-          </AuthProvider>
-        </BrowserRouter>,
-      );
-
-      // In default Student Workspace:
-      expect(screen.getByRole('button', { name: /student workspace/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /teacher workspace/i })).toBeInTheDocument();
-
-      // Student items must exist in the sidebar and dashboard launchpad
-      expect(screen.getAllByRole('button', { name: /study planner/i }).length).toBeGreaterThan(0);
-      expect(screen.getAllByRole('button', { name: /flashcard maker/i }).length).toBeGreaterThan(0);
-
-      // Teacher items must NOT exist in the student sidebar
-      expect(screen.queryByRole('button', { name: /lesson plan creator/i })).toBeNull();
-      expect(screen.queryByRole('button', { name: /rubric builder/i })).toBeNull();
-
-      // Switch to Teacher Workspace
-      const teacherWorkspaceBtn = screen.getByRole('button', { name: /teacher workspace/i });
-      fireEvent.click(teacherWorkspaceBtn);
-
-      // Now Teacher items must exist in the sidebar
-      expect(
-        screen.getAllByRole('button', { name: /lesson plan creator/i }).length,
-      ).toBeGreaterThan(0);
-      expect(screen.getAllByRole('button', { name: /rubric builder/i }).length).toBeGreaterThan(0);
-
-      // And Student items must NOT exist in the teacher sidebar
-      expect(screen.queryByRole('button', { name: /study planner/i })).toBeNull();
-      expect(screen.queryByRole('button', { name: /flashcard maker/i })).toBeNull();
-    });
-
-    it('automatically activates Teacher Workspace when user is logged in as teacher', async () => {
-      vi.stubGlobal(
-        'fetch',
-        vi.fn().mockImplementation(async (url: string) => {
-          if (typeof url === 'string' && url.includes('/api/auth/me')) {
-            return {
-              ok: true,
-              json: async () => ({
-                success: true,
-                data: {
-                  id: 'teacher-456',
-                  email: 'teacher@example.com',
-                  username: 'prof_smith',
-                  name: 'Professor Smith',
-                  role: 'user',
-                  educationRole: 'teacher',
-                },
-              }),
-            };
-          }
-          if (typeof url === 'string' && url.includes('/api/education')) {
-            return {
-              ok: true,
-              json: async () => ({
-                success: true,
-                data: { pendingTasks: 2, lessonPlanCount: 5 },
-              }),
-            };
-          }
-          return {
-            ok: true,
-            json: async () => ({ success: true, data: {} }),
-          };
-        }),
-      );
-
-      localStorage.setItem('tn_token', 'mock-teacher-token');
-
-      render(
-        <BrowserRouter>
-          <AuthProvider>
-            <ToastProvider>
-              <StudySpacePage />
-            </ToastProvider>
-          </AuthProvider>
-        </BrowserRouter>,
-      );
-
-      // Teacher tools should automatically appear in the active sidebar
-      expect(
-        await screen.findByRole('button', { name: /lesson plan creator/i }),
-      ).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /study planner/i })).toBeNull();
-      expect(screen.getByText(/curriculum milestones/i)).toBeInTheDocument();
-      expect(screen.queryByText(/enable teacher mode/i)).toBeNull();
-
-      localStorage.removeItem('tn_token');
     });
   });
 });

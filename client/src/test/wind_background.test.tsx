@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { WindBackground } from '../components/common/WindBackground';
+import { WindBackground } from '../components/common/WindBackground.js';
 
 describe('WindBackground Component', () => {
   it('renders accessible background container with straight wind gust streaks', () => {

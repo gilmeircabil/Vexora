@@ -14,55 +14,70 @@ export interface HslColor {
   a?: number;
 }
 
+// Helper to convert a single color channel (0-255) to a 2-character hex string
+function componentToHex(value: number): string {
+  const clamped = Math.max(0, Math.min(255, Math.round(value)));
+  const hex = clamped.toString(16);
+  return hex.length === 1 ? '0' + hex : hex;
+}
+
 export function parseHexColor(hex: string): Result<RgbColor, string> {
   let clean = hex.trim();
-  if (clean.startsWith('#')) clean = clean.slice(1);
+  if (clean.startsWith('#')) {
+    clean = clean.slice(1);
+  }
 
+  // Expand short 3 or 4 character hex: e.g. "abc" -> "aabbcc"
   if (clean.length === 3 || clean.length === 4) {
-    clean = clean
-      .split('')
-      .map((c) => c + c)
-      .join('');
+    let expanded = '';
+    for (let i = 0; i < clean.length; i++) {
+      const char = clean[i] || '';
+      expanded += char + char;
+    }
+    clean = expanded;
   }
 
   if (clean.length !== 6 && clean.length !== 8) {
     return err('Hex color must be 3, 4, 6, or 8 characters.');
   }
 
-  const num = parseInt(clean, 16);
-  if (isNaN(num)) {
+  // Check that all characters are valid hex digits
+  if (!/^[0-9a-fA-F]+$/.test(clean)) {
+    return err('Invalid hexadecimal characters.');
+  }
+
+  const r = parseInt(clean.slice(0, 2), 16);
+  const g = parseInt(clean.slice(2, 4), 16);
+  const b = parseInt(clean.slice(4, 6), 16);
+
+  if (isNaN(r) || isNaN(g) || isNaN(b)) {
     return err('Invalid hexadecimal characters.');
   }
 
   if (clean.length === 8) {
-    return ok({
-      r: (num >> 24) & 255,
-      g: (num >> 16) & 255,
-      b: (num >> 8) & 255,
-      a: Number(((num & 255) / 255).toFixed(2)),
-    });
+    const rawAlpha = parseInt(clean.slice(6, 8), 16);
+    if (isNaN(rawAlpha)) {
+      return err('Invalid hexadecimal characters.');
+    }
+    const a = Number((rawAlpha / 255).toFixed(2));
+    return ok({ r, g, b, a });
   }
 
-  return ok({
-    r: (num >> 16) & 255,
-    g: (num >> 8) & 255,
-    b: num & 255,
-    a: 1,
-  });
+  return ok({ r, g, b, a: 1 });
 }
 
 export function rgbToHex({ r, g, b, a }: RgbColor): string {
-  const clamp = (v: number) => Math.max(0, Math.min(255, Math.round(v)));
-  const toHex = (v: number) => clamp(v).toString(16).padStart(2, '0');
+  const redHex = componentToHex(r);
+  const greenHex = componentToHex(g);
+  const blueHex = componentToHex(b);
 
   if (a !== undefined && a < 1) {
-    const alphaHex = Math.round(a * 255)
-      .toString(16)
-      .padStart(2, '0');
-    return `#${toHex(r)}${toHex(g)}${toHex(b)}${alphaHex}`.toUpperCase();
+    const alphaValue = Math.round(a * 255);
+    const alphaHex = componentToHex(alphaValue);
+    return `#${redHex}${greenHex}${blueHex}${alphaHex}`.toUpperCase();
   }
 
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+  return `#${redHex}${greenHex}${blueHex}`.toUpperCase();
 }
 
 export function rgbToHsl({ r, g, b, a }: RgbColor): HslColor {
@@ -72,25 +87,27 @@ export function rgbToHsl({ r, g, b, a }: RgbColor): HslColor {
 
   const max = Math.max(rNorm, gNorm, bNorm);
   const min = Math.min(rNorm, gNorm, bNorm);
+  const l = (max + min) / 2;
+
   let h = 0;
   let s = 0;
-  const l = (max + min) / 2;
 
   if (max !== min) {
     const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case rNorm:
-        h = (gNorm - bNorm) / d + (gNorm < bNorm ? 6 : 0);
-        break;
-      case gNorm:
-        h = (bNorm - rNorm) / d + 2;
-        break;
-      case bNorm:
-        h = (rNorm - gNorm) / d + 4;
-        break;
+    if (l > 0.5) {
+      s = d / (2 - max - min);
+    } else {
+      s = d / (max + min);
     }
-    h /= 6;
+
+    if (max === rNorm) {
+      h = (gNorm - bNorm) / d + (gNorm < bNorm ? 6 : 0);
+    } else if (max === gNorm) {
+      h = (bNorm - rNorm) / d + 2;
+    } else {
+      h = (rNorm - gNorm) / d + 4;
+    }
+    h = h / 6;
   }
 
   return {
@@ -99,6 +116,17 @@ export function rgbToHsl({ r, g, b, a }: RgbColor): HslColor {
     l: Math.round(l * 100),
     a,
   };
+}
+
+function hueToRgb(p: number, q: number, t: number): number {
+  let tempT = t;
+  if (tempT < 0) tempT += 1;
+  if (tempT > 1) tempT -= 1;
+
+  if (tempT < 1 / 6) return p + (q - p) * 6 * tempT;
+  if (tempT < 1 / 2) return q;
+  if (tempT < 2 / 3) return p + (q - p) * (2 / 3 - tempT) * 6;
+  return p;
 }
 
 export function hslToRgb({ h, s, l, a }: HslColor): RgbColor {
@@ -111,36 +139,38 @@ export function hslToRgb({ h, s, l, a }: HslColor): RgbColor {
     return { r: val, g: val, b: val, a };
   }
 
-  const hue2rgb = (p: number, q: number, t: number) => {
-    let tNorm = t;
-    if (tNorm < 0) tNorm += 1;
-    if (tNorm > 1) tNorm -= 1;
-    if (tNorm < 1 / 6) return p + (q - p) * 6 * tNorm;
-    if (tNorm < 1 / 2) return q;
-    if (tNorm < 2 / 3) return p + (q - p) * (2 / 3 - tNorm) * 6;
-    return p;
-  };
-
-  const q = lNorm < 0.5 ? lNorm * (1 + sNorm) : lNorm + sNorm - lNorm * sNorm;
+  let q = 0;
+  if (lNorm < 0.5) {
+    q = lNorm * (1 + sNorm);
+  } else {
+    q = lNorm + sNorm - lNorm * sNorm;
+  }
   const p = 2 * lNorm - q;
 
-  return {
-    r: Math.round(hue2rgb(p, q, hNorm + 1 / 3) * 255),
-    g: Math.round(hue2rgb(p, q, hNorm) * 255),
-    b: Math.round(hue2rgb(p, q, hNorm - 1 / 3) * 255),
-    a,
-  };
+  const r = Math.round(hueToRgb(p, q, hNorm + 1 / 3) * 255);
+  const g = Math.round(hueToRgb(p, q, hNorm) * 255);
+  const b = Math.round(hueToRgb(p, q, hNorm - 1 / 3) * 255);
+
+  return { r, g, b, a };
 }
 
 /**
  * Calculates WCAG relative luminance (0 to 1).
  */
 export function getRelativeLuminance({ r, g, b }: RgbColor): number {
-  const toLinear = (v: number) => {
+  function toLinear(v: number): number {
     const c = v / 255;
-    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  };
-  return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+    if (c <= 0.03928) {
+      return c / 12.92;
+    }
+    return Math.pow((c + 0.055) / 1.055, 2.4);
+  }
+
+  const redLinear = toLinear(r);
+  const greenLinear = toLinear(g);
+  const blueLinear = toLinear(b);
+
+  return 0.2126 * redLinear + 0.7152 * greenLinear + 0.0722 * blueLinear;
 }
 
 /**

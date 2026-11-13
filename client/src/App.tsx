@@ -13,6 +13,7 @@ import { FloatingMascotWidget } from './components/mascot/FloatingMascotWidget.j
 import { AppLayout } from './components/layout/AppLayout.js';
 
 import { HomePage } from './pages/HomePage.js';
+import { ToolsDirectoryPage } from './pages/ToolsDirectoryPage.js';
 import { CategoryPage } from './pages/CategoryPage.js';
 import { ToolDetailPage } from './pages/ToolDetailPage.js';
 import { DashboardPage } from './pages/DashboardPage.js';
@@ -22,6 +23,8 @@ import { RegisterPage } from './pages/RegisterPage.js';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage.js';
 import { OAuthCallbackPage } from './pages/OAuthCallbackPage.js';
 import { AboutPage } from './pages/AboutPage.js';
+import { HowItWorksPage } from './pages/HowItWorksPage.js';
+import { ContactPage } from './pages/ContactPage.js';
 import { PrivacyPage } from './pages/PrivacyPage.js';
 import { LicensesPage } from './pages/LicensesPage.js';
 import { TermsPage } from './pages/TermsPage.js';
@@ -93,13 +96,6 @@ import { CommunityPage } from './pages/community/CommunityPage.js';
 import { ReviewsPage } from './pages/ReviewsPage.js';
 import { DiscoverPage } from './pages/discover/DiscoverPage.js';
 
-// Preserved Legacy Developer Profile & Project Showcase Routes
-import { DeveloperProfilePage } from './pages/developers/DeveloperProfilePage.js';
-import { DeveloperProfileEditPage } from './pages/developers/DeveloperProfileEditPage.js';
-import { ProjectsDirectoryPage } from './pages/developers/ProjectsDirectoryPage.js';
-import { ProjectDetailPage } from './pages/developers/ProjectDetailPage.js';
-import { ManageProjectsPage } from './pages/developers/ManageProjectsPage.js';
-
 // LoveLink Romantic Digital Letters Suite
 import { LoveLinkLandingPage } from './pages/lovelink/LoveLinkLandingPage.js';
 import { LoveLinkStudioPage } from './pages/lovelink/LoveLinkStudioPage.js';
@@ -167,7 +163,7 @@ export const App: React.FC = () => {
                         <Route path="/" element={<HomePage />} />
 
                         {/* 2. All Tools (Unified Normal + AI Tools) */}
-                        <Route path="/tools" element={<Navigate to="/#tools-directory" replace />} />
+                        <Route path="/tools" element={<ToolsDirectoryPage />} />
                         <Route path="/tools/:toolSlug" element={<ToolDetailPage />} />
                         <Route path="/category/:categorySlug" element={<CategoryPage />} />
 
@@ -278,23 +274,6 @@ export const App: React.FC = () => {
                         <Route path="/study" element={<StudySpacePage />} />
                         <Route path="/study-space" element={<Navigate to="/study" replace />} />
 
-                        {/* Legacy Developer Hub Redirect + Preserved Profile/Project Routes */}
-                        <Route path="/developers" element={<Navigate to="/learning" replace />} />
-                        <Route
-                          path="/developers/profile/edit"
-                          element={<DeveloperProfileEditPage />}
-                        />
-                        <Route
-                          path="/developers/profile/:username"
-                          element={<DeveloperProfilePage />}
-                        />
-                        <Route path="/developers/projects" element={<ProjectsDirectoryPage />} />
-                        <Route
-                          path="/developers/projects/manage"
-                          element={<ManageProjectsPage />}
-                        />
-                        <Route path="/developers/projects/:slug" element={<ProjectDetailPage />} />
-
                         {/* 5. Community (Donations + Leaderboard Combined) */}
                         <Route path="/community" element={<CommunityPage />} />
                         <Route path="/support" element={<Navigate to="/community" replace />} />
@@ -317,6 +296,8 @@ export const App: React.FC = () => {
                         <Route path="/dashboard" element={<DashboardPage />} />
                         <Route path="/admin" element={<AdminDashboardPage />} />
                         <Route path="/about" element={<AboutPage />} />
+                        <Route path="/how-it-works" element={<HowItWorksPage />} />
+                        <Route path="/contact" element={<ContactPage />} />
                         <Route path="/privacy" element={<PrivacyPage />} />
                         <Route path="/licenses" element={<LicensesPage />} />
                         <Route path="/terms" element={<TermsPage />} />

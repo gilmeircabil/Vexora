@@ -53,6 +53,18 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     [addToast],
   );
 
+  // Bridge native window.alert to styled Toast UI
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const originalAlert = window.alert;
+    window.alert = (message?: any) => {
+      addToast(String(message ?? ''), 'info');
+    };
+    return () => {
+      window.alert = originalAlert;
+    };
+  }, [addToast]);
+
   return (
     <ToastContext.Provider value={{ toast: addToast, showToast: addToast, success, error, info }}>
       {children}

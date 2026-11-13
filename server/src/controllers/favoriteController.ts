@@ -4,15 +4,23 @@ import type { AuthenticatedRequest } from '../middleware/authMiddleware.js';
 import { UserFavorite } from '../models/UserFavorite.js';
 
 function toObjectId(id: unknown): Types.ObjectId {
-  if (id instanceof Types.ObjectId) return id;
+  if (id instanceof Types.ObjectId) {
+    return id;
+  }
   return new Types.ObjectId(String(id));
 }
 
 function sanitizeToolId(raw: unknown): string | null {
-  if (typeof raw !== 'string') return null;
+  if (typeof raw !== 'string') {
+    return null;
+  }
   const trimmed = raw.trim();
-  if (!trimmed || trimmed.length > 64) return null;
-  if (!/^[a-z0-9_-]+$/i.test(trimmed)) return null;
+  if (!trimmed || trimmed.length > 64) {
+    return null;
+  }
+  if (!/^[a-z0-9_-]+$/i.test(trimmed)) {
+    return null;
+  }
   return trimmed;
 }
 
@@ -29,9 +37,15 @@ export class FavoriteController {
       }
       const userId = toObjectId(req.user.userId);
       const favs = await UserFavorite.find({ userId }).sort({ createdAt: -1 }).lean();
+      
+      const toolIds: string[] = [];
+      for (const fav of favs) {
+        toolIds.push(fav.toolId);
+      }
+
       res.status(200).json({
         success: true,
-        data: favs.map((f) => f.toolId),
+        data: toolIds,
       });
     } catch (err: any) {
       res.status(500).json({ success: false, error: err.message || 'Failed to fetch favorites' });
@@ -106,6 +120,7 @@ export class FavoriteController {
       }
       const userId = toObjectId(req.user.userId);
       const rawToolIds = Array.isArray(req.body.toolIds) ? req.body.toolIds : [];
+      
       const validToolIds: string[] = [];
       for (const raw of rawToolIds) {
         const sanitized = sanitizeToolId(raw);
@@ -114,23 +129,24 @@ export class FavoriteController {
         }
       }
 
-      if (validToolIds.length > 0) {
-        await Promise.all(
-          validToolIds.map((id) =>
-            UserFavorite.updateOne(
-              { userId, toolId: id },
-              { $setOnInsert: { userId, toolId: id, createdAt: new Date() } },
-              { upsert: true },
-            ),
-          ),
+      for (const id of validToolIds) {
+        await UserFavorite.updateOne(
+          { userId, toolId: id },
+          { $setOnInsert: { userId, toolId: id, createdAt: new Date() } },
+          { upsert: true },
         );
       }
 
       // Return complete merged list of favorite IDs, sorted recently added first
       const allFavs = await UserFavorite.find({ userId }).sort({ createdAt: -1 }).lean();
+      const resultToolIds: string[] = [];
+      for (const fav of allFavs) {
+        resultToolIds.push(fav.toolId);
+      }
+
       res.status(200).json({
         success: true,
-        data: allFavs.map((f) => f.toolId),
+        data: resultToolIds,
       });
     } catch (err: any) {
       res.status(500).json({

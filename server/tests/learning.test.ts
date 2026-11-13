@@ -18,7 +18,6 @@ import {
   CreatorPayout,
 } from '../src/models/LearningMarketplace.js';
 import { User } from '../src/models/User.js';
-import { DeveloperProfile } from '../src/models/DeveloperProfile.js';
 import { WebhookEvent } from '../src/models/WebhookEvent.js';
 import { LearningService } from '../src/services/learningService.js';
 import { env } from '../src/config/env.js';
@@ -68,9 +67,6 @@ describe('Learning Hub Open Community & Creator Marketplace Suite', () => {
       avatar: '',
       isSuspended: false,
     } as any);
-    vi.spyOn(DeveloperProfile, 'findOne').mockReturnValue({
-      lean: vi.fn().mockResolvedValue(null),
-    } as any);
     vi.spyOn(CreatorProfile, 'findOne').mockReturnValue({
       lean: vi.fn().mockResolvedValue(null),
     } as any);
@@ -111,9 +107,6 @@ describe('Learning Hub Open Community & Creator Marketplace Suite', () => {
       _id: new Types.ObjectId(creatorId),
       name: 'Prof. Mateo',
       isSuspended: false,
-    } as any);
-    vi.spyOn(DeveloperProfile, 'findOne').mockReturnValue({
-      lean: vi.fn().mockResolvedValue(null),
     } as any);
     vi.spyOn(CreatorProfile, 'findOne').mockReturnValue({
       lean: vi.fn().mockResolvedValue(null),

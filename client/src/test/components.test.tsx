@@ -80,6 +80,7 @@ describe('Common UI Components', () => {
     expect(emblem).toHaveClass('text-[var(--theme-canvas)]');
     expect(screen.getByText('Vexora')).toBeInTheDocument();
     expect(screen.getByText('Mods')).toBeInTheDocument();
+    expect(screen.getByTestId('brand-beta-badge')).toHaveTextContent(/beta/i);
     expect(screen.getByText('Everything You Need. One Platform. Free.')).toBeInTheDocument();
   });
 

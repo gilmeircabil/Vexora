@@ -21,15 +21,6 @@ router.get('/donations', AdminController.getDonations);
 router.patch('/donations/:id', AdminController.updateDonation);
 router.get('/donations/webhooks', AdminController.getDonationWebhooks);
 
-// Admin Developer Hub Management
-router.get('/developers', AdminController.getDevelopers);
-router.patch('/developers/:id', AdminController.updateDeveloper);
-
-// Admin Projects Management
-router.get('/projects', AdminController.getProjects);
-router.patch('/projects/:id', AdminController.updateProject);
-router.delete('/projects/:id', AdminController.deleteProject);
-
 // Admin Moderation Reports
 router.get('/reports', AdminController.getReports);
 router.patch('/reports/:id', AdminController.resolveReport);
@@ -53,6 +44,9 @@ router.patch('/learning/payouts/:id', AdminController.processLearningPayout);
 router.get('/platform-config', AdminController.getPlatformConfig);
 router.patch('/platform-config', AdminController.updatePlatformConfig);
 router.patch('/maintenance', AdminController.updateMaintenanceConfig);
+router.post('/contact/:id/reply', AdminController.replyToContactInquiry);
+router.patch('/contact/:id/status', AdminController.updateContactInquiryStatus);
+router.delete('/contact/:id/messages/:messageId', AdminController.deleteContactMessage);
 
 // Admin Broadcast Announcements
 router.get('/announcements', AnnouncementController.getAllAnnouncements);

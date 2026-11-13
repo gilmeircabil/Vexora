@@ -43,58 +43,6 @@ export const adminDonationApi = {
     return res.json();
   },
 
-  async getDevelopers(params: Record<string, any> = {}) {
-    const qs = new URLSearchParams();
-    Object.entries(params).forEach(([k, v]) => {
-      if (v !== undefined && v !== null && v !== '') {
-        qs.append(k, String(v));
-      }
-    });
-    const res = await fetch(`/api/admin/developers?${qs.toString()}`, {
-      headers: getAuthHeaders(),
-    });
-    return res.json();
-  },
-
-  async updateDeveloper(id: string, data: any) {
-    const res = await fetch(`/api/admin/developers/${id}`, {
-      method: 'PATCH',
-      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify(data),
-    });
-    return res.json();
-  },
-
-  async getProjects(params: Record<string, any> = {}) {
-    const qs = new URLSearchParams();
-    Object.entries(params).forEach(([k, v]) => {
-      if (v !== undefined && v !== null && v !== '') {
-        qs.append(k, String(v));
-      }
-    });
-    const res = await fetch(`/api/admin/projects?${qs.toString()}`, {
-      headers: getAuthHeaders(),
-    });
-    return res.json();
-  },
-
-  async updateProject(id: string, data: any) {
-    const res = await fetch(`/api/admin/projects/${id}`, {
-      method: 'PATCH',
-      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify(data),
-    });
-    return res.json();
-  },
-
-  async deleteProject(id: string) {
-    const res = await fetch(`/api/admin/projects/${id}`, {
-      method: 'DELETE',
-      headers: getAuthHeaders(),
-    });
-    return res.json();
-  },
-
   async getReports(params: Record<string, any> = {}) {
     const qs = new URLSearchParams();
     Object.entries(params).forEach(([k, v]) => {

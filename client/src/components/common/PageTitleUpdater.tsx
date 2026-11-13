@@ -84,6 +84,10 @@ export const PageTitleUpdater: React.FC = () => {
       document.title = 'Admin Console — VexoraMods';
       return;
     }
+    if (pathname === '/contact') {
+      document.title = 'Contact Admin — VexoraMods';
+      return;
+    }
 
     // 11. Auth Pages
     if (pathname === '/login') {
@@ -100,6 +104,10 @@ export const PageTitleUpdater: React.FC = () => {
     }
 
     // 12. Informational & Legal
+    if (pathname === '/how-it-works') {
+      document.title = 'How It Works — VexoraMods';
+      return;
+    }
     if (pathname === '/about') {
       document.title = 'About — VexoraMods';
       return;

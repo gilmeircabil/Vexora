@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
-export type LimitCategory = 'auth' | 'api' | 'upload' | 'ai' | 'learning' | 'studySpace' | 'studio' | 'community' | 'reviews' | 'developer' | 'media' | 'jobs' | 'storage' | 'payment';
+export type LimitCategory = 'auth' | 'api' | 'upload' | 'ai' | 'learning' | 'studySpace' | 'studio' | 'community' | 'reviews' | 'jobs' | 'storage' | 'payment';
 
 export type LimitAction =
   | 'register' | 'login' | 'logout' | 'passwordRecovery' | 'changePassword'
@@ -12,8 +12,6 @@ export type LimitAction =
   | 'learningPost' | 'learningComment' | 'learningReview' | 'learningBookmark' | 'learningReaction'
   | 'communityPost' | 'communityComment' | 'reaction' | 'report'
   | 'submitReview' | 'submitRating' | 'reportAbuse'
-  | 'devProject' | 'devReaction' | 'devComment' | 'devReport'
-  | 'mediaDownload' | 'mediaConvert'
   | 'jobQueue' | 'jobProcess' | 'jobCancel' | 'jobGet'
   | 'storageUsage' | 'storageCleanup'
   | 'checkout' | 'verifySandbox' | 'refund';
@@ -47,7 +45,7 @@ const UsageLimitSchema = new Schema<IUsageLimit>(
     },
     category: {
       type: String,
-      enum: ['auth', 'api', 'upload', 'ai', 'learning', 'studySpace', 'studio', 'community', 'reviews', 'developer', 'media', 'jobs', 'storage', 'payment'],
+      enum: ['auth', 'api', 'upload', 'ai', 'learning', 'studySpace', 'studio', 'community', 'reviews', 'jobs', 'storage', 'payment'],
       required: true,
       index: true,
     },

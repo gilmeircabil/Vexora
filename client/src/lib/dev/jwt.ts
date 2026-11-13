@@ -30,6 +30,25 @@ export interface DecodedJwt {
   expiresInSeconds?: number;
 }
 
+// Converts a URL-safe Base64 string to standard Base64 with padding
+function toStandardBase64(urlSafeStr: string): string {
+  let base64 = urlSafeStr.replace(/-/g, '+').replace(/_/g, '/');
+  while (base64.length % 4 !== 0) {
+    base64 += '=';
+  }
+  return base64;
+}
+
+// Converts a base64 string into a Uint8Array of bytes
+function base64ToBytes(base64: string): Uint8Array {
+  const binaryString = atob(base64);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes;
+}
+
 /**
  * Base64URL encoding (RFC 7515).
  */
@@ -37,7 +56,10 @@ export function base64UrlEncode(input: string | Uint8Array): string {
   const bytes = typeof input === 'string' ? new TextEncoder().encode(input) : input;
   let binary = '';
   for (let i = 0; i < bytes.length; i++) {
-    binary += String.fromCharCode(bytes[i]!);
+    const byte = bytes[i];
+    if (byte !== undefined) {
+      binary += String.fromCharCode(byte);
+    }
   }
   const base64 = btoa(binary);
   return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -48,43 +70,28 @@ export function base64UrlEncode(input: string | Uint8Array): string {
  */
 export function base64UrlDecode(str: string): Result<string, string> {
   try {
-    let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
-    while (base64.length % 4) {
-      base64 += '=';
-    }
-    const binary = atob(base64);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) {
-      bytes[i] = binary.charCodeAt(i);
-    }
-    return ok(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
+    const standardBase64 = toStandardBase64(str);
+    const bytes = base64ToBytes(standardBase64);
+    const textDecoder = new TextDecoder('utf-8', { fatal: true });
+    return ok(textDecoder.decode(bytes));
   } catch {
     return err('Failed to decode Base64URL string.');
   }
 }
 
 function base64UrlDecodeBytes(str: string): Uint8Array {
-  let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
-  while (base64.length % 4) {
-    base64 += '=';
-  }
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return bytes;
+  const standardBase64 = toStandardBase64(str);
+  return base64ToBytes(standardBase64);
 }
 
 function getHashName(alg: JwtAlgorithm): string {
-  switch (alg) {
-    case 'HS256':
-      return 'SHA-256';
-    case 'HS384':
-      return 'SHA-384';
-    case 'HS512':
-      return 'SHA-512';
+  if (alg === 'HS384') {
+    return 'SHA-384';
   }
+  if (alg === 'HS512') {
+    return 'SHA-512';
+  }
+  return 'SHA-256';
 }
 
 /**
@@ -107,9 +114,9 @@ export async function signJwt(
     const encodedPayload = base64UrlEncode(payloadJson);
     const signingInput = `${encodedHeader}.${encodedPayload}`;
 
-    const enc = new TextEncoder();
-    const keyData = enc.encode(secret);
-    const inputData = enc.encode(signingInput);
+    const textEncoder = new TextEncoder();
+    const keyData = textEncoder.encode(secret);
+    const inputData = textEncoder.encode(signingInput);
 
     const hashName = getHashName(header.alg);
     const cryptoKey = await crypto.subtle.importKey(
@@ -126,7 +133,8 @@ export async function signJwt(
 
     return ok(`${signingInput}.${encodedSignature}`);
   } catch (error) {
-    return err(error instanceof Error ? error.message : 'Failed to sign JWT.');
+    const message = error instanceof Error ? error.message : 'Failed to sign JWT.';
+    return err(message);
   }
 }
 
@@ -139,7 +147,13 @@ export function decodeJwt(token: string): Result<DecodedJwt, string> {
     return err('Invalid JWT format. A valid token must contain 3 parts separated by dots.');
   }
 
-  const [rawHeader, rawPayload, signature] = parts as [string, string, string];
+  const rawHeader = parts[0];
+  const rawPayload = parts[1];
+  const signature = parts[2];
+
+  if (!rawHeader || !rawPayload || signature === undefined) {
+    return err('Invalid JWT format. A valid token must contain 3 parts separated by dots.');
+  }
 
   const headerRes = base64UrlDecode(rawHeader);
   if (!headerRes.ok) {
@@ -194,7 +208,9 @@ export async function verifyJwtSignature(
   secret: string,
 ): Promise<Result<boolean, string>> {
   const decoded = decodeJwt(token);
-  if (!decoded.ok) return decoded;
+  if (!decoded.ok) {
+    return decoded;
+  }
 
   const { header, rawHeader, rawPayload, signature } = decoded.value;
 
@@ -208,9 +224,9 @@ export async function verifyJwtSignature(
 
   try {
     const signingInput = `${rawHeader}.${rawPayload}`;
-    const enc = new TextEncoder();
-    const keyData = enc.encode(secret);
-    const inputData = enc.encode(signingInput);
+    const textEncoder = new TextEncoder();
+    const keyData = textEncoder.encode(secret);
+    const inputData = textEncoder.encode(signingInput);
     const signatureBytes = base64UrlDecodeBytes(signature);
 
     const hashName = getHashName(header.alg);
@@ -231,6 +247,7 @@ export async function verifyJwtSignature(
 
     return ok(isValid);
   } catch (error) {
-    return err(error instanceof Error ? error.message : 'Verification failed.');
+    const message = error instanceof Error ? error.message : 'Verification failed.';
+    return err(message);
   }
 }

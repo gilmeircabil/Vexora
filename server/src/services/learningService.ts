@@ -36,9 +36,9 @@ import {
   CreatorPayout,
 } from '../models/LearningMarketplace.js';
 import { User } from '../models/User.js';
-import { DeveloperProfile } from '../models/DeveloperProfile.js';
 import { WebhookEvent } from '../models/WebhookEvent.js';
 import { env } from '../config/env.js';
+import { StorageService } from './storageService.js';
 
 function sanitizePlain(input: unknown): string {
   if (typeof input !== 'string') return '';
@@ -640,9 +640,6 @@ export class LearningService {
         }))
       : [];
 
-    const devProfile = await DeveloperProfile.findOne({
-      userId: new Types.ObjectId(userId),
-    }).lean();
     const creatorProfile = await CreatorProfile.findOne({
       userId: new Types.ObjectId(userId),
     }).lean();
@@ -666,9 +663,9 @@ export class LearningService {
 
     const post = await LearningPost.create({
       authorId: new Types.ObjectId(userId),
-      authorName: creatorProfile?.displayName || devProfile?.displayName || user.name,
-      authorUsername: creatorProfile?.username || devProfile?.username,
-      authorAvatar: creatorProfile?.avatarUrl || devProfile?.profileImage || user.avatarUrl || '',
+      authorName: creatorProfile?.displayName || user.name,
+      authorUsername: creatorProfile?.username,
+      authorAvatar: creatorProfile?.avatarUrl || user.avatarUrl || '',
       title,
       slug,
       excerpt,
@@ -762,11 +759,19 @@ export class LearningService {
     }
 
     if (input.coverImage !== undefined) {
-      post.coverImage = input.coverImage ? sanitizeUrl(input.coverImage) : '';
+      const nextCover = input.coverImage ? sanitizeUrl(input.coverImage) : '';
+      if (post.coverImage && post.coverImage !== nextCover) {
+        await StorageService.deleteAssetByUrl(post.coverImage);
+      }
+      post.coverImage = nextCover;
     }
 
     if (input.thumbnailUrl !== undefined) {
-      post.thumbnailUrl = input.thumbnailUrl ? sanitizeUrl(input.thumbnailUrl) : '';
+      const nextThumb = input.thumbnailUrl ? sanitizeUrl(input.thumbnailUrl) : '';
+      if (post.thumbnailUrl && post.thumbnailUrl !== nextThumb) {
+        await StorageService.deleteAssetByUrl(post.thumbnailUrl);
+      }
+      post.thumbnailUrl = nextThumb;
     }
 
     if (input.videoUrl !== undefined) {
@@ -1364,9 +1369,13 @@ export class LearningService {
     })
       .sort({ createdAt: 1 })
       .limit(200)
+      .populate('authorId', 'avatarUrl')
       .lean();
 
-    return comments;
+    return comments.map((c: any) => ({
+      ...c,
+      authorAvatar: c.authorAvatar || c.authorId?.avatarUrl || '',
+    }));
   }
 
   static async addComment(
@@ -1393,15 +1402,11 @@ export class LearningService {
       }
     }
 
-    const devProfile = await DeveloperProfile.findOne({
-      userId: new Types.ObjectId(userId),
-    }).lean();
-
     const comment = await LearningComment.create({
       postId: post._id,
       authorId: new Types.ObjectId(userId),
-      authorName: devProfile?.displayName || user.name,
-      authorAvatar: devProfile?.profileImage || user.avatarUrl || '',
+      authorName: user.name,
+      authorAvatar: user.avatarUrl || '',
       parentCommentId: parentObjId,
       content: cleanContent,
     });
@@ -1489,6 +1494,7 @@ export class LearningService {
         .sort({ isVerifiedPurchase: -1, createdAt: -1 })
         .skip(skip)
         .limit(limit)
+        .populate('userId', 'avatarUrl')
         .lean(),
       LearningReview.countDocuments({ postId: postObjId, status: 'approved' }),
       LearningReview.aggregate([
@@ -1509,7 +1515,10 @@ export class LearningService {
     const averageRating = total > 0 ? Math.round((weightedSum / total) * 10) / 10 : 0;
 
     return {
-      reviews,
+      reviews: reviews.map((r: any) => ({
+        ...r,
+        userAvatar: r.userAvatar || r.userId?.avatarUrl || '',
+      })),
       total,
       page,
       totalPages: Math.ceil(total / limit) || 1,
@@ -1617,22 +1626,12 @@ export class LearningService {
     }
 
     if (!userIdObj) {
-      const devProf = await DeveloperProfile.findOne({
-        username: usernameOrUserId.toLowerCase(),
-      }).lean();
-      if (devProf) {
-        userIdObj = devProf.userId;
-      }
-    }
-
-    if (!userIdObj) {
       throw new Error('Creator profile not found');
     }
 
-    const [user, devProfile, publishedPosts, reviewStats, verifiedSalesCount, followerCount] =
+    const [user, publishedPosts, reviewStats, verifiedSalesCount, followerCount] =
       await Promise.all([
         User.findById(userIdObj).select('name avatar bio createdAt').lean(),
-        DeveloperProfile.findOne({ userId: userIdObj }).lean(),
         LearningPost.find({ authorId: userIdObj, status: 'published' })
           .select(
             '-content -chapters.lessons.content -steps.content -codeSnippets.code -protectedFiles.storageKey',
@@ -1691,20 +1690,15 @@ export class LearningService {
       userId: String(userIdObj),
       username:
         profile?.username ||
-        devProfile?.username ||
         user.name.toLowerCase().replace(/[^a-z0-9]+/g, '') ||
         String(userIdObj),
-      displayName: profile?.displayName || devProfile?.displayName || user.name,
-      avatarUrl: profile?.avatarUrl || devProfile?.profileImage || user.avatarUrl || '',
-      bio: profile?.bio || devProfile?.biography || user.bio || '',
-      headline: profile?.headline || devProfile?.headline || 'Knowledge Creator on VexoraMods',
-      expertise: profile?.expertise?.length
-        ? profile.expertise
-        : devProfile?.skills?.length
-          ? devProfile.skills
-          : derivedExpertise,
+      displayName: profile?.displayName || user.name,
+      avatarUrl: profile?.avatarUrl || user.avatarUrl || '',
+      bio: profile?.bio || user.bio || '',
+      headline: profile?.headline || 'Knowledge Creator on VexoraMods',
+      expertise: profile?.expertise?.length ? profile.expertise : derivedExpertise,
       interests: profile?.interests || [],
-      websiteUrl: profile?.websiteUrl || devProfile?.portfolioUrl || '',
+      websiteUrl: profile?.websiteUrl || '',
       followersCount: followerCount,
       viewerFollowing,
       stats: {
@@ -1775,7 +1769,11 @@ export class LearningService {
     };
 
     if (input.avatarUrl !== undefined) {
-      updateFields.avatarUrl = input.avatarUrl ? sanitizeUrl(input.avatarUrl) : '';
+      const nextAvatar = input.avatarUrl ? sanitizeUrl(input.avatarUrl) : '';
+      if (existing?.avatarUrl && existing.avatarUrl !== nextAvatar) {
+        await StorageService.deleteAssetByUrl(existing.avatarUrl);
+      }
+      updateFields.avatarUrl = nextAvatar;
     }
     if (input.bio !== undefined) {
       updateFields.bio = sanitizePlain(input.bio).slice(0, 1200);

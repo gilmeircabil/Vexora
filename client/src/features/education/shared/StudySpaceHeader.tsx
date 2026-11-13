@@ -7,13 +7,10 @@ import {
   PanelLeftOpen,
   Menu,
   ChevronRight,
-  School,
   BookOpen,
 } from 'lucide-react';
 
 export interface StudySpaceHeaderProps {
-  workspace: 'student' | 'teacher';
-  onWorkspaceChange: (ws: 'student' | 'teacher') => void;
   activeTab: string;
   isSidebarCollapsed: boolean;
   onToggleSidebar: () => void;
@@ -23,8 +20,6 @@ export interface StudySpaceHeaderProps {
 }
 
 export const StudySpaceHeader: React.FC<StudySpaceHeaderProps> = ({
-  workspace,
-  onWorkspaceChange,
   activeTab,
   isSidebarCollapsed,
   onToggleSidebar,
@@ -78,44 +73,21 @@ export const StudySpaceHeader: React.FC<StudySpaceHeaderProps> = ({
         </div>
       </div>
 
-      {/* Center: Dedicated Workspace Switcher */}
-      <div className="flex items-center bg-[var(--theme-surface)] p-1 rounded-xl border border-[var(--theme-gray-border)] shadow-sm">
-        <button
-          type="button"
-          onClick={() => onWorkspaceChange('student')}
-          className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-xs font-black transition-all cursor-pointer ${
-            workspace === 'student'
-              ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-dirty-white)] shadow-sm'
-              : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] border border-transparent'
-          }`}
-          aria-label="Student Workspace"
-        >
-          <BookOpen className="w-3.5 h-3.5 stroke-[2.5]" />
-          <span>Student Workspace</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => onWorkspaceChange('teacher')}
-          className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-xs font-black transition-all cursor-pointer ${
-            workspace === 'teacher'
-              ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-dirty-white)] shadow-sm'
-              : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] border border-transparent'
-          }`}
-          aria-label="Teacher Workspace"
-        >
-          <School className="w-3.5 h-3.5 stroke-[2.5]" />
-          <span>Teacher Workspace</span>
-        </button>
+      {/* Center: Student Workspace Pill */}
+      <div className="flex items-center bg-[var(--theme-surface)] px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] shadow-sm gap-1.5 text-xs font-black text-[var(--theme-dirty-white)]">
+        <BookOpen className="w-3.5 h-3.5 stroke-[2.5] text-[var(--theme-yellow)]" />
+        <span>Student Workspace</span>
       </div>
 
       {/* Right: Breadcrumb & Fullscreen / Focus Mode Toggle */}
       <div className="flex items-center gap-2">
         {/* Active Tab Breadcrumb pill (Desktop) */}
         <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-gray-muted)] text-xs font-mono font-bold">
-          <span className="capitalize text-[var(--theme-gray-muted)]">{workspace}</span>
+          <span className="capitalize text-[var(--theme-gray-muted)]">student</span>
           <ChevronRight className="w-3 h-3 text-[var(--theme-gray-dim)]" />
-          <span className="capitalize text-[var(--theme-dirty-white)] font-black">{activeTab.replace('-', ' ')}</span>
+          <span className="capitalize text-[var(--theme-dirty-white)] font-black">
+            {activeTab.replace('-', ' ')}
+          </span>
         </div>
 
         {/* Fullscreen / Focus Mode Toggle Button */}

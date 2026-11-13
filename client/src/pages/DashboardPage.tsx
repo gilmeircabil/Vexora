@@ -121,6 +121,51 @@ export const DashboardPage: React.FC = () => {
     }
   };
 
+  const handleDeleteJob = async (jobId: string) => {
+    try {
+      const res = await fetch(`/api/ai/history/${jobId}`, {
+        method: 'DELETE',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        setJobs((prev) => prev.filter((j) => j._id !== jobId));
+        showToast('History item deleted.', 'success');
+      } else {
+        throw new Error(data.error || 'Failed to delete history item');
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Failed to delete history item.', 'error');
+    }
+  };
+
+  const handleClearAllJobs = async () => {
+    if (typeof window !== 'undefined' && typeof window.confirm === 'function') {
+      try {
+        if (!window.confirm('Are you sure you want to clear all processing history?')) {
+          return;
+        }
+      } catch {
+        // Continue if confirm is not supported
+      }
+    }
+    try {
+      const res = await fetch('/api/ai/history', {
+        method: 'DELETE',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        setJobs([]);
+        showToast('Processing history cleared.', 'success');
+      } else {
+        throw new Error(data.error || 'Failed to clear processing history');
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Failed to clear history.', 'error');
+    }
+  };
+
   useEffect(() => {
     if (token) {
       loadDashboardData();
@@ -300,15 +345,28 @@ export const DashboardPage: React.FC = () => {
             <Clock className="w-5 h-5 text-[var(--theme-dirty-white)]" />
             <h2 className="text-xl font-bold text-[var(--theme-dirty-white)]">Processing History</h2>
           </div>
-          <button
-            type="button"
-            onClick={loadDashboardData}
-            disabled={isLoadingData}
-            className="p-1.5 rounded-lg bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] cursor-pointer"
-            title="Refresh history"
-          >
-            <RefreshCw className={`w-4 h-4 ${isLoadingData ? 'animate-spin' : ''}`} />
-          </button>
+          <div className="flex items-center gap-2">
+            {jobs.length > 0 && (
+              <button
+                type="button"
+                onClick={handleClearAllJobs}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface-raised)] hover:bg-red-500/15 border border-[var(--theme-gray-border)] text-red-400 hover:text-red-300 text-xs font-semibold transition-colors cursor-pointer"
+                title="Clear all history"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Clear All</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={loadDashboardData}
+              disabled={isLoadingData}
+              className="p-1.5 rounded-lg bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] cursor-pointer"
+              title="Refresh history"
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoadingData ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
         </div>
 
         {isLoadingData ? (
@@ -370,19 +428,28 @@ export const DashboardPage: React.FC = () => {
                       })}
                     </td>
                     <td className="py-3 px-3 text-right">
-                      {job.outputUrl ? (
-                        <a
-                          href={job.outputUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          download
-                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] border border-[var(--theme-yellow)] font-semibold text-[11px] rounded-lg shadow-sm"
+                      <div className="inline-flex items-center justify-end gap-1.5">
+                        {job.outputUrl && (
+                          <a
+                            href={job.outputUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            download
+                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] border border-[var(--theme-yellow)] font-semibold text-[11px] rounded-lg shadow-sm"
+                          >
+                            <Download className="w-3 h-3" /> Download
+                          </a>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteJob(job._id)}
+                          aria-label={`Delete ${job.tool} history`}
+                          className="inline-flex items-center gap-1 px-2 py-1 bg-[var(--theme-surface-raised)] hover:bg-red-500/15 border border-[var(--theme-gray-border)] text-red-400 hover:text-red-300 font-semibold text-[11px] rounded-lg transition-colors cursor-pointer"
+                          title="Delete history item"
                         >
-                          <Download className="w-3 h-3" /> Download
-                        </a>
-                      ) : (
-                        <span className="text-[var(--theme-gray-muted)] font-mono">-</span>
-                      )}
+                          <Trash2 className="w-3 h-3" /> Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

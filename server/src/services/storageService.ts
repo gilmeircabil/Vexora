@@ -371,4 +371,32 @@ export class StorageService {
       .replace(/^https:\/\/pub-[^/]+\.r2\.dev\/assets\//, '/api/design-assets/files/')
       .replace(/^https:\/\/pub-[^/]+\.r2\.dev\/thumbs\//, '/api/design-assets/files/thumbs/');
   }
+
+  /**
+   * Extract the underlying R2/local storageKey from an asset URL or proxy URL.
+   * Returns null for external URLs (e.g., Google/Facebook OAuth avatars).
+   */
+  static extractStorageKeyFromUrl(url?: string | null): string | null {
+    if (!url || typeof url !== 'string') return null;
+    const clean = url.split('?')[0]!.split('#')[0]!.trim();
+    const match = clean.match(
+      /(?:\/api\/design-assets\/files\/(?:thumbs\/)?|\/(?:assets|thumbs)\/)(asset_[A-Za-z0-9_-]+\.[a-z0-9]+)$/i,
+    );
+    return match ? match[1]! : null;
+  }
+
+  /**
+   * Delete an uploaded picture and its thumbnail from R2 / local storage by URL,
+   * and remove any matching DesignAsset quota record.
+   */
+  static async deleteAssetByUrl(url?: string | null): Promise<void> {
+    const storageKey = this.extractStorageKeyFromUrl(url);
+    if (!storageKey) return;
+    await this.deleteAsset(storageKey);
+    try {
+      await DesignAsset.deleteOne({ storageKey });
+    } catch {
+      // Ignore DB cleanup errors
+    }
+  }
 }

@@ -24,12 +24,17 @@ export const Footer: React.FC = () => {
   }, []);
 
   return (
-    <footer className="mt-20 py-8 px-4 sm:px-6">
+    <footer id="contact" className="mt-20 py-8 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto rounded-3xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] shadow-sm p-8 sm:p-12 transition-colors text-[var(--theme-dirty-white)]">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           {/* Col 1: Mission & Identity */}
           <div className="md:col-span-1 space-y-3">
-            <Link to="/" className="inline-block group" aria-label="VexoraMods Home">
+            <Link
+              to="/"
+              onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
+              className="inline-block group"
+              aria-label="VexoraMods Home"
+            >
               <BrandLogo size="md" />
             </Link>
             <p className="text-xs font-medium text-[var(--theme-gray-muted)] leading-relaxed">

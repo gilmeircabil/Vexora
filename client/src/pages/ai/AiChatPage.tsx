@@ -1287,11 +1287,7 @@ export const AiChatPage: React.FC = () => {
   const userBadge = isAuthenticated && user ? (user.role === 'admin' ? 'Admin' : 'Free') : 'Guest';
 
   return (
-    <div
-      className={`w-full ${
-        isFullscreen ? 'h-screen' : 'h-[calc(100vh-4rem)]'
-      } bg-transparent text-slate-100 flex overflow-hidden font-sans select-text`}
-    >
+    <div className="w-full h-screen bg-transparent text-slate-100 flex overflow-hidden font-sans select-text">
       {/* Mobile Drawer Overlay */}
       {isSidebarOpen && (
         <div

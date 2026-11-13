@@ -12,6 +12,7 @@ const contactLimiter = createRateLimiter({
 
 router.get('/home', PlatformController.getHomeOverview);
 router.get('/maintenance', PlatformController.getMaintenanceConfig);
+router.get('/contact/threads', PlatformController.getContactThreads);
 router.post('/contact', contactLimiter, PlatformController.submitContactInquiry);
 
 export default router;

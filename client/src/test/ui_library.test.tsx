@@ -98,8 +98,8 @@ describe('VexoraMods UI Component Library & Design Learning Center', () => {
   });
 
   describe('2. Navigation Integration', () => {
-    it('renders UI Library item in Header with active state support', () => {
-      render(
+    it('hides Header completely on /ui-library so no navbar or floating bar overlaps the workspace', () => {
+      const { container } = render(
         <AuthProvider>
           <MemoryRouter initialEntries={['/ui-library']}>
             <Header />
@@ -107,10 +107,10 @@ describe('VexoraMods UI Component Library & Design Learning Center', () => {
         </AuthProvider>,
       );
 
-      // Desktop link should be present
-      const navLinks = screen.getAllByRole('link', { name: /ui library/i });
-      expect(navLinks.length).toBeGreaterThanOrEqual(1);
-      expect(navLinks[0]).toHaveAttribute('href', '/ui-library');
+      expect(container).toBeEmptyDOMElement();
+      expect(screen.queryByRole('link', { name: 'Web Tool' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('link', { name: 'How it works' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('link', { name: 'Contact' })).not.toBeInTheDocument();
     });
   });
 

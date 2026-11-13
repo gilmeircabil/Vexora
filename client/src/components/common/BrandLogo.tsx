@@ -5,6 +5,7 @@ interface BrandLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   showTagline?: boolean;
   monochrome?: boolean;
+  showBeta?: boolean;
 }
 
 export const BrandLogo: React.FC<BrandLogoProps> = ({
@@ -12,6 +13,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   size = 'md',
   showTagline = false,
   monochrome = false,
+  showBeta = true,
 }) => {
   const iconSizes = {
     sm: 'w-7 h-7 text-xs',
@@ -62,11 +64,21 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
 
       {/* Typography */}
       <div className="flex flex-col">
-        <span
-          className={`${textSizes[size]} font-black tracking-tight leading-none text-[var(--theme-silver)] font-sans`}
-        >
-          Vexora<span className="text-[var(--theme-yellow)]">Mods</span>
-        </span>
+        <div className="flex items-center gap-1.5 leading-none">
+          <span
+            className={`${textSizes[size]} font-black tracking-tight leading-none text-[var(--theme-silver)] font-sans`}
+          >
+            Vexora<span className="text-[var(--theme-yellow)]">Mods</span>
+          </span>
+          {showBeta && (
+            <span
+              data-testid="brand-beta-badge"
+              className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase font-mono tracking-wider bg-[var(--theme-yellow)]/15 text-[var(--theme-yellow)] border border-[var(--theme-yellow)]/30 select-none shadow-xs"
+            >
+              Beta
+            </span>
+          )}
+        </div>
         {showTagline && (
           <span className="text-[10px] font-medium text-[var(--theme-gray-muted)] tracking-wider uppercase mt-1">
             Everything You Need. One Platform. Free.

@@ -187,6 +187,8 @@ router.delete('/chat/sessions', authenticate, AIController.clearChatSessions);
 // Jobs, history & downloads
 router.get('/jobs/:jobId', optionalAuthenticate, AIController.getJob);
 router.get('/history', optionalAuthenticate, AIController.getHistory);
+router.delete('/history/:id', optionalAuthenticate, AIController.deleteHistoryItem);
+router.delete('/history', optionalAuthenticate, AIController.clearHistory);
 router.get('/download/:filename', AIController.downloadResult);
 
 export default router;

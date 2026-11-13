@@ -6,22 +6,40 @@ import {
   LogOut,
   LayoutDashboard,
   ShieldCheck,
-  Sparkles,
-  Heart,
-  BookOpen,
-  Wrench,
-  GraduationCap,
-  Bot,
-  Compass,
-  LayoutGrid,
   Star,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 import { BrandLogo } from '../common/BrandLogo.js';
 
+const PRIMARY_NAV_ITEMS = [
+  { label: 'Web Tool', to: '/tools', hash: '' },
+  { label: 'How it works', to: '/how-it-works', hash: '' },
+  { label: 'Contact', to: '/contact', hash: '' },
+] as const;
+
+export function isWorkspacePath(pathname: string): boolean {
+  return (
+    pathname.startsWith('/ai-tools/chat') ||
+    pathname === '/ai-chat' ||
+    pathname === '/chat' ||
+    pathname.startsWith('/studio') ||
+    pathname.startsWith('/design-studio') ||
+    pathname.startsWith('/ui-library') ||
+    pathname.startsWith('/learning') ||
+    pathname.startsWith('/study') ||
+    pathname.startsWith('/study-space') ||
+    pathname.startsWith('/discover') ||
+    pathname.startsWith('/community') ||
+    pathname.startsWith('/support') ||
+    pathname.startsWith('/leaderboard') ||
+    pathname.startsWith('/lovelink')
+  );
+}
+
 export const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const location = useLocation();
+  const isWorkspace = isWorkspacePath(location.pathname);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -31,7 +49,7 @@ export const Header: React.FC = () => {
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsProfileMenuOpen(false);
-  }, [location.pathname]);
+  }, [location.pathname, location.hash]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -43,154 +61,67 @@ export const Header: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const isNavActive = (path: string) => {
-    if (path === '/') return location.pathname === '/';
-    if (path === '/ai-chat') {
-      return location.pathname.startsWith('/ai-chat') || location.pathname.startsWith('/chat');
+  const handleNavClick = (hash: string) => {
+    setIsMobileMenuOpen(false);
+    if (hash && location.pathname === '/') {
+      const targetId = hash.replace('#', '');
+      const el = document.getElementById(targetId);
+      if (el && typeof el.scrollIntoView === 'function') {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }
-    if (path === '/discover') {
-      return location.pathname.startsWith('/discover');
-    }
-    if (path === '/studio') {
-      return (
-        location.pathname.startsWith('/studio') || location.pathname.startsWith('/design-studio')
-      );
-    }
-    if (path === '/ui-library') {
-      return location.pathname.startsWith('/ui-library');
-    }
-    if (path === '/study') {
-      return location.pathname.startsWith('/study') || location.pathname.startsWith('/study-space');
-    }
-    if (path === '/tools') {
-      return (
-        location.pathname.startsWith('/tools') ||
-        location.pathname.startsWith('/ai-tools') ||
-        location.pathname.startsWith('/category')
-      );
-    }
-    if (path === '/lovelink') {
-      return location.pathname.startsWith('/lovelink');
-    }
-    return location.pathname.startsWith(path);
   };
+
+  const isNavItemActive = (to: string, hash: string) => {
+    if (!hash) {
+      if (to === '/tools') {
+        return (
+          location.pathname.startsWith('/tools') ||
+          location.pathname.startsWith('/ai-tools') ||
+          location.pathname.startsWith('/category')
+        );
+      }
+      return location.pathname.startsWith(to);
+    }
+    return location.pathname === '/' && location.hash === hash;
+  };
+
+  if (isWorkspace) {
+    return null;
+  }
 
   return (
     <header className="sticky top-0 z-40 w-full bg-[var(--theme-canvas)]/95 backdrop-blur-md border-b border-[var(--theme-gray-border)] shadow-sm transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Brand / Logo */}
-        <Link to="/" className="flex items-center shrink-0 group" aria-label="VexoraMods Home">
+        <Link
+          to="/"
+          onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
+          className="flex items-center shrink-0 group"
+          aria-label="VexoraMods Home"
+        >
           <BrandLogo size="md" />
         </Link>
 
         {/* Primary Navigation Links */}
         <nav
           aria-label="Primary Navigation"
-          className="hidden md:flex items-center gap-1 xl:gap-2 text-xs font-bold"
+          className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-bold"
         >
-          <Link
-            to="/ai-chat"
-            className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
-              isNavActive('/ai-chat')
-                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
-                : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
-            }`}
-          >
-            <Bot className="w-3.5 h-3.5 stroke-[2.2]" />
-            <span>AI Chat</span>
-          </Link>
-
-          <Link
-            to="/studio"
-            className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
-              isNavActive('/studio')
-                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
-                : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
-            }`}
-          >
-            <Sparkles className="w-3.5 h-3.5 stroke-[2.2]" />
-            <span>Studio</span>
-          </Link>
-
-          <Link
-            to="/ui-library"
-            className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
-              isNavActive('/ui-library')
-                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
-                : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
-            }`}
-          >
-            <LayoutGrid className="w-3.5 h-3.5 stroke-[2.2]" />
-            <span>UI Library</span>
-          </Link>
-
-          <Link
-            to="/learning"
-            className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
-              isNavActive('/learning')
-                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
-                : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
-            }`}
-          >
-            <BookOpen className="w-3.5 h-3.5 stroke-[2.2]" />
-            <span>Learning Hub</span>
-          </Link>
-
-          <Link
-            to={
-              user?.educationRole === 'teacher' || user?.educationRole === 'educator'
-                ? '/study?workspace=teacher'
-                : '/study'
-            }
-            className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
-              isNavActive('/study')
-                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
-                : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
-            }`}
-          >
-            <GraduationCap className="w-3.5 h-3.5 stroke-[2.2]" />
-            <span>
-              {user?.educationRole === 'teacher' || user?.educationRole === 'educator'
-                ? 'Teacher Workspace'
-                : 'Study Space'}
-            </span>
-          </Link>
-
-          <Link
-            to="/discover"
-            className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
-              isNavActive('/discover')
-                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
-                : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
-            }`}
-          >
-            <Compass className="w-3.5 h-3.5 stroke-[2.2]" />
-            <span>Discover</span>
-          </Link>
-
-          <Link
-            to="/community"
-            className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
-              isNavActive('/community')
-                ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold shadow-xs'
-                : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]'
-            }`}
-          >
-            <Heart className="w-3.5 h-3.5 stroke-[2.2]" />
-            <span>Community</span>
-          </Link>
-
-          <Link
-            to="/lovelink"
-            className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
-              isNavActive('/lovelink')
-                ? 'bg-rose-500 text-white font-bold shadow-xs'
-                : 'text-[var(--theme-gray-muted)] hover:text-rose-400 hover:bg-[var(--theme-surface-raised)]'
-            }`}
-          >
-            <Heart className="w-3.5 h-3.5 stroke-[2.2] text-rose-400" />
-            <span>LoveLink</span>
-          </Link>
+          {PRIMARY_NAV_ITEMS.map((item) => (
+            <Link
+              key={item.label}
+              to={item.to}
+              onClick={() => handleNavClick(item.hash)}
+              className={`px-2 py-1.5 rounded-lg transition-colors whitespace-nowrap ${
+                isNavItemActive(item.to, item.hash)
+                  ? 'text-[var(--theme-dirty-white)]'
+                  : 'text-[var(--theme-gray-muted)] hover:text-[var(--theme-dirty-white)]'
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         {/* Right Section: Ratings + Auth Menu + Mobile Toggle */}
@@ -254,14 +185,6 @@ export const Header: React.FC = () => {
                     >
                       <LayoutDashboard className="w-4 h-4 text-[var(--theme-gray-muted)]" />
                       <span>Account Dashboard</span>
-                    </Link>
-
-                    <Link
-                      to="/lovelink/my-letters"
-                      className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-medium rounded-lg text-[var(--theme-dirty-white-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)] transition-colors"
-                    >
-                      <Heart className="w-4 h-4 text-rose-400" />
-                      <span>My Letters (LoveLink)</span>
                     </Link>
 
                     {user.role === 'admin' && (
@@ -423,132 +346,26 @@ export const Header: React.FC = () => {
               </div>
             )}
 
-            <Link
-              to="/tools"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-sm font-semibold text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)]"
-            >
-              <Wrench className="w-4 h-4 text-[var(--theme-dirty-white)]" />
-              <span>All Tools</span>
-            </Link>
-
-            <Link
-              to="/ai-chat"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
-                isNavActive('/ai-chat')
-                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
-                  : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
-              }`}
-            >
-              <Bot className="w-4 h-4" />
-              <span>Vexora AI Chat</span>
-            </Link>
-
-            <Link
-              to="/studio"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
-                isNavActive('/studio')
-                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
-                  : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
-              }`}
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>Studio</span>
-            </Link>
-
-            <Link
-              to="/ui-library"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
-                isNavActive('/ui-library')
-                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
-                  : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
-              }`}
-            >
-              <LayoutGrid className="w-4 h-4" />
-              <span>UI Library</span>
-            </Link>
-
-            <Link
-              to="/learning"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
-                isNavActive('/learning')
-                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
-                  : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
-              }`}
-            >
-              <BookOpen className="w-4 h-4" />
-              <span>Learning Hub</span>
-            </Link>
-
-            <Link
-              to={
-                user?.educationRole === 'teacher' || user?.educationRole === 'educator'
-                  ? '/study?workspace=teacher'
-                  : '/study'
-              }
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
-                isNavActive('/study')
-                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
-                  : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
-              }`}
-            >
-              <GraduationCap className="w-4 h-4" />
-              <span>
-                {user?.educationRole === 'teacher' || user?.educationRole === 'educator'
-                  ? 'Teacher Workspace'
-                  : 'Study Space'}
-              </span>
-            </Link>
-
-            <Link
-              to="/discover"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
-                isNavActive('/discover')
-                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
-                  : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
-              }`}
-            >
-              <Compass className="w-4 h-4" />
-              <span>Vexora Discover</span>
-            </Link>
-
-            <Link
-              to="/community"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
-                isNavActive('/community')
-                  ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
-                  : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
-              }`}
-            >
-              <Heart className="w-4 h-4" />
-              <span>Community</span>
-            </Link>
-
-            <Link
-              to="/lovelink"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
-                isNavActive('/lovelink')
-                  ? 'bg-rose-500 text-white border-rose-500 font-bold'
-                  : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
-              }`}
-            >
-              <Heart className="w-4 h-4 text-rose-400" />
-              <span>LoveLink</span>
-            </Link>
+            {PRIMARY_NAV_ITEMS.map((item) => (
+              <Link
+                key={item.label}
+                to={item.to}
+                onClick={() => handleNavClick(item.hash)}
+                className={`flex items-center justify-between px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
+                  isNavItemActive(item.to, item.hash)
+                    ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
+                    : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
+                }`}
+              >
+                <span>{item.label}</span>
+              </Link>
+            ))}
 
             <Link
               to="/reviews"
               onClick={() => setIsMobileMenuOpen(false)}
               className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
-                isNavActive('/reviews')
+                location.pathname.startsWith('/reviews')
                   ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] font-bold'
                   : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
               }`}

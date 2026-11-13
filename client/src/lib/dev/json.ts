@@ -11,29 +11,35 @@ export interface JsonSyntaxErrorDetail {
   column?: number;
 }
 
+// Recursively sorts the keys of an object alphabetically
 function sortJsonKeys(value: unknown): unknown {
   if (Array.isArray(value)) {
-    return value.map(sortJsonKeys);
+    const sortedList: unknown[] = [];
+    for (let i = 0; i < value.length; i++) {
+      sortedList.push(sortJsonKeys(value[i]));
+    }
+    return sortedList;
   }
+
   if (value !== null && typeof value === 'object') {
-    return Object.keys(value as Record<string, unknown>)
-      .sort()
-      .reduce(
-        (acc, key) => {
-          acc[key] = sortJsonKeys((value as Record<string, unknown>)[key]);
-          return acc;
-        },
-        {} as Record<string, unknown>,
-      );
+    const obj = value as Record<string, unknown>;
+    const sortedKeys = Object.keys(obj).sort();
+    const sortedObj: Record<string, unknown> = {};
+
+    for (const key of sortedKeys) {
+      sortedObj[key] = sortJsonKeys(obj[key]);
+    }
+    return sortedObj;
   }
+
   return value;
 }
 
 /**
- * Extracts line and column from JSON.parse error message if available.
+ * Extracts line and column numbers from JSON.parse error messages when available.
  */
 function extractErrorPosition(errorMsg: string, input: string): { line?: number; column?: number } {
-  // Typical formats: "at position 42", "line 3 column 5"
+  // Check for "line X column Y" format
   const lineColMatch = errorMsg.match(/line (\d+) column (\d+)/i);
   if (lineColMatch && lineColMatch[1] && lineColMatch[2]) {
     return {
@@ -42,14 +48,17 @@ function extractErrorPosition(errorMsg: string, input: string): { line?: number;
     };
   }
 
+  // Check for "at position X" format
   const posMatch = errorMsg.match(/at position (\d+)/i);
   if (posMatch && posMatch[1]) {
-    const pos = parseInt(posMatch[1], 10);
-    const before = input.slice(0, pos);
-    const lines = before.split('\n');
+    const position = parseInt(posMatch[1], 10);
+    const textBeforeError = input.slice(0, position);
+    const lines = textBeforeError.split('\n');
+    const lastLine = lines[lines.length - 1] || '';
+
     return {
       line: lines.length,
-      column: (lines[lines.length - 1]?.length ?? 0) + 1,
+      column: lastLine.length + 1,
     };
   }
 
@@ -77,20 +86,22 @@ export function formatJson(
     return ok({ output, parsed });
   } catch (error) {
     const rawMsg = error instanceof Error ? error.message : 'Invalid JSON syntax.';
-    const pos = extractErrorPosition(rawMsg, input);
+    const position = extractErrorPosition(rawMsg, input);
     return err({
       message: rawMsg,
-      line: pos.line,
-      column: pos.column,
+      line: position.line,
+      column: position.column,
     });
   }
 }
 
 /**
- * Minifies JSON by stripping all indentation and whitespace outside string literals.
+ * Minifies JSON by stripping indentation and unnecessary whitespace.
  */
 export function minifyJson(input: string): Result<string, JsonSyntaxErrorDetail> {
   const res = formatJson(input, { indent: 0 });
-  if (!res.ok) return res;
+  if (!res.ok) {
+    return res;
+  }
   return ok(JSON.stringify(res.value.parsed));
 }

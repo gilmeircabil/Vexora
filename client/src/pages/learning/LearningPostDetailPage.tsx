@@ -867,14 +867,27 @@ export const LearningPostDetailPage: React.FC = () => {
           <div className="space-y-3">
             {reviews.map((rev) => (
               <div key={rev._id} className="p-4 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-2xl">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-sm text-[var(--theme-dirty-white)]">{rev.userName}</span>
-                    {rev.isVerifiedPurchase && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded text-[11px] font-bold">
-                        <ShieldCheck className="w-3 h-3" /> Verified Purchase
-                      </span>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2.5">
+                    {rev.userAvatar ? (
+                      <img
+                        src={rev.userAvatar}
+                        alt={rev.userName}
+                        className="w-8 h-8 rounded-lg object-cover border border-[var(--theme-gray-border)] shrink-0"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] flex items-center justify-center font-bold text-xs text-[var(--theme-dirty-white)] shrink-0">
+                        {(rev.userName || 'U').slice(0, 2).toUpperCase()}
+                      </div>
                     )}
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-sm text-[var(--theme-dirty-white)]">{rev.userName}</span>
+                      {rev.isVerifiedPurchase && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] rounded text-[11px] font-bold">
+                          <ShieldCheck className="w-3 h-3" /> Verified Purchase
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <span className="font-bold text-xs text-amber-500">
                     {'★'.repeat(rev.rating)}
@@ -947,9 +960,22 @@ export const LearningPostDetailPage: React.FC = () => {
               return (
                 <div key={c._id} className="border border-[var(--theme-gray-border)] rounded-2xl p-4 bg-[var(--theme-surface-raised)]">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-bold text-sm text-[var(--theme-dirty-white)]">
-                      {c.authorName || c.userName || 'Learner'}
-                    </span>
+                    <div className="flex items-center gap-2.5">
+                      {c.authorAvatar || c.userAvatar ? (
+                        <img
+                          src={c.authorAvatar || c.userAvatar}
+                          alt={c.authorName || c.userName || 'Learner'}
+                          className="w-8 h-8 rounded-lg object-cover border border-[var(--theme-gray-border)] shrink-0"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] flex items-center justify-center font-bold text-xs text-[var(--theme-dirty-white)] shrink-0">
+                          {(c.authorName || c.userName || 'L').slice(0, 2).toUpperCase()}
+                        </div>
+                      )}
+                      <span className="font-bold text-sm text-[var(--theme-dirty-white)]">
+                        {c.authorName || c.userName || 'Learner'}
+                      </span>
+                    </div>
                     <div className="flex items-center gap-3 text-xs text-[var(--theme-gray-muted)]">
                       <span>{new Date(c.createdAt).toLocaleDateString()}</span>
                       {isAuthenticated && (
@@ -979,9 +1005,22 @@ export const LearningPostDetailPage: React.FC = () => {
                       {replies.map((r) => (
                         <div key={r._id} className="bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] p-3">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="font-bold text-xs text-[var(--theme-dirty-white)]">
-                              {r.authorName || r.userName || 'Learner'}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              {r.authorAvatar || r.userAvatar ? (
+                                <img
+                                  src={r.authorAvatar || r.userAvatar}
+                                  alt={r.authorName || r.userName || 'Learner'}
+                                  className="w-6 h-6 rounded-md object-cover border border-[var(--theme-gray-border)] shrink-0"
+                                />
+                              ) : (
+                                <div className="w-6 h-6 rounded-md bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] flex items-center justify-center font-bold text-[10px] text-[var(--theme-dirty-white)] shrink-0">
+                                  {(r.authorName || r.userName || 'L').slice(0, 2).toUpperCase()}
+                                </div>
+                              )}
+                              <span className="font-bold text-xs text-[var(--theme-dirty-white)]">
+                                {r.authorName || r.userName || 'Learner'}
+                              </span>
+                            </div>
                             <span className="text-[11px] text-[var(--theme-gray-muted)]">
                               {new Date(r.createdAt).toLocaleDateString()}
                             </span>

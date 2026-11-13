@@ -12,9 +12,11 @@ export interface DateDiffResult {
   explanation: string;
 }
 
+const MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24;
+
 /**
- * Calculates calendar differences between two dates strictly using UTC date components
- * to avoid daylight savings time shifts and ambiguous local timezone offsets.
+ * Calculates calendar differences between two dates using UTC date components
+ * to avoid daylight saving time shifts and local timezone offsets.
  */
 export function calculateDateDifference(
   startDateStr: string,
@@ -25,38 +27,42 @@ export function calculateDateDifference(
     return err('Both start and end dates must be provided.');
   }
 
-  const start = new Date(startDateStr);
-  const end = new Date(endDateStr);
+  const startDate = new Date(startDateStr);
+  const endDate = new Date(endDateStr);
 
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
     return err('Invalid date format provided.');
   }
 
-  // Use UTC calendar midnight for both dates
-  const utc1 = Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate());
-  const utc2 = Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate());
+  // Convert both dates to UTC midnight milliseconds
+  const utcStart = Date.UTC(
+    startDate.getUTCFullYear(),
+    startDate.getUTCMonth(),
+    startDate.getUTCDate(),
+  );
+  const utcEnd = Date.UTC(
+    endDate.getUTCFullYear(),
+    endDate.getUTCMonth(),
+    endDate.getUTCDate(),
+  );
 
-  const msPerDay = 1000 * 60 * 60 * 24;
-  let diffDays = Math.round((utc2 - utc1) / msPerDay);
-  const isNegative = diffDays < 0;
-
-  if (diffDays < 0) {
-    diffDays = Math.abs(diffDays);
-  }
+  const rawDiffDays = Math.round((utcEnd - utcStart) / MILLISECONDS_IN_A_DAY);
+  const isNegative = rawDiffDays < 0;
+  let totalDays = Math.abs(rawDiffDays);
 
   if (inclusive) {
-    diffDays += 1;
+    totalDays += 1;
   }
 
-  // Count business days (Monday to Friday)
+  // Count weekdays (Monday through Friday) vs weekends (Saturday and Sunday)
   let businessDays = 0;
   let weekendDays = 0;
-  const loopStart = new Date(Math.min(utc1, utc2));
-  const loopEndDays = inclusive ? diffDays : diffDays;
+  const earlierUtc = Math.min(utcStart, utcEnd);
 
-  for (let i = 0; i < loopEndDays; i++) {
-    const cur = new Date(loopStart.getTime() + i * msPerDay);
-    const dayOfWeek = cur.getUTCDay(); // 0 is Sunday, 6 is Saturday
+  for (let i = 0; i < totalDays; i++) {
+    const currentDay = new Date(earlierUtc + i * MILLISECONDS_IN_A_DAY);
+    const dayOfWeek = currentDay.getUTCDay(); // 0 is Sunday, 6 is Saturday
+
     if (dayOfWeek === 0 || dayOfWeek === 6) {
       weekendDays++;
     } else {
@@ -64,19 +70,22 @@ export function calculateDateDifference(
     }
   }
 
-  const totalWeeks = Math.floor(diffDays / 7);
-  const remainingDays = diffDays % 7;
+  const totalWeeks = Math.floor(totalDays / 7);
+  const remainingDays = totalDays % 7;
 
   // Approximate years and months
-  const years = Math.floor(diffDays / 365.25);
-  const months = Math.floor((diffDays % 365.25) / 30.44);
+  const years = Math.floor(totalDays / 365.25);
+  const months = Math.floor((totalDays % 365.25) / 30.44);
 
-  const explanation = inclusive
-    ? `Calculated inclusively: both the start date and end date are counted as full days.`
-    : `Calculated exclusively: counts elapsed calendar days between the two dates.`;
+  let explanation = '';
+  if (inclusive) {
+    explanation = 'Calculated inclusively: both the start date and end date are counted as full days.';
+  } else {
+    explanation = 'Calculated exclusively: counts elapsed calendar days between the two dates.';
+  }
 
   return ok({
-    totalDays: diffDays,
+    totalDays,
     totalWeeks,
     remainingDays,
     businessDays,

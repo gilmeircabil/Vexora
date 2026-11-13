@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { StorageService } from '../src/services/storageService.js';
+import { AuthService } from '../src/services/authService.js';
+import { User } from '../src/models/User.js';
 import { env } from '../src/config/env.js';
 import { DesignAsset } from '../src/models/DesignAsset.js';
 
@@ -89,6 +91,72 @@ describe('StorageService & Cloudflare R2 Safety Cap', () => {
       const stream = await StorageService.getAssetStream('asset_nonexistent_123.jpg');
       expect(stream).toBeNull();
       expect(mockS3.send).toHaveBeenCalled();
+    });
+  });
+
+  describe('Automatic Old Picture Deletion in R2 Storage', () => {
+    it('extracts storageKey from proxy and R2 URLs and ignores external OAuth URLs', () => {
+      expect(
+        StorageService.extractStorageKeyFromUrl(
+          '/api/design-assets/files/asset_u1_abcdef123456.png',
+        ),
+      ).toBe('asset_u1_abcdef123456.png');
+
+      expect(
+        StorageService.extractStorageKeyFromUrl(
+          'https://cdn.vexoramods.com/assets/asset_u1_abcdef123456.jpg',
+        ),
+      ).toBe('asset_u1_abcdef123456.jpg');
+
+      expect(
+        StorageService.extractStorageKeyFromUrl('https://lh3.googleusercontent.com/a/avatar123'),
+      ).toBeNull();
+      expect(StorageService.extractStorageKeyFromUrl('')).toBeNull();
+    });
+
+    it('deletes the old picture and thumbnail from R2 storage when user changes or removes avatarUrl', async () => {
+      vi.spyOn(StorageService, 'isS3Enabled').mockReturnValue(true);
+      const mockS3 = {
+        send: vi.fn().mockResolvedValue({}),
+      };
+      vi.spyOn(StorageService, 'getS3Client').mockReturnValue(mockS3 as any);
+      vi.spyOn(DesignAsset, 'deleteOne').mockResolvedValue({ deletedCount: 1 } as any);
+
+      const mockUserDoc: any = {
+        _id: '507f1f77bcf86cd799439011',
+        name: 'Alex',
+        avatarUrl: '/api/design-assets/files/asset_507f1f77bcf86cd799439011_oldpic123.png',
+        save: vi.fn().mockResolvedValue(true),
+      };
+      vi.spyOn(User, 'findById').mockResolvedValue(mockUserDoc);
+      vi.spyOn(AuthService, 'getCurrentUser').mockResolvedValue({
+        id: '507f1f77bcf86cd799439011',
+        username: 'alex',
+        name: 'Alex',
+        avatarUrl: '/api/design-assets/files/asset_507f1f77bcf86cd799439011_newpic456.png',
+        role: 'user',
+      } as any);
+
+      await AuthService.updateProfile('507f1f77bcf86cd799439011', {
+        avatarUrl: '/api/design-assets/files/asset_507f1f77bcf86cd799439011_newpic456.png',
+      });
+
+      // Verify both the primary asset and thumbnail of the old picture were deleted from R2
+      expect(mockS3.send).toHaveBeenCalledTimes(2);
+      const sentCommands = mockS3.send.mock.calls.map((c) => c[0].input);
+      expect(sentCommands).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            Key: 'assets/asset_507f1f77bcf86cd799439011_oldpic123.png',
+          }),
+          expect.objectContaining({
+            Key: 'thumbs/thumb_507f1f77bcf86cd799439011_oldpic123.webp',
+          }),
+        ]),
+      );
+      expect(DesignAsset.deleteOne).toHaveBeenCalledWith({
+        storageKey: 'asset_507f1f77bcf86cd799439011_oldpic123.png',
+      });
     });
   });
 });

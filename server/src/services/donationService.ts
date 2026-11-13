@@ -111,7 +111,7 @@ export class DonationService {
               },
             ],
             payment_method_types: ['gcash', 'paymaya', 'card', 'grab_pay'],
-            success_url: `${clientOrigin}/community?status=success&session_id={CHECKOUT_SESSION_ID}&donation_id=${donation._id}`,
+            success_url: `${clientOrigin}/community?status=success&donation_id=${donation._id}`,
             cancel_url: `${clientOrigin}/community?status=canceled`,
             metadata: {
               donationId: donation._id.toString(),
@@ -153,7 +153,7 @@ export class DonationService {
 
     // 2. Local sandbox / testing environment flow
     const sandboxSessionId = `sbx_sess_${providerTxId}`;
-    const sandboxCheckoutUrl = `${clientOrigin}/community?status=sandbox&session_id=${sandboxSessionId}&donation_id=${donation._id}`;
+    const sandboxCheckoutUrl = `${clientOrigin}/community?status=success&donation_id=${donation._id}`;
 
     donation.providerTransactionId = sandboxSessionId;
     donation.checkoutUrl = sandboxCheckoutUrl;
@@ -188,6 +188,7 @@ export class DonationService {
 
     // If sandbox provider and status is pending, confirm in development
     if (
+      env.NODE_ENV !== 'production' &&
       donation.paymentProvider === 'sandbox' &&
       donation.providerTransactionId.startsWith('sbx_sess_')
     ) {
@@ -241,6 +242,9 @@ export class DonationService {
     const { rawBody, signatureHeader, body } = params;
 
     // PayMongo webhook signature verification
+    if (!env.PAYMONGO_WEBHOOK_SECRET && env.NODE_ENV === 'production') {
+      return { status: 'ignored', error: 'Webhook secret not configured' };
+    }
     if (env.PAYMONGO_WEBHOOK_SECRET) {
       if (!signatureHeader) {
         return { status: 'ignored', error: 'Missing webhook signature header' };
@@ -336,13 +340,11 @@ export class DonationService {
     try {
       const parts = signatureHeader.split(',');
       const tPart = parts.find((p) => p.startsWith('t='));
-      const tePart = parts.find((p) => p.startsWith('te='));
-      const liPart = parts.find((p) => p.startsWith('li='));
-
-      if (!tPart || (!tePart && !liPart)) return false;
+      const val = (k: string) => parts.find((p) => p.startsWith(`${k}=`))?.split('=')[1];
+      const signature = val('li') || val('te');
+      if (!tPart || !signature) return false;
 
       const timestamp = tPart.split('=')[1];
-      const signature = (liPart || tePart)!.split('=')[1];
 
       const raw = typeof rawBody === 'string' ? rawBody : rawBody.toString('utf8');
       const payload = `${timestamp}.${raw}`;

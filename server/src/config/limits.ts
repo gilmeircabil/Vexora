@@ -96,19 +96,6 @@ export interface LimitConfig {
     ratingChangesPerDay: number;     // 5 = rating changes per day per user
   };
 
-  // Developer Hub limits
-  developer: {
-    projectsPerUser: number;         // 20 = projects per developer
-    reactionsPerHour: number;        // 60 = project reactions per hour
-    commentsPerHour: number;         // 30 = project comments per hour
-  };
-
-  // Media downloader/converter limits
-  media: {
-    downloadsPerHour: number;        // 20 = media downloads per hour
-    conversionQueueLimit: number;    // 5 = items in conversion queue
-  };
-
   // Background job limits
   jobs: {
     maxQueuedJobs: number;           // 100 = max jobs in queue
@@ -195,15 +182,6 @@ export const defaultLimits: LimitConfig = {
     reviewsPerDayPerUser: parseInt(process.env.LIMIT_REVIEWS_PER_DAY || '3', 10),
     ratingChangesPerDay: parseInt(process.env.LIMIT_RATING_CHANGES_PER_DAY || '5', 10),
   },
-  developer: {
-    projectsPerUser: parseInt(process.env.LIMIT_DEV_PROJECTS || '20', 10),
-    reactionsPerHour: parseInt(process.env.LIMIT_DEV_REACTIONS || '60', 10),
-    commentsPerHour: parseInt(process.env.LIMIT_DEV_COMMENTS || '30', 10),
-  },
-  media: {
-    downloadsPerHour: parseInt(process.env.LIMIT_MEDIA_DOWNLOADS || '20', 10),
-    conversionQueueLimit: parseInt(process.env.LIMIT_MEDIA_QUEUE || '5', 10),
-  },
   jobs: {
     maxQueuedJobs: parseInt(process.env.LIMIT_MAX_QUEUED_JOBS || '100', 10),
     maxJobAgeHours: parseInt(process.env.LIMIT_JOB_AGE_HOURS || '24', 10),
@@ -244,8 +222,6 @@ export const {
   community,
   storage,
   reviews,
-  developer,
-  media,
   jobs,
   database
 } = defaultLimits;

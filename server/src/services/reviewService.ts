@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { Review, type IReview, type ReviewStatus } from '../models/Review.js';
 import { User } from '../models/User.js';
-import { DeveloperProfile } from '../models/DeveloperProfile.js';
 
 export interface ReviewDistribution {
   5: number;
@@ -222,16 +221,7 @@ export class ReviewService {
       throw new Error('Please write a review comment of at least 3 characters.');
     }
 
-    // Attempt to resolve avatar from optional input or existing DeveloperProfile
-    let avatarUrl = this.sanitizeText(input.userAvatar, 500);
-    if (!avatarUrl) {
-      const devProfile = await DeveloperProfile.findOne({ userId: user._id })
-        .select('avatarUrl')
-        .lean();
-      if (devProfile && (devProfile as any).avatarUrl) {
-        avatarUrl = String((devProfile as any).avatarUrl);
-      }
-    }
+    const avatarUrl = this.sanitizeText((user as any).avatarUrl || input.userAvatar, 500);
 
     const displayName = this.sanitizeText(user.name, 100) || 'VexoraMods Member';
 

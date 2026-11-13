@@ -9,8 +9,10 @@ import {
   Database,
 } from 'lucide-react';
 import { educationApi } from '../../../services/educationApi.js';
+import { useToast } from '../../../context/ToastContext.js';
 
 export const DataExportImport: React.FC = () => {
+  const { showToast } = useToast();
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [importStatus, setImportStatus] = useState<string | null>(null);
@@ -31,11 +33,11 @@ export const DataExportImport: React.FC = () => {
         document.body.removeChild(a);
         setTimeout(() => URL.revokeObjectURL(url), 1000);
       } else {
-        alert(res.error || 'Failed to export data.');
+        showToast(res.error || 'Failed to export data.', 'error');
       }
     } catch (e) {
       console.error('Export failed', e);
-      alert('An error occurred during data export.');
+      showToast('An error occurred during data export.', 'error');
     } finally {
       setIsExporting(false);
     }
@@ -75,7 +77,7 @@ export const DataExportImport: React.FC = () => {
     if (confirmation === 'DELETE ALL') {
       const res = await educationApi.purgeUserData();
       if (res.success) {
-        alert('All educational records have been permanently cleared.');
+        showToast('All educational records have been permanently cleared.', 'success');
         window.location.reload();
       }
     }

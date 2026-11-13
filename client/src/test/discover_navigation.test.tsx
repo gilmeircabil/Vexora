@@ -2,7 +2,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router';
-import { Header } from '../components/layout/Header.js';
+import { HomePage } from '../pages/HomePage.js';
+import { MascotProvider } from '../context/MascotContext.js';
 
 vi.mock('../context/AuthContext.js', () => ({
   useAuth: () => ({
@@ -22,15 +23,22 @@ vi.mock('../context/ToastContext.js', () => ({
 }));
 
 vi.mock('../context/FavoritesContext.js', () => ({
-  useFavorites: () => ({ favoriteIds: [], favoritesCount: 0 }),
+  useFavorites: () => ({
+    favoriteIds: [],
+    favoritesCount: 0,
+    isFavorite: () => false,
+    toggleFavorite: vi.fn(),
+  }),
 }));
 
-describe('Vexora Discover Navigation & Header Integration', () => {
-  it('renders Discover navigation link pointing to /discover', () => {
+describe('Vexora Discover Navigation & HomePage Card Grid Integration', () => {
+  it('renders Discover workspace card on HomePage pointing to /discover', () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Header />
-      </MemoryRouter>
+      <MascotProvider>
+        <MemoryRouter initialEntries={['/']}>
+          <HomePage />
+        </MemoryRouter>
+      </MascotProvider>
     );
 
     const discoverLinks = screen.getAllByRole('link', { name: /Discover/i });

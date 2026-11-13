@@ -9,6 +9,7 @@ import {
   CheckCircle,
   TrendingUp,
 } from 'lucide-react';
+import { useToast } from '../../../context/ToastContext.js';
 
 export interface AssessmentItem {
   id: string;
@@ -26,6 +27,7 @@ export interface SubjectGrade {
 }
 
 export const GradeCalculator: React.FC = () => {
+  const { showToast } = useToast();
   // Configurable grading scales
   const [scaleType, setScaleType] = useState<'4.0' | '4.3' | '5.0'>('4.0');
 
@@ -141,7 +143,7 @@ export const GradeCalculator: React.FC = () => {
 
   const handleDeleteSubject = (id: string) => {
     if (subjects.length <= 1) {
-      alert('You must have at least one subject.');
+      showToast('You must have at least one subject.', 'error');
       return;
     }
     const filtered = subjects.filter((s) => s.id !== id);

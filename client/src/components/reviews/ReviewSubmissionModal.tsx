@@ -60,6 +60,7 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({
       const res = await reviewApi.submitReview({
         rating,
         comment: trimmedComment,
+        userAvatar: user?.avatarUrl,
       });
 
       if (res.success && res.data) {

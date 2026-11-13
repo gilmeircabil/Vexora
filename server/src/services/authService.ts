@@ -5,6 +5,7 @@ import { Types } from 'mongoose';
 import { env } from '../config/env.js';
 import { User, validateUsername, RESERVED_USERNAMES } from '../models/User.js';
 import { TurnstileService } from './turnstileService.js';
+import { StorageService } from './storageService.js';
 
 export class AuthSecurityError extends Error {
   statusCode: number;
@@ -676,7 +677,11 @@ export class AuthService {
       user.name = params.name.trim().slice(0, 100);
     }
     if (params.avatarUrl !== undefined) {
+      const oldAvatarUrl = user.avatarUrl;
       user.avatarUrl = params.avatarUrl;
+      if (oldAvatarUrl && oldAvatarUrl !== params.avatarUrl) {
+        await StorageService.deleteAssetByUrl(oldAvatarUrl);
+      }
     }
     if (params.bio !== undefined) {
       user.bio = params.bio.slice(0, 500);

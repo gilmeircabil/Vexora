@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Plus, Trash2, Printer, AlertTriangle, Clock, MapPin, User } from 'lucide-react';
 import { educationApi } from '../../../services/educationApi.js';
+import { useToast } from '../../../context/ToastContext.js';
 
 export interface TimetableEntry {
   id: string;
@@ -27,6 +28,7 @@ const PRESET_COLORS = [
 ];
 
 export const TimetableGenerator: React.FC = () => {
+  const { showToast } = useToast();
   const [entries, setEntries] = useState<TimetableEntry[]>([]);
   const [scheduleName, setScheduleName] = useState('My Weekly Timetable');
   const [isLoading, setIsLoading] = useState(true);
@@ -92,7 +94,7 @@ export const TimetableGenerator: React.FC = () => {
     if (!form.subject.trim()) return;
 
     if (form.startTime >= form.endTime) {
-      alert('Start time must be before end time.');
+      showToast('Start time must be before end time.', 'error');
       return;
     }
 

@@ -15,6 +15,7 @@ import {
   FileQuestion,
 } from 'lucide-react';
 import { educationApi } from '../../../services/educationApi.js';
+import { useToast } from '../../../context/ToastContext.js';
 
 export interface QuizQuestion {
   id: string;
@@ -52,6 +53,7 @@ export interface QuizMakerProps {
 }
 
 export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
+  const { showToast } = useToast();
   const [quizzes, setQuizzes] = useState<QuizItem[]>([]);
   const [attempts, setAttempts] = useState<AttemptItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -134,7 +136,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
   const handleStartQuiz = (quiz: QuizItem, onlyIncorrect: QuizQuestion[] | null = null) => {
     const list = onlyIncorrect ? [...onlyIncorrect] : [...quiz.questions];
     if (list.length === 0) {
-      alert('This quiz has no questions.');
+      showToast('This quiz has no questions.', 'error');
       return;
     }
     // Shuffle questions
@@ -218,7 +220,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
     });
 
     if (incorrectQuestions.length === 0) {
-      alert('You got a perfect score! No incorrect questions to retry.');
+      showToast('You got a perfect score! No incorrect questions to retry.', 'info');
       return;
     }
 
@@ -227,7 +229,7 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
 
   const handleAddQuestionToForm = () => {
     if (!newQuestion.prompt.trim() || !newQuestion.correctAnswer.trim()) {
-      alert('Prompt and Correct Answer are required.');
+      showToast('Prompt and Correct Answer are required.', 'error');
       return;
     }
     const q: QuizQuestion = {
@@ -253,11 +255,11 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
   const handleSaveQuiz = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!quizForm.title.trim() || !quizForm.subject.trim()) {
-      alert('Title and subject are required.');
+      showToast('Title and subject are required.', 'error');
       return;
     }
     if (quizForm.questions.length === 0) {
-      alert('Please add at least one question to your quiz.');
+      showToast('Please add at least one question to your quiz.', 'error');
       return;
     }
 

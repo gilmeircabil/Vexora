@@ -155,14 +155,33 @@ const PlatformConfigSchema = new Schema<IPlatformConfig>(
   },
 );
 
+export interface IContactChatMessage {
+  sender: 'user' | 'admin';
+  senderName: string;
+  text: string;
+  createdAt: Date;
+}
+
 export interface IContactInquiry extends Document {
   name: string;
   email: string;
   subject: string;
   message: string;
-  status: 'unread' | 'read' | 'archived';
+  messages: IContactChatMessage[];
+  status: 'unread' | 'read' | 'replied' | 'resolved' | 'archived';
   createdAt: Date;
+  updatedAt?: Date;
 }
+
+const ContactChatMessageSchema = new Schema<IContactChatMessage>(
+  {
+    sender: { type: String, enum: ['user', 'admin'], required: true },
+    senderName: { type: String, required: true, trim: true, maxlength: 100 },
+    text: { type: String, required: true, trim: true, maxlength: 3000 },
+    createdAt: { type: Date, default: Date.now },
+  },
+  { _id: true },
+);
 
 const ContactInquirySchema = new Schema<IContactInquiry>(
   {
@@ -170,9 +189,14 @@ const ContactInquirySchema = new Schema<IContactInquiry>(
     email: { type: String, required: true, trim: true, lowercase: true, maxlength: 150 },
     subject: { type: String, required: true, trim: true, maxlength: 200 },
     message: { type: String, required: true, trim: true, maxlength: 3000 },
-    status: { type: String, enum: ['unread', 'read', 'archived'], default: 'unread' },
+    messages: { type: [ContactChatMessageSchema], default: [] },
+    status: {
+      type: String,
+      enum: ['unread', 'read', 'replied', 'resolved', 'archived'],
+      default: 'unread',
+    },
   },
-  { timestamps: { createdAt: true, updatedAt: false } },
+  { timestamps: true },
 );
 
 export const PlatformConfig: mongoose.Model<IPlatformConfig> =

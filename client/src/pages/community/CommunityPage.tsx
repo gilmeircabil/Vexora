@@ -49,7 +49,7 @@ export const CommunityPage: React.FC = () => {
 
   // Checkout return verification
   const checkoutStatus = searchParams.get('status');
-  const sessionId = searchParams.get('session_id');
+  const donationId = searchParams.get('donation_id');
   const [verifiedDonation, setVerifiedDonation] = useState<any>(null);
 
   const loadCommunityData = async () => {
@@ -82,15 +82,19 @@ export const CommunityPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (checkoutStatus === 'success' && sessionId) {
-      donationApi.getStatus(sessionId).then((res) => {
-        if (res.success && res.data) {
+    if (checkoutStatus !== 'success' || !donationId) return;
+    let tries = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    const check = () =>
+      donationApi.getStatus(donationId).then((res) => {
+        if (res.success && res.data?.paymentStatus === 'succeeded') {
           setVerifiedDonation(res.data);
           loadCommunityData();
-        }
+        } else if (++tries < 10) timer = setTimeout(check, 1500); // webhook may arrive late
       });
-    }
-  }, [checkoutStatus, sessionId]);
+    check();
+    return () => clearTimeout(timer);
+  }, [checkoutStatus, donationId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -6,6 +6,7 @@ import type { AuthenticatedRequest } from '../middleware/authMiddleware.js';
 import { AIService } from '../services/ai/aiService.js';
 import { GeminiTextService } from '../services/ai/geminiTextService.js';
 import { AIJob } from '../models/AIJob.js';
+import { StorageService } from '../services/storageService.js';
 import {
   AIChatSession,
   type IChatMessageItem,
@@ -482,6 +483,77 @@ export class AIController {
       res
         .status(500)
         .json({ success: false, error: err.message || 'Failed to retrieve AI history' });
+    }
+  }
+
+  static async deleteHistoryItem(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      const rawJobId = req.params.id;
+      const jobId = Array.isArray(rawJobId) ? rawJobId[0] : rawJobId;
+      if (!jobId || !Types.ObjectId.isValid(jobId)) {
+        res.status(400).json({ success: false, error: 'Valid job ID is required.' });
+        return;
+      }
+
+      const uid = req.user?.userId ? new Types.ObjectId(req.user.userId) : undefined;
+      const query: any = { _id: new Types.ObjectId(jobId) };
+      if (uid) {
+        query.userId = uid;
+      }
+
+      const job = await AIJob.findOne(query);
+      if (!job) {
+        res.status(404).json({ success: false, error: 'History item not found.' });
+        return;
+      }
+
+      if (job.outputUrl) {
+        if (job.outputUrl.includes('/api/ai/download/')) {
+          const filename = path.basename(job.outputUrl);
+          const filepath = path.resolve(process.cwd(), 'server', 'uploads', 'processed', filename);
+          if (fs.existsSync(filepath)) {
+            fs.unlink(filepath, () => {});
+          }
+        } else {
+          await StorageService.deleteAssetByUrl(job.outputUrl);
+        }
+      }
+
+      await AIJob.deleteOne({ _id: job._id });
+      res.status(200).json({ success: true, message: 'History item deleted successfully.' });
+    } catch (err: any) {
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to delete history item.' });
+    }
+  }
+
+  static async clearHistory(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      const uid = req.user?.userId ? new Types.ObjectId(req.user.userId) : undefined;
+      const query = uid ? { userId: uid } : {};
+      const jobs = await AIJob.find(query);
+
+      for (const job of jobs) {
+        if (job.outputUrl) {
+          if (job.outputUrl.includes('/api/ai/download/')) {
+            const filename = path.basename(job.outputUrl);
+            const filepath = path.resolve(process.cwd(), 'server', 'uploads', 'processed', filename);
+            if (fs.existsSync(filepath)) {
+              fs.unlink(filepath, () => {});
+            }
+          } else {
+            await StorageService.deleteAssetByUrl(job.outputUrl);
+          }
+        }
+      }
+
+      await AIJob.deleteMany(query);
+      res.status(200).json({ success: true, message: 'All processing history cleared.' });
+    } catch (err: any) {
+      res
+        .status(500)
+        .json({ success: false, error: err.message || 'Failed to clear history.' });
     }
   }
 

@@ -278,16 +278,6 @@ export function getRouteLockStatus(
     };
   }
 
-  // Developer Projects
-  if (path.startsWith('/developers')) {
-    return {
-      isLocked: Boolean(pagesMap.DEVELOPER_PROJECTS),
-      pageTitle: 'Developer Projects',
-      accentColor: '#FB923C',
-      key: 'DEVELOPER_PROJECTS',
-    };
-  }
-
   // Dashboard
   if (path.startsWith('/dashboard')) {
     return {

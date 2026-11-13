@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import crypto from 'node:crypto';
 import { DonationService } from '../src/services/donationService.js';
+import { Donation } from '../src/models/Donation.js';
 import { env } from '../src/config/env.js';
 
 describe('VexoraMods Support & Voluntary Donation System', () => {
@@ -81,6 +82,59 @@ describe('VexoraMods Support & Voluntary Donation System', () => {
         DonationService.verifyPayMongoSignature(rawPayload, 'invalid_header', testSecret),
       ).toBe(false);
       expect(DonationService.verifyPayMongoSignature(rawPayload, '', testSecret)).toBe(false);
+    });
+
+    it('should accept test-mode headers where li= is empty', () => {
+      const t = Math.floor(Date.now() / 1000);
+      const sig = crypto.createHmac('sha256', testSecret).update(`${t}.${rawPayload}`).digest('hex');
+      expect(
+        DonationService.verifyPayMongoSignature(rawPayload, `t=${t},te=${sig},li=`, testSecret),
+      ).toBe(true);
+    });
+  });
+
+  describe('Production safety & checkout URLs', () => {
+    const saved = { ...env };
+    afterEach(() => {
+      Object.assign(env, saved);
+      vi.restoreAllMocks();
+      vi.unstubAllGlobals();
+    });
+
+    it('rejects webhooks in production when no webhook secret is configured', async () => {
+      Object.assign(env, { NODE_ENV: 'production', PAYMONGO_WEBHOOK_SECRET: '' });
+      const out = await DonationService.handleWebhook({
+        rawBody: '{}',
+        body: { data: { id: 'evt_x', attributes: { type: 'payment.paid' } } },
+      });
+      expect(out.status).toBe('ignored');
+    });
+
+    it('does not auto-confirm sandbox donations in production', async () => {
+      env.NODE_ENV = 'production';
+      const doc: any = {
+        paymentStatus: 'pending',
+        paymentProvider: 'sandbox',
+        providerTransactionId: 'sbx_sess_x',
+        save: vi.fn(),
+      };
+      vi.spyOn(Donation, 'findOne').mockResolvedValue(doc);
+      await DonationService.verifyDonation('sbx_sess_x');
+      expect(doc.paymentStatus).toBe('pending');
+    });
+
+    it('builds PayMongo success_url with donation_id and no Stripe placeholder', async () => {
+      env.PAYMONGO_SECRET_KEY = 'sk_test_x';
+      vi.spyOn(Donation, 'create').mockResolvedValue({ _id: 'd123', save: vi.fn() } as any);
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ data: { id: 'cs_1', attributes: { checkout_url: 'https://pm' } } }),
+      });
+      vi.stubGlobal('fetch', fetchMock);
+      await DonationService.createCheckoutSession({ amount: 100 });
+      const url = JSON.parse((fetchMock.mock.calls[0] as any[])[1].body).data.attributes.success_url;
+      expect(url).toContain('donation_id=d123');
+      expect(url).not.toContain('{CHECKOUT_SESSION_ID}');
     });
   });
 });

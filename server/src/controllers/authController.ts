@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { AuthService, AuthSecurityError } from '../services/authService.js';
 import { TurnstileService } from '../services/turnstileService.js';
 import { StorageService } from '../services/storageService.js';
-import { DeveloperProfile } from '../models/DeveloperProfile.js';
 import { env } from '../config/env.js';
 import type { AuthenticatedRequest } from '../middleware/authMiddleware.js';
 import { extractClientIp } from '../middleware/rateLimitMiddleware.js';
@@ -747,15 +746,6 @@ export class AuthController {
         avatarUrl: saved.url,
       });
 
-      try {
-        await DeveloperProfile.findOneAndUpdate(
-          { userId: req.user.userId },
-          { profileImage: saved.url },
-        );
-      } catch {
-        // Developer profile may not exist
-      }
-
       res.status(200).json({
         success: true,
         data: {
@@ -779,12 +769,6 @@ export class AuthController {
       const updatedUser = await AuthService.updateProfile(req.user.userId, {
         avatarUrl: '',
       });
-
-      try {
-        await DeveloperProfile.findOneAndUpdate({ userId: req.user.userId }, { profileImage: '' });
-      } catch {
-        // Ignore
-      }
 
       res.status(200).json({
         success: true,

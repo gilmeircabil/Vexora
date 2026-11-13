@@ -15,6 +15,7 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { educationApi } from '../../../services/educationApi.js';
+import { useToast } from '../../../context/ToastContext.js';
 
 export interface CardItem {
   id: string;
@@ -37,6 +38,7 @@ export interface DeckItem {
 }
 
 export const FlashcardMaker: React.FC = () => {
+  const { showToast } = useToast();
   const [decks, setDecks] = useState<DeckItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeDeck, setActiveDeck] = useState<DeckItem | null>(null);
@@ -141,7 +143,7 @@ export const FlashcardMaker: React.FC = () => {
 
   const startStudy = (deck: DeckItem) => {
     if (deck.cards.length === 0) {
-      alert('Add at least one card to this deck before studying.');
+      showToast('Add at least one card to this deck before studying.', 'info');
       return;
     }
     setActiveDeck(deck);
@@ -182,10 +184,11 @@ export const FlashcardMaker: React.FC = () => {
       setShowHint(false);
     } else {
       // Completed session
-      alert(
-        `Session Complete!\nKnown Cards: ${knownCount + (known ? 1 : 0)}\nStill Learning: ${
+      showToast(
+        `Session Complete! Known Cards: ${knownCount + (known ? 1 : 0)}, Still Learning: ${
           learningCount + (known ? 0 : 1)
         }`,
+        'success',
       );
       setIsStudying(false);
       loadDecks();

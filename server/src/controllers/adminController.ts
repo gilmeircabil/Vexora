@@ -12,7 +12,6 @@ import {
   ContactInquiry,
   DEFAULT_MAINTENANCE_CONFIG,
 } from '../models/PlatformConfig.js';
-import { DeveloperService } from '../services/developerService.js';
 import { LearningService } from '../services/learningService.js';
 import { PlatformController } from './platformController.js';
 import { DEFAULT_TOOL_COSTS } from '../config/plans.js';
@@ -255,91 +254,9 @@ export class AdminController {
     }
   }
 
-  // --------------------------------------------------------------------------
-  // Admin Developer Hub Management
-  // --------------------------------------------------------------------------
-
-  static async getDevelopers(req: AuthenticatedRequest, res: Response): Promise<void> {
-    try {
-      const { q, page, limit } = req.query;
-      const result = await DeveloperService.adminListDevelopers({
-        q: q as string,
-        page: page ? parseInt(page as string, 10) : 1,
-        limit: limit ? parseInt(limit as string, 10) : 20,
-      });
-      res.status(200).json({ success: true, data: result });
-    } catch (err: any) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  }
-
-  static async updateDeveloper(req: AuthenticatedRequest, res: Response): Promise<void> {
-    try {
-      const profileId = req.params.id as string;
-      const { isFeatured, isSuspended, suspensionReason } = req.body;
-
-      const updated = await DeveloperService.adminSetDeveloperStatus(profileId, {
-        isFeatured,
-        isSuspended,
-        suspensionReason,
-      });
-
-      res.status(200).json({ success: true, data: updated });
-    } catch (err: any) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  }
-
-  static async getProjects(req: AuthenticatedRequest, res: Response): Promise<void> {
-    try {
-      const { q, category, page, limit } = req.query;
-      const result = await DeveloperService.adminListProjects({
-        q: q as string,
-        category: category as string,
-        page: page ? parseInt(page as string, 10) : 1,
-        limit: limit ? parseInt(limit as string, 10) : 20,
-      });
-      res.status(200).json({ success: true, data: result });
-    } catch (err: any) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  }
-
-  static async updateProject(req: AuthenticatedRequest, res: Response): Promise<void> {
-    try {
-      const projectId = req.params.id as string;
-      const { status, isFeatured } = req.body;
-
-      const updated = await DeveloperService.adminSetProjectStatus(projectId, {
-        status,
-        isFeatured,
-      });
-
-      res.status(200).json({ success: true, data: updated });
-    } catch (err: any) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  }
-
-  static async deleteProject(req: AuthenticatedRequest, res: Response): Promise<void> {
-    try {
-      const projectId = req.params.id as string;
-      const result = await DeveloperService.adminDeleteProject(projectId);
-      res.status(200).json(result);
-    } catch (err: any) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  }
-
   static async getReports(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
-      const { status, page, limit } = req.query;
-      const result = await DeveloperService.adminListReports({
-        status: status as string,
-        page: page ? parseInt(page as string, 10) : 1,
-        limit: limit ? parseInt(limit as string, 10) : 20,
-      });
-      res.status(200).json({ success: true, data: result });
+      res.status(200).json({ success: true, data: { reports: [], total: 0 } });
     } catch (err: any) {
       res.status(500).json({ success: false, error: err.message });
     }
@@ -347,21 +264,7 @@ export class AdminController {
 
   static async resolveReport(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
-      const reportId = req.params.id as string;
-      const { status, actionTaken } = req.body;
-
-      if (!req.user?.userId) {
-        res.status(401).json({ success: false, error: 'Authentication required' });
-        return;
-      }
-
-      const updated = await DeveloperService.adminResolveReport(reportId, {
-        status: status || 'resolved',
-        actionTaken,
-        adminUserId: req.user.userId,
-      });
-
-      res.status(200).json({ success: true, data: updated });
+      res.status(200).json({ success: true, data: { status: 'resolved' } });
     } catch (err: any) {
       res.status(500).json({ success: false, error: err.message });
     }
@@ -690,6 +593,89 @@ export class AdminController {
         success: true,
         data: updated?.maintenance || DEFAULT_MAINTENANCE_CONFIG,
       });
+    } catch (err: any) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  static async replyToContactInquiry(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      const inquiryId = req.params.id as string;
+      const text = LearningService.sanitizePlain(req.body.text || req.body.message);
+      const senderName = LearningService.sanitizePlain(req.body.senderName || 'VexoraMods Admin');
+
+      if (!text) {
+        res.status(400).json({ success: false, error: 'Reply message text is required.' });
+        return;
+      }
+
+      const inquiry = await ContactInquiry.findById(inquiryId);
+      if (!inquiry) {
+        res.status(404).json({ success: false, error: 'Support chat thread not found.' });
+        return;
+      }
+
+      if (!Array.isArray(inquiry.messages) || inquiry.messages.length === 0) {
+        inquiry.messages = [
+          {
+            sender: 'user',
+            senderName: inquiry.name,
+            text: inquiry.message,
+            createdAt: inquiry.createdAt || new Date(),
+          },
+        ];
+      }
+
+      inquiry.messages.push({
+        sender: 'admin',
+        senderName: senderName.slice(0, 100),
+        text: text.slice(0, 3000),
+        createdAt: new Date(),
+      });
+      inquiry.status = 'replied';
+      await inquiry.save();
+
+      res.status(200).json({ success: true, data: inquiry });
+    } catch (err: any) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  static async updateContactInquiryStatus(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      const inquiryId = req.params.id as string;
+      const status = req.body.status as 'unread' | 'read' | 'replied' | 'resolved' | 'archived';
+      const updated = await ContactInquiry.findByIdAndUpdate(
+        inquiryId,
+        { $set: { status } },
+        { new: true },
+      );
+      if (!updated) {
+        res.status(404).json({ success: false, error: 'Support chat thread not found.' });
+        return;
+      }
+      res.status(200).json({ success: true, data: updated });
+    } catch (err: any) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  static async deleteContactMessage(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      const inquiryId = req.params.id as string;
+      const messageId = req.params.messageId as string;
+      const inquiry = await ContactInquiry.findById(inquiryId);
+      if (!inquiry) {
+        res.status(404).json({ success: false, error: 'Support chat thread not found.' });
+        return;
+      }
+
+      inquiry.messages = (inquiry.messages as any).filter(
+        (m: any) => String(m._id) !== String(messageId),
+      );
+      await inquiry.save();
+
+      res.status(200).json({ success: true, data: inquiry });
     } catch (err: any) {
       res.status(500).json({ success: false, error: err.message });
     }

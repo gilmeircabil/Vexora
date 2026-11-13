@@ -13,6 +13,8 @@ import { FULLSCREEN_EVENT } from '../../features/education/shared/useFullscreenM
 // Public pages that are 100% free and open to view without requiring login
 const PUBLIC_PATHS = new Set([
   '/',
+  '/tools',
+  '/how-it-works',
   '/about',
   '/privacy',
   '/terms',
@@ -37,7 +39,10 @@ export const AppLayout: React.FC = () => {
 
   // Require login for non-public pages (unless already under maintenance for regular users)
   const REQUIRE_AUTH_TO_OPEN_PAGES = true;
-  const isPublicPage = PUBLIC_PATHS.has(location.pathname);
+  const isPublicPage =
+    PUBLIC_PATHS.has(location.pathname) ||
+    location.pathname.startsWith('/tools/') ||
+    location.pathname.startsWith('/category/');
   const isAiChatRoute =
     location.pathname.startsWith('/ai-tools/chat') ||
     location.pathname === '/ai-chat' ||
@@ -73,6 +78,15 @@ export const AppLayout: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen relative overflow-x-clip">
       <WindBackground />
+      {/* Top Golden Route Transition Progress Bar */}
+      <div
+        key={`progress-${location.pathname}`}
+        data-testid="route-transition-progress"
+        aria-hidden="true"
+        className="fixed top-0 left-0 right-0 z-50 h-0.5 pointer-events-none overflow-hidden"
+      >
+        <div className="h-full w-full bg-[var(--theme-yellow)] shadow-[0_0_10px_var(--theme-yellow)] route-progress-bar" />
+      </div>
       {/* Accessible Skip to Content Link */}
       <a
         href="#main-content"
@@ -134,13 +148,16 @@ export const AppLayout: React.FC = () => {
         ) : null}
 
         <div
-          className={
+          key={location.pathname}
+          data-testid="page-transition-stage"
+          data-route-key={location.pathname}
+          className={`page-transition-enter ${
             isMaintenanceActiveForUser || requiresAuth
               ? 'pointer-events-none select-none filter blur-[3px] opacity-40'
               : isFullBleedRoute
                 ? 'flex-1 w-full flex flex-col min-h-0'
                 : ''
-          }
+          }`}
         >
           <Suspense
             fallback={

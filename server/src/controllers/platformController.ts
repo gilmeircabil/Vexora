@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express';
 import { User } from '../models/User.js';
 import { LearningPost } from '../models/LearningPost.js';
-import { DeveloperProject } from '../models/DeveloperProject.js';
 import {
   PlatformConfig,
   ContactInquiry,
@@ -38,7 +37,6 @@ export class PlatformController {
       const [
         totalMembers,
         learningPostsCount,
-        legacyProjectsCount,
         donationSummary,
         leaderboard,
         recentPosts,
@@ -47,7 +45,6 @@ export class PlatformController {
       ] = await Promise.all([
         User.countDocuments({ isSuspended: { $ne: true } }),
         LearningPost.countDocuments({ status: 'published' }),
-        DeveloperProject.countDocuments({ status: 'published' }),
         DonationService.getSummary(),
         DonationService.getLeaderboard(5),
         LearningPost.find({ status: 'published' })
@@ -90,7 +87,7 @@ export class PlatformController {
         statistics: {
           totalMembers,
           activeMembers: totalMembers,
-          totalLearningPosts: learningPostsCount + legacyProjectsCount,
+          totalLearningPosts: learningPostsCount,
           publishedLearningPosts: learningPostsCount,
           totalSupporters: donationSummary.uniqueSupporters,
           totalVerifiedDonations: donationSummary.totalDonations,
@@ -132,20 +129,71 @@ export class PlatformController {
         return;
       }
 
+      const threadId = req.body.threadId ? String(req.body.threadId) : '';
+      if (threadId) {
+        const existing = await ContactInquiry.findById(threadId);
+        if (existing && existing.email === email) {
+          existing.messages.push({
+            sender: 'user',
+            senderName: name.slice(0, 100),
+            text: message.slice(0, 3000),
+            createdAt: new Date(),
+          });
+          existing.message = message.slice(0, 3000);
+          existing.status = 'unread';
+          await existing.save();
+          res.status(200).json({
+            success: true,
+            data: {
+              id: existing._id,
+              thread: existing,
+              message: 'Message sent to Admin.',
+            },
+          });
+          return;
+        }
+      }
+
       const inquiry = await ContactInquiry.create({
         name: name.slice(0, 100),
         email: email.slice(0, 150),
         subject: subject.slice(0, 200),
         message: message.slice(0, 3000),
+        messages: [
+          {
+            sender: 'user',
+            senderName: name.slice(0, 100),
+            text: message.slice(0, 3000),
+            createdAt: new Date(),
+          },
+        ],
       });
 
       res.status(201).json({
         success: true,
         data: {
           id: inquiry._id,
+          thread: inquiry,
           message: 'Your message has been received by the VexoraMods team.',
         },
       });
+    } catch (err: any) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  /**
+   * Public endpoint to fetch a user's support chat threads by email.
+   */
+  static async getContactThreads(req: Request, res: Response): Promise<void> {
+    try {
+      const email = LearningService.sanitizePlain(String(req.query.email || '')).toLowerCase();
+      if (!email || !email.includes('@')) {
+        res.status(200).json({ success: true, data: { threads: [] } });
+        return;
+      }
+      const threads = await ContactInquiry.find({ email }).sort({ updatedAt: -1, createdAt: -1 }).limit(20).lean();
+      res.status(200).json({ success: true, data: { threads } });
     } catch (err: any) {
       res.status(500).json({ success: false, error: err.message });
     }

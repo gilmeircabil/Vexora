@@ -78,4 +78,33 @@ describe('Ratings & Reviews Backend Service & Model Suite', () => {
     const cleaned = ReviewService.sanitizeText('<script>alert(1)</script>Great platform!   ');
     expect(cleaned).toBe('alert(1)Great platform!');
   });
+
+  it('automatically assigns user.avatarUrl when submitting a review', async () => {
+    const mockUserId = '507f1f77bcf86cd799439011';
+    const { User } = await import('../src/models/User.js');
+    vi.spyOn(User, 'findById').mockReturnValueOnce({
+      lean: async () => ({
+        _id: mockUserId,
+        name: 'Jane Doe',
+        avatarUrl: 'https://r2.vexora.com/avatars/jane.png',
+        isSuspended: false,
+      }),
+    } as any);
+
+    vi.spyOn(Review, 'findOne').mockResolvedValueOnce(null);
+    const createSpy = vi.spyOn(Review, 'create').mockImplementationOnce(async (doc: any) => doc as any);
+
+    await ReviewService.submitReview(mockUserId, {
+      rating: 5,
+      comment: 'Top tier AI platform with rich features!',
+    });
+
+    expect(createSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userAvatar: 'https://r2.vexora.com/avatars/jane.png',
+        userName: 'Jane Doe',
+        rating: 5,
+      }),
+    );
+  });
 });
