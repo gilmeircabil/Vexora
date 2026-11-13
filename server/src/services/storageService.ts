@@ -167,7 +167,10 @@ export class StorageService {
         }
 
         // Generate public or proxy URLs
-        const publicBase = env.S3_PUBLIC_URL?.replace(/\/+$/, '');
+        // Note: r2.dev dev domains are rate-limited and often fail DNS resolution (ENOTFOUND).
+        // Only use publicBase directly if configured with a custom domain, otherwise use the reliable streaming proxy.
+        const isR2DevDomain = Boolean(env.S3_PUBLIC_URL && env.S3_PUBLIC_URL.includes('.r2.dev'));
+        const publicBase = (!isR2DevDomain && env.S3_PUBLIC_URL) ? env.S3_PUBLIC_URL.replace(/\/+$/, '') : '';
         const url = publicBase
           ? `${publicBase}/assets/${storageKey}`
           : `/api/design-assets/files/${storageKey}`;
@@ -357,5 +360,15 @@ export class StorageService {
     if (thumbPath) {
       await fs.unlink(thumbPath).catch(() => {});
     }
+  }
+
+  /**
+   * Normalize an asset URL to prevent broken r2.dev links by routing through the internal streaming proxy.
+   */
+  static normalizeAssetUrl(url?: string | null): string {
+    if (!url) return '';
+    return url
+      .replace(/^https:\/\/pub-[^/]+\.r2\.dev\/assets\//, '/api/design-assets/files/')
+      .replace(/^https:\/\/pub-[^/]+\.r2\.dev\/thumbs\//, '/api/design-assets/files/thumbs/');
   }
 }

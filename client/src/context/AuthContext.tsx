@@ -47,13 +47,28 @@ interface AuthContextType {
   updateUser: (updated: Partial<UserProfile>) => void;
 }
 
+export function normalizeAvatarUrl(url?: string): string | undefined {
+  if (!url) return url;
+  return url
+    .replace(/^https:\/\/pub-[^/]+\.r2\.dev\/assets\//, '/api/design-assets/files/')
+    .replace(/^https:\/\/pub-[^/]+\.r2\.dev\/thumbs\//, '/api/design-assets/files/thumbs/');
+}
+
+export function sanitizeUserProfile(user: UserProfile | null): UserProfile | null {
+  if (!user) return null;
+  return {
+    ...user,
+    avatarUrl: normalizeAvatarUrl(user.avatarUrl),
+  };
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(() => {
     try {
       const saved = localStorage.getItem('tn_user');
-      return saved ? JSON.parse(saved) : null;
+      return saved ? sanitizeUserProfile(JSON.parse(saved)) : null;
     } catch {
       return null;
     }
@@ -74,10 +89,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           localStorage.setItem('tn_token', data.data.accessToken);
           localStorage.setItem('tn_has_session', 'true');
           if (data.data.user) {
-            localStorage.setItem('tn_user', JSON.stringify(data.data.user));
+            const sanitized = sanitizeUserProfile(data.data.user);
+            localStorage.setItem('tn_user', JSON.stringify(sanitized));
+            setUser(sanitized);
           }
           setToken(data.data.accessToken);
-          setUser(data.data.user);
           return true;
         } else {
           localStorage.removeItem('tn_has_session');
@@ -106,8 +122,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           if (data.success) {
             // Guard: don't overwrite if user was logged out while request was in-flight
             if (localStorage.getItem('tn_token')) {
-              localStorage.setItem('tn_user', JSON.stringify(data.data));
-              setUser(data.data);
+              const sanitized = sanitizeUserProfile(data.data);
+              localStorage.setItem('tn_user', JSON.stringify(sanitized));
+              setUser(sanitized);
             }
             return;
           }
@@ -148,11 +165,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [token, fetchCurrentUser, tryRefreshToken]);
 
   const login = (newToken: string, newUser: UserProfile) => {
+    const sanitized = sanitizeUserProfile(newUser);
     localStorage.setItem('tn_token', newToken);
     localStorage.setItem('tn_has_session', 'true');
-    localStorage.setItem('tn_user', JSON.stringify(newUser));
+    localStorage.setItem('tn_user', JSON.stringify(sanitized));
     setToken(newToken);
-    setUser(newUser);
+    setUser(sanitized);
   };
 
   const logout = async (redirectTo: string = '/login') => {
@@ -194,7 +212,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateUser = useCallback((updated: Partial<UserProfile>) => {
     setUser((prev) => {
       if (!prev) return null;
-      const next = { ...prev, ...updated };
+      const next = sanitizeUserProfile({ ...prev, ...updated })!;
       try {
         localStorage.setItem('tn_user', JSON.stringify(next));
       } catch {
