@@ -69,6 +69,9 @@ export const Header: React.FC = () => {
         location.pathname.startsWith('/category')
       );
     }
+    if (path === '/lovelink') {
+      return location.pathname.startsWith('/lovelink');
+    }
     return location.pathname.startsWith(path);
   };
 
@@ -176,6 +179,18 @@ export const Header: React.FC = () => {
             <Heart className="w-3.5 h-3.5 stroke-[2.2]" />
             <span>Community</span>
           </Link>
+
+          <Link
+            to="/lovelink"
+            className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              isNavActive('/lovelink')
+                ? 'bg-rose-500 text-white font-bold shadow-xs'
+                : 'text-[var(--theme-gray-muted)] hover:text-rose-400 hover:bg-[var(--theme-surface-raised)]'
+            }`}
+          >
+            <Heart className="w-3.5 h-3.5 stroke-[2.2] text-rose-400" />
+            <span>LoveLink</span>
+          </Link>
         </nav>
 
         {/* Right Section: Ratings + Auth Menu + Mobile Toggle */}
@@ -239,6 +254,14 @@ export const Header: React.FC = () => {
                     >
                       <LayoutDashboard className="w-4 h-4 text-[var(--theme-gray-muted)]" />
                       <span>Account Dashboard</span>
+                    </Link>
+
+                    <Link
+                      to="/lovelink/my-letters"
+                      className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-medium rounded-lg text-[var(--theme-dirty-white-muted)] hover:text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)] transition-colors"
+                    >
+                      <Heart className="w-4 h-4 text-rose-400" />
+                      <span>My Letters (LoveLink)</span>
                     </Link>
 
                     {user.role === 'admin' && (
@@ -506,6 +529,19 @@ export const Header: React.FC = () => {
             >
               <Heart className="w-4 h-4" />
               <span>Community</span>
+            </Link>
+
+            <Link
+              to="/lovelink"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
+                isNavActive('/lovelink')
+                  ? 'bg-rose-500 text-white border-rose-500 font-bold'
+                  : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface-raised)]'
+              }`}
+            >
+              <Heart className="w-4 h-4 text-rose-400" />
+              <span>LoveLink</span>
             </Link>
 
             <Link

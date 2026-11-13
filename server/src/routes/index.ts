@@ -14,6 +14,7 @@ import { educationRoutes } from './educationRoutes.js';
 import favoriteRoutes from './favoriteRoutes.js';
 import announcementRoutes from './announcementRoutes.js';
 import limitRoutes from './limitRoutes.js';
+import loveLinkRoutes from './loveLinkRoutes.js';
 import { enforceLimits } from '../middleware/limitMiddleware.js';
 import { defaultLimits } from '../config/limits.js';
 import type { AuthenticatedRequest } from '../middleware/authMiddleware.js';
@@ -60,5 +61,6 @@ apiRouter.use('/education', educationRoutes);
 apiRouter.use('/favorites', favoriteRoutes);
 apiRouter.use('/announcements', announcementRoutes);
 apiRouter.use('/limits', limitRoutes);
+apiRouter.use('/lovelink', loveLinkRoutes);
 
 export default apiRouter;

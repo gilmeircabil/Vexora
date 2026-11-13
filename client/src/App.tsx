@@ -100,6 +100,13 @@ import { ProjectsDirectoryPage } from './pages/developers/ProjectsDirectoryPage.
 import { ProjectDetailPage } from './pages/developers/ProjectDetailPage.js';
 import { ManageProjectsPage } from './pages/developers/ManageProjectsPage.js';
 
+// LoveLink Romantic Digital Letters Suite
+import { LoveLinkLandingPage } from './pages/lovelink/LoveLinkLandingPage.js';
+import { LoveLinkStudioPage } from './pages/lovelink/LoveLinkStudioPage.js';
+import { LoveLinkSharePage } from './pages/lovelink/LoveLinkSharePage.js';
+import { LoveLinkDashboardPage } from './pages/lovelink/LoveLinkDashboardPage.js';
+import { LoveLinkRecipientPage } from './pages/lovelink/LoveLinkRecipientPage.js';
+
 export const App: React.FC = () => {
   return (
     <ThemeProvider>
@@ -151,6 +158,9 @@ export const App: React.FC = () => {
                       <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
                       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                       <Route path="/reset-password" element={<ForgotPasswordPage />} />
+
+                      {/* Standalone LoveLink Recipient Experience (Opening Envelope) */}
+                      <Route path="/lovelink/open/:token" element={<LoveLinkRecipientPage />} />
 
                       <Route element={<AppLayout />}>
                         {/* 1. Home */}
@@ -295,6 +305,13 @@ export const App: React.FC = () => {
 
                         {/* 7. Public Ratings & Reviews */}
                         <Route path="/reviews" element={<ReviewsPage />} />
+
+                        {/* 8. LoveLink Digital Romance Suite */}
+                        <Route path="/lovelink" element={<LoveLinkLandingPage />} />
+                        <Route path="/lovelink/create" element={<LoveLinkStudioPage />} />
+                        <Route path="/lovelink/studio" element={<Navigate to="/lovelink/create" replace />} />
+                        <Route path="/lovelink/share/:id" element={<LoveLinkSharePage />} />
+                        <Route path="/lovelink/my-letters" element={<LoveLinkDashboardPage />} />
 
                         {/* Account, Admin & Legal */}
                         <Route path="/dashboard" element={<DashboardPage />} />

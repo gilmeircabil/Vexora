@@ -26,3 +26,4 @@ export * from './Announcement.js';
 export * from './AnnouncementDismissal.js';
 export * from './AIChatSession.js';
 export * from './UsageLimit.js';
+export * from './LoveLetter.js';
