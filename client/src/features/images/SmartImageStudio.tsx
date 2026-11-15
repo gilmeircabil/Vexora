@@ -541,7 +541,7 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
           <div
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
-            className="border-2 border-dashed border-black rounded-2xl bg-slate-900/60 p-8 sm:p-12 max-w-2xl mx-auto space-y-4 hover:bg-[#f3ede1] transition-all cursor-pointer group"
+            className="border-2 border-dashed border-[var(--theme-gray-border)] hover:border-[var(--theme-yellow)]/60 rounded-3xl bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-raised)] p-8 sm:p-12 max-w-2xl mx-auto space-y-4 transition-all cursor-pointer group shadow-sm"
             onClick={() => document.getElementById('smart-image-upload')?.click()}
           >
             <input
@@ -551,14 +551,14 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
               onChange={handleFileChange}
               className="hidden"
             />
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--theme-surface)] border border-[var(--theme-gray-border)] text-slate-100 shadow-sm flex items-center justify-center group-hover:scale-105 transition-transform">
-              <UploadCloud className="w-8 h-8 text-slate-100 stroke-[2]" />
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[var(--theme-yellow)] shadow-sm flex items-center justify-center group-hover:scale-105 transition-transform">
+              <UploadCloud className="w-8 h-8 stroke-[2]" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-slate-100">
+              <h3 className="text-lg font-black text-[var(--theme-dirty-white)] group-hover:text-[var(--theme-yellow)] transition-colors">
                 Drop your image here or click to browse
               </h3>
-              <p className="text-xs font-semibold text-slate-400 mt-1">
+              <p className="text-xs font-semibold text-[var(--theme-gray-muted)] mt-1">
                 Supports PNG, JPG, WebP, AVIF up to 30 MB. Zero accounts or subscriptions needed.
               </p>
             </div>
@@ -566,25 +566,25 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
 
           {/* Quick Sample Selector */}
           <div className="space-y-2">
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--theme-gray-muted)]">
               Or test instantly with a sample:
             </span>
             <div className="flex flex-wrap items-center justify-center gap-2.5">
               <button
                 onClick={() => loadSampleImage('portrait')}
-                className="px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] bg-white hover:bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold font-mono shadow-sm transition-colors"
+                className="px-3.5 py-2 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-raised)] hover:border-[var(--theme-yellow)]/60 text-[var(--theme-dirty-white)] hover:text-[var(--theme-yellow)] text-xs font-bold font-mono shadow-sm transition-all cursor-pointer"
               >
                 Portrait (Enhance / BG)
               </button>
               <button
                 onClick={() => loadSampleImage('landscape')}
-                className="px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] bg-white hover:bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold font-mono shadow-sm transition-colors"
+                className="px-3.5 py-2 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-raised)] hover:border-[var(--theme-yellow)]/60 text-[var(--theme-dirty-white)] hover:text-[var(--theme-yellow)] text-xs font-bold font-mono shadow-sm transition-all cursor-pointer"
               >
                 Landscape (Super-Res)
               </button>
               <button
                 onClick={() => loadSampleImage('graphic')}
-                className="px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] bg-white hover:bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] text-xs font-bold font-mono shadow-sm transition-colors"
+                className="px-3.5 py-2 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-raised)] hover:border-[var(--theme-yellow)]/60 text-[var(--theme-dirty-white)] hover:text-[var(--theme-yellow)] text-xs font-bold font-mono shadow-sm transition-all cursor-pointer"
               >
                 Graphic / Text (OCR)
               </button>
@@ -655,12 +655,12 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
           {/* Operation Controls & Canvas Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px]">
             {/* Left Control Column (4 cols) */}
-            <div className="lg:col-span-4 p-5 border-b-2 lg:border-b-0 lg:border-r border-[var(--theme-gray-border)] bg-white space-y-5">
+            <div className="lg:col-span-4 p-5 border-b-2 lg:border-b-0 lg:border-r border-[var(--theme-gray-border)] bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] space-y-5">
               {/* Image Info Tag */}
               {imageMeta && (
-                <div className="p-3 bg-slate-900/60 border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs space-y-1">
-                  <div className="font-black text-slate-100 truncate">{imageMeta.name}</div>
-                  <div className="text-slate-400 flex items-center gap-3">
+                <div className="p-3 bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl font-mono text-xs space-y-1">
+                  <div className="font-black text-[var(--theme-dirty-white)] truncate">{imageMeta.name}</div>
+                  <div className="text-[var(--theme-gray-muted)] flex items-center gap-3">
                     <span>
                       {imageMeta.width} × {imageMeta.height} px
                     </span>
@@ -682,10 +682,10 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
                         <button
                           key={s}
                           onClick={() => setScale(s)}
-                          className={`py-2 rounded-xl border border-[var(--theme-gray-border)] font-mono font-black text-xs transition-all ${
+                          className={`py-2 rounded-xl border font-mono font-black text-xs transition-all cursor-pointer ${
                             scale === s
-                              ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] shadow-sm'
-                              : 'bg-white hover:bg-neutral-100'
+                              ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] shadow-sm'
+                              : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)]'
                           }`}
                         >
                           {s}× Upscale
@@ -729,10 +729,10 @@ export const SmartImageStudio: React.FC<SmartImageStudioProps> = ({
                       <button
                         key={opt.id}
                         onClick={() => setBgColor(opt.id)}
-                        className={`py-2 px-2.5 rounded-xl border border-[var(--theme-gray-border)] font-mono font-bold text-xs text-left truncate transition-all ${
+                        className={`py-2 px-2.5 rounded-xl border font-mono font-bold text-xs text-left truncate transition-all cursor-pointer ${
                           bgColor === opt.id
-                            ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] hover:bg-[var(--theme-dirty-white-muted)] shadow-sm'
-                            : 'bg-white hover:bg-neutral-100'
+                            ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] shadow-sm'
+                            : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)]'
                         }`}
                       >
                         {opt.label}

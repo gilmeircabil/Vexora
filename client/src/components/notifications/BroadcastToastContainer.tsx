@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router';
 import { Info, CheckCircle2, AlertTriangle, Megaphone, X } from 'lucide-react';
 import { useBroadcastNotifications } from '../../context/BroadcastNotificationContext.js';
 import type { BroadcastAnnouncement } from '../../services/announcementApi.js';
@@ -157,7 +158,13 @@ export const BroadcastToastCard: React.FC<ToastCardProps> = ({ announcement, onD
 };
 
 export const BroadcastToastContainer: React.FC = () => {
+  const location = useLocation();
   const { visibleAnnouncements, dismiss } = useBroadcastNotifications();
+
+  // Suppress broadcast notifications across all LoveLink experiences
+  if (location.pathname === '/lovelink' || location.pathname.startsWith('/lovelink/')) {
+    return null;
+  }
 
   if (!visibleAnnouncements || visibleAnnouncements.length === 0) {
     return null;

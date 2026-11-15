@@ -600,6 +600,10 @@ describe('VexoraMods Unified Platform Restructuring Suite', () => {
     fireEvent.change(confirmInput, { target: { value: 'StrongPassword123' } });
     expect(screen.queryByText('Passwords do not match.')).not.toBeInTheDocument();
     expect(screen.getByText('Cloudflare Turnstile')).toBeInTheDocument();
+
+    // Obsolete Study Space Role selector must not be rendered
+    expect(screen.queryByText(/Study Space Account Role/i)).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Teacher/i })).not.toBeInTheDocument();
   }, 15000);
 
   it('renders LoginPage with show/hide password toggle, Forgot password link, and Turnstile widget', () => {

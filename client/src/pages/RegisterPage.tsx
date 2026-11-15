@@ -16,8 +16,6 @@ import {
   AlertCircle,
   KeyRound,
   ArrowRight,
-  School,
-  BookOpen,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
 import { useToast } from '../context/ToastContext.js';
@@ -45,7 +43,6 @@ export const RegisterPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [educationRole, setEducationRole] = useState<'student' | 'teacher'>('student');
   const [websiteHoneypot, setWebsiteHoneypot] = useState('');
   const [turnstileToken, setTurnstileToken] = useState('');
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
@@ -133,7 +130,7 @@ export const RegisterPage: React.FC = () => {
           name: name.trim() || trimmedUsername,
           password,
           confirmPassword,
-          educationRole,
+          educationRole: 'student',
           turnstileToken,
           website: websiteHoneypot,
         }),
@@ -182,14 +179,7 @@ export const RegisterPage: React.FC = () => {
   const handleFinishRegistration = () => {
     if (!recoveryModalData) return;
     login(recoveryModalData.accessToken, recoveryModalData.user);
-    const isTeacher =
-      recoveryModalData.user?.educationRole === 'teacher' ||
-      recoveryModalData.user?.educationRole === 'educator';
-    let target = redirect;
-    if (isTeacher && (redirect === '/study' || redirect === '/study-space')) {
-      target = '/study?workspace=teacher';
-    }
-    navigate(target);
+    navigate(redirect);
   };
 
   return (
@@ -535,39 +525,6 @@ export const RegisterPage: React.FC = () => {
                       Passwords do not match.
                     </p>
                   )}
-                </div>
-
-                {/* Study Space Role Selection */}
-                <div>
-                  <label className="block font-semibold text-slate-200 text-xs uppercase tracking-wider mb-1.5">
-                    Study Space Account Role
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setEducationRole('student')}
-                      className={`p-2.5 rounded-xl border flex items-center justify-center gap-2 text-xs font-semibold transition-all cursor-pointer ${
-                        educationRole === 'student'
-                          ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)] shadow-sm'
-                          : 'bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface)]'
-                      }`}
-                    >
-                      <BookOpen className="w-3.5 h-3.5" />
-                      <span>Student</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setEducationRole('teacher')}
-                      className={`p-2.5 rounded-xl border flex items-center justify-center gap-2 text-xs font-semibold transition-all cursor-pointer ${
-                        educationRole === 'teacher'
-                          ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border-[var(--theme-dirty-white)] shadow-sm'
-                          : 'bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)] border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface)]'
-                      }`}
-                    >
-                      <School className="w-3.5 h-3.5" />
-                      <span>Teacher</span>
-                    </button>
-                  </div>
                 </div>
 
                 {/* Security & Bot Protection Notice */}

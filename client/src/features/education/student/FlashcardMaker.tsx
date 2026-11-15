@@ -261,7 +261,7 @@ export const FlashcardMaker: React.FC = () => {
               {isFlipped ? currentCard.answer : currentCard.question}
             </p>
             {!isFlipped && showHint && currentCard.hint && (
-              <p className="mt-3 text-xs text-amber-700 bg-amber-50 p-2 rounded-lg border border-amber-300 inline-block">
+              <p className="mt-3 text-xs text-[var(--theme-yellow)] bg-[var(--theme-surface-raised)] p-2 rounded-lg border border-[var(--theme-gray-border)] inline-block">
                 Hint: {currentCard.hint}
               </p>
             )}
@@ -293,7 +293,7 @@ export const FlashcardMaker: React.FC = () => {
         <div className="grid grid-cols-2 gap-4">
           <button
             onClick={() => handleReviewAction(false)}
-            className="py-3 px-4 bg-[var(--theme-surface)] hover:bg-red-50 text-red-600 font-black text-sm rounded-xl border border-[var(--theme-gray-border)] shadow-sm flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-transform"
+            className="py-3 px-4 bg-[var(--theme-surface)] hover:bg-red-500/15 text-red-400 font-black text-sm rounded-xl border border-[var(--theme-gray-border)] shadow-sm flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-transform cursor-pointer"
           >
             <X className="w-5 h-5 stroke-[3]" />
             Still Learning
@@ -301,7 +301,7 @@ export const FlashcardMaker: React.FC = () => {
 
           <button
             onClick={() => handleReviewAction(true)}
-            className="py-3 px-4 bg-[#4ADE80] text-slate-100 font-black text-sm rounded-xl border border-[var(--theme-gray-border)] shadow-sm flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-transform"
+            className="py-3 px-4 bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] font-black text-sm rounded-xl border border-[var(--theme-yellow)] shadow-sm flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-transform cursor-pointer"
           >
             <Check className="w-5 h-5 stroke-[3]" />
             Got It!
@@ -396,7 +396,7 @@ export const FlashcardMaker: React.FC = () => {
                     {c.answer}
                   </p>
                   {c.hint && (
-                    <p className="text-[11px] text-amber-700 mt-2 bg-amber-50 p-1.5 rounded border border-amber-200">
+                    <p className="text-[11px] text-[var(--theme-yellow)] mt-2 bg-[var(--theme-surface-raised)] p-1.5 rounded border border-[var(--theme-gray-border)]">
                       Hint: {c.hint}
                     </p>
                   )}

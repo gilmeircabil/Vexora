@@ -556,10 +556,10 @@ export const QuizMaker: React.FC<QuizMakerProps> = ({ onOpenDocQuiz }) => {
       </div>
 
       {/* Notice */}
-      <div className="p-3.5 bg-amber-50 rounded-xl border border-amber-300 flex items-start gap-2.5 text-xs text-amber-900">
-        <AlertTriangle className="w-4 h-4 shrink-0 text-amber-700 mt-0.5" />
+      <div className="p-3.5 bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] flex items-start gap-2.5 text-xs text-[var(--theme-dirty-white)]">
+        <AlertTriangle className="w-4 h-4 shrink-0 text-[var(--theme-yellow)] mt-0.5" />
         <div>
-          <span className="font-bold">Automated Scoring Policy:</span> Objective multiple-choice and
+          <span className="font-bold text-[var(--theme-yellow)]">Automated Scoring Policy:</span> Objective multiple-choice and
           true/false questions are scored directly. Short-answer responses are evaluated based on
           exact/keyword match and should be reviewed by an instructor for full academic grading.
         </div>

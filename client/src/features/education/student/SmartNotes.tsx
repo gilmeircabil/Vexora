@@ -372,7 +372,7 @@ export const SmartNotes: React.FC = () => {
                       {selectedNote.subject}
                     </span>
                     {selectedNote.isPinned && (
-                      <span className="text-[10px] font-black text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-300">
+                      <span className="text-[10px] font-bold text-[var(--theme-yellow)] bg-[var(--theme-surface-raised)] px-2 py-0.5 rounded border border-[var(--theme-gray-border)]">
                         Pinned
                       </span>
                     )}

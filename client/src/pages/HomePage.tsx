@@ -4,6 +4,7 @@ import {
   Wrench,
   Sparkles,
   Heart,
+  Users,
   ArrowRight,
   Star,
   PenSquare,
@@ -546,56 +547,56 @@ export const HomePage: React.FC = () => {
               desc: 'Conversational AI assistant with session history and prompt tools.',
               to: '/ai-chat',
               icon: Bot,
-              accent: false,
+              tag: 'AI Assistant',
             },
             {
               title: 'Studio',
               desc: 'Multi-page vector canvas, custom SVGs, layers, and high-res exports.',
               to: '/studio',
               icon: Sparkles,
-              accent: false,
+              tag: 'Vector Canvas',
             },
             {
               title: 'UI Library',
               desc: 'Interactive components, full page layouts, styles, and live sandbox.',
               to: '/ui-library',
               icon: LayoutGrid,
-              accent: false,
+              tag: 'Components & Sandbox',
             },
             {
               title: 'Learning Hub',
               desc: 'Community tutorials, creator courses, and multidisciplinary guides.',
               to: '/learning',
               icon: BookOpen,
-              accent: false,
+              tag: 'Tutorials & Courses',
             },
             {
               title: 'Study Space',
               desc: 'Student workspace with flashcards, quizzes, GPA calculator, and planners.',
               to: '/study',
               icon: GraduationCap,
-              accent: false,
+              tag: 'Student Tools',
             },
             {
               title: 'Discover',
               desc: 'Explore curated community hubs, creative spaces, and local spots.',
               to: '/discover',
               icon: Compass,
-              accent: false,
+              tag: 'Curated Directory',
             },
             {
               title: 'Community',
               desc: 'Open-source supporter leaderboard, milestones, and platform backing.',
               to: '/community',
-              icon: Heart,
-              accent: false,
+              icon: Users,
+              tag: 'Supporters & Leaderboard',
             },
             {
               title: 'LoveLink',
               desc: 'Craft interactive digital letters and sealed envelope experiences.',
               to: '/lovelink',
               icon: Heart,
-              accent: true,
+              tag: 'Interactive Letters',
             },
           ].map((item) => (
             <Link
@@ -605,13 +606,7 @@ export const HomePage: React.FC = () => {
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div
-                    className={`w-12 h-12 rounded-2xl border flex items-center justify-center shadow-xs transition-all duration-200 ${
-                      item.accent
-                        ? 'bg-rose-500/10 border-rose-500/30 text-rose-400 group-hover:bg-rose-500 group-hover:text-white group-hover:scale-105'
-                        : 'bg-[var(--theme-surface-raised)] border-[var(--theme-gray-border)] text-[var(--theme-dirty-white)] group-hover:bg-[var(--theme-yellow)] group-hover:text-[var(--theme-canvas)] group-hover:border-[var(--theme-yellow)] group-hover:scale-105'
-                    }`}
-                  >
+                  <div className="w-12 h-12 rounded-2xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] group-hover:bg-[var(--theme-yellow)] group-hover:text-[var(--theme-canvas)] group-hover:border-[var(--theme-yellow)] group-hover:scale-105 flex items-center justify-center shadow-xs transition-all duration-200">
                     <item.icon className="w-6 h-6 stroke-[2.2]" />
                   </div>
                   <span
@@ -622,19 +617,19 @@ export const HomePage: React.FC = () => {
                   </span>
                 </div>
                 <div>
-                  <h3
-                    className={`text-lg sm:text-xl font-bold tracking-tight transition-colors ${
-                      item.accent
-                        ? 'text-[var(--theme-dirty-white)] group-hover:text-rose-400'
-                        : 'text-[var(--theme-dirty-white)] group-hover:text-[var(--theme-yellow)]'
-                    }`}
-                  >
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight transition-colors text-[var(--theme-dirty-white)] group-hover:text-[var(--theme-yellow)]">
                     {item.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-[var(--theme-gray-muted)] leading-relaxed mt-1.5">
                     {item.desc}
                   </p>
                 </div>
+              </div>
+              <div className="mt-5 pt-3.5 border-t border-[var(--theme-gray-border)]/60 flex items-center justify-between text-[11px] font-mono text-[var(--theme-gray-muted)]">
+                <span>{item.tag}</span>
+                <span className="text-[var(--theme-yellow)] font-bold transition-transform group-hover:translate-x-0.5">
+                  Launch →
+                </span>
               </div>
             </Link>
           ))}

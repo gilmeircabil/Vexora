@@ -243,7 +243,7 @@ export const GradeCalculator: React.FC = () => {
             </span>
             <p className="text-2xl font-black mt-0.5 text-slate-100">{overallGpa}</p>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-[var(--theme-gray-border)] flex items-center justify-center font-black text-base shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-[var(--theme-surface-raised)] text-[var(--theme-yellow)] border border-[var(--theme-gray-border)] flex items-center justify-center font-mono font-black text-base shadow-sm">
             {getLetterGradeAndPoints(overallGpa * 25, scaleType).letter}
           </div>
         </div>
@@ -269,7 +269,7 @@ export const GradeCalculator: React.FC = () => {
           </div>
           <button
             onClick={handleAddSubject}
-            className="flex items-center gap-1 text-xs font-black bg-[#4ADE80] text-slate-100 px-2.5 py-1 rounded-lg border border-black shadow-sm hover:scale-105 transition-all cursor-pointer"
+            className="flex items-center gap-1 text-xs font-black bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] px-3 py-1.5 rounded-xl border border-[var(--theme-yellow)] shadow-sm hover:scale-105 transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5 stroke-[3]" />
             Add Course
@@ -288,14 +288,14 @@ export const GradeCalculator: React.FC = () => {
             <button
               key={sub.id}
               onClick={() => setActiveSubjectId(sub.id)}
-              className={`px-4 py-2 rounded-xl border-2 text-xs font-black shrink-0 transition-all flex items-center gap-2 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl border text-xs font-black shrink-0 transition-all flex items-center gap-2 cursor-pointer ${
                 isActive
-                  ? 'border-black bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-sm'
-                  : 'border-neutral-300 bg-[var(--theme-surface)] hover:border-black'
+                  ? 'border-[var(--theme-yellow)] bg-[var(--theme-yellow)] text-[var(--theme-canvas)] shadow-sm'
+                  : 'border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)]'
               }`}
             >
               <span>{sub.name}</span>
-              <span className="bg-black/10 px-1.5 py-0.5 rounded text-[10px]">
+              <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono ${isActive ? 'bg-black/15 text-black' : 'bg-[var(--theme-surface-raised)] text-[var(--theme-gray-muted)]'}`}>
                 {pct}% ({letter})
               </span>
             </button>
@@ -371,19 +371,19 @@ export const GradeCalculator: React.FC = () => {
                   <th className="py-2.5 px-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100">
+              <tbody className="divide-y divide-[var(--theme-gray-border)]">
                 {activeSubject.assessments.map((item) => {
                   const itemPct =
                     item.maxScore > 0 ? Math.round((item.score / item.maxScore) * 100) : 0;
 
                   return (
-                    <tr key={item.id} className="hover:bg-neutral-50 font-medium">
+                    <tr key={item.id} className="hover:bg-[var(--theme-surface-raised)]/60 font-medium">
                       <td className="py-2.5 px-3">
                         <input
                           type="text"
                           value={item.name}
                           onChange={(e) => handleUpdateAssessment(item.id, 'name', e.target.value)}
-                          className="w-full border-b border-transparent hover:border-neutral-300 focus:border-black focus:outline-none py-1"
+                          className="w-full border-b border-[var(--theme-gray-border)] bg-transparent hover:border-[var(--theme-gray-subtle)] focus:border-[var(--theme-yellow)] focus:outline-none py-1 text-[var(--theme-dirty-white)]"
                         />
                       </td>
                       <td className="py-2.5 px-3">
@@ -393,7 +393,7 @@ export const GradeCalculator: React.FC = () => {
                           onChange={(e) =>
                             handleUpdateAssessment(item.id, 'score', Number(e.target.value) || 0)
                           }
-                          className="w-20 px-2 py-1 border border-neutral-300 rounded font-bold text-center"
+                          className="w-20 px-2 py-1 border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] rounded-lg font-bold text-center focus:border-[var(--theme-yellow)] focus:outline-none"
                         />
                       </td>
                       <td className="py-2.5 px-3">
@@ -403,7 +403,7 @@ export const GradeCalculator: React.FC = () => {
                           onChange={(e) =>
                             handleUpdateAssessment(item.id, 'maxScore', Number(e.target.value) || 1)
                           }
-                          className="w-20 px-2 py-1 border border-neutral-300 rounded font-bold text-center"
+                          className="w-20 px-2 py-1 border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] rounded-lg font-bold text-center focus:border-[var(--theme-yellow)] focus:outline-none"
                         />
                       </td>
                       <td className="py-2.5 px-3">
@@ -413,14 +413,14 @@ export const GradeCalculator: React.FC = () => {
                           onChange={(e) =>
                             handleUpdateAssessment(item.id, 'weight', Number(e.target.value) || 0)
                           }
-                          className="w-20 px-2 py-1 border border-neutral-300 rounded font-bold text-center"
+                          className="w-20 px-2 py-1 border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] rounded-lg font-bold text-center focus:border-[var(--theme-yellow)] focus:outline-none"
                         />
                       </td>
-                      <td className="py-2.5 px-3 font-black text-neutral-800">{itemPct}%</td>
+                      <td className="py-2.5 px-3 font-bold text-[var(--theme-dirty-white)]">{itemPct}%</td>
                       <td className="py-2.5 px-3 text-right">
                         <button
                           onClick={() => handleDeleteAssessment(item.id)}
-                          className="p-1 text-neutral-400 hover:text-red-600 transition-colors"
+                          className="p-1 text-[var(--theme-gray-muted)] hover:text-red-400 transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -435,7 +435,7 @@ export const GradeCalculator: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
             <button
               onClick={handleAddAssessment}
-              className="px-4 py-2 bg-[var(--theme-surface)] text-slate-100 font-black text-xs rounded-xl border border-[var(--theme-gray-border)] hover:bg-neutral-50 shadow-sm self-start"
+              className="px-4 py-2 bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] font-bold text-xs rounded-xl border border-[var(--theme-gray-border)] shadow-sm self-start cursor-pointer transition-colors"
             >
               + Add Assessment Item
             </button>
@@ -444,7 +444,7 @@ export const GradeCalculator: React.FC = () => {
               Total Assessed Weight:{' '}
               <span
                 className={`font-black ${
-                  currentAssessedWeight > 100 ? 'text-red-600' : 'text-neutral-900'
+                  currentAssessedWeight > 100 ? 'text-red-400' : 'text-[var(--theme-yellow)]'
                 }`}
               >
                 {currentAssessedWeight}%

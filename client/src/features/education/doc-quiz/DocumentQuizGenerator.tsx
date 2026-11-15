@@ -630,13 +630,13 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
       <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] p-4 sm:p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="space-y-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <div className="w-8 h-8 rounded-lg bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] border border-black flex items-center justify-center shrink-0">
-              <FileQuestion className="w-4 h-4 text-slate-100" />
+            <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface-raised)] text-[var(--theme-yellow)] border border-[var(--theme-gray-border)] flex items-center justify-center shrink-0">
+              <FileQuestion className="w-4 h-4 text-[var(--theme-yellow)]" />
             </div>
             <h1 className="text-lg sm:text-2xl font-black text-slate-100 tracking-tight truncate">
               Document-to-Quiz Generator
             </h1>
-            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#4ADE80] border border-black shrink-0">
+            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 font-mono shrink-0">
               Zero-Cost Engine
             </span>
           </div>
@@ -647,20 +647,20 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
         </div>
 
         {/* Top Header Actions */}
-        <div className="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-end shrink-0 pt-1 sm:pt-0 border-t sm:border-t-0 border-black/10">
+        <div className="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-end shrink-0 pt-1 sm:pt-0 border-t sm:border-t-0 border-[var(--theme-gray-border)]">
           <button
             type="button"
             onClick={toggleHistoryView}
             className={`min-h-[38px] px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ${
               step === 'history'
                 ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-sm'
-                : 'bg-[var(--theme-surface)] text-neutral-800 hover:bg-neutral-100 shadow-sm'
+                : 'bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)] hover:text-white shadow-sm'
             }`}
           >
-            <History className="w-3.5 h-3.5 text-slate-100" />
+            <History className="w-3.5 h-3.5 text-[var(--theme-yellow)]" />
             <span>Saved Quizzes</span>
             {savedQuizzes.length > 0 && (
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-black text-white font-bold">
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-[var(--theme-yellow)] text-[var(--theme-canvas)] font-bold">
                 {savedQuizzes.length}
               </span>
             )}
@@ -670,7 +670,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
             <button
               type="button"
               onClick={onBackToQuizzes}
-              className="min-h-[38px] px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-neutral-100 text-xs font-black text-neutral-800 flex items-center gap-1 cursor-pointer shadow-sm"
+              className="min-h-[38px] px-3 py-1.5 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-raised)] text-xs font-black text-[var(--theme-dirty-white)] hover:text-white flex items-center gap-1 cursor-pointer shadow-sm"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back</span>
@@ -717,12 +717,12 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
               return (
                 <div
                   key={s.id}
-                  className={`p-2.5 rounded-xl border border-[var(--theme-gray-border)] flex items-center gap-2 text-xs font-black transition-all ${
+                  className={`p-2.5 rounded-xl border flex items-center gap-2 text-xs font-black transition-all ${
                     isCurrent
-                      ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-sm'
+                      ? 'bg-[var(--theme-yellow)] text-[var(--theme-canvas)] border-[var(--theme-yellow)] shadow-sm'
                       : isDone
-                        ? 'bg-neutral-100 text-neutral-800'
-                        : 'bg-[var(--theme-surface)] text-neutral-400'
+                        ? 'bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] border-[var(--theme-gray-border)]'
+                        : 'bg-[var(--theme-surface)] text-[var(--theme-gray-muted)] border-[var(--theme-gray-border)]'
                   }`}
                 >
                   <s.icon className="w-3.5 h-3.5 shrink-0" />
@@ -883,7 +883,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
                 handleFileUpload(e.dataTransfer.files[0]);
               }
             }}
-            className="bg-[var(--theme-surface)] rounded-2xl border-2 border-dashed border-black p-5 sm:p-10 text-center shadow-sm hover:border-solid hover:bg-amber-50/20 transition-all space-y-4"
+            className="bg-[var(--theme-surface)] rounded-2xl border-2 border-dashed border-[var(--theme-gray-border)] p-5 sm:p-10 text-center shadow-sm hover:border-[var(--theme-yellow)]/60 hover:bg-[var(--theme-surface-raised)]/40 transition-all space-y-4"
           >
             <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-2xl bg-[var(--theme-dirty-white)] border border-[var(--theme-gray-border)] flex items-center justify-center shadow-sm">
               <Upload className="w-7 h-7 sm:w-8 sm:h-8 text-[var(--theme-canvas)]" />
@@ -904,7 +904,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
               {['.PDF', '.DOCX', '.PPTX', '.TXT', '.MD'].map((ext) => (
                 <span
                   key={ext}
-                  className="px-2 sm:px-2.5 py-1 rounded-md bg-[var(--theme-surface-raised)] border border-black text-[10px] sm:text-[11px] font-black text-slate-100 font-mono shadow-sm"
+                  className="px-2 sm:px-2.5 py-1 rounded-md bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] text-[10px] sm:text-[11px] font-black text-slate-100 font-mono shadow-sm"
                 >
                   {ext}
                 </span>
@@ -933,7 +933,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
                 type="button"
                 disabled={isParsing}
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full sm:w-auto min-h-[48px] px-8 py-3 bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] font-black text-xs uppercase rounded-xl border border-[var(--theme-gray-border)] shadow-sm hover:translate-y-[-1px] transition-all cursor-pointer disabled:opacity-50 inline-flex items-center justify-center gap-2"
+                className="w-full sm:w-auto min-h-[48px] px-8 py-3 bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] font-black text-xs uppercase rounded-xl border border-[var(--theme-yellow)] shadow-sm hover:translate-y-[-1px] transition-all cursor-pointer disabled:opacity-50 inline-flex items-center justify-center gap-2"
               >
                 <Upload className="w-4 h-4 stroke-[2.5]" />
                 <span>{isParsing ? 'Extracting Content...' : 'Choose File / Browse'}</span>
@@ -952,8 +952,8 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
             )}
 
             {parseError && (
-              <div className="p-3 bg-red-50 border-2 border-red-500 rounded-xl text-xs font-bold text-red-700 flex items-center gap-2 justify-center max-w-md mx-auto text-left">
-                <AlertTriangle className="w-4 h-4 shrink-0 text-red-600" />
+              <div className="p-3 bg-red-500/15 border border-red-500/40 rounded-xl text-xs font-bold text-red-300 flex items-center gap-2 justify-center max-w-md mx-auto text-left">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-red-400" />
                 <span className="break-words">{parseError}</span>
               </div>
             )}
@@ -961,13 +961,13 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
 
           {/* Quick-Start Sample Documents */}
           <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-gray-border)] p-4 sm:p-5 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 pb-2 border-b border-black/10">
-              <Sparkles className="w-4 h-4 text-slate-100 shrink-0" />
-              <h3 className="text-xs font-black uppercase tracking-wider text-slate-100">
+            <div className="flex items-center gap-2 pb-2 border-b border-[var(--theme-gray-border)]">
+              <Sparkles className="w-4 h-4 text-[var(--theme-yellow)] shrink-0" />
+              <h3 className="text-xs font-black uppercase tracking-wider text-[var(--theme-dirty-white)]">
                 Quick-Start Educational Sample Documents
               </h3>
             </div>
-            <p className="text-xs text-slate-400 font-medium">
+            <p className="text-xs text-[var(--theme-gray-muted)] font-medium">
               Don't have a document on hand? Tap any sample below to test the zero-cost extraction
               engine instantly:
             </p>
@@ -978,18 +978,18 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
                   key={sample.name}
                   type="button"
                   onClick={() => handleLoadSample(sample)}
-                  className="min-h-[54px] p-3 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)]/30 text-left transition-all shadow-sm group cursor-pointer space-y-1 active:translate-x-0.5 active:translate-y-0.5"
+                  className="min-h-[54px] p-3 rounded-xl border border-[var(--theme-gray-border)] bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)] hover:border-[var(--theme-yellow)]/60 text-left transition-all shadow-sm group cursor-pointer space-y-1 active:translate-x-0.5 active:translate-y-0.5"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase text-slate-400 font-mono">
+                    <span className="text-[10px] font-black uppercase text-[var(--theme-yellow)] font-mono">
                       {sample.subject}
                     </span>
-                    <span className="text-[10px] font-bold text-neutral-400">Sample</span>
+                    <span className="text-[10px] font-bold text-[var(--theme-gray-muted)]">Sample</span>
                   </div>
-                  <h4 className="text-xs font-black text-slate-100 group-hover:underline line-clamp-1">
+                  <h4 className="text-xs font-black text-[var(--theme-dirty-white)] group-hover:text-[var(--theme-yellow)] transition-colors line-clamp-1">
                     {sample.title}
                   </h4>
-                  <p className="text-[11px] text-slate-400 truncate font-mono">{sample.name}</p>
+                  <p className="text-[11px] text-[var(--theme-gray-muted)] truncate font-mono">{sample.name}</p>
                 </button>
               ))}
             </div>
@@ -1153,7 +1153,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
             <button
               type="button"
               onClick={() => setStep('upload')}
-              className="min-h-[44px] px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-black bg-[var(--theme-surface)] hover:bg-neutral-100 cursor-pointer text-center"
+              className="min-h-[44px] px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-black bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)] hover:text-white cursor-pointer text-center"
             >
               ← Upload Different File
             </button>
@@ -1217,7 +1217,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
                   className={`min-h-[44px] px-3 sm:px-4 py-2 rounded-xl text-xs font-black border border-[var(--theme-gray-border)] transition-all cursor-pointer text-center ${
                     quizConfig.questionCount === num
                       ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-sm'
-                      : 'bg-[var(--theme-surface-raised)] text-slate-300 hover:bg-neutral-100'
+                      : 'bg-[var(--theme-surface-raised)] text-slate-300 hover:bg-[var(--theme-surface)] hover:text-white'
                   }`}
                 >
                   {num} Questions
@@ -1245,7 +1245,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
                   className={`min-h-[52px] p-2.5 rounded-xl border border-[var(--theme-gray-border)] text-left transition-all cursor-pointer ${
                     quizConfig.difficulty === diff.id
                       ? 'bg-[var(--theme-dirty-white)] text-[var(--theme-canvas)] shadow-sm'
-                      : 'bg-[var(--theme-surface-raised)] hover:bg-neutral-100'
+                      : 'bg-[var(--theme-surface-raised)] hover:bg-[var(--theme-surface)]'
                   }`}
                 >
                   <span className={`text-xs font-black block ${quizConfig.difficulty === diff.id ? 'text-[var(--theme-canvas)]' : 'text-slate-100'}`}>{diff.label}</span>
@@ -1361,7 +1361,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
             <button
               type="button"
               onClick={() => setStep('review')}
-              className="min-h-[44px] px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-black bg-[var(--theme-surface)] hover:bg-neutral-100 cursor-pointer text-center"
+              className="min-h-[44px] px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-black bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)] hover:text-white cursor-pointer text-center"
             >
               ← Back to Review
             </button>
@@ -1404,16 +1404,16 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
                 type="button"
                 onClick={handleSaveToStudySpace}
                 disabled={savingQuiz}
-                className="flex-1 sm:flex-initial min-h-[44px] px-3.5 py-2 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] text-xs font-black flex items-center justify-center gap-1.5 hover:bg-neutral-100 cursor-pointer shadow-sm"
+                className="flex-1 sm:flex-initial min-h-[44px] px-3.5 py-2 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] text-xs font-black text-[var(--theme-dirty-white)] flex items-center justify-center gap-1.5 hover:bg-[var(--theme-surface-raised)] hover:text-white cursor-pointer shadow-sm"
               >
-                <BookmarkPlus className="w-3.5 h-3.5" />
+                <BookmarkPlus className="w-3.5 h-3.5 text-[var(--theme-yellow)]" />
                 <span>{savingQuiz ? 'Saving...' : 'Save Quiz'}</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleExportJson}
-                className="flex-1 sm:flex-initial min-h-[44px] px-3.5 py-2 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] text-xs font-black flex items-center justify-center gap-1.5 hover:bg-neutral-100 cursor-pointer shadow-sm"
+                className="flex-1 sm:flex-initial min-h-[44px] px-3.5 py-2 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-gray-border)] text-xs font-black text-[var(--theme-dirty-white)] flex items-center justify-center gap-1.5 hover:bg-[var(--theme-surface-raised)] hover:text-white cursor-pointer shadow-sm"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Export JSON</span>
@@ -1422,7 +1422,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
               <button
                 type="button"
                 onClick={() => handleStartTaking()}
-                className="w-full sm:w-auto min-h-[48px] px-6 py-2.5 bg-[#4ADE80] text-slate-100 rounded-xl border border-[var(--theme-gray-border)] text-xs font-black uppercase flex items-center justify-center gap-1.5 shadow-sm hover:translate-y-[-1px] transition-all cursor-pointer"
+                className="w-full sm:w-auto min-h-[48px] px-6 py-2.5 bg-[var(--theme-yellow)] text-[var(--theme-canvas)] rounded-xl border border-[var(--theme-yellow)] text-xs font-black uppercase flex items-center justify-center gap-1.5 shadow-sm hover:translate-y-[-1px] transition-all cursor-pointer"
               >
                 <span>Take Quiz Now →</span>
               </button>
@@ -1510,7 +1510,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
             <button
               type="button"
               onClick={() => setStep('configure')}
-              className="min-h-[44px] px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-black bg-[var(--theme-surface)] hover:bg-neutral-100 cursor-pointer text-center"
+              className="min-h-[44px] px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-black bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)] hover:text-white cursor-pointer text-center"
             >
               ← Back to Settings
             </button>
@@ -1780,7 +1780,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
               type="button"
               disabled={currentQuestionIndex === 0}
               onClick={() => setCurrentQuestionIndex((prev) => Math.max(0, prev - 1))}
-              className="min-h-[44px] px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-black bg-[var(--theme-surface)] hover:bg-neutral-100 cursor-pointer disabled:opacity-40"
+              className="min-h-[44px] px-4 py-2 border border-[var(--theme-gray-border)] rounded-xl text-xs font-black bg-[var(--theme-surface)] text-[var(--theme-dirty-white)] hover:bg-[var(--theme-surface-raised)] hover:text-white cursor-pointer disabled:opacity-40"
             >
               ← Previous
             </button>
@@ -1888,7 +1888,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
                 <button
                   type="button"
                   onClick={() => handleStartTaking(generatedQuestions)}
-                  className="min-h-[38px] px-3.5 py-1.5 bg-[var(--theme-surface)] text-slate-100 font-black text-xs rounded-lg border border-[var(--theme-gray-border)] shadow-sm hover:bg-neutral-100 cursor-pointer"
+                  className="min-h-[38px] px-3.5 py-1.5 bg-[var(--theme-surface)] text-slate-100 font-black text-xs rounded-lg border border-[var(--theme-gray-border)] shadow-sm hover:bg-[var(--theme-surface-raised)] cursor-pointer"
                 >
                   Retake Full Quiz
                 </button>
@@ -1896,7 +1896,7 @@ export const DocumentQuizGenerator: React.FC<DocumentQuizGeneratorProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep('upload')}
-                  className="min-h-[38px] px-3.5 py-1.5 bg-neutral-100 text-neutral-800 font-black text-xs rounded-lg border border-black/30 hover:bg-neutral-200 cursor-pointer"
+                  className="min-h-[38px] px-3.5 py-1.5 bg-[var(--theme-surface-raised)] text-[var(--theme-dirty-white)] font-black text-xs rounded-lg border border-[var(--theme-gray-border)] hover:bg-[var(--theme-surface)] cursor-pointer"
                 >
                   New Document
                 </button>

@@ -385,9 +385,9 @@ export const LearningPostDetailPage: React.FC = () => {
             <button
               type="button"
               onClick={handleSaveFreeToLibrary}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#4ADE80] border border-[var(--theme-gray-border)] text-xs font-black cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[var(--theme-yellow)] hover:bg-[var(--theme-yellow-hover)] text-[var(--theme-canvas)] border border-[var(--theme-yellow)] rounded-xl text-xs font-black cursor-pointer shadow-sm transition-all"
             >
-              <FolderPlus className="w-3.5 h-3.5" /> Save to My Library
+              <FolderPlus className="w-3.5 h-3.5 stroke-[2.5]" /> Save to My Library
             </button>
           )}
         </div>
@@ -481,7 +481,7 @@ export const LearningPostDetailPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleDeletePost}
-                className="p-1.5 border border-[var(--theme-gray-border)] bg-red-50 text-red-600 hover:bg-red-100 cursor-pointer"
+                className="p-2 border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-xl cursor-pointer transition-colors"
                 title="Delete post"
               >
                 <Trash2 className="w-4 h-4" />

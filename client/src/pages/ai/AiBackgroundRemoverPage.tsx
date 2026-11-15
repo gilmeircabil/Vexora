@@ -192,25 +192,25 @@ export const AiBackgroundRemoverPage: React.FC = () => {
             </div>
 
             <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="border border-slate-800 bg-gray-50 p-4 flex flex-col justify-between">
-                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">
+              <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] rounded-2xl p-4 flex flex-col justify-between">
+                <span className="font-mono text-xs font-bold text-[var(--theme-dirty-white)] uppercase mb-2">
                   Original
                 </span>
-                <div className="flex-1 flex items-center justify-center min-h-[260px] bg-white border border-gray-200 overflow-hidden">
+                <div className="flex-1 flex items-center justify-center min-h-[260px] bg-[var(--theme-surface-raised)] border border-[var(--theme-gray-border)] rounded-xl overflow-hidden">
                   {previewUrl ? (
                     <img src={previewUrl} alt="Original" className="max-h-[360px] object-contain" />
                   ) : (
-                    <span className="text-xs font-mono text-gray-400">No image uploaded</span>
+                    <span className="text-xs font-mono text-[var(--theme-gray-muted)]">No image uploaded</span>
                   )}
                 </div>
               </div>
 
-              <div className="border border-slate-800 bg-gray-50 p-4 flex flex-col justify-between">
-                <span className="font-mono text-xs font-bold text-gray-700 uppercase mb-2">
+              <div className="border border-[var(--theme-gray-border)] bg-[var(--theme-surface)] rounded-2xl p-4 flex flex-col justify-between">
+                <span className="font-mono text-xs font-bold text-[var(--theme-dirty-white)] uppercase mb-2">
                   Background Removed
                 </span>
                 <div
-                  className="flex-1 flex items-center justify-center min-h-[260px] border border-gray-200 overflow-hidden"
+                  className="flex-1 flex items-center justify-center min-h-[260px] border border-[var(--theme-gray-border)] rounded-xl overflow-hidden"
                   style={{
                     backgroundImage:
                       bgColor === 'transparent'
