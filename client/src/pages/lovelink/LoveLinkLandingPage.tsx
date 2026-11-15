@@ -9,11 +9,11 @@ export const LoveLinkLandingPage: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="relative min-h-[90vh] bg-[var(--theme-canvas)] overflow-hidden">
-      <FloatingHearts count={14} />
+    <div className="relative flex-1 w-full min-h-[calc(100vh-4rem)] bg-[var(--theme-canvas)] overflow-hidden">
+      <FloatingHearts count={24} />
 
       {/* Hero Section */}
-      <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-16 pb-20 text-center">
+      <section className="relative z-10 min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center max-w-5xl mx-auto px-4 sm:px-6 py-16 text-center">
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-300 border border-rose-500/30 mb-8 backdrop-blur-xs">
           <Sparkles className="w-3.5 h-3.5 text-rose-400" />

@@ -19,11 +19,15 @@ import {
   AlertCircle,
   ExternalLink,
   ShieldAlert,
+  QrCode,
+  MessageCircleHeart,
+  RotateCcw,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.js';
 import { useToast } from '../../context/ToastContext.js';
 import {
   loveLinkApi,
+  REACTION_OPTIONS,
   type LoveLetter,
   type DashboardMetrics,
 } from '../../services/loveLinkService.js';
@@ -117,6 +121,16 @@ export const LoveLinkDashboardPage: React.FC = () => {
       fetchLetters();
     } catch (err: any) {
       showToast(err.message || 'Failed to revoke access', 'error');
+    }
+  };
+
+  const handleRepublish = async (id: string) => {
+    try {
+      await loveLinkApi.publishLetter(id);
+      showToast('Letter re-published and active!', 'success');
+      fetchLetters();
+    } catch (err: any) {
+      showToast(err.message || 'Failed to re-publish letter', 'error');
     }
   };
 
@@ -332,6 +346,31 @@ export const LoveLinkDashboardPage: React.FC = () => {
                     <span>Scheduled: {new Date(letter.scheduledRevealAt).toLocaleString()}</span>
                   </div>
                 )}
+
+                {(letter.recipientReaction || letter.recipientReply) && (
+                  <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/25 space-y-1">
+                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-rose-300">
+                      <MessageCircleHeart className="w-3.5 h-3.5 text-rose-400" />
+                      <span>
+                        Recipient Response
+                        {letter.recipientReaction
+                          ? `: ${
+                              REACTION_OPTIONS.find((r) => r.id === letter.recipientReaction)
+                                ?.emoji || '❤️'
+                            } ${
+                              REACTION_OPTIONS.find((r) => r.id === letter.recipientReaction)
+                                ?.label || letter.recipientReaction
+                            }`
+                          : ''}
+                      </span>
+                    </div>
+                    {letter.recipientReply && (
+                      <p className="text-[11px] italic text-[var(--theme-dirty-white)] leading-snug">
+                        "{letter.recipientReply}"
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Action Buttons Row */}
@@ -367,6 +406,14 @@ export const LoveLinkDashboardPage: React.FC = () => {
                         )}
                       </button>
 
+                      <button
+                        onClick={() => handleDownloadQr(letter)}
+                        className="p-1.5 rounded-lg text-[var(--theme-gray-muted)] hover:text-white hover:bg-[var(--theme-surface-raised)] cursor-pointer"
+                        title="Download QR Code"
+                      >
+                        <QrCode className="w-4 h-4" />
+                      </button>
+
                       <Link
                         to={`/lovelink/share/${letter._id}`}
                         className="p-1.5 rounded-lg text-[var(--theme-gray-muted)] hover:text-white hover:bg-[var(--theme-surface-raised)]"
@@ -389,6 +436,15 @@ export const LoveLinkDashboardPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-1">
+                  {letter.status === 'revoked' && (
+                    <button
+                      onClick={() => handleRepublish(letter._id)}
+                      className="p-1.5 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-[var(--theme-surface-raised)] cursor-pointer"
+                      title="Re-Publish Letter"
+                    >
+                      <RotateCcw className="w-4 h-4" />
+                    </button>
+                  )}
                   {letter.status === 'published' && (
                     <button
                       onClick={() => handleRevoke(letter._id)}

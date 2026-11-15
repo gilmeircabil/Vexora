@@ -2,6 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { LoveLetter } from '../src/models/LoveLetter.js';
+import { DesignAsset } from '../src/models/DesignAsset.js';
+import { StorageService } from '../src/services/storageService.js';
 import { LoveLinkController } from '../src/controllers/loveLinkController.js';
 
 describe('VexoraMods Backend LoveLink Suite', () => {
@@ -58,7 +60,7 @@ describe('VexoraMods Backend LoveLink Suite', () => {
       const req: any = {
         user: { userId: mockUserId.toString() },
         body: {
-          recipientName: 'Valerie',
+          recipientName: 'Someone Special',
           senderName: 'Alex',
           title: 'Forever & Always',
           message: 'Happy Anniversary my love',
@@ -72,7 +74,7 @@ describe('VexoraMods Backend LoveLink Suite', () => {
       const mockSavedLetter = {
         _id: new Types.ObjectId(),
         userId: mockUserId,
-        recipientName: 'Valerie',
+        recipientName: 'Someone Special',
         senderName: 'Alex',
         status: 'draft',
         isPasswordProtected: true,
@@ -154,7 +156,7 @@ describe('VexoraMods Backend LoveLink Suite', () => {
         publicToken: token,
         status: 'published',
         isPasswordProtected: true,
-        recipientName: 'Valerie',
+        recipientName: 'Someone Special',
         senderName: 'Alex',
         title: 'Secret Letter',
         message: 'Top secret love note',
@@ -168,7 +170,7 @@ describe('VexoraMods Backend LoveLink Suite', () => {
       await LoveLinkController.getPublicLetter(req, res);
       const callArg = res.json.mock.calls[0][0];
       expect(callArg.success).toBe(true);
-      expect(callArg.letter.recipientName).toBe('Valerie');
+      expect(callArg.letter.recipientName).toBe('Someone Special');
       expect(callArg.letter.isPasswordProtected).toBe(true);
       expect(callArg.letter.isLocked).toBe(true);
       expect(callArg.letter.message).toBeUndefined();
@@ -184,7 +186,7 @@ describe('VexoraMods Backend LoveLink Suite', () => {
         status: 'published',
         isPasswordProtected: true,
         passwordHash: hash,
-        recipientName: 'Valerie',
+        recipientName: 'Someone Special',
         senderName: 'Alex',
         title: 'Secret Letter',
         message: 'Top secret love note',
@@ -220,7 +222,7 @@ describe('VexoraMods Backend LoveLink Suite', () => {
         publicToken: token,
         status: 'published',
         scheduledRevealAt: futureDate,
-        recipientName: 'Valerie',
+        recipientName: 'Someone Special',
         message: 'Hidden until tomorrow',
       };
 
@@ -283,6 +285,125 @@ describe('VexoraMods Backend LoveLink Suite', () => {
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({ success: true, message: 'Letter access revoked' }),
       );
+    });
+
+    it('blocks verifyPassword when letter is expired or still scheduled in the future', async () => {
+      const expiredLetter: any = {
+        publicToken: 'exp-pw-token',
+        status: 'published',
+        isPasswordProtected: true,
+        passwordHash: 'hash',
+        expiresAt: new Date(Date.now() - 60000),
+      };
+      const reqExp: any = { params: { token: 'exp-pw-token' }, body: { password: '123' } };
+      const resExp: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
+      vi.spyOn(LoveLetter, 'findOne').mockResolvedValueOnce(expiredLetter);
+
+      await LoveLinkController.verifyPassword(reqExp, resExp);
+      expect(resExp.status).toHaveBeenCalledWith(410);
+
+      const schedLetter: any = {
+        publicToken: 'sched-pw-token',
+        status: 'published',
+        isPasswordProtected: true,
+        passwordHash: 'hash',
+        scheduledRevealAt: new Date(Date.now() + 60000),
+      };
+      const reqSched: any = { params: { token: 'sched-pw-token' }, body: { password: '123' } };
+      const resSched: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
+      vi.spyOn(LoveLetter, 'findOne').mockResolvedValueOnce(schedLetter);
+
+      await LoveLinkController.verifyPassword(reqSched, resSched);
+      expect(resSched.status).toHaveBeenCalledWith(403);
+    });
+
+    it('allows recipient to submit reaction and reply note via submitReaction', async () => {
+      const token = 'react-token';
+      const mockLetter: any = {
+        publicToken: token,
+        status: 'published',
+        recipientReaction: null,
+        recipientReply: '',
+        recipientRepliedAt: null,
+        save: vi.fn().mockResolvedValue(true),
+      };
+
+      const req: any = {
+        params: { token },
+        body: { reaction: 'love', reply: 'Thank you so much, I love you too!' },
+      };
+      const res: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
+
+      vi.spyOn(LoveLetter, 'findOne').mockResolvedValueOnce(mockLetter);
+
+      await LoveLinkController.submitReaction(req, res);
+      expect(mockLetter.recipientReaction).toBe('love');
+      expect(mockLetter.recipientReply).toBe('Thank you so much, I love you too!');
+      expect(mockLetter.recipientRepliedAt).toBeInstanceOf(Date);
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: true,
+          recipientReaction: 'love',
+          recipientReply: 'Thank you so much, I love you too!',
+        }),
+      );
+    });
+
+    it('uploads LoveLink photo or audio to R2 via StorageService.saveAsset and cleans up R2 on deleteLetter', async () => {
+      const saveSpy = vi.spyOn(StorageService, 'saveAsset').mockResolvedValueOnce({
+        storageKey: 'asset_user123_abc123.jpg',
+        url: '/api/design-assets/files/asset_user123_abc123.jpg',
+        thumbnailUrl: '/api/design-assets/files/thumbs/thumb_user123_abc123.webp',
+        size: 4096,
+      });
+      vi.spyOn(DesignAsset, 'create').mockResolvedValueOnce({} as any);
+
+      const uploadReq: any = {
+        user: { userId: mockUserId.toString() },
+        file: {
+          buffer: Buffer.from('fake-jpeg'),
+          originalname: 'memory.jpg',
+          mimetype: 'image/jpeg',
+        },
+      };
+      const uploadRes: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
+
+      await (LoveLinkController as any).uploadMedia(uploadReq, uploadRes);
+      expect(saveSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          originalName: 'memory.jpg',
+          mimeType: 'image/jpeg',
+          userId: mockUserId.toString(),
+        }),
+      );
+      expect(uploadRes.status).toHaveBeenCalledWith(201);
+      expect(uploadRes.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: true,
+          url: '/api/design-assets/files/asset_user123_abc123.jpg',
+          storageKey: 'asset_user123_abc123.jpg',
+        }),
+      );
+
+      // Verify deleteLetter cleans up R2 attachments and customMusicUrl
+      const deleteR2Spy = vi.spyOn(StorageService, 'deleteAssetByUrl').mockResolvedValue();
+      const letterId = new Types.ObjectId();
+      vi.spyOn(LoveLetter, 'findOneAndDelete').mockResolvedValueOnce({
+        _id: letterId,
+        userId: mockUserId,
+        attachments: ['/api/design-assets/files/asset_user123_abc123.jpg'],
+        customization: { customMusicUrl: '/api/design-assets/files/asset_user123_song999.mp3' },
+      } as any);
+
+      const delReq: any = {
+        user: { userId: mockUserId.toString() },
+        params: { id: letterId.toString() },
+      };
+      const delRes: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
+
+      await LoveLinkController.deleteLetter(delReq, delRes);
+      expect(deleteR2Spy).toHaveBeenCalledWith('/api/design-assets/files/asset_user123_abc123.jpg');
+      expect(deleteR2Spy).toHaveBeenCalledWith('/api/design-assets/files/asset_user123_song999.mp3');
     });
   });
 });

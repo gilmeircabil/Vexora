@@ -51,6 +51,21 @@ export const uploadDocument = multer({
   },
 });
 
+export const uploadLoveLinkMedia = multer({
+  storage,
+  limits: {
+    fileSize: 15 * 1024 * 1024, // 15MB max
+    files: 1,
+  },
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('audio/')) {
+      cb(null, true);
+      return;
+    }
+    cb(new Error('Unsupported file format. Please upload an image or audio file.'));
+  },
+});
+
 /**
  * Validates real magic bytes of image buffer before passing to processing.
  */

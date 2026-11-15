@@ -30,6 +30,9 @@ export interface ILoveLetter extends Document {
   expiresAt?: Date | null;
   firstOpenedAt?: Date | null;
   openCount: number;
+  recipientReaction?: string | null;
+  recipientReply?: string;
+  recipientRepliedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -64,6 +67,9 @@ const LoveLetterSchema = new Schema<ILoveLetter>(
     expiresAt: { type: Date, default: null },
     firstOpenedAt: { type: Date, default: null },
     openCount: { type: Number, default: 0 },
+    recipientReaction: { type: String, default: null },
+    recipientReply: { type: String, default: '', trim: true },
+    recipientRepliedAt: { type: Date, default: null },
   },
   { timestamps: true }
 );

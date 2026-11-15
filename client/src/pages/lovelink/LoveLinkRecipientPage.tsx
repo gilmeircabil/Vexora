@@ -16,6 +16,26 @@ export const LoveLinkRecipientPage: React.FC = () => {
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [countdownText, setCountdownText] = useState<string>('');
+
+  useEffect(() => {
+    if (!letter?.isScheduled || !letter?.scheduledRevealAt) return;
+    const updateCountdown = () => {
+      const diff = new Date(letter.scheduledRevealAt!).getTime() - Date.now();
+      if (diff <= 0) {
+        setCountdownText('Ready to open!');
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      setCountdownText(`${d}d ${h}h ${m}m ${s}s`);
+    };
+    updateCountdown();
+    const timer = setInterval(updateCountdown, 1000);
+    return () => clearInterval(timer);
+  }, [letter?.isScheduled, letter?.scheduledRevealAt]);
 
   useEffect(() => {
     if (!token) return;
@@ -125,6 +145,12 @@ export const LoveLinkRecipientPage: React.FC = () => {
               timeStyle: 'short',
             })}
           </div>
+          {countdownText && (
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/15 border border-purple-500/30 font-mono text-xs font-bold text-purple-200">
+              <Clock className="w-3.5 h-3.5 text-purple-400" />
+              <span>{countdownText}</span>
+            </div>
+          )}
           <p className="text-xs text-[var(--theme-gray-muted)]">
             Check back when the countdown arrives!
           </p>
@@ -189,22 +215,10 @@ export const LoveLinkRecipientPage: React.FC = () => {
 
   // Envelope Experience (Interactive Opening + Reading)
   return (
-    <div className="min-h-screen bg-[var(--theme-canvas)] flex flex-col justify-between">
-      <main className="flex-1 flex items-center justify-center">
+    <div className="min-h-screen w-full bg-[var(--theme-canvas)] flex flex-col">
+      <main className="flex-1 w-full flex items-center justify-center">
         <EnvelopeExperience letter={letter} onOpen={handleEnvelopeOpen} />
       </main>
-
-      {/* Powered by Vexora LoveLink footer */}
-      <footer className="py-6 text-center text-xs text-[var(--theme-gray-muted)] border-t border-[var(--theme-gray-border)]/50">
-        <div className="flex items-center justify-center gap-1.5">
-          <span>Sent with</span>
-          <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500 inline" />
-          <span>via</span>
-          <Link to="/lovelink" className="font-bold text-rose-400 hover:underline">
-            LoveLink on VexoraMods
-          </Link>
-        </div>
-      </footer>
     </div>
   );
 };

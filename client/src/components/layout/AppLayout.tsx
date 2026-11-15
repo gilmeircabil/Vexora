@@ -49,7 +49,9 @@ export const AppLayout: React.FC = () => {
     location.pathname === '/chat';
   const isStudySpaceRoute =
     location.pathname.startsWith('/study') || location.pathname.startsWith('/study-space');
-  const isFullBleedRoute = isAiChatRoute || isStudySpaceRoute;
+  const isLoveLinkRoute =
+    location.pathname === '/lovelink' || location.pathname.startsWith('/lovelink/');
+  const isFullBleedRoute = isAiChatRoute || isStudySpaceRoute || isLoveLinkRoute;
 
   const [isFocusMode, setIsFocusMode] = useState(false);
 

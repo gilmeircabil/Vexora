@@ -1,12 +1,62 @@
+export type PaperLayoutId =
+  | 'classic'
+  | 'ornate-frame'
+  | 'polaroid-postcard'
+  | 'midnight-velvet'
+  | 'lined-notebook'
+  | 'royal-gold';
+
+export type WaxSealId = 'heart' | 'crown' | 'star' | 'sparkle' | 'lock';
+export type ParticleEffectId =
+  | 'hearts'
+  | 'petals'
+  | 'butterflies'
+  | 'fireflies'
+  | 'stars'
+  | 'sparkles'
+  | 'none';
+export type MusicPresetId =
+  | 'none'
+  | 'gentle-chimes'
+  | 'musicbox-lullaby'
+  | 'romantic-piano'
+  | 'dreamy-harp'
+  | 'custom';
+
 export interface LetterCustomization {
   font?: 'serif' | 'script' | 'sans' | 'handwriting';
+  paperLayout?: PaperLayoutId;
+  salutation?: string;
+  signOff?: string;
+  waxSeal?: WaxSealId;
+  particleEffect?: ParticleEffectId;
   bgTheme?: string;
   envelopeStyle?: string;
   openingAnimation?: 'gentle-unfold' | 'romantic-pop' | 'wax-break';
-  musicPreset?: 'none' | 'musicbox-lullaby' | 'romantic-piano' | 'gentle-chimes';
+  musicPreset?: MusicPresetId;
+  customMusicUrl?: string;
+  customMusicTitle?: string;
+  photoStyle?: 'grid' | 'polaroid';
   alignment?: 'left' | 'center' | 'right';
   decorativeElements?: string[];
 }
+
+export const PAPER_LAYOUTS: { id: PaperLayoutId; name: string; badge: string }[] = [
+  { id: 'classic', name: 'Classic Parchment', badge: 'Warm' },
+  { id: 'ornate-frame', name: 'Ornate Vintage', badge: 'Double Border' },
+  { id: 'polaroid-postcard', name: 'Polaroid Postcard', badge: 'Air Mail' },
+  { id: 'midnight-velvet', name: 'Midnight Velvet', badge: 'Dark Luxury' },
+  { id: 'lined-notebook', name: 'Lined Notebook', badge: 'Ruled Pad' },
+  { id: 'royal-gold', name: 'Royal Gold', badge: 'Gilded' },
+];
+
+export const REACTION_OPTIONS = [
+  { id: 'love', emoji: '❤️', label: 'Loved It' },
+  { id: 'touched', emoji: '🥹', label: 'So Touched' },
+  { id: 'hug', emoji: '🤗', label: 'Sending Hugs' },
+  { id: 'forever', emoji: '💍', label: 'Forever Yours' },
+  { id: 'smile', emoji: '😊', label: 'Made Me Smile' },
+] as const;
 
 export interface LoveLetter {
   _id: string;
@@ -26,6 +76,9 @@ export interface LoveLetter {
   expiresAt?: string | null;
   firstOpenedAt?: string | null;
   openCount: number;
+  recipientReaction?: string | null;
+  recipientReply?: string;
+  recipientRepliedAt?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -46,6 +99,9 @@ export interface PublicLetter {
   scheduledRevealAt?: string | null;
   expiresAt?: string | null;
   firstOpenedAt?: string | null;
+  recipientReaction?: string | null;
+  recipientReply?: string;
+  recipientRepliedAt?: string | null;
   createdAt?: string;
 }
 
@@ -147,6 +203,19 @@ class LoveLinkApiService {
     return token ? { Authorization: `Bearer ${token}` } : {};
   }
 
+  async uploadMedia(file: File): Promise<{ url: string; storageKey: string; size: number }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch('/api/lovelink/upload', {
+      method: 'POST',
+      headers: { ...this.getAuthHeader() },
+      body: formData,
+    });
+    const json = await res.json();
+    if (!res.ok || !json.success) throw new Error(json.error || 'Failed to upload media to R2');
+    return json;
+  }
+
   async createLetter(data: Partial<LoveLetter> & { password?: string }): Promise<LoveLetter> {
     const res = await fetch('/api/lovelink', {
       method: 'POST',
@@ -236,6 +305,24 @@ class LoveLinkApiService {
     await fetch(`/api/lovelink/public/${token}/open`, {
       method: 'POST',
     }).catch(() => {});
+  }
+
+  async submitReaction(
+    token: string,
+    payload: { reaction?: string; reply?: string },
+  ): Promise<{
+    success: boolean;
+    recipientReaction?: string | null;
+    recipientReply?: string;
+  }> {
+    const res = await fetch(`/api/lovelink/public/${token}/react`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const json = await res.json();
+    if (!res.ok || !json.success) throw new Error(json.error || 'Failed to send response');
+    return json;
   }
 }
 

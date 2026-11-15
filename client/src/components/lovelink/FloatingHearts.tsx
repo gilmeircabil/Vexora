@@ -1,47 +1,140 @@
 import React, { useMemo } from 'react';
+import type { ParticleEffectId } from '../../services/loveLinkService.js';
 
-export const FloatingHearts: React.FC<{ count?: number }> = ({ count = 12 }) => {
+const EFFECT_CONFIG: Record<
+  Exclude<ParticleEffectId, 'none'>,
+  {
+    symbols: string[];
+    color: string;
+    glowColor: string;
+    secondaryGlow: string;
+  }
+> = {
+  petals: {
+    symbols: ['🌸', '🌺', '🌷', '💮', '🌹'],
+    color: 'text-pink-300 drop-shadow-[0_0_8px_rgba(244,114,182,0.55)]',
+    glowColor: 'rgba(244, 63, 94, 0.16)',
+    secondaryGlow: 'rgba(236, 72, 153, 0.14)',
+  },
+  hearts: {
+    symbols: ['💗', '🌸', '💖', '♥', '💕'],
+    color: 'text-rose-400 drop-shadow-[0_0_8px_rgba(251,113,133,0.55)]',
+    glowColor: 'rgba(225, 29, 72, 0.16)',
+    secondaryGlow: 'rgba(244, 114, 182, 0.13)',
+  },
+  butterflies: {
+    symbols: ['🦋', '🌸', '✨', '💮', '🌷'],
+    color: 'text-fuchsia-300 drop-shadow-[0_0_10px_rgba(217,70,239,0.55)]',
+    glowColor: 'rgba(192, 38, 211, 0.15)',
+    secondaryGlow: 'rgba(244, 63, 94, 0.13)',
+  },
+  fireflies: {
+    symbols: ['✨', '✧', '💫', '⋆', '🌸'],
+    color: 'text-amber-300 drop-shadow-[0_0_10px_rgba(251,191,36,0.75)]',
+    glowColor: 'rgba(245, 158, 11, 0.14)',
+    secondaryGlow: 'rgba(244, 63, 94, 0.12)',
+  },
+  stars: {
+    symbols: ['✦', '★', '🌙', '✨', '✧'],
+    color: 'text-amber-200 drop-shadow-[0_0_8px_rgba(253,230,138,0.65)]',
+    glowColor: 'rgba(139, 92, 246, 0.16)',
+    secondaryGlow: 'rgba(244, 63, 94, 0.12)',
+  },
+  sparkles: {
+    symbols: ['✨', '✧', '💖', '🌸', '⋆'],
+    color: 'text-rose-300 drop-shadow-[0_0_8px_rgba(253,164,175,0.6)]',
+    glowColor: 'rgba(244, 63, 94, 0.15)',
+    secondaryGlow: 'rgba(168, 85, 247, 0.13)',
+  },
+};
+
+export const FloatingHearts: React.FC<{ count?: number; effect?: ParticleEffectId }> = ({
+  count = 24,
+  effect = 'petals',
+}) => {
   const particles = useMemo(() => {
-    return Array.from({ length: count }).map((_, i) => ({
-      id: i,
-      left: `${(i * (100 / count) + Math.random() * 5).toFixed(1)}%`,
-      delay: `${(Math.random() * 4).toFixed(1)}s`,
-      duration: `${(5 + Math.random() * 5).toFixed(1)}s`,
-      size: `${12 + (i % 3) * 6}px`,
-      opacity: 0.2 + (i % 4) * 0.15,
-    }));
+    return Array.from({ length: count }).map((_, i) => {
+      const durationSec = 7 + (i % 6) * 1.4;
+      const delaySec = -((i * 1.3) % durationSec);
+      const swayPx = (i % 2 === 0 ? 1 : -1) * (25 + (i % 4) * 15);
+      return {
+        id: i,
+        left: `${((i * (100 / count) + (i * 7) % 9) % 98).toFixed(1)}%`,
+        delay: `${delaySec.toFixed(1)}s`,
+        duration: `${durationSec.toFixed(1)}s`,
+        size: `${14 + (i % 4) * 5}px`,
+        opacity: 0.35 + (i % 4) * 0.15,
+        sway: `${swayPx}px`,
+      };
+    });
   }, [count]);
 
+  if (effect === 'none') return null;
+  const cfg = EFFECT_CONFIG[effect] || EFFECT_CONFIG.petals;
+
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden z-0" aria-hidden="true">
+    <div
+      data-particle-effect={effect}
+      className="pointer-events-none absolute inset-0 overflow-hidden z-0"
+      aria-hidden="true"
+    >
       <style>{`
-        @keyframes floatHeart {
-          0% { transform: translateY(105vh) scale(0.8) rotate(0deg); opacity: 0; }
-          15% { opacity: var(--heart-opacity, 0.4); }
-          50% { transform: translateY(50vh) scale(1.1) rotate(15deg); }
-          85% { opacity: var(--heart-opacity, 0.4); }
-          100% { transform: translateY(-10vh) scale(0.9) rotate(-15deg); opacity: 0; }
+        @keyframes lovelinkFallPetal {
+          0% {
+            transform: translate3d(0, -10vh, 0) rotate(0deg) scale(0.85);
+            opacity: 0;
+          }
+          12% {
+            opacity: var(--particle-opacity, 0.65);
+          }
+          50% {
+            transform: translate3d(var(--particle-sway, 35px), 50vh, 0) rotate(180deg) scale(1.08);
+          }
+          88% {
+            opacity: var(--particle-opacity, 0.65);
+          }
+          100% {
+            transform: translate3d(calc(var(--particle-sway, 35px) * -0.6), 110vh, 0) rotate(360deg) scale(0.9);
+            opacity: 0;
+          }
         }
-        @media (prefers-reduced-motion: reduce) {
-          .floating-heart { display: none !important; }
+        @keyframes lovelinkAuroraPulse {
+          0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.85; }
+          50% { transform: scale(1.12) translate(15px, -15px); opacity: 1; }
         }
       `}</style>
+
+      {/* Ambient Romantic Aurora Backdrop Glows */}
+      <div
+        data-ambient-aurora="true"
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(circle at 18% 25%, ${cfg.glowColor} 0%, transparent 45%),
+            radial-gradient(circle at 82% 30%, ${cfg.secondaryGlow} 0%, transparent 45%),
+            radial-gradient(circle at 50% 80%, ${cfg.glowColor} 0%, transparent 50%)
+          `,
+          animation: 'lovelinkAuroraPulse 8s ease-in-out infinite',
+        }}
+      />
+
+      {/* Falling Flowers / Petals / Romantic Particles */}
       {particles.map((p) => (
         <span
           key={p.id}
-          className="floating-heart absolute select-none text-rose-400"
+          className={`lovelink-falling-particle absolute select-none ${cfg.color}`}
           style={
             {
               left: p.left,
-              bottom: '-20px',
+              top: '-4%',
               fontSize: p.size,
-              '--heart-opacity': p.opacity,
-              animation: `floatHeart ${p.duration} ease-in-out infinite`,
-              animationDelay: p.delay,
+              '--particle-opacity': p.opacity,
+              '--particle-sway': p.sway,
+              animation: `lovelinkFallPetal ${p.duration} ease-in-out ${p.delay} infinite`,
             } as React.CSSProperties
           }
         >
-          {p.id % 2 === 0 ? '♥' : '♡'}
+          {cfg.symbols[p.id % cfg.symbols.length]}
         </span>
       ))}
     </div>

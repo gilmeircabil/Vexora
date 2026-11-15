@@ -126,18 +126,20 @@ export class StorageService {
     let height: number | undefined;
     let thumbBuffer: Buffer | null = null;
 
-    try {
-      const metadata = await sharp(params.buffer).metadata();
-      width = metadata.width;
-      height = metadata.height;
+    if (params.mimeType.startsWith('image/')) {
+      try {
+        const metadata = await sharp(params.buffer).metadata();
+        width = metadata.width;
+        height = metadata.height;
 
-      // Generate optimized WebP thumbnail
-      thumbBuffer = await sharp(params.buffer)
-        .resize(320, 320, { fit: 'inside', withoutEnlargement: true })
-        .webp({ quality: 80 })
-        .toBuffer();
-    } catch (err) {
-      console.warn('Could not generate thumbnail for asset:', err);
+        // Generate optimized WebP thumbnail
+        thumbBuffer = await sharp(params.buffer)
+          .resize(320, 320, { fit: 'inside', withoutEnlargement: true })
+          .webp({ quality: 80 })
+          .toBuffer();
+      } catch (err) {
+        console.warn('Could not generate thumbnail for asset:', err);
+      }
     }
 
     if (this.isS3Enabled()) {
@@ -300,6 +302,18 @@ export class StorageService {
           contentType = 'image/png';
         } else if (key.endsWith('.jpg') || key.endsWith('.jpeg')) {
           contentType = 'image/jpeg';
+        } else if (key.endsWith('.gif')) {
+          contentType = 'image/gif';
+        } else if (key.endsWith('.mp3')) {
+          contentType = 'audio/mpeg';
+        } else if (key.endsWith('.wav')) {
+          contentType = 'audio/wav';
+        } else if (key.endsWith('.ogg')) {
+          contentType = 'audio/ogg';
+        } else if (key.endsWith('.m4a')) {
+          contentType = 'audio/mp4';
+        } else if (key.endsWith('.webm')) {
+          contentType = 'audio/webm';
         }
 
         return {
